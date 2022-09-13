@@ -22,7 +22,7 @@ def end(timer):
     return diff
 
 class pyeo:
-    def __init__(self, name="your model", direction="min", interface="none"):
+    def __init__(self, name="your_model", direction="min", interface="none"):
         self.name = name
         self.direction = direction
         self.interface = interface
@@ -31,8 +31,8 @@ class pyeo:
         self.name = _name
         self.direction = _direction
         
-class ortools_op(pyeo):
-    def __init__(self, name="your model", direction="min", interface="none"):
+class interface(pyeo):
+    def __init__(self, name="your_model", direction="min", interface="none"):
         self.name = name
         self.direction = direction
         self.interface = interface

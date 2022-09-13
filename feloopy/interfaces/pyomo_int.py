@@ -24,7 +24,7 @@ def end(timer):
 
 
 class pyeo:
-    def __init__(self, name="your model", direction="min", interface="none"):
+    def __init__(self, name="your_model", direction="min", interface="none"):
         self.name = name
         self.direction = direction
         self.interface = interface
@@ -33,9 +33,9 @@ class pyeo:
         self.name = _name
         self.direction = _direction
 
-class pyomo_op(pyeo):
+class interface(pyeo):
 
-    def __init__(self, name="your model", direction="min", interface="none"):
+    def __init__(self, name="your_model", direction="min", interface="none"):
         self.pyomo_model = pyomo_in.ConcreteModel()
         self.pyomo_model.constraint = pyomo_in.ConstraintList()
         self.name = name

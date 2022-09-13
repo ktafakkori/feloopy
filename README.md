@@ -28,7 +28,7 @@ License: MIT
 - Using almost all solvers available.
 - Getting execution time of your optimization model.
 - (Upcoming) possibility for sensitivity analysis.
-- (Upcoming) possibility for benchmarking all optimizers for your model.
+- (Upcoming) possibility for benchmarking all optimizers for your_model.
 - (Scope) possibility for heuristic optimization with the same syntax.
 - ...
 
@@ -70,9 +70,9 @@ Some examples are provided as follows:
 ### Solving a simple MILP with FelooPy by Pyomo:
 
 ```python
-import feloopy.feloopy.interfaces.pyomo_int as modeler
+import feloopy.interfaces.pyomo_int as pyomo
 
-m = modeler.pyomo_op(direction="max")
+m = pyomo.iterface(direction="max")
 x = m.pvar('x')
 y = m.ivar('y')
 
@@ -87,7 +87,7 @@ m.display(x, y)
 Results:
 
 ```
-Pyomo solved 'your model' with glpk solver | CPT= 411416.3999984157 (μs) 00:00:00 (h:m:s)
+Pyomo solved 'your_model' with glpk solver | CPT= 411416.3999984157 (μs) 00:00:00 (h:m:s)
 x: 1.0
 y: 1.0
 obj: 7.0
@@ -96,9 +96,9 @@ obj: 7.0
 ### Solving a simple MILP with FelooPy by Gekko:
 
 ```python
-import feloopy.feloopy.interfaces.gekko_int as modeler
+import feloopy.interfaces.gekko_int as gekko
 
-m = modeler.gekko_op(direction="max")
+m = gekko.interface(direction="max")
 x = m.pvar('x')
 y = m.ivar('y')
 
@@ -113,7 +113,7 @@ m.display(x, y)
 Results:
 
 ```
-Gekko solved 'your model' with apopt solver | CPT= 505112.3000012012 (μs) 00:00:00 (h:m:s)
+Gekko solved 'your_model' with apopt solver | CPT= 505112.3000012012 (μs) 00:00:00 (h:m:s)
 v1: [1.0]
 int_v2: [1.0]
 obj: 7.0
@@ -122,9 +122,9 @@ obj: 7.0
 ### Solving a simple MILP with FelooPy by Ortools:
 
 ```python
-import feloopy.feloopy.interfaces.ortools_int as modeler
+import feloopy.interfaces.ortools_int as ortools
 
-m = modeler.ortools_op(direction="max")
+m = ortools.interface(direction="max")
 x = m.pvar('x')
 y = m.ivar('y')
 
@@ -139,7 +139,7 @@ m.display(x, y)
 Results:
 
 ```
-ORTOOLs solved 'your model' with glpk solver | CPT= 3619.700000854209 (μs) 00:00:00 (h:m:s)
+ORTOOLs solved 'your_model' with glpk solver | CPT= 3619.700000854209 (μs) 00:00:00 (h:m:s)
 x: 1.0
 y: 1.0
 obj: 7.0
@@ -148,9 +148,9 @@ obj: 7.0
 ### Solving a simple MILP with FelooPy by PuLP:
 
 ```python
-import feloopy.feloopy.interfaces.pulp_int as modeler
+import feloopy.feloopy.interfaces.pulp_int as pulp
 
-m = modeler.pulp_op(direction="max")
+m = pulp.interface(direction="max")
 x = m.pvar('x')
 y = m.ivar('y')
 
@@ -165,7 +165,7 @@ m.display(x, y)
 Results:
 
 ```
-PuLP solved 'your model' with <pulp.apis.glpk_api.GLPK_CMD object at 0x000001DDC0021750> solver | CPT= 1706935.9999986773 (μs) 00:00:01 (h:m:s)
+PuLP solved 'your_model' with <pulp.apis.glpk_api.GLPK_CMD object at 0x000001DDC0021750> solver | CPT= 1706935.9999986773 (μs) 00:00:01 (h:m:s)
 x: 1.0
 y: 1
 obj: 7.0

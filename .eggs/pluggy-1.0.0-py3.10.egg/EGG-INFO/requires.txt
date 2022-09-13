@@ -1,0 +1,8 @@
+
+[dev]
+pre-commit
+tox
+
+[testing]
+pytest
+pytest-benchmark

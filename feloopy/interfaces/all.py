@@ -1,6 +1,4 @@
-import gekko_int
-import ortools_int
-import pulp_int
-import pyomo_int
-
-
+import pyomo_int as pyomo
+import gekko_int as gekko
+import ortools_int as ortools
+import pulp_int as pulp
