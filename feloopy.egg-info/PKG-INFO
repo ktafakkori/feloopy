@@ -1,10 +1,12 @@
 Metadata-Version: 2.1
 Name: feloopy
-Version: 0.0.3
+Version: 0.1
 Summary: FelooPy: An Integrated Optimization Environment
-Home-page: UNKNOWN
+Home-page: https://github.com/ktafakkori/feloopy
 Author: Keivan Tafakkori
+Author-email: k.tafakkori@gmail.com
 License: MIT
+Keywords: optimization,machine_learning,simulation
 Platform: UNKNOWN
 License-File: LICENSE.txt
 

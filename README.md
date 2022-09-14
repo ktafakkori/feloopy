@@ -72,7 +72,7 @@ Some examples are provided as follows:
 ```python
 import feloopy.interfaces.pyomo_int as pyomo
 
-m = pyomo.iterface(direction="max")
+m = pyomo.interface(direction="max")
 x = m.pvar('x')
 y = m.ivar('y')
 
@@ -111,6 +111,7 @@ m.display(x, y)
 ```
 
 Results:
+
 
 ```
 Gekko solved 'your_model' with apopt solver | CPT= 505112.3000012012 (μs) 00:00:00 (h:m:s)

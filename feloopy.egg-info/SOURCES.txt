@@ -2,8 +2,15 @@ LICENSE.txt
 README.md
 setup.cfg
 setup.py
+feloopy/__init__.py
 feloopy.egg-info/PKG-INFO
 feloopy.egg-info/SOURCES.txt
 feloopy.egg-info/dependency_links.txt
 feloopy.egg-info/requires.txt
 feloopy.egg-info/top_level.txt
+feloopy/interfaces/__init__.py
+feloopy/interfaces/all.py
+feloopy/interfaces/gekko_int.py
+feloopy/interfaces/ortools_int.py
+feloopy/interfaces/pulp_int.py
+feloopy/interfaces/pyomo_int.py
