@@ -149,7 +149,7 @@ obj: 7.0
 ### Solving a simple MILP with FelooPy by PuLP:
 
 ```python
-import feloopy.feloopy.interfaces.pulp_int as pulp
+import feloopy.interfaces.pulp_int as pulp
 
 m = pulp.interface(direction="max")
 x = m.pvar('x')
