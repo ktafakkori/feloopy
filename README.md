@@ -10,7 +10,7 @@ An integrated optimization environment (IOE) for AutoOR!
 
 ## 🐍Introduction
 
-Feloopy (FEasible, LOgical & OPtimal + Python) is a hyper-optimization interface that allows operations research scientists to build, develop, and test optimization models with almost all open-source and commercial solvers available for optimization in Python. With FelooPy, the users would be able to benchmark the solvers to see if they meet the requirements.
+FelooPy (FEasible, LOgical & OPtimal + Python) is a hyper-optimization interface that allows operations research scientists to build, develop, and test optimization models with almost all open-source and commercial solvers available. With FelooPy, the users would be able to benchmark the solvers to see if they meet the requirements.
 
 Motivated by the AutoML era, which is "the process of automating the time-consuming, iterative tasks of machine learning model development," FelooPy is the first package that is going to provide an AutoOR tool for automating the time-consuming tasks of modeling, implementing, and analyzing an optimization model by providing an integrated (exact and heuristic) optimization environment in Python. Accordingly, FelooPy would also support multiple features such as sensitivity analysis, visualization, and more!
 
