@@ -184,7 +184,7 @@ Are welcome :)
 
 This repository will be more and more complete over time.
 
-Hence, it is kindly requested to support this work by giving a ⭐ to the repository to make it available for a broad range of audiences who are interested in using heuristic optimization techniques in the Python programming language.
+Hence, it is kindly requested to support this work by giving a ⭐ to the repository to make it available for a broad range of audiences who are interested in using exact and heuristic optimization techniques in the Python programming language.
 
 ## 💫 Supporters
 
