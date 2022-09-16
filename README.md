@@ -1,6 +1,7 @@
 ![](https://img.shields.io/github/stars/ktafakkori/feloopy?style=social)
 ![](https://img.shields.io/github/languages/code-size/ktafakkori/feloopy?style=social)
 ![](https://hitcounter.pythonanywhere.com/count/tag.svg?url=https://github.com/ktafakkori/feloopy/)
+[![Downloads](https://static.pepy.tech/personalized-badge/feloopy?period=total&units=international_system&left_color=black&right_color=blue&left_text=Downloads)](https://pepy.tech/project/feloopy)
 
 # FelooPy
 
