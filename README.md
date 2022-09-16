@@ -22,7 +22,7 @@ License: MIT
 ## 🔝 Advantages:
 
 - An integrated optimization environment.
-- Automating operation research model development workflow.
+- Automating operations research model development workflow.
 - Straightforward syntax for optimization modeling.
 - Using only one syntax for coding.
 - Having access to multiple optimization interfaces all at once.
