@@ -1,14 +1,10 @@
 Metadata-Version: 2.1
 Name: feloopy
-Version: 0.1
-Summary: FelooPy: An Integrated Optimization Environment
+Version: 0.1.1
+Summary: FelooPy: An Integrated Optimization Environment (IOE) for AutoOR in Python.
 Home-page: https://github.com/ktafakkori/feloopy
 Author: Keivan Tafakkori
 Author-email: k.tafakkori@gmail.com
 License: MIT
-Keywords: optimization,machine_learning,simulation
-Platform: UNKNOWN
+Keywords: optimization,machine_learning,simulation,operations_research,computer_science,data_science
 License-File: LICENSE.txt
-
-UNKNOWN
-

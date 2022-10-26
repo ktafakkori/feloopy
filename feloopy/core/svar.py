@@ -27,4 +27,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
 
-from .main import *
+from .age import *
+
+def add_ga_svar(var_name, agent, VarLength, dim,  b=[0, 1], vectorized=False):
+    if vectorized:
+        return multiagent(var_name, b[0] + agent[:,VarLength[0]:VarLength[1]] * (b[1] - b[0]), dim, 'svar')
+    else:
+        return singleagent(var_name, b[0] + agent[:,VarLength[0]:VarLength[1]] * (b[1] - b[0]), dim, 'svar')
+
+svar_maker = {
+    "ga": add_ga_svar
+}
+

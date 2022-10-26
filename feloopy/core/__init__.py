@@ -27,4 +27,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
 
-from .main import *
+from .age import *
+from .ben import *
+from .bvar import *
+from .dis import *
+from .env import *
+from .fvar import *
+from .get import *
+from .inf import *
+from .ivar import *
+from .oper import *
+from .pvar import *
+from .sol import *
+from .svar import *
+from .opt import * 
+from .sens import *

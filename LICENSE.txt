@@ -2,13 +2,6 @@ MIT License
 
 Copyright (c) 2022 Keivan Tafakkori & FELOOP (https://ktafakkori.github.io/)
 
-'FelooPy' uses the following packages and their copyright notices are as follows:
-
-- Copyright (c) 2022 pyomo (https://github.com/Pyomo/pyomo/blob/main/LICENSE.txt)
-- Copyright (c) 2022 pulp (https://github.com/coin-or/pulp/blob/master/LICENSE)
-- Copyright (c) 2022 ortools (https://github.com/google/or-tools/blob/stable/LICENSE)
-- Copyright (c) 2022 gekko (https://github.com/BYU-PRISM/GEKKO/blob/master/LICENSE)
-
 Redistribution and use in source and binary forms, with or without modification, are
 permitted provided that the following conditions are met:
 
