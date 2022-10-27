@@ -5,7 +5,7 @@ authors:
   given-names: "Keivan"
   orcid: "https://orcid.org/0000-0001-8964-6008"
 title: "Feloopy: An integrated optimization environment for AutoOR in Python"
-version: 1.0.0
+version: 0.1.1
 doi: 
 date-released: 2022-09-14
 url: "https://github.com/ktafakkori/feloopy"

@@ -1,8 +1,0 @@
-pyomo
-pulp
-gekko
-ortools
-tabulate
-numpy
-matplotlib
-infix

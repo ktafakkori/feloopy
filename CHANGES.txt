@@ -1,13 +1,13 @@
-CHANGELOG (SINCE 24 SEPTEMBER 2022).
+CHANGELOG (SINCE 14 SEPTEMBER 2022).
 
 ====================================
 * Version 0.1.1 (26 October 2022)
 ====================================
-Stated to support heuristic algorithms.
-Started to support sensitvity analysis.
+Started to support heuristic algorithms.
+Started to support sensitivity analysis.
 Started to support extensible coding.
 
 ====================================
-* Version 0.1 (24 September 2022)
+* Version 0.1 (14 September 2022)
 ===============================
-Initial realse of FelooPy 
+Initial release of FelooPy 

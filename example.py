@@ -52,7 +52,7 @@ model.ava()
 #Solving the provided model
 model.sol('max', 'scip')
 
-#Getting to know the available solvers
+#Getting to know the problem features
 model.inf()
 
 model.ben('cpt')
@@ -108,5 +108,3 @@ model.inf()
 model.dis(['x',(0,)], ['y',(0,)])
 
 model.ben(['cpt',10])
-
-
