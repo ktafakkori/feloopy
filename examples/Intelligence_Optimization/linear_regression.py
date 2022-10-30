@@ -17,7 +17,7 @@ T = range(len(b)) #Observations
 #Normalizing input data:
 ran_a = {i: max(a[t][i] for t in T) - min(a[t][i] for t in T) for i in U}
 ave_a = {i: sum(a[t][i] for t in T)/len(T) for i in U}
-n_a = {(t,i): (a[t][i]-ave_a[i])/ran_a[i] for t,i in it.product(T,U)}
+n_a = {(t,i): (a[t][i]-ave_a[i])/ran_a[i] for t,i in sets(T,U)}
 ran_b = max(b[t] for t in T) - min(b[t] for t in T)
 ave_b = sum(b[t] for t in T)/len(T)
 n_b = {t: (b[t]-ave_b)/ran_b for t in T}
