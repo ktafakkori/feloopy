@@ -45,3 +45,15 @@ bb = [ 6     , 7     , 8     , 9     , 10     ] #Target
 
 for item in aa:
     predict(w,b,item)
+
+'''
+
+Output:
+
+Input = [6, 8, 9] -> Output = 6.000000000190427
+Input = [7, 4, 3] -> Output = 6.999999999697222
+Input = [8, 3, 5] -> Output = 7.999999999796734
+Input = [9, 1, 6] -> Output = 8.999999999829779
+Input = [10, 9, 3] -> Output = 9.999999999426267
+
+'''

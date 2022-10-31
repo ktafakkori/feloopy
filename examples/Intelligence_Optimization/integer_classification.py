@@ -43,13 +43,13 @@ for j in C:
     m.sol('min', 'ipopt')
 
     #Getting the results
-    weigth = []
-    for i in U: weigth.append(m.get(x[i])[0])
+    weight = []
+    for i in U: weight.append(m.get(x[i])[0])
     bias = m.get(z)[0]
 
     #Storing the results
     b = list(save_b)
-    x_c[j]=weigth
+    x_c[j]=weight
     z_c[j]=bias
 
 w = x_c
@@ -61,3 +61,15 @@ bb = [ 0       , 1       , 2       , 3       , 4       ] #Target
 
 for item in aa:
     classify(w,b,item)
+
+
+'''
+
+Output:
+Input = [1, 2.1, 2] -> Output = 0
+Input = [1.9, 3, 3] -> Output = 1
+Input = [3.2, 4, 5] -> Output = 3
+Input = [4.1, 5, 6] -> Output = 3
+Input = [4.9, 7, 8] -> Output = 4
+
+'''

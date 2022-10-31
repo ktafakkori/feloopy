@@ -38,3 +38,15 @@ bb = [ 0       , 1       , 0       , 1       , 0       ] #Target
 
 for item in aa:
     classify(w,b,item)
+
+'''
+
+Output:
+
+Input = [1, 2.1, 2] -> Output = 0
+Input = [1.9, 3, 3] -> Output = 1
+Input = [3.2, 4, 5] -> Output = 1
+Input = [4.1, 5, 6] -> Output = 1
+Input = [4.9, 7, 8] -> Output = 0
+
+'''
