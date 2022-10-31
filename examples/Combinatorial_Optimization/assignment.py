@@ -19,3 +19,13 @@ m.sol('min','cbc')
 for i,j in sets(I,J):
     if m.get(x[i,j])==1:
         print(f"agent {i} assigned to job {j}")
+
+'''
+
+Output:
+
+agent 0 assigned to job 1
+agent 1 assigned to job 0
+agent 2 assigned to job 2
+
+'''

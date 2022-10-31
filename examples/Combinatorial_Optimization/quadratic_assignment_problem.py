@@ -24,8 +24,8 @@ x = m.bvar('x', [I,J])
 
 m.obj(sum(a[i,j,k,l]*x[i,j]*x[k,l] for i,j,k,l in sets(I,J,K,L)))
 
-for j in J: m.con(sum(x[i,j] for i in I) == 1)
-for i in I: m.con(sum(x[i,j] for j in J) == 1)
+for j in J: m.con(sum(x[i,j] for i in I) |e| 1)
+for i in I: m.con(sum(x[i,j] for j in J) |e| 1)
 
 m.sol('min','bonmin_online',email='youremail@email.com')
 
@@ -33,3 +33,13 @@ for i,j in sets(I,J):
     if m.get(x[i,j])==1:
         print(f"agent {i} assigned to job {j}")
 
+'''
+
+Output:
+
+agent 0 assigned to job 2
+agent 1 assigned to job 3
+agent 2 assigned to job 0
+agent 3 assigned to job 1
+
+'''

@@ -13,11 +13,11 @@ c = m.pvar('c', [J])
 
 m.obj(sum(w[j]*c[j] for j in J))
 
-for i in I: m.con(sum(x[i,j] for j in J) == 1)
-for j in J: m.con(sum(x[i,j] for i in I) == 1)
-m.con(c[0] == s + sum(x[(i,0)]*p[i] for i in I))
+for i in I: m.con(sum(x[i,j] for j in J) |e| 1)
+for j in J: m.con(sum(x[i,j] for i in I) |e| 1)
+m.con(c[0] |e| s + sum(x[(i,0)]*p[i] for i in I))
 for j in J:
-    if j!=0: m.con(c[j] >= c[j-1] + sum(x[(i,j)]*p[i] for i in I))
+    if j!=0: m.con(c[j] |g| c[j-1] + sum(x[(i,j)]*p[i] for i in I))
 
 m.sol('min','cbc')
 
@@ -25,3 +25,14 @@ for i,j in sets(I,J):
     if m.get(x[i,j])==1:
         print(f"| job  {i}  | position {j} | finish: {m.get(c[j])} | ") 
 
+
+'''
+
+Output:
+
+| job  0  | position 2 | finish: 19.0 | 
+| job  1  | position 0 | finish: 8.0 | 
+| job  2  | position 3 | finish: 28.0 | 
+| job  3  | position 1 | finish: 12.0 | 
+
+'''

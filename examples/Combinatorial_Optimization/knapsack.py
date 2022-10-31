@@ -19,3 +19,18 @@ for j in J:
     print(f"item {j} is {m.get(x[j])}")
 
 print("obj:", -m.get_obj())
+
+'''
+Output:
+
+item 0 is 0.0
+item 1 is 1.0
+item 2 is 0.0
+item 3 is 1.0
+item 4 is 1.0
+item 5 is 0.0
+item 6 is 1.0
+obj: 133.0
+
+
+'''

@@ -14,10 +14,10 @@ for (i,j) in it.product(N,N):
 x = m.bvar('x',[N,N])
 u = m.ivar('u',[N], [0,len(N)-1])
 
-m.obj(sum(c[i][j]*x[(i,j)]  for i,j in it.product(N,N)))
+m.obj(sum(c[i][j]*x[i,j]  for i,j in it.product(N,N)))
 
-for j in N: m.con(sum(x[i,j] for i in N if i!=j ) == 1)
-for i in N: m.con(sum(x[i,j] for j in N if j!=i ) == 1)
+for j in N: m.con(sum(x[i,j] for i in N if i!=j ) |e| 1)
+for i in N: m.con(sum(x[i,j] for j in N if j!=i ) |e| 1)
 for i,j in sets(U,N): 
     if i!=j: m.con(u[i] - u[j] + x[(i,j)] * len(N) <= len(N)-1)
 
@@ -26,3 +26,15 @@ m.sol('min','cbc')
 for i,j in sets(N,N):
     if m.get(x[i,j])==1:
         print(f"arc {i}-{j}")
+
+'''
+
+Output:
+
+arc 0-2
+arc 1-0
+arc 2-4
+arc 3-1
+arc 4-3
+
+'''

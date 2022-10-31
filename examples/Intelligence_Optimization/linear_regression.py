@@ -39,6 +39,11 @@ w = []
 for i in U: w.append(m.get(x[i])[0])
 b = m.get(z)[0]
 
+x = w
+z = b
+
+
+
 #Test dataset
 aa = [[6,8,9],[7,4,3],[8,3,5],[9,1,6],[10,9,3]] #Features
 bb = [ 6     , 7     , 8     , 9     , 10     ] #Target
