@@ -1,40 +1,53 @@
 from feloopy import *
 
-m = feloopy('TravelingSalesman','pulp')
+#Environment
+m = feloopy('TSP','ortools')
 
-np.random.seed(0) #Fixing the seed for random number generator
+#Sets
+N = range(10)
+U = range(1,len(N)) 
 
-N = range(5) #Set of cities (nodes)
-U = range(1,len(N)) #Set of dummy variables for sub-tour elimination constraint
+#Parameters
+np.random.seed(0)
+
 c = np.random.randint(1,10, size=(len(N),len(N))) 
-for (i,j) in it.product(N,N):
+
+for i,j in sets(N,N):
     c[i][i]=0                 #Cost (distance) matrix 
     c[i][j]=c[j][i]
 
+#Variables
 x = m.bvar('x',[N,N])
-u = m.ivar('u',[N], [0,len(N)-1])
+u = m.ivar('u',[N])
 
-m.obj(sum(c[i][j]*x[i,j]  for i,j in it.product(N,N)))
+#Objective
+m.obj(sum(c[i,j]*x[i,j]  for i,j in sets(N,N)))
 
+#Constraints
 for j in N: m.con(sum(x[i,j] for i in N if i!=j ) |e| 1)
 for i in N: m.con(sum(x[i,j] for j in N if j!=i ) |e| 1)
-for i,j in sets(U,N): 
-    if i!=j: m.con(u[i] - u[j] + x[(i,j)] * len(N) <= len(N)-1)
 
-m.sol('min','cbc')
+for i,j in sets(U,N): 
+    if i!=j: m.con(u[i] - u[j] + x[i,j] * len(N) <= len(N)-1)
+
+m.sol('min','scip')
 
 for i,j in sets(N,N):
     if m.get(x[i,j])==1:
-        print(f"arc {i}-{j}")
+        print(f"traveler goes from {i} to {j}")
 
 '''
-
 Output:
 
-arc 0-2
-arc 1-0
-arc 2-4
-arc 3-1
-arc 4-3
+traveler goes from 0 to 9
+traveler goes from 1 to 4
+traveler goes from 2 to 6
+traveler goes from 3 to 0
+traveler goes from 4 to 3
+traveler goes from 5 to 2
+traveler goes from 6 to 1
+traveler goes from 7 to 8
+traveler goes from 8 to 5
+traveler goes from 9 to 7
 
 '''
