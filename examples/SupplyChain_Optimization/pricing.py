@@ -1,14 +1,16 @@
 from feloopy import *
 
+#Environment
+m = feloopy('LinearRegression','gekko') 
 
+#Data
 #     Monday   Tuesday    Wednesday   Thursday   Friday   Saturday   Sunday
 a = [   [80],    [150],       [200],    [400],    [145],    [350],    [409]]    #Sales
 b = [     20,       22,          18,       25,       55,       15,       21]    #Prices
+
+#Sets
 U = range(len(a[0]))  #Set of input features
 T = range(len(b))     #Set of the training points
-
-
-m = feloopy('LinearRegression','gekko') 
 
 #Defining sets (based on input data):
 U = range(len(a[0])) #Features
