@@ -27,12 +27,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
 
-from types import NoneType
 from feloopy.core import *
 from feloopy.exact import *
 from feloopy.heuristic import *
 
 import math as mt
+import pandas as pd
 
 class empty:
 
@@ -140,7 +140,7 @@ class feloopy:
             else:
                 return empty(0)
 
-        if type(self.Agent) == NoneType:
+        if type(self.Agent) == type(None):
             if b[1]==1: b=[0,None]
             return pvar_maker[self.InterfaceName](self.ModelObject, var_name, b, dim)
         else:
@@ -163,7 +163,7 @@ class feloopy:
             else:
                 return empty(0)
 
-        if type(self.Agent) == NoneType:
+        if type(self.Agent) == type(None):
             return bvar_maker[self.InterfaceName](self.ModelObject, var_name, b, dim)
         else:
             return bvar_maker[self.InterfaceName](var_name, self.Agent, self.NotActive[1][var_name], dim, b, self.Vectorized)
@@ -185,7 +185,7 @@ class feloopy:
             else:
                 return empty(0)
 
-        if type(self.Agent) == NoneType:
+        if type(self.Agent) == type(None):
             if b[1]==1: b=[0,None]
             return ivar_maker[self.InterfaceName](self.ModelObject, var_name, b, dim)
         else:
@@ -224,11 +224,11 @@ class feloopy:
         self.ConstraintExpression.append(expr)
 
     def sol(self, dir, solvername, algoptions=None, objectivenumber=0, email=None):
-        if type(self.Agent) == NoneType or self.NotActive:
+        if type(self.Agent) == type(None) or self.NotActive:
             self.SolverName = solvername
             self.Direction = dir
             self.AlgOptions = algoptions
-        if type(self.Agent) == NoneType:
+        if type(self.Agent) == type(None):
             self.Result, self.Chronometer = solver[self.InterfaceName](
                 self.ModelObject, self.ObjectiveExpression, self.ConstraintExpression, dir, solvername, objectivenumber, email)
             return self.Result
@@ -255,6 +255,16 @@ class feloopy:
     
     def ava(self):
         return ava_solver[self.InterfaceName](self.InterfaceName)
+
+    def dat(path,shape,row_dim,col_dim,index_names,sheet_name):
+        parameter = pd.read_excel(path, header=[i for i in range(col_dim)], index_col=[i for i in range(row_dim)], sheet_name=sheet_name)
+        created_par = np.zeros(shape=([len(i) for i in shape]))
+        for keys in it.product(*shape):
+            try:
+                created_par[keys] = parameter.loc[tuple([index_names[i]+str(keys[i]) for i in range(row_dim)]),tuple([index_names[i]+str(keys[i]) for i in range(row_dim,len(index_names))])]
+            except:
+                created_par[keys] = None
+        return created_par
 
 class implement:
 
