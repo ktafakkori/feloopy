@@ -99,7 +99,6 @@ def solve_ortools_model(modelobject, objectiveslist, constraintslist, dir, solve
     time_solve_end = timeit.default_timer()
     return result, [time_solve_begin, time_solve_end]
 
-
 pulp_solver_selector = {
     'glpk': pulp_interface.GLPK_CMD(),
     'pyglpk': pulp_interface.PYGLPK(),
@@ -114,7 +113,8 @@ pulp_solver_selector = {
     'coinmp_dll': pulp_interface.COINMP_DLL(),
     'choco': pulp_interface.CHOCO_CMD(),
     'mipcl': pulp_interface.MIPCL_CMD(),
-    'scip': pulp_interface.SCIP_CMD()
+    'scip': pulp_interface.SCIP_CMD(),
+    'highs': pulp_interface.HiGHS_CMD(),
 }
 
 

@@ -100,5 +100,8 @@ benchmark_int = {
     'ortools': benchmark_exact,
     'pulp': benchmark_exact,
     'pyomo': benchmark_exact,
+    'cplex': benchmark_exact,
+    'gurobi': benchmark_exact,
+    'xpress': benchmark_exact,
     'ga' : benchmark_heuristic
 }

@@ -62,6 +62,12 @@ install('feloopy')
 
 - Using the package provided in the release section.
 
+- Using the following code (Attention: A pre-release version will be downloaded and installed.):
+
+```python
+pip install -U git+https://github.com/ktafakkori/feloopy
+```
+
 ## 📄 Documentation
 
 A short documentation is provided in the repository. Please refer to it for more information on installation and the usage of the FelooPy package. 
