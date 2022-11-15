@@ -32,6 +32,7 @@ import pulp as pulp_interface
 import pyomo.environ as pyomo_interface
 import gekko as gekko_interface
 from ortools.linear_solver import pywraplp as ortools_interface
+import pymprog as pymprog_interface
 import os
 import timeit
 import numpy as np
@@ -226,6 +227,23 @@ def solve_pyomo_model(modelobject, objectiveslist, constraintslist, dir, solvern
         time_solve_end = timeit.default_timer()
     return result, [time_solve_begin, time_solve_end]
 
+pymprog_solver_selector = {'glpk':'glpk'}
+
+def solve_pymprog_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, email=None):
+    if solvername not in pymprog_solver_selector.keys():
+        raise RuntimeError(
+            "Pymprog does not support '%s' as a solver. Check the provided name or use another interface." %(solvername))
+    if dir == "min":
+        pymprog_interface.minimize(objectiveslist[objectivenumber], 'objective')
+    if dir == "max":
+        pymprog_interface.maximize(objectiveslist[objectivenumber], 'objective')
+    for constraint in constraintslist:
+        constraint
+    time_solve_begin = timeit.default_timer()
+    result = pymprog_interface.solve()
+    time_solve_end = timeit.default_timer()
+    return result, [time_solve_begin, time_solve_end]
+
 def solve_ga_model(objectiveslist, constraintslist, dir, objectivenumber=0):
     penalty = np.amax(np.array([0]+constraintslist, dtype=object))
     if dir == "min":
@@ -249,6 +267,7 @@ solver = {
     "ortools": solve_ortools_model,
     "pulp": solve_pulp_model,
     "pyomo": solve_pyomo_model,
+    "pymprog": solve_pymprog_model,
     "ga": solve_ga_model
 }
 
@@ -290,6 +309,13 @@ def ava_solver(interface):
         print("-------------------------")
         print(pyomo_online_solver_selector.keys())
         print()
+    if interface == "pymprog":
+        print()
+        print("-------------------------")
+        print("Available LOCAL:   ")
+        print("-------------------------")
+        print(pymprog_solver_selector.keys())
+        print()
     if interface == "ga":
         print()
         print("-------------------------")
@@ -298,11 +324,11 @@ def ava_solver(interface):
         print("geneticalgorithm")
         print()
 
-
 ava_solver = {
     "gekko": ava_solver,
     "ortools": ava_solver,
     "pulp": ava_solver,
+    "pymprog": ava_solver,
     "pyomo": ava_solver
 }
 

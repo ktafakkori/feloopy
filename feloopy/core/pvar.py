@@ -32,6 +32,7 @@ import pulp as pulp_interface
 import pyomo.environ as pyomo_interface
 import gekko as gekko_interface
 from ortools.linear_solver import pywraplp as ortools_interface
+import pymprog as pymprog_interface
 from .age import *
 
 # gekko
@@ -78,6 +79,15 @@ def add_pyomo_pvar(modelobject, var_name, b, dim=0):
 
     return modelobject.component(var_name)
 
+#pymprog
+
+def add_pymprog_pvar(modelobject, var_name, b, dim=0):
+    if dim == 0:
+        return pymprog_interface.var(var_name,bounds=(b[0],b[1])) 
+    else:
+        if len(dim)==1: return {key: pymprog_interface.var(var_name,bounds=(b[0],b[1]))  for key in dim[0]}
+        else: return {key: pymprog_interface.var(var_name,bounds=(b[0],b[1])) for key in it.product(*dim)}
+
 # ga
 
             
@@ -98,5 +108,6 @@ pvar_maker = {
     "ortools": add_ortools_pvar,
     "pulp": add_pulp_pvar,
     "pyomo": add_pyomo_pvar,
+    "pymprog": add_pymprog_pvar,
     "ga": add_ga_pvar
 }

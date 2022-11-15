@@ -20,6 +20,6 @@ setup(
 
     license='MIT',
 
-    install_requires=['pyomo','pulp','gekko','ortools','tabulate','numpy','matplotlib','infix','func-timeout','pandas','openpyxl']
+    install_requires=['pyomo','pulp','gekko','ortools','pymprog','tabulate','numpy','matplotlib','infix','func-timeout','pandas','openpyxl']
 
 )

@@ -32,6 +32,7 @@ import pulp as pulp_interface
 import pyomo.environ as pyomo_interface
 import gekko as gekko_interface
 from ortools.linear_solver import pywraplp as ortools_interface
+import pymprog as pymprog_interface
 import numpy as np
 from feloopy.heuristic import *
 
@@ -51,6 +52,9 @@ def add_pyomo_model():
     modelobject = pyomo_interface.ConcreteModel()
     return modelobject
 
+def add_pymprog_model():
+    pymprog_interface.begin('None')
+
 def add_ga_model(model, n_vars, algsetting):
         varbound = np.array([[0, 1]]*n_vars)
         model = ga(function=model, dimension=n_vars, variable_type='real', variable_boundaries=varbound, progress_bar=False, convergence_curve=False, algorithm_parameters=algsetting)
@@ -61,6 +65,7 @@ model_maker = {
     "ortools": add_ortools_model,
     "pulp": add_pulp_model,
     "pyomo": add_pyomo_model,
+    "pymprog": add_pymprog_model,
     "ga": add_ga_model
 }
 

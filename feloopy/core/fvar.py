@@ -32,6 +32,7 @@ import pulp as pulp_interface
 import pyomo.environ as pyomo_interface
 import gekko as gekko_interface
 from ortools.linear_solver import pywraplp as ortools_interface
+import pymprog as pymprog_interface
 from .age import *
 
 # gekko
@@ -78,6 +79,17 @@ def add_pyomo_fvar(modelobject, var_name, b, dim=0):
         modelobject.add_component(var_name, pyomo_interface.Var([i for i in it.product(*dim)], domain=pyomo_interface.Reals, bounds=(b[0],b[1])))
     return modelobject.component(var_name)
 
+# pymprog
+
+def add_pymprog_fvar(modelobject, var_name, b, dim=0):
+    if dim == 0:
+        return pymprog_interface.var(var_name,bounds=(b[0],b[1])) 
+    else:
+        if len(dim)==1: return {key: pymprog_interface.var(var_name,bounds=(b[0],b[1]))  for key in dim[0]}
+        else: return {key: pymprog_interface.var(var_name,bounds=(b[0],b[1])) for key in it.product(*dim)}
+
+# ga
+
 def add_ga_fvar(var_name, agent, VarLength, dim=0,  b=[0, 1], vectorized=False):
     if dim == 0:
         if vectorized:
@@ -90,12 +102,11 @@ def add_ga_fvar(var_name, agent, VarLength, dim=0,  b=[0, 1], vectorized=False):
         else:
             return singleagent(var_name, b[0]+ agent[VarLength[0]:VarLength[1]] * (b[1] - b[0]), dim, 'fvar')
 
-
-
 fvar_maker = {
     "gekko": add_gekko_fvar,
     "ortools": add_ortools_fvar,
     "pulp": add_pulp_fvar,
     "pyomo": add_pyomo_fvar,
+    "pymprog": add_pymprog_fvar,
     "ga": add_ga_fvar
 }

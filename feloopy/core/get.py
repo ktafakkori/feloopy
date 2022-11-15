@@ -31,6 +31,7 @@ import itertools as it
 import pulp as pulp_interface
 import pyomo.environ as pyomo_interface
 import gekko as gekko_interface
+import pymprog as pymprog_interface
 from ortools.linear_solver import pywraplp as ortools_interface
 
 gekko_status_dict = {0: "not_optimal", 1: "optimal"}
@@ -74,25 +75,37 @@ def show_pyomo_getstat(modelobject, result):
 def show_pyomo_getobj(modelobject, result):
     return pyomo_interface.value(modelobject.OBJ)
 
+def show_pymprog_get(input):
+    return input.primal
+
+def show_pymprog_getstat(modelobject, result):
+    return pymprog_interface.status()
+
+def show_pymprog_getobj(modelobject, result):
+    return pymprog_interface.vobj()
+
 variable_getter = {
     "gekko": show_gekko_get,
     "ortools": show_ortools_get,
     "pulp": show_pulp_get,
-    "pyomo": show_pyomo_get
+    "pyomo": show_pyomo_get,
+    "pymprog": show_pymprog_get
 }
 
 objective_getter = {
     "gekko": show_gekko_getobj,
     "ortools": show_ortools_getobj,
     "pulp": show_pulp_getobj,
-    "pyomo": show_pyomo_getobj
+    "pyomo": show_pyomo_getobj,
+    "pymprog": show_pymprog_getobj
 }
 
 status_getter = {
     "gekko": show_gekko_getstat,
     "ortools": show_ortools_getstat,
     "pulp": show_pulp_getstat,
-    "pyomo": show_pyomo_getstat
+    "pyomo": show_pyomo_getstat,
+    "pymprog": show_pymprog_getstat
 }
 
 
