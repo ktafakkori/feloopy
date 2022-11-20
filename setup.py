@@ -10,5 +10,34 @@ setup(
     url = 'https://github.com/ktafakkori/feloopy',
     keywords = ['optimization', 'machine_learning', 'simulation', 'operations_research', 'computer_science', 'data_science'],
     license='MIT',
-    install_requires=['pyscipopt','cvxpy','gurobipy','pyomo','picos','optlang','pulp','gekko','ortools','pymprog','tabulate','numpy','matplotlib','infix','func-timeout','pandas','openpyxl','cplex','docplex','xpress']
+    install_requires=[
+    #dependencies
+    'tabulate',
+    'numpy',
+    'matplotlib',
+    'infix',
+    'func-timeout',
+    'pandas',
+    'openpyxl',
+
+    #Interfaces & solvers
+    'gekko',
+    'ortools',
+    'pulp',
+    'pyomo',
+    'pymprog',
+    'picos',
+    'optlang',
+    'cplex',
+    'docplex',
+    'gurobi',
+    'xpress',
+    'linopy',
+    'cvxpy',
+    'cylp',
+    'mip',
+    'ga',
+    ]
 )
+
+    
