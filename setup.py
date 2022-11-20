@@ -27,7 +27,6 @@ setup(
     'pyomo',
     'pymprog',
     'picos',
-    'optlang',
     'cplex',
     'docplex',
     'gurobipy',
