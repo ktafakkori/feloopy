@@ -5,7 +5,12 @@
 
 # FelooPy
 
-![](images/feloopy.gif)
+<p align="center">
+  <img src="images/feloopy.gif" 
+    width="400" 
+    height="400"
+    />
+</p>
 
 An integrated optimization environment (IOE) for AutoOR in Python!
 
