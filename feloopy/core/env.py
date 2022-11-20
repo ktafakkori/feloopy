@@ -18,7 +18,7 @@ import pulp as pulp_interface
 from ortools.linear_solver import pywraplp as ortools_interface
 import gekko as gekko_interface
 
-# TODO: None
+# TODO: Fix optlang's support
 
 
 # gekko
@@ -62,13 +62,13 @@ def add_pymprog_model():
 def add_picos_model():
     return picos_interface.Problem('None')
 
-
+'''
 # optlang
 
 
 def add_optlang_model():
     return optlang_interface.Model(name='None')
-
+'''
 
 # cplex
 
