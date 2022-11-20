@@ -30,7 +30,7 @@ setup(
     'optlang',
     'cplex',
     'docplex',
-    'gurobi',
+    'gurobipy',
     'xpress',
     'linopy',
     'cvxpy',
