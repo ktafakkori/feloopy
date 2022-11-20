@@ -10,16 +10,12 @@ import xpress as xpress_interface
 import gurobipy as gurobi_interface
 from docplex.mp.model import Model as CPLEXMODEL
 import docplex as cplex_interface
-import optlang as optlang_interface
 import picos as picos_interface
 import pymprog as pymprog_interface
 import pyomo.environ as pyomo_interface
 import pulp as pulp_interface
 from ortools.linear_solver import pywraplp as ortools_interface
 import gekko as gekko_interface
-
-# TODO: Fix optlang's support
-
 
 # gekko
 
@@ -61,14 +57,6 @@ def add_pymprog_model():
 
 def add_picos_model():
     return picos_interface.Problem('None')
-
-'''
-# optlang
-
-
-def add_optlang_model():
-    return optlang_interface.Model(name='None')
-'''
 
 # cplex
 
@@ -133,7 +121,6 @@ model_maker = {
     "pyomo": add_pyomo_model,
     "pymprog": add_pymprog_model,
     "picos": add_picos_model,
-    "optlang": add_optlang_model,
     "cplex": add_cplex_model,
     "gurobi": add_gurobi_model,
     "xpress": add_xpress_model,
