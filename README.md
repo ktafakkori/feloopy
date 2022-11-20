@@ -5,7 +5,7 @@
 
 # FelooPy
 
-![](images/feloopy.png)
+![](images/feloopy.gif)
 
 An integrated optimization environment (IOE) for AutoOR in Python!
 
