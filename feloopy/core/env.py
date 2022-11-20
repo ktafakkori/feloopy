@@ -34,6 +34,8 @@ import gekko as gekko_interface
 from ortools.linear_solver import pywraplp as ortools_interface
 import pymprog as pymprog_interface
 import numpy as np
+import picos as picos_interface
+import optlang as optlang_interface
 from feloopy.heuristic import *
 
 def add_gekko_model():
@@ -55,6 +57,12 @@ def add_pyomo_model():
 def add_pymprog_model():
     pymprog_interface.begin('None')
 
+def add_picos_model():
+    return picos_interface.Problem('None')
+
+def add_optlang_model():
+    return optlang_interface.Model(name='None')
+
 def add_ga_model(model, n_vars, algsetting):
         varbound = np.array([[0, 1]]*n_vars)
         model = ga(function=model, dimension=n_vars, variable_type='real', variable_boundaries=varbound, progress_bar=False, convergence_curve=False, algorithm_parameters=algsetting)
@@ -66,6 +74,8 @@ model_maker = {
     "pulp": add_pulp_model,
     "pyomo": add_pyomo_model,
     "pymprog": add_pymprog_model,
+    "picos": add_picos_model,
+    "optlang": add_optlang_model,
     "ga": add_ga_model
 }
 
