@@ -7,8 +7,6 @@
 
 <p align="center">
   <img src="images/feloopy.gif" 
-    width="400" 
-    height="400"
     />
 </p>
 
