@@ -8,6 +8,6 @@ J = range(3)
 
 data_file = os.path.join(sys.path[0], "data.xlsx")
 
-par_h = data(data_file, [I,M,T,J], 2,2,['i','m','t','j'],"h") 
+par_h = load_data(data_file, [I,M,T,J], 2,2,['i','m','t','j'],"h") 
 
-par_p = data(data_file, [I,T,J], 1,2,['i','t','j'],"p")
+par_p = load_data(data_file, [I,T,J], 1,2,['i','t','j'],"p")

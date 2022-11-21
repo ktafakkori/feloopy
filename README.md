@@ -32,21 +32,22 @@ License: MIT
 - Native support for sensitivity analysis.
 - Native support for benchmarking all optimizers for your_model.
 - Native support for heuristic optimization with the same syntax.
-- Native support for solver interfaces (Coming soon)
-- Native support for multi-objective optimization (Coming soon)
+- Native support for solver interfaces.
+- Native support for multi-objective optimization (Coming soon).
 - ...
 
 ## ⬇️ Installation
+Note: If you have installed a previous release, you might uninstall it by replacing `install -U` with `uninstall` in the following commands.
 
 There are multiple ways to install this Python package:
 
-- Using the command `pip install feloopy` in a terminal.
-- Using the command `!pip install feloopy` at the top of your code and implementing it for once.
+- Using the command `pip install -U feloopy` in a terminal.
+- Using the command `!pip install -U feloopy` at the top of your code and implementing it for once.
 - Using the following piece of code:
 
 ```python
 import os
-os.system("pip install feloopy")
+os.system("pip install -U feloopy")
 ```
 
 - Using the following function:
@@ -56,16 +57,16 @@ import pip
 
 def install(package):
     if hasattr(pip, 'main'):
-        pip.main(['install', package])
+        pip.main(['install','-U', package])
     else:
-        pip._internal.main(['install', package])
+        pip._internal.main(['install','-U', package])
 
 install('feloopy')
 ```
 
 - Using the package provided in the release section.
 
-- Using the following code (Attention: A pre-release version will be downloaded and installed.):
+- Using the following code (attention: A pre-release version will be downloaded and installed.):
 
 ```python
 pip install -U git+https://github.com/ktafakkori/feloopy
@@ -95,7 +96,7 @@ Hence, it is kindly requested to support this work by giving a ⭐ to the reposi
 
 ## ❤️ Sponsorship
 
-Contact me on [Twitter][1], or on [Linkedin][2].
+Contact me on [Linkedin][2] or [Twitter][1].
 
 [1]: https://twitter.com/ktafakkori
 [2]: https://www.linkedin.com/in/keivan-tafakkori/
