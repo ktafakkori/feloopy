@@ -2,7 +2,7 @@ import pandas as pd
 import itertools as it
 import numpy as np
 
-def data(path,shape,row_dim,col_dim,index_names,sheet_name):
+def load_data(path,shape,row_dim,col_dim,index_names,sheet_name):
     parameter = pd.read_excel(path, header=[i for i in range(col_dim)], index_col=[i for i in range(row_dim)], sheet_name=sheet_name)
     created_par = np.zeros(shape=([len(i) for i in shape]))
     for keys in it.product(*shape):

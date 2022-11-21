@@ -27,25 +27,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
 
+
 import itertools as it
-import pulp as pulp_interface
-import pyomo.environ as pyomo_interface
-import gekko as gekko_interface
-from ortools.linear_solver import pywraplp as ortools_interface
-import pymprog as pymprog_interface
 import os
 import timeit
 import numpy as np
-
+import mip as mip_interface
+import cylp as cylp_interface
+from cylp.cy import CyClpSimplex
+import cvxpy as cvxpy_interface
+from linopy import Model
+import xpress as xpress_interface
+import gurobipy as gurobi_interface
+from docplex.mp.model import Model as CPLEXMODEL
+import docplex as cplex_interface
+import picos as picos_interface
+import pymprog as pymprog_interface
+import pyomo.environ as pyomo_interface
+import pulp as pulp_interface
+from ortools.linear_solver import pywraplp as ortools_interface
+import gekko as gekko_interface
 gekko_solver_selector = {'apopt': 1,
                          'bpopt': 2,
                          'ipopt': 3}
 
 
-def solve_gekko_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, email=None):
+def solve_gekko_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, algoptions=None, email=None):
     if solvername not in gekko_solver_selector.keys():
         raise RuntimeError(
-            "Gekko does not support '%s' as a solver. Check the provided name or use another interface." %(solvername))
+            "Gekko does not support '%s' as a solver. Check the provided name or use another interface." % (solvername))
     if dir == "min":
         modelobject.Minimize(objectiveslist[objectivenumber])
     if dir == "max":
@@ -70,7 +80,7 @@ def solve_gekko_model(modelobject, objectiveslist, constraintslist, dir, solvern
 ortools_solver_selector = {
     'clp': 'CLP_LINEAR_PROGRAMMING',
     'cbc': 'CBC_MIXED_INTEGER_PROGRAMMING',
-    'scip' : 'SCIP_MIXED_INTEGER_PROGRAMMING',
+    'scip': 'SCIP_MIXED_INTEGER_PROGRAMMING',
     'glop': 'GLOP_LINEAR_PROGRAMMING',
     'bop': 'BOP_INTEGER_PROGRAMMING',
     'sat': 'SAT_INTEGER_PROGRAMMING',
@@ -84,10 +94,11 @@ ortools_solver_selector = {
     'glpk': 'GLPK_MIXED_INTEGER_PROGRAMMING'
 }
 
-def solve_ortools_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, email=None):
+
+def solve_ortools_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, algoptions=None, email=None):
     if solvername not in ortools_solver_selector.keys():
         raise RuntimeError(
-            "Ortools does not support '%s' as a solver. Check the provided name or use another interface." %(solvername))
+            "Ortools does not support '%s' as a solver. Check the provided name or use another interface." % (solvername))
     if dir == "min":
         modelobject.Minimize(objectiveslist[objectivenumber])
     if dir == "max":
@@ -99,6 +110,7 @@ def solve_ortools_model(modelobject, objectiveslist, constraintslist, dir, solve
     result = modelobject.Solve()
     time_solve_end = timeit.default_timer()
     return result, [time_solve_begin, time_solve_end]
+
 
 pulp_solver_selector = {
     'glpk': pulp_interface.GLPK_CMD(),
@@ -114,22 +126,20 @@ pulp_solver_selector = {
     'coinmp_dll': pulp_interface.COINMP_DLL(),
     'choco': pulp_interface.CHOCO_CMD(),
     'mipcl': pulp_interface.MIPCL_CMD(),
-    'scip': pulp_interface.SCIP_CMD()
-    #,
-#    'highs': pulp_interface.HiGHS_CMD(),
+    'scip': pulp_interface.SCIP_CMD(),
 }
 
 
-def solve_pulp_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, email=None):
+def solve_pulp_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, algoptions=None, email=None):
     if solvername not in pulp_solver_selector.keys():
         raise RuntimeError(
-            "Pulp does not support '%s' as a solver. Check the provided name or use another interface." %(solvername))
+            "Pulp does not support '%s' as a solver. Check the provided name or use another interface." % (solvername))
     if dir == "min":
         modelobject += objectiveslist[objectivenumber]
     if dir == "max":
         modelobject += -objectiveslist[objectivenumber]
     for constraint in constraintslist:
-        modelobject+=constraint
+        modelobject += constraint
     time_solve_begin = timeit.default_timer()
     result = modelobject.solve(solver=pulp_solver_selector[solvername])
     time_solve_end = timeit.default_timer()
@@ -196,29 +206,35 @@ pyomo_online_solver_selector = {
     'snopt_online': 'snopt'
 }
 
-def solve_pyomo_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, email=None):
+
+def solve_pyomo_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, algoptions=None, email=None):
     if dir == "min":
         modelobject.OBJ = pyomo_interface.Objective(
             expr=objectiveslist[objectivenumber], sense=pyomo_interface.minimize)
     if dir == "max":
         modelobject.OBJ = pyomo_interface.Objective(
-            expr=objectiveslist[objectivenumber], sense=pyomo_interface.maximize)    
+            expr=objectiveslist[objectivenumber], sense=pyomo_interface.maximize)
     modelobject.constraint = pyomo_interface.ConstraintList()
     for element in constraintslist:
         modelobject.constraint.add(expr=element)
     if 'online' not in solvername:
         if solvername not in pyomo_offline_solver_selector.keys():
             raise RuntimeError(
-                "Pyomo does not support '%s' as a solver. Check the provided name or use another interface." %(solvername))
+                "Pyomo does not support '%s' as a solver. Check the provided name or use another interface." % (solvername))
         solver_manager = pyomo_interface.SolverFactory(
             pyomo_offline_solver_selector[solvername])
-        time_solve_begin = timeit.default_timer()
-        result = solver_manager.solve(modelobject)
-        time_solve_end = timeit.default_timer()
+        if algoptions == None:
+            time_solve_begin = timeit.default_timer()
+            result = solver_manager.solve(modelobject)
+            time_solve_end = timeit.default_timer()
+        else:
+            time_solve_begin = timeit.default_timer()
+            result = solver_manager.solve(modelobject, options=algoptions)
+            time_solve_end = timeit.default_timer()      
     else:
         if solvername not in pyomo_online_solver_selector.keys():
             raise RuntimeError(
-                "Neos does not support '%s' as a solver. Check the provided name or use another interface." %(solvername))
+                "Neos does not support '%s' as a solver. Check the provided name or use another interface." % (solvername))
         os.environ['NEOS_EMAIL'] = email
         solver_manager = pyomo_interface.SolverManagerFactory('neos')
         time_solve_begin = timeit.default_timer()
@@ -227,22 +243,203 @@ def solve_pyomo_model(modelobject, objectiveslist, constraintslist, dir, solvern
         time_solve_end = timeit.default_timer()
     return result, [time_solve_begin, time_solve_end]
 
-pymprog_solver_selector = {'glpk':'glpk'}
 
-def solve_pymprog_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, email=None):
+pymprog_solver_selector = {'glpk': 'glpk'}
+
+
+def solve_pymprog_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, algoptions=None, email=None):
     if solvername not in pymprog_solver_selector.keys():
         raise RuntimeError(
-            "Pymprog does not support '%s' as a solver. Check the provided name or use another interface." %(solvername))
+            "Pymprog does not support '%s' as a solver. Check the provided name or use another interface." % (solvername))
     if dir == "min":
-        pymprog_interface.minimize(objectiveslist[objectivenumber], 'objective')
+        pymprog_interface.minimize(
+            objectiveslist[objectivenumber], 'objective')
     if dir == "max":
-        pymprog_interface.maximize(objectiveslist[objectivenumber], 'objective')
+        pymprog_interface.maximize(
+            objectiveslist[objectivenumber], 'objective')
     for constraint in constraintslist:
         constraint
     time_solve_begin = timeit.default_timer()
     result = pymprog_interface.solve()
     time_solve_end = timeit.default_timer()
     return result, [time_solve_begin, time_solve_end]
+
+
+picos_solver_selector = {'cplex': 'cplex', 'cvxopt': 'cvxopt', 'ecos': 'ecos', 'glpk': 'glpk',
+                         'gurobi': 'gurobi', 'mosek': 'mosek', 'mskfsn': 'mskfsn', 'osqp': 'osqp', 'scip': 'scip', 'smcp': 'smcp'}
+
+
+def solve_picos_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, algoptions=None, email=None):
+    if solvername not in picos_solver_selector.keys():
+        raise RuntimeError(
+            "Picos does not support '%s' as a solver. Check the provided name or use another interface." % (solvername))
+    if dir == "min":
+        modelobject.set_objective('min', objectiveslist[objectivenumber])
+    if dir == "max":
+        modelobject.set_objective('max', objectiveslist[objectivenumber])
+    for constraint in constraintslist:
+        modelobject += constraint
+    time_solve_begin = timeit.default_timer()
+    result = modelobject.solve(solver=solvername)
+    time_solve_end = timeit.default_timer()
+    return result, [time_solve_begin, time_solve_end]
+
+
+cplex_solver_selector = {'cplex': 'cplex'}
+
+
+def solve_cplex_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, algoptions=None, email=None):
+    if solvername not in cplex_solver_selector.keys():
+        raise RuntimeError(
+            "Cplex does not support '%s' as a solver. Check the provided name or use another interface." % (solvername))
+    if dir == "min":
+        modelobject.set_objective('min', objectiveslist[objectivenumber])
+    if dir == "max":
+        modelobject.set_objective('max', objectiveslist[objectivenumber])
+    for constraint in constraintslist:
+        modelobject.add_constraint(constraint)
+    time_solve_begin = timeit.default_timer()
+    result = modelobject.solve()
+    time_solve_end = timeit.default_timer()
+    return result, [time_solve_begin, time_solve_end]
+
+
+gurobi_solver_selector = {'gurobi': 'gurobi'}
+
+
+def solve_gurobi_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, algoptions=None, email=None):
+    if solvername not in gurobi_solver_selector.keys():
+        raise RuntimeError(
+            "Gurobi does not support '%s' as a solver. Check the provided name or use another interface." % (solvername))
+    if dir == "min":
+        modelobject.setObjective(
+            objectiveslist[objectivenumber], gurobi_interface.GRB.MINIMIZE)
+    if dir == "max":
+        modelobject.setObjective(
+            objectiveslist[objectivenumber], gurobi_interface.GRB.MAXIMIZE)
+    for constraint in constraintslist:
+        modelobject.addConstr(constraint)
+    time_solve_begin = timeit.default_timer()
+    result = modelobject.optimize()
+    time_solve_end = timeit.default_timer()
+    return result, [time_solve_begin, time_solve_end]
+
+
+xpress_solver_selector = {'xpress': 'xpress'}
+
+
+def solve_xpress_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, algoptions=None, email=None):
+    if solvername not in xpress_solver_selector.keys():
+        raise RuntimeError(
+            "Xpress does not support '%s' as a solver. Check the provided name or use another interface." % (solvername))
+    for constraint in constraintslist:
+        modelobject.addConstraint(constraint)
+    if dir == "min":
+        modelobject.setObjective(
+            objectiveslist[objectivenumber], sense=xpress_interface.minimize)
+    if dir == "max":
+        modelobject.setObjective(
+            objectiveslist[objectivenumber], sense=xpress_interface.maximize)
+    time_solve_begin = timeit.default_timer()
+    result = modelobject.solve()
+    time_solve_end = timeit.default_timer()
+    return result, [time_solve_begin, time_solve_end]
+
+
+linopy_solver_selector = {'cbc': 'cbc', 'glpk': 'glpk', 'highs': 'highs',
+                          'gurobi': 'gurobi', 'xpress': 'xpress', 'cplex': 'cplex'}
+
+
+def solve_linopy_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, algoptions=None, email=None):
+    if solvername not in linopy_solver_selector.keys():
+        raise RuntimeError(
+            "Linopy does not support '%s' as a solver. Check the provided name or use another interface." % (solvername))
+    if dir == "min":
+        modelobject.add_objective(objectiveslist[objectivenumber])
+    if dir == "max":
+        modelobject.add_objective(-objectiveslist[objectivenumber])
+    for constraint in constraintslist:
+        modelobject.add_constraints(constraint)
+    time_solve_begin = timeit.default_timer()
+    result = modelobject.solve(solver_name=solvername)
+    time_solve_end = timeit.default_timer()
+    return result, [time_solve_begin, time_solve_end]
+
+
+cvxpy_solver_selector = {
+    'qsqp': cvxpy_interface.OSQP,
+    'ecos': cvxpy_interface.ECOS,
+    'cvxopt': cvxpy_interface.CVXOPT,
+    'scs': cvxpy_interface.SCS,
+    'highs': [cvxpy_interface.SCIPY, {"method": "highs"}],
+    'glop': cvxpy_interface.GLOP,
+    'glpk': cvxpy_interface.GLPK,
+    'glpk_mi': cvxpy_interface.GLPK_MI,
+    'gurobi': cvxpy_interface.GUROBI,
+    'mosek': cvxpy_interface.MOSEK,
+    'cbc': cvxpy_interface.CBC,
+    'cplex': cvxpy_interface.CPLEX,
+    'nag': cvxpy_interface.NAG,
+    'pdlp': cvxpy_interface.PDLP,
+    'scip': cvxpy_interface.SCIP,
+    'xpress': cvxpy_interface.XPRESS}
+
+
+def solve_cvxpy_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, algoptions=None, email=None):
+    if solvername not in cvxpy_solver_selector.keys():
+        raise RuntimeError(
+            "Cvxpy does not support '%s' as a solver. Check the provided name or use another interface." % (solvername))
+    if dir == "min":
+        obj = cvxpy_interface.Minimize(objectiveslist[objectivenumber])
+    if dir == "max":
+        obj = cvxpy_interface.Maximize(objectiveslist[objectivenumber])
+    prob = cvxpy_interface.Problem(obj, constraintslist)
+    time_solve_begin = timeit.default_timer()
+    result = prob.solve(solver=cvxpy_solver_selector[solvername])
+    time_solve_end = timeit.default_timer()
+    return result, [time_solve_begin, time_solve_end]
+
+
+cylp_solver_selector = {'cbc': 'cbc'}
+
+
+def solve_cylp_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, algoptions=None, email=None):
+    if solvername not in cylp_solver_selector.keys():
+        raise RuntimeError(
+            "Cylp does not support '%s' as a solver. Check the provided name or use another interface." % (solvername))
+    for constraint in constraintslist:
+        modelobject += constraint
+    if dir == "min":
+        modelobject.objective = 1*(objectiveslist[objectivenumber])
+    if dir == "max":
+        modelobject.objective = -1*(objectiveslist[objectivenumber])
+    cbcModel = cylp_interface.cy.CyClpSimplex(modelobject).getCbcModel()
+    time_solve_begin = timeit.default_timer()
+    result = cbcModel.solve()
+    time_solve_end = timeit.default_timer()
+    return result, [time_solve_begin, time_solve_end]
+
+
+mip_solver_selector = {'cbc': 'cbc'}
+
+
+def solve_mip_model(modelobject, objectiveslist, constraintslist, dir, solvername, objectivenumber=0, algoptions=None, email=None):
+    if solvername not in mip_solver_selector.keys():
+        raise RuntimeError(
+            "Mip does not support '%s' as a solver. Check the provided name or use another interface." % (solvername))
+    for constraint in constraintslist:
+        modelobject += constraint
+    if dir == "min":
+        modelobject.objective = mip_interface.minimize(
+            objectiveslist[objectivenumber])
+    if dir == "max":
+        modelobject.objective = mip_interface.maximize(
+            objectiveslist[objectivenumber])
+    time_solve_begin = timeit.default_timer()
+    result = modelobject.optimize()
+    time_solve_end = timeit.default_timer()
+    return result, [time_solve_begin, time_solve_end]
+
 
 def solve_ga_model(objectiveslist, constraintslist, dir, objectivenumber=0):
     penalty = np.amax(np.array([0]+constraintslist, dtype=object))
@@ -251,14 +448,15 @@ def solve_ga_model(objectiveslist, constraintslist, dir, objectivenumber=0):
     if dir == "max":
         return -objectiveslist[0] + (penalty-0)**2
 
-def implement_ga_model(model,dir):
+
+def implement_ga_model(model, dir):
     time_solve_begin = timeit.default_timer()
     model.run()
     time_solve_end = timeit.default_timer()
     Chronometer = [time_solve_begin, time_solve_end]
     bestagent = model.best_variable
-    bestallreward = - model.best_function if dir == 'max' else  model.best_function 
-    result = [bestagent,bestallreward]
+    bestallreward = - model.best_function if dir == 'max' else model.best_function
+    result = [bestagent, bestallreward]
     return result, Chronometer
 
 
@@ -268,12 +466,22 @@ solver = {
     "pulp": solve_pulp_model,
     "pyomo": solve_pyomo_model,
     "pymprog": solve_pymprog_model,
+    "picos": solve_picos_model,
+    "cplex": solve_cplex_model,
+    "gurobi": solve_gurobi_model,
+    "xpress": solve_xpress_model,
+    "linopy": solve_linopy_model,
+    "cvxpy": solve_cvxpy_model,
+    "cylp": solve_cylp_model,
+    "mip": solve_mip_model,
     "ga": solve_ga_model
 }
 
 implementor = {
     "ga": implement_ga_model
 }
+
+
 def ava_solver(interface):
     if interface == "gekko":
         print()
@@ -316,20 +524,83 @@ def ava_solver(interface):
         print("-------------------------")
         print(pymprog_solver_selector.keys())
         print()
+    if interface == "cvxpy":
+        print()
+        print("-------------------------")
+        print("Available LOCAL:   ")
+        print("-------------------------")
+        print(cvxpy_solver_selector.keys())
+        print()
+    if interface == "linopy":
+        print()
+        print("-------------------------")
+        print("Available LOCAL:   ")
+        print("-------------------------")
+        print(linopy_solver_selector.keys())
+        print()
+    if interface == "cylp":
+        print()
+        print("-------------------------")
+        print("Available LOCAL:   ")
+        print("-------------------------")
+        print(cylp_solver_selector.keys())
+        print()
+    if interface == "picos":
+        print()
+        print("-------------------------")
+        print("Available LOCAL:   ")
+        print("-------------------------")
+        print(picos_solver_selector.keys())
+        print()
+    if interface == "cplex":
+        print()
+        print("-------------------------")
+        print("Available LOCAL:   ")
+        print("-------------------------")
+        print(cplex_solver_selector.keys())
+        print()
+    if interface == "gurobi":
+        print()
+        print("-------------------------")
+        print("Available LOCAL:   ")
+        print("-------------------------")
+        print(gurobi_solver_selector.keys())
+        print()
+    if interface == "xpress":
+        print()
+        print("-------------------------")
+        print("Available LOCAL:   ")
+        print("-------------------------")
+        print(xpress_solver_selector.keys())
+        print()
+    if interface == "mip":
+        print()
+        print("-------------------------")
+        print("Available LOCAL:   ")
+        print("-------------------------")
+        print(mip_solver_selector.keys())
+        print()
     if interface == "ga":
         print()
         print("-------------------------")
         print("Available LOCAL:   ")
         print("-------------------------")
-        print("geneticalgorithm")
+        print("genetic algorithm")
         print()
 
 ava_solver = {
     "gekko": ava_solver,
     "ortools": ava_solver,
     "pulp": ava_solver,
+    "pyomo": ava_solver,
     "pymprog": ava_solver,
-    "pyomo": ava_solver
+    "picos": ava_solver,
+    "cplex": ava_solver,
+    "gurobi": ava_solver,
+    "xpress": ava_solver,
+    "linopy": ava_solver,
+    "cvxpy": ava_solver,
+    "cylp": ava_solver,
+    "mip": ava_solver,
+    "ga": ava_solver
 }
-
-

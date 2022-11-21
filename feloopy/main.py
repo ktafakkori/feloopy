@@ -230,7 +230,7 @@ class feloopy:
             self.AlgOptions = algoptions
         if type(self.Agent) == type(None):
             self.Result, self.Chronometer = solver[self.InterfaceName](
-                self.ModelObject, self.ObjectiveExpression, self.ConstraintExpression, dir, solvername, objectivenumber, email)
+                self.ModelObject, self.ObjectiveExpression, self.ConstraintExpression, dir, solvername, objectivenumber, algoptions, email)
             return self.Result
         else:
             self.Result = solver[self.InterfaceName](self.ObjectiveExpression, self.ConstraintExpression, dir, objectivenumber=0)
@@ -239,7 +239,7 @@ class feloopy:
         return show[self.InterfaceName](*args, modelobject=self.ModelObject, result=self.Result, showstatus=showstatus, showobj=showobj)
 
     def get(self, input):
-        return variable_getter[self.InterfaceName](input)
+        return variable_getter[self.InterfaceName](self.ModelObject,input)
 
     def get_stat(self):
         return status_getter[self.InterfaceName](self.ModelObject,self.Result)

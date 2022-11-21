@@ -1,11 +1,22 @@
+
+'''
+Name: Feloopy
+Version: 0.1.11
+Contributors: Keivan Tafakkori
+Date: 20 November 2022
+License: MIT. (For more details please refer to LICENSE.txt file).
+Copyright (c) 2022 Keivan Tafakkori & FELOOP (https://ktafakkori.github.io/)
+'''
+
 import itertools as it
 import numpy as np
 from feloopy.heuristic import *
+
 import mip as mip_interface
 import cylp as cylp_interface
 from cylp.cy import CyClpSimplex
 import cvxpy as cvxpy_interface
-from linopy import Model
+from linopy import Model as LINOPYMODEL
 import xpress as xpress_interface
 import gurobipy as gurobi_interface
 from docplex.mp.model import Model as CPLEXMODEL
@@ -83,7 +94,7 @@ def add_xpress_model():
 
 
 def add_linopy_model():
-    return Model()
+    return LINOPYMODEL()
 
 
 # cvxpy
