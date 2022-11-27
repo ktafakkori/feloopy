@@ -1,6 +1,5 @@
-
 '''
-Name: Feloopy
+Name: FelooPy
 Version: 0.1.11
 Contributors: Keivan Tafakkori
 Date: 21 November 2022
