@@ -27,7 +27,7 @@ FelooPy (/fɛlupaɪ/, an abbreviation for feasible, logical, optimal, and Python
 - **Easy** OR model development **workflow**.
 - **All-in-One** optimization toolbox.
 - Uses **single** optimization programming syntax for **14** **exact** and **heuristic** optimization interfaces in Python.
-- Solves an optimization model with **81** exact and **172+5** heuristic optimization solvers (total: **256** optimization algorithms).
+- Solves an optimization model with **81** exact and **172+5** heuristic optimization solvers (total: **258** optimization algorithms).
 - Supports **scalable** optimization for **large-scale** real-world problems.
 - Supports **benchmarking** of an optimization problem with various solvers.
 - Supports **multi-parameter** sensitivity analysis on a single objective.
