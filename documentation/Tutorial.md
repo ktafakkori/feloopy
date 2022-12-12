@@ -179,7 +179,7 @@ def tsp(c):
 * This code generates a table:
 
 ```python
-sensitvity(tsp, [c], [-6,6],Table=True)
+sensitivity(tsp, [c], [-6,6],Table=True)
 ```
 
 Output:
@@ -208,7 +208,7 @@ SENSITIVITY ANALYSIS (PARAM: 1)
 * This code generates a table and a figure.
 
 ```python
-sensitvity(tsp, [c], [-6,6],Table=True, Plot=True)
+sensitivity(tsp, [c], [-6,6],Table=True, Plot=True)
 ```
 
 Output:
