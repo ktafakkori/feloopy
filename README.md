@@ -40,14 +40,15 @@ FelooPy (/fɛlupaɪ/, an abbreviation for feasible, logical, optimal, and Python
 
 ### Terminal command (e.g., CMD or GC):
 
-```
+```text
 pip install feloopy==0.2.0
 ```
 
 ### IDE command (e.g., Spyder):
 
 *Note*: After installation, this line of code should be deleted.
-```
+
+```text
 !pip install feloopy==0.2.0
 ```
 
@@ -55,7 +56,7 @@ pip install feloopy==0.2.0
 
 *Note*: After installation, this piece of code should be deleted.
 
-```
+```text
 import pip
 
 def install(package):
@@ -78,7 +79,7 @@ install('feloopy')
 
 ### From GitHub repository (Prerelease version)
 
-```
+```text
 pip install -U git+https://github.com/ktafakkori/feloopy
 ```
 
@@ -91,12 +92,12 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 * [Changelog][05]
 * [Citation][06]
 
-[01]: https://github.com/ktafakkori/feloopy/Documentation.md
-[02]: https://www.linkedin.com/in/keivan-tafakkori/Exact.md
-[03]: https://github.com/ktafakkori/feloopy/Heuristic.md
-[04]: https://github.com/ktafakkori/feloopy/Changelog.md
-[05]: https://github.com/ktafakkori/feloopy/Changelog.md
-[06]: https://github.com/ktafakkori/feloopy/Changelog.md
+[01]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Tutorial.md
+[02]: https://github.com/ktafakkori/feloopy/tree/main/examples
+[03]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Exact_List.md
+[04]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Heuristic_List.md
+[05]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Updates.md
+[06]: https://github.com/ktafakkori/feloopy/blob/main/CITATION.cff
 
 ## Contributors
 
