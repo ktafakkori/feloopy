@@ -30,8 +30,6 @@ setup(
 
     license='MIT',
 
-    python_requires = '>=3.9',
-    
     install_requires=[
 
     'tabulate',
@@ -46,35 +44,35 @@ setup(
 
     'openpyxl', 
 
-    'gekko>=1.0.5',
+    'gekko',
 
-    'ortools>=9.4.1874',
+    'ortools',
 
-    'pulp>=2.7.0',
+    'pulp',
 
-    'pyomo>=6.4.4',
+    'pyomo',
 
-    'pymprog>=1.1.2',
+    'pymprog',
 
-    'picos>=2.4.11',
+    'picos',
 
-    'cplex>=22.1.0.0',
+    'cplex',
 
-    'docplex>=2.23.222',
+    'docplex',
 
-    'gurobipy>=10.0.0',
+    'gurobipy',
 
-    'xpress>=8.14.2',
+    'xpress',
 
-    'linopy>=0.0.14',
+    'linopy',
 
-    'cvxpy>=1.2.1',
+    'cvxpy',
 
-    'cylp>=0.91.5',
+    'cylp',
 
-    'mip>=1.14.1',
+    'mip',
 
-    'mealpy>=2.5.1',
+    'mealpy',
     ],
 )
 
