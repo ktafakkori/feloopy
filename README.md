@@ -1,6 +1,6 @@
 
 [![GitHub release](https://img.shields.io/badge/version-0.2.0-orange.svg)](https://github.com/ktafakkori/feloopy/releases)
-[![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
+[![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-310/)
 ![Package Size](https://img.shields.io/github/languages/code-size/ktafakkori/feloopy)
 ![Supporters](https://img.shields.io/github/stars/ktafakkori/feloopy)
 ![Downloads](https://img.shields.io/pypi/dm/feloopy.svg)
@@ -36,7 +36,7 @@ FelooPy (/fɛlupaɪ/, an abbreviation for feasible, logical, optimal, and Python
 
 # Installation
 
-*Note*: Installation process requires `python>=3.9`, `pip>=22.3.1` and a stable internet connection.
+*Note*: Installation process requires `python==3.10`, `pip>=22.3.1` and a stable internet connection.
 
 ### Terminal command (e.g., CMD or GC):
 

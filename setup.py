@@ -29,6 +29,8 @@ setup(
     packages=find_packages(include=['feloopy','feloopy.*']),
 
     license='MIT',
+    
+    python_requires = '>=3.10',
 
     install_requires=[
 
