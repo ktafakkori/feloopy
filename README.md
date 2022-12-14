@@ -23,15 +23,14 @@ FelooPy (/fɛlupaɪ/, an abbreviation for feasible, logical, optimal, and Python
 
 ## Features:
 
-- **Free** and **Open-Source** (FOSS) IOE developed under **MIT** license.
-- **Easy** OR model development **workflow**.
-- **All-in-One** optimization toolbox.
-- Uses **single** optimization programming syntax for **14** **exact** and **heuristic** optimization interfaces in Python.
+- **Free** and **Open-Source** integrated optimization environment developed under **MIT** license.
+- **Straightforward** mathematical programming **workflow**.
+- Useing **single** optimization programming syntax for **14** **exact** and **heuristic** optimization interfaces in Python.
 - Accessing **81** exact and **172+5** heuristic optimization solvers (total: **258** optimization algorithms).
-- Supports **scalable** optimization for **large-scale** real-world problems.
-- Supports **benchmarking** of an optimization problem with various solvers.
-- Supports **multi-parameter** sensitivity analysis on a single objective.
-- Supports **multi-criteria** and **multi-objective** optimization (coming soon).
+- Supporting **scalable** optimization for **large-scale** real-world problems.
+- Supporting **benchmarking** with various optimization solvers.
+- Supporting **multi-parameter** sensitivity analysis on a single objective.
+- Supporting **multi-criteria** and **multi-objective** optimization (coming soon).
 - ...
 
 # Installation
