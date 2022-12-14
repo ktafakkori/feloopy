@@ -106,7 +106,7 @@ pip install -U git+https://github.com/ktafakkori/feloopy
   title        = {{FelooPy: An integrated optimization environment for AutoOR in Python}},
   year         = {2022},
   month        = dec,
-  publisher    = {Github},
+  publisher    = {GitHub},
   version      = {v0.2.0},
   url          = {https://github.com/ktafakkori/feloopy/}
 }
