@@ -98,26 +98,3 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 [04]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Heuristic_List.md
 [05]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Updates.md
 [06]: https://github.com/ktafakkori/feloopy/blob/main/CITATION.cff
-
-## Contributors
-
-![Contributors](https://contrib.rocks/image?repo=ktafakkori/feloopy)
-
-## Supporters
-
-This repository will be more and more complete over time. It is kindly requested to support this work by giving a ⭐ to the repository to make it available for a broad range of audiences who are interested in using exact and heuristic optimization techniques in the Python programming language.
-
-[![Stars given](https://reporoster.com/stars/dark/ktafakkori/feloopy)](https://github.com/ktafakkori/feloopy/stargazers)
-
-Or you might kindly consider consider donations:
-
-* BTC crypto: `bc1q37audm2jd75j3rmralxhejtd44yz5az4e2nf4e`
-* ETH crypto: `0xFceE0143E668c83176b96A20e0c386C54Bc9A6b9`
-* DOGE crypto: `DSu19Ks5KEbFcqvj8QKAL6pCaoiCYAzpAU`
-
-## Sponsorship
-
-Contact me on [Linkedin][2] or [Twitter][1].
-
-[1]: https://twitter.com/ktafakkori
-[2]: https://www.linkedin.com/in/keivan-tafakkori/
