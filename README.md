@@ -69,14 +69,20 @@ install('feloopy')
 
 ### From GitHub [Releases][a] section
 
-1. Download the feloopy-0.2.0.zip file.
+1. Download the [feloopy-0.2.0.zip][c] file.
 2. Extract it into a specific directory.
 3. Open a terminal in that directory.
 4. Type: `pip install .`
 
 [a]: https://github.com/ktafakkori/feloopy/releases
+[b]: https://git-scm.com/downloads
+[c]: https://github.com/ktafakkori/feloopy/releases/download/0.2.0/feloopy-0.2.0.zip
 
-### From GitHub repository (Prerelease version)
+### From GitHub repository (insiders version)
+
+1. Download and install [git][b].
+
+2. Run this command inside a terminal:
 
 ```text
 pip install -U git+https://github.com/ktafakkori/feloopy
