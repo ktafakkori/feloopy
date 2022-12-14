@@ -97,3 +97,9 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 [04]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Heuristic_List.md
 [05]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Updates.md
 [06]: https://github.com/ktafakkori/feloopy/blob/main/CITATION.cff
+
+## Citation
+
+```text
+
+```
