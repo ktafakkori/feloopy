@@ -101,13 +101,13 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 ## Citation
 
 ```text
-@misc{ktafakkori2022Dec,
-	author = {ktafakkori},
-	title = {{FelooPy: An integrated optimization environment for AutoOR in Python}},
-	journal = {GitHub},
-	year = {2022},
-	month = dec,
-	note = {[Computer Software]},
-	url = {https://github.com/ktafakkori/feloopy/}
+@software{ktafakkori2022Dec,
+  author       = {Keivan Tafakkori},
+  title        = {{FelooPy: An integrated optimization environment for AutoOR in Python}},
+  year         = {2022},
+  month        = dec,
+  publisher    = {Github},
+  version      = {v0.2.0},
+  url          = {https://github.com/ktafakkori/feloopy/}
 }
 ```
