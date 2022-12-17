@@ -47,13 +47,13 @@ FelooPy (/fɛlupaɪ/, an abbreviation for feasible, logical, optimal, and Python
 [sp]: https://www.anaconda.com/
 [gc]: https://colab.research.google.com/
 
-### Terminal command (e.g., CMD or GC):
+### Method 1: Terminal command (e.g., CMD or GC):
 
 ```text
 pip install feloopy==0.2.0
 ```
 
-### IDE command (e.g., Spyder):
+### Method 2: IDE command (e.g., Spyder):
 
 *Note*: After installation, this line of code should be deleted.
 
@@ -61,7 +61,7 @@ pip install feloopy==0.2.0
 !pip install feloopy==0.2.0
 ```
 
-### Inside your Python code
+### Method 3: Inside your Python code
 
 *Note*: After installation, this piece of code should be deleted.
 
@@ -77,7 +77,7 @@ def install(package):
 install('feloopy')
 ```
 
-### From GitHub [Releases][a] section
+### Method 4: From GitHub [Releases][a] section
 
 1. Download the [feloopy-0.2.0.zip][c] file.
 2. Extract it into a specific directory.
@@ -88,7 +88,7 @@ install('feloopy')
 [b]: https://git-scm.com/downloads
 [c]: https://github.com/ktafakkori/feloopy/releases/download/0.2.0/feloopy-0.2.0.zip
 
-### From GitHub repository (insiders version)
+### Method 5: From GitHub repository (insiders version)
 
 1. Download and install [git][b].
 
