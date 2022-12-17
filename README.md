@@ -39,9 +39,13 @@ FelooPy (/fɛlupaɪ/, an abbreviation for feasible, logical, optimal, and Python
 
 *Note 2:* Ensure to add Python to PATH during the installation process (usually the first menu).
 
-*Downloads*: [Python 3.10][py]
+- *Downloads*: [Python 3.10][py], ([Visual Studio Code][vs] or [Anaconda][sp])
+- *Cloud*: [Google Colab][gc]
 
 [py]: https://www.python.org/downloads/release/python-3100/
+[vs]: https://code.visualstudio.com/
+[sp]: https://www.anaconda.com/
+[gc]: https://colab.research.google.com/
 
 ### Terminal command (e.g., CMD or GC):
 
