@@ -1933,6 +1933,3 @@ def sensitivity(ModelFunction, ParameterList, Range=[-10, 10], Step=1, Table=Tru
         plt.show()
 
     return pd.DataFrame(data)
-
-
-print(prod(len(dims) for dims in [range(2), range(2)]))
