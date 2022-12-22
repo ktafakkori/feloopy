@@ -38,11 +38,10 @@ for i in U: m.con(x[i] >= -BigM*s[i])
 for i in U: m.con(x[i] <= BigM*s[i])
 m.con(sum(s[i] for i in U) <= k)
 
-m.inf()
-
 #Solve
 m.sol(['min'], 'apopt')
 
+m.inf()
 m.dis_obj()
 m.dis_status()
 
