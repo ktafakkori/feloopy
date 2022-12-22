@@ -79,18 +79,20 @@ def ee(x, y):
 def sets(*args):
     return it.product(*args)
 
-
 Version = 'Version 0.2.0'
 ReleaseDate = '11 December 2022'
 
-
 def UpdateCounter(VarDim, TotCounter, SpecialCounter):
-    TotCounter[0] += 1
-    SpecialCounter[0] += 1
-    SpecialCounter[1] += 1 if VarDim == 0 else prod(len(dims) for dims in VarDim)
-    TotCounter[1] += SpecialCounter[1]
-    return TotCounter, SpecialCounter
 
+    TotCounter[0] += 1
+
+    SpecialCounter[0] += 1
+
+    SpecialCounter[1] += 1 if VarDim == 0 else prod(len(dims) for dims in VarDim)
+
+    TotCounter[1] += 1 if VarDim == 0 else prod(len(dims) for dims in VarDim)
+
+    return TotCounter, SpecialCounter
 
 class EMPTY:
 
@@ -195,14 +197,14 @@ class model:
                 self.ModelObjectives = []
                 self.ObjectivesDirections = []
 
+                #Counters
                 self.PositiveVariableCounter = [0, 0]
-                self.BinaryVariableCounter = [0, 0]
-                self.IntegerVariableCounter = [0, 0]
-                self.FreeVariableCounter = [0, 0]
-                self.ToTalVariableCounter = [0, 0]
-
-                self.ConstraintsCounter = [0, 0]
-                self.ObjectivesCounter = [0, 0]
+                self.BinaryVariableCounter   = [0, 0]
+                self.IntegerVariableCounter  = [0, 0]
+                self.FreeVariableCounter     = [0, 0]
+                self.ToTalVariableCounter    = [0, 0]
+                self.ConstraintsCounter      = [0, 0]
+                self.ObjectivesCounter       = [0, 0]
 
                 match self.InterfaceName:
 
@@ -364,8 +366,7 @@ class model:
 
             case 'exact':
 
-                self.ToTalVariableCounter, self.BinaryVariableCounter = UpdateCounter(
-                    VarDim, self.ToTalVariableCounter, self.BinaryVariableCounter)
+                self.ToTalVariableCounter, self.BinaryVariableCounter = UpdateCounter(VarDim, self.ToTalVariableCounter, self.BinaryVariableCounter)
 
                 match self.InterfaceName:
 
@@ -520,8 +521,7 @@ class model:
 
             case 'exact':
 
-                self.ToTalVariableCounter, self.IntegerVariableCounter = UpdateCounter(
-                    VarDim, self.ToTalVariableCounter, self.IntegerVariableCounter)
+                self.ToTalVariableCounter, self.IntegerVariableCounter = UpdateCounter(VarDim, self.ToTalVariableCounter, self.IntegerVariableCounter)
 
                 match self.InterfaceName:
 
@@ -690,8 +690,7 @@ class model:
 
             case 'exact':
 
-                self.ToTalVariableCounter, self.PositiveVariableCounter = UpdateCounter(
-                    VarDim, self.ToTalVariableCounter, self.PositiveVariableCounter)
+                self.ToTalVariableCounter, self.PositiveVariableCounter = UpdateCounter(VarDim, self.ToTalVariableCounter, self.PositiveVariableCounter)
 
                 match self.InterfaceName:
 
@@ -826,8 +825,7 @@ class model:
 
             case 'exact':
 
-                self.ToTalVariableCounter, self.FreeVariableCounter = UpdateCounter(
-                    VarDim, self.ToTalVariableCounter, self.FreeVariableCounter)
+                self.ToTalVariableCounter, self.FreeVariableCounter = UpdateCounter(VarDim, self.ToTalVariableCounter, self.FreeVariableCounter)
 
                 match self.InterfaceName:
 
@@ -1935,3 +1933,6 @@ def sensitivity(ModelFunction, ParameterList, Range=[-10, 10], Step=1, Table=Tru
         plt.show()
 
     return pd.DataFrame(data)
+
+
+print(prod(len(dims) for dims in [range(2), range(2)]))
