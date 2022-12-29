@@ -18,7 +18,7 @@ def GenerateModel(TotVars, Directions, SolverName, AlgOptions):
 
         case 'SA':
             from ..AlgorithmFactory.Heuristic.SA import SA
-            ModelObject = SA(F=TotVars, D=Directions, S=AlgOptions.get('S', 100), T=AlgOptions.get('T', 1), Cc=AlgOptions.get('Cc', 50), Mt=AlgOptions.get('Mt', 1000))
+            ModelObject = SA(F=TotVars, D=Directions, S=AlgOptions.get('S', 100), T=AlgOptions.get('T', 1), Cc=AlgOptions.get('Cc', 10), Mt=AlgOptions.get('Mt', 1000))
 
         case 'TS':
             from ..AlgorithmFactory.Heuristic.TS import TS

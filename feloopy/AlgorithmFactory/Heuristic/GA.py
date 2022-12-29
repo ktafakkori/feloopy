@@ -17,7 +17,7 @@ class GA:
     def __init__(self, F: int, D: list, S: int, T: int, Cr: float, Mu: float):
 
         '''
-        Genetic Algorithm (GA) (Classic version modified)
+        Genetic Algorithm (GA) (Classic version)
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         Date
@@ -78,7 +78,13 @@ class GA:
             self.Best = self.PIE[-1*(1+self.D[0])//2]
 
             # [AGENT] [SELECT] [ROULETTE WHEEL]
-            self.PIE = self.PIE[[np.random.choice(self.T, p=(1+self.D[0])//2*(self.PIE[:, self.F]/np.sum(self.PIE[:, self.F])) + (-1+self.D[0])//2* ((self.PIE[:, self.F]/np.sum(self.PIE[:, self.F]))-1)) for t in range(0,self.T)]]
+            try:
+                self.PIE = self.PIE[[np.random.choice(self.T, p=(1+self.D[0])//2*((self.PIE[:, self.F]/np.sum(self.PIE[:, self.F]))) + (-1+self.D[0])//2* (((self.PIE[:, self.F]/np.sum(self.PIE[:, self.F])))-1)) for t in range(0,self.T)]]
+            
+            except:
+                point = int(np.random.uniform(0.2,0.6)*self.T)
+                if self.D[0] == 1: self.PIE[:point] = self.PIE[[np.random.randint(point,self.T) for t in range(0,point)]]
+                else: self.PIE[point:] = self.PIE[[np.random.randint(0,point+1) for t in range(point,self.T)]]
 
             # [AGENT] [CROSS]
             POOL = np.asarray([np.random.randint(0,self.T,2) if np.random.rand() < self.Cr else np.array([t,t]) for t in range(0,self.T)])

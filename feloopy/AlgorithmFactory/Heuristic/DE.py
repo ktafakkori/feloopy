@@ -77,10 +77,13 @@ class DE:
             NEWPIE = evaluate(NEWPIE)
 
             # [AGENT] [UPDATE]
-            self.PIE = np.where((self.D[0]*NEWPIE[:, self.F] > self.D[0]*self.PIE[:, self.F]), NEWPIE, self.PIE)
+            self.PIE[np.where(self.D[0]*NEWPIE[:, self.F] > self.D[0]*self.PIE[:, self.F])] = NEWPIE[np.where(self.D[0]*NEWPIE[:, self.F] > self.D[0]*self.PIE[:, self.F])]
+
+            # [AGENT] [SORT]
+            self.PIE = self.PIE[np.argsort(self.PIE[:, self.F])]
 
             # [BEST] [UPDATE]
-            self.Best = self.PIE[np.argmax(self.PIE[:,self.F])] if self.PIE[np.argmax(self.PIE[:,self.F])] > self.Best[-1] else self.Best
+            self.Best = self.PIE[-1*(1+self.D[0])//2]
 
             for t in range(0, self.T):
 
@@ -93,7 +96,7 @@ class DE:
                 if not np.any(cross_points):
                     cross_points[np.random.randint(0, self.F)] = True
 
-                self.NEWPIE[t, :-1] = np.where(cross_points, mutant, self.PIE[t, :-1])
+                NEWPIE[t, :-1] = np.where(cross_points, mutant, self.PIE[t, :-1])
 
         return self.Best[:-1],self.Best[-1]
 

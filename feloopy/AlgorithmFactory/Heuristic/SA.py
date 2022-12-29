@@ -87,6 +87,9 @@ class SA:
                 NEWPIE = evaluate(NEWPIE)
 
                 # [AGENT] [UPDATE]
+
+                #self.PIE[np.where((NEWPIE[:, self.F] > self.PIE[:, self.F]) | (np.random.rand() < np.exp(-abs(self.PIE[:, self.F]-NEWPIE[:, self.F])/temp)))] = NEWPIE[np.where((NEWPIE[:, self.F] > self.PIE[:, self.F]) | (np.random.rand() < np.exp(-abs(self.PIE[:, self.F]-NEWPIE[:, self.F])/temp)))]
+                
                 self.PIE = np.where((NEWPIE[:, self.F] > self.PIE[:, self.F]) | (np.random.rand() < np.exp(-abs(self.PIE[:, self.F]-NEWPIE[:, self.F])/temp)), NEWPIE, self.PIE)
 
                 # [BEST] [UPDATE]

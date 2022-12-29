@@ -94,6 +94,21 @@ def UpdateCounter(VarDim, TotCounter, SpecialCounter):
 
     return TotCounter, SpecialCounter
 
+# TODO: python 11 addition to unpack indices
+
+# class VAR:
+
+#     def __init__(self,val):
+#         self.val = val
+
+#     def __setitem__(self, *key, value):
+#         self.val[*key] = value
+
+#     def __getattribute__(self, key):
+#         return super().__getitem__(*key)
+
+# x = VAR()
+
 class EMPTY:
 
     '''
@@ -109,6 +124,9 @@ class EMPTY:
 
     def __getitem__(self, *args):
         return 0
+    
+    def __setitem__(self, *args):
+        'none'
 
     def __hash__(self):
         return 0
@@ -308,6 +326,7 @@ class model:
 
                     self.ModelName = ModelName
                     self.SolverName = None
+                    self.POPsize = 1
 
                     self.ModelObjectives = []
                     self.ModelConstraints = []
@@ -331,6 +350,7 @@ class model:
                 else:
 
                     self.ConstraintsViolation = 0
+                    self.POPsize = len(self.AgentProperties[1])
                     self.VariablesSpread = self.AgentProperties[2]
                     self.PenaltyMultiplier = self.AgentProperties[3]
 
@@ -461,31 +481,41 @@ class model:
                     self.VariablesBound[VarName] = VarBound
                     self.VariablesDim[VarName] = VarDim
 
-                    return EMPTY(0)
+                    if self.Vectorized =='FelooPyMethod':
+                        return np.random.rand(*tuple([10]+[len(dims) for dims in VarDim]))
+                    else:
+                        return np.random.rand(*tuple([len(dims) for dims in VarDim]))
 
                 else:
 
                     if self.Vectorized == False:
 
-                        if VarDim == 0:
+                        if VarDim == 1:
                             return np.round(VarBound[0] + self.AgentProperties[self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
                         else:
-                            def var(*args):
-                                self.NewAgentProperties = np.round(
-                                    VarBound[0] + self.AgentProperties[self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
-                                return self.NewAgentProperties[sum(args[i]*mt.prod(len(VarDim[j]) for j in range(i+1, len(VarDim))) for i in range(len(VarDim)))]
-                            return var
+
+                            return np.reshape(np.round(VarBound[0] + self.AgentProperties[self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0])),[len(dims) for dims in VarDim])
+
+                            # '''
+                            # def var(*args):
+                            #     self.NewAgentProperties = np.round(
+                            #         VarBound[0] + self.AgentProperties[self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
+                            #     return self.NewAgentProperties[sum(args[i]*mt.prod(len(VarDim[j]) for j in range(i+1, len(VarDim))) for i in range(len(VarDim)))]
+                            # '''
+                            #return var
 
                     if self.Vectorized == 'FelooPyMethod':
 
                         if VarDim == 0:
                             return np.round(VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
                         else:
-                        
-                            def var(*args):
-                                self.NewAgentProperties = np.round(VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
-                                return self.NewAgentProperties[:,sum(args[i]*mt.prod(len(VarDim[j]) for j in range(i+1, len(VarDim))) for i in range(len(VarDim)))]
-                            return var
+                            var = np.round(VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
+                            return np.reshape(var,[var.shape[0]]+[len(dims) for dims in VarDim])
+
+                            # def var(*args):
+                            #     self.NewAgentProperties = np.round(VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
+                            #     return self.NewAgentProperties[:,sum(args[i]*mt.prod(len(VarDim[j]) for j in range(i+1, len(VarDim))) for i in range(len(VarDim)))]
+                            # return var
 
     def set(self, *size):
         return range(*size)
@@ -616,28 +646,37 @@ class model:
                     self.VariablesBound[VarName] = VarBound
                     self.VariablesDim[VarName] = VarDim
 
-                    return EMPTY(0)
+                    if self.Vectorized =='FelooPyMethod':
+                        return np.random.rand(*tuple([10]+[len(dims) for dims in VarDim]))
+                    else:
+                        return np.random.rand(*tuple([len(dims) for dims in VarDim]))
 
                 else:
                     if self.Vectorized == False:
                         if VarDim == 0:
                             return np.floor(VarBound[0] + self.AgentProperties[self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
                         else:
-                            def var(*args):
-                                self.NewAgentProperties = np.floor(
-                                    VarBound[0] + self.AgentProperties[self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
-                                return self.NewAgentProperties[sum(args[i]*mt.prod(len(VarDim[j]) for j in range(i+1, len(VarDim))) for i in range(len(VarDim)))]
-                            return var
+                            return np.reshape(np.floor(VarBound[0] + self.AgentProperties[self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0])),[len(dims) for dims in VarDim])
+
+
+                            # def var(*args):
+                            #     self.NewAgentProperties = np.floor(
+                            #         VarBound[0] + self.AgentProperties[self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
+                            #     return self.NewAgentProperties[sum(args[i]*mt.prod(len(VarDim[j]) for j in range(i+1, len(VarDim))) for i in range(len(VarDim)))]
+                            # return var
 
                     if self.Vectorized == 'FelooPyMethod':
                         
                         if VarDim == 0:
                             return np.floor(VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
                         else:
-                            def var(*args):
-                                self.NewAgentProperties = np.floor(VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
-                                return self.NewAgentProperties[:,sum(args[i]*mt.prod(len(VarDim[j]) for j in range(i+1, len(VarDim))) for i in range(len(VarDim)))]
-                            return var
+                            var = np.floor(VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
+                            return np.reshape(var,[var.shape[0]]+[len(dims) for dims in VarDim])
+
+                            # def var(*args):
+                            #     self.NewAgentProperties = np.floor(VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
+                            #     return self.NewAgentProperties[:,sum(args[i]*mt.prod(len(VarDim[j]) for j in range(i+1, len(VarDim))) for i in range(len(VarDim)))]
+                            # return var
 
     def svar(self, VarName: str, VarDim=0):
         '''
@@ -664,7 +703,10 @@ class model:
                     self.VariablesType[VarName] = 'svar'
                     self.VariablesDim[VarName] = VarDim
 
-                    return EMPTY(0)
+                    if self.Vectorized =='FelooPyMethod':
+                        return np.random.rand(*tuple([10]+[len(dims) for dims in VarDim]))
+                    else:
+                        return np.random.rand(*tuple([len(dims) for dims in VarDim]))
 
                 else:
 
@@ -785,7 +827,10 @@ class model:
                     self.VariablesBound[VarName] = VarBound
                     self.VariablesDim[VarName] = VarDim
 
-                    return EMPTY(0)
+                    if self.Vectorized =='FelooPyMethod':
+                        return np.random.rand(*tuple([10]+[len(dims) for dims in VarDim]))
+                    else:
+                        return np.random.rand(*tuple([len(dims) for dims in VarDim]))
 
                 else:
                     if self.Vectorized == False:
@@ -793,20 +838,26 @@ class model:
                         if VarDim == 0:
                             return VarBound[0] + self.AgentProperties[self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0])
                         else:
-                            def var(*args):
-                                self.NewAgentProperties = (
-                                    VarBound[0] + self.AgentProperties[self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
-                                return self.NewAgentProperties[sum(args[i]*mt.prod(len(VarDim[j]) for j in range(i+1, len(VarDim))) for i in range(len(VarDim)))]
-                            return var
+                            return np.reshape((VarBound[0] + self.AgentProperties[self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0])),[len(dims) for dims in VarDim])
+
+                            # def var(*args):
+                            #     self.NewAgentProperties = (
+                            #         VarBound[0] + self.AgentProperties[self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
+                            #     return self.NewAgentProperties[sum(args[i]*mt.prod(len(VarDim[j]) for j in range(i+1, len(VarDim))) for i in range(len(VarDim)))]
+                            # return var
+
                     if self.Vectorized == 'FelooPyMethod':
                         
                         if VarDim == 0:
                             return VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0])
                         else:
-                            def var(*args):
-                                self.NewAgentProperties = (VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
-                                return self.NewAgentProperties[:,sum(args[i]*mt.prod(len(VarDim[j]) for j in range(i+1, len(VarDim))) for i in range(len(VarDim)))]
-                            return var
+                            var = (VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
+                            return np.reshape(var,[var.shape[0]]+[len(dims) for dims in VarDim])[0:]
+
+                            # def var(*args):
+                            #     self.NewAgentProperties = (VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
+                            #     return self.NewAgentProperties[:,sum(args[i]*mt.prod(len(VarDim[j]) for j in range(i+1, len(VarDim))) for i in range(len(VarDim)))]
+                            # return var
 
     def fvar(self, VarName: str, VarDim=0, VarBound=[0, None]):
         
@@ -920,7 +971,10 @@ class model:
                     self.VariablesBound[VarName] = VarBound
                     self.VariablesDim[VarName] = VarDim
 
-                    return EMPTY(0)
+                    if self.Vectorized =='FelooPyMethod':
+                        return np.random.rand(*tuple([10]+[len(dims) for dims in VarDim]))
+                    else:
+                        return np.random.rand(*tuple([len(dims) for dims in VarDim]))
 
                 else:
                     if self.Vectorized == False:
@@ -937,10 +991,44 @@ class model:
                         if VarDim == 0:
                             return VarBound[0] + self.AgentProperties[:, self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0])
                         else:
-                            def var(*args):
-                                self.NewAgentProperties = (VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
-                                return self.NewAgentProperties[:,sum(args[i]*mt.prod(len(VarDim[j]) for j in range(i+1, len(VarDim))) for i in range(len(VarDim)))]
-                            return var
+                            var = (VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
+                            return np.reshape(var,[var.shape[0]]+[len(dims) for dims in VarDim])
+
+                            # def var(*args):
+                            #     self.NewAgentProperties = (VarBound[0] + self.AgentProperties[:,self.VariablesSpread[VarName][0]:self.VariablesSpread[VarName][1]] * (VarBound[1] - VarBound[0]))
+                            #     return self.NewAgentProperties[:,sum(args[i]*mt.prod(len(VarDim[j]) for j in range(i+1, len(VarDim))) for i in range(len(VarDim)))]
+                            # return var
+
+    def dvar(self, VarName: str, VarDim=0):
+
+        '''
+        Dependent Variable Definition
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        * VarName (String): Determine a name for your variable (e.g., 'x' or 'flow' or 'xy')
+        * VarDim (List) : If your variable has indices, determine corresponding sets in a list (e.g., [I] or [I,J] where I=range(2), J=range(3))
+
+        '''
+
+        if self.AgentProperties[0] == 'idle':
+            if self.Vectorized != 'FelooPyMethod':
+                if VarDim == 0:
+                    return 0
+                else:
+                    return np.zeros([len(dims) for dims in VarDim])
+            else:
+                return np.random.rand(*tuple([10]+[len(dims) for dims in VarDim]))
+        else:
+            if self.Vectorized != 'FelooPyMethod':
+                if VarDim == 0:
+                    return 0
+                else:
+                    return np.zeros([len(dims) for dims in VarDim])
+            else:
+                if VarDim == 0:
+                    return np.zeros(self.POPsize)
+                else:
+                    return np.zeros([self.POPsize]+[len(dims) for dims in VarDim])
 
     def con(self, MathematicalExpression):
         '''
@@ -975,7 +1063,9 @@ class model:
 
                     self.ModelConstraints.append(MathematicalExpression)
 
-                    self.ConstraintsViolation = np.amax(np.array([0]+self.ModelConstraints, dtype=object))
+                    if self.Vectorized != 'FelooPyMethod':
+
+                         self.FinalPenalty = np.amax(np.array([0]+self.ModelConstraints, dtype=object))
 
 
     def obj(self, MathematicalExpression, Direction=None):
@@ -1237,21 +1327,34 @@ class model:
 
                 else:
 
+                    if self.Vectorized == 'FelooPyMethod':
+
+                        self.FinalPenalty = 0
+
+                        if self.PenaltyMultiplier !=0:
+
+                            if len(self.ModelConstraints)==1:
+
+                                self.FinalPenalty = np.maximum(np.zeros(len(self.ModelConstraints)),self.ModelConstraints)
+
+                            else:
+
+                                self.FinalPenalty = np.maximum.reduce(self.ModelConstraints)
+
+                                self.FinalPenalty = np.maximum(np.zeros(len(self.FinalPenalty)),np.asarray(self.FinalPenalty))
+
                     self.ObjectiveBeingOptimized = ObjectiveNumber
 
                     #if self.ObjectivesDirections[0] == None: self.ObjectivesDirections = ObjectivesDirections
 
                     if ObjectivesDirections[ObjectiveNumber] == 'max':
-                        self.Result = self.FitnessValue[ObjectiveNumber] - \
-                            self.PenaltyMultiplier * \
-                            (self.ConstraintsViolation-0)**2
+
+                        self.Result = self.FitnessValue[ObjectiveNumber] - self.PenaltyMultiplier * (self.FinalPenalty)**2           
+
                     if ObjectivesDirections[ObjectiveNumber] == 'min':
-                        self.Result = self.FitnessValue[ObjectiveNumber] + \
-                            self.PenaltyMultiplier * \
-                            (self.ConstraintsViolation-0)**2
 
+                        self.Result = self.FitnessValue[ObjectiveNumber] + self.PenaltyMultiplier * (self.FinalPenalty)**2
      
-
     def Solve(self, SolverName=None, ObjectivesDirections=None, ObjectiveNumber=0):
         '''
 
@@ -1459,6 +1562,7 @@ class model:
                         return LinopyGetter.Get(self.ModelObject, self.ModelSolution, 'objective')
 
     def get_status(self):
+
         '''
 
         Status Getter 
