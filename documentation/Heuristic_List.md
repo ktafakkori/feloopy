@@ -8,7 +8,7 @@
 | Differential Evolution | DE    | DE     |
 | Grey Wolf Optimizer    | GWO   | GWO    |
 
-Source: The Author.
+Source: The author.
 
 | MealPy Algorithms                               | Class    | Solver           |
 | ----------------------------------------------- | -------- | ---------------- |
