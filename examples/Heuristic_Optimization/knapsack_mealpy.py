@@ -17,10 +17,10 @@ def instance(X):
     x = m.bvar('x', [J])
 
     # Objective
-    m.obj(sum(p[j]*x(j) for j in J))
+    m.obj(sum(p[j]*x[j] for j in J))
 
     # Constraints
-    m.con(sum(w[j]*x(j) for j in J) |ll| W)
+    m.con(sum(w[j]*x[j] for j in J) |ll| W)
 
     # Solve
     m.sol(['max'], 'BaseSMA', {'epoch':100, 'pop_size': 20})
@@ -39,23 +39,6 @@ for j in J:
 
 '''
 Output:
-
-TIME
- --------
-| cpt (ave)   | cpt (std)         | unit      |
-|-------------|-------------------|-----------|
-| 775322.9    | 99388.31470796755 | micro sec |
-| 00:00:00    | 00:00:00          | h:m:s     |
-
-OBJ
- --------
-|   obj | unit               |
-|-------|--------------------|
-|   133 | max                |
-|   133 | average            |
-|     0 | standard deviation |
-|   133 | min                |
-
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    FelooPy (Version 0.2.0) - Released: 11 December 2022

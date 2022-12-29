@@ -16,10 +16,10 @@ def instance(X):
     x = m.bvar('x', [J])
 
     # Objective
-    m.obj(sum(p[j]*x(j) for j in J))
+    m.obj(sum(p[j]*x[:,j] for j in J))
 
     # Constraints
-    m.con(sum(w[j]*x(j) for j in J) |ll| W)
+    m.con(sum(w[j]*x[:,j] for j in J) |ll| W)
 
     # Solve
     m.sol(['max'], 'TS')
@@ -44,7 +44,7 @@ Output:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-PROBLEM FEATURES 
+PROBLEM FEATURES
  --------
 | info      | detail    | variable   | count (cat,tot)   | other      | count (cat, tot)   |
 |-----------|-----------|------------|-------------------|------------|--------------------|

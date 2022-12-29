@@ -224,9 +224,8 @@ Output:
 1. Create your model inside a function.
 
 * Note 1: This function gets a search agent and returns the objective value.
-* Note 2: Notice that the decision variables here are indexed as `x(i)` or `x(i,j)`. 
-* Note 3: Notice that instead of `|l|`, `|e|`, and `|g|` for `<=`, `==`, and `>=`, herein one should use `|ll|`, `|ee|`, and `|gg|`.
-
+* Note 2: Notice that the decision variables here are indexed either as `x[i]`,`x[i,j]` (for `mealpy` and non-vectorized interfaces) or `x[:,i]`, `x[:,i,j]` for vectorized interfaces (i.e., the `feloopy` interface itself).
+* Note 3: Notice that instead of `|l|`, `|e|`, and `|g|` or `<=`, `==`, and `>=`, herein you should only use `|ll|` or `|gg|`.
 
 ```python
 from feloopy import *
@@ -248,10 +247,10 @@ def instance(X):
     x = m.bvar('x', [J])
 
     # Objective
-    m.obj(sum(p[j]*x(j) for j in J))
+    m.obj(sum(p[j]*x[j] for j in J))
 
     # Constraints
-    m.con(sum(w[j]*x(j) for j in J) |ll| W)
+    m.con(sum(w[j]*x[j] for j in J) |ll| W)
 
     # Solve
     m.sol(['max'], 'BaseSMA', {'epoch': 100, 'pop_size': 10})
