@@ -49,7 +49,7 @@ m.dis_status()
 # Display
 for i in I:
     print(
-        f"Number of employees working on {list(Data.keys())[i]}: {m.get(x[i])} ")
+        f"Number of employees who start working on {list(Data.keys())[i]}: {m.get(x[i])} ")
 
 '''
 Output:
@@ -83,12 +83,12 @@ x2 + x3 + x4 + x5 + x6 >= 11
 ~~~~~~~~~~~~~~~~~~~~~~
 objective:  23.0
 status:  Optimal
-Number of employees working on Mon: 2.0
-Number of employees working on Tue: 6.0
-Number of employees working on Wed: 0.0
-Number of employees working on Thu: 7.0
-Number of employees working on Fri: 0.0
-Number of employees working on Sat: 3.0
-Number of employees working on Sun: 5.0
+Number of employees who start working on Mon: 2.0
+Number of employees who start working on Tue: 6.0
+Number of employees who start working on Wed: 0.0
+Number of employees who start working on Thu: 7.0
+Number of employees who start working on Fri: 0.0
+Number of employees who start working on Sat: 3.0
+Number of employees who start working on Sun: 5.0
 
 '''
