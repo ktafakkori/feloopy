@@ -11,7 +11,7 @@ import timeit
 from tabulate import tabulate as tb
 import numpy as np
 
-def GenerateSolution(ModelObject, Fitness, ToTalVariableCounter, ObjectivesDirections, ObjectiveBeingOptimized, Times):
+def GenerateSolution(ModelObject, Fitness, ToTalVariableCounter, ObjectivesDirections, ObjectiveBeingOptimized, Times, Plots):
 
     if Times == 1:
         

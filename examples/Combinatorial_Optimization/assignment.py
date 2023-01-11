@@ -34,7 +34,7 @@ m.dis_status()
 # Display
 for i, j in sets(I, J):
     if m.get(x[i, j]) == 1:
-        print(f"agent {i} assigned to job {j}")
+        print(f"agent {i} is assigned to job {j}")
 
 '''
 

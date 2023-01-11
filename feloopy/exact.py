@@ -1,11 +1,5 @@
-'''
-INFO
-~~~~
-Package Version: 0.2.0
-Copyright: (2022) Keivan Tafakkori & FELOOP (http://k.tafakkori.github.io/)
-License: MIT (Please Refer to the LICENSE.txt File)
-Script Edited by: Keivan Tafakkori (12 December 2022)
-'''
+Version = 'Version 0.2.01'
+ReleaseDate = '23 January 2023'
 
 import matplotlib.style as style
 from tabulate import tabulate as tb
@@ -24,63 +18,49 @@ prod = mt.prod
 def isle(x, y):
     return x <= y
 
-
 @make_infix('or', 'sub')
 def le(x, y):
     return x <= y
-
 
 @make_infix('or', 'sub')
 def l(x, y):
     return x <= y
 
-
 @make_infix('or', 'sub')
 def isge(x, y):
     return x >= y
-
 
 @make_infix('or', 'sub')
 def ge(x, y):
     return x >= y
 
-
 @make_infix('or', 'sub')
 def g(x, y):
     return x >= y
-
 
 @make_infix('or', 'sub')
 def ise(x, y):
     return x == y
 
-
 @make_infix('or', 'sub')
 def e(x, y):
     return x == y
-
 
 @make_infix('or', 'sub')
 def ll(x, y):
     return x-y
 
-
 @make_infix('or', 'sub')
 def gg(x, y):
     return y-x
-
 
 @make_infix('or', 'sub')
 def ee(x, y):
     x = y
     return x
 
-
 def sets(*args):
     return it.product(*args)
-
-Version = 'Version 0.2.0'
-ReleaseDate = '11 December 2022'
 
 def UpdateCounter(VarDim, TotCounter, SpecialCounter):
 
@@ -94,19 +74,14 @@ def UpdateCounter(VarDim, TotCounter, SpecialCounter):
 
     return TotCounter, SpecialCounter
 
-# TODO: python 11 addition to unpack indices
-
+# TODO: Python 3.11 addition to unpack indices
 # class VAR:
-
 #     def __init__(self,val):
 #         self.val = val
-
 #     def __setitem__(self, *key, value):
 #         self.val[*key] = value
-
 #     def __getattribute__(self, key):
 #         return super().__getitem__(*key)
-
 # x = VAR()
 
 class EMPTY:
@@ -182,20 +157,18 @@ class EMPTY:
     def __ne__(self, other):
         return 0
 
-
 class model:
 
     def __init__(self, SolutionMethod: str, ModelName: str, InterfaceName: str, Key=None, AgentProperties=None):
+        
         '''
-
         Environment Definition
         ~~~~~~~~~~~~~~~~~~~~~~
-
         * SolutionMethod (String): Determine the solution method of your model (e.g., 'exact' or 'heuristic')
-        * ModelName (String): Determine a name for your model (e.g., 'TSP' or 'TravelingSalesManProblem' or 'Trvaeling_Salesman_Problem')
+        * ModelName (String): Determine a name for your model (e.g., 'TSP' or 'TravelingSalespersonProblem' or 'Traveling_Salesperson_Problem')
         * InterfaceName (String) : Select the desired exact optimization interface in Python (e.g., 'pulp' or 'pyomo')
         * AgentProperties (List) : (Only for heuristic optimization) Provide a variable name for your agents and consider it as an input for your model function. (e.g., X or Agent) 
-        * Key (Integer): Determine a seed for random number generator 
+        * Key (Integer): Determine a seed for random number generator for initiating random parameters
         '''
 
         self.RNG = np.random.default_rng(Key)
@@ -307,15 +280,12 @@ class model:
             case 'heuristic':
 
                 self.InterfaceName = InterfaceName
-
                 match self.InterfaceName:
 
                     case 'mealpy':
-
                         self.Vectorized = False
 
                     case 'feloopy':
-
                         self.Vectorized = 'FelooPyMethod'
 
                 self.AgentProperties = AgentProperties
@@ -371,15 +341,13 @@ class model:
                 return self.AgentProperties
 
     def bvar(self, VarName: str, VarDim=0, VarBound=[0, 1]):
+        
         '''
-
         Binary Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
-
         * VarName (String): Determine a name for your variable (e.g., 'x' or 'flow' or 'xy')
         * VarDim (List) : If your variable has indices, determine corresponding sets in a list (e.g., [I] or [I,J] where I=range(2), J=range(3))
         * VarBound (List) : If your variable has a specific bound, determine lb and ub in a list (e.g., [0, None], or [10, 30])
-
         '''
 
         match self.SolutionMethod:
@@ -536,15 +504,13 @@ class model:
             return self.RNG.integers(low=lb, high=ub+1, size=([len(i) for i in dim]))
 
     def ivar(self, VarName: str, VarDim=0, VarBound=[0, None]):
+        
         '''
-
         Integer Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
         * VarName (String): Determine a name for your variable (e.g., 'x' or 'flow' or 'xy')
         * VarDim (List) : If your variable has indices, determine corresponding sets in a list (e.g., [I] or [I,J] where I=range(2), J=range(3))
         * VarBound (List) : If your variable has a specific bound, determine lb and ub in a list (e.g., [0, None], or [10, 30])
-
         '''
 
         match self.SolutionMethod:
@@ -679,14 +645,12 @@ class model:
                             # return var
 
     def svar(self, VarName: str, VarDim=0):
+        
         '''
-
         Sequential Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        * VarName (String): Determine a name for your variable (e.g., 'x' or 'flow' or 'xy')
+        * VarName (String): Determine a name for your variable (e.g., 'x', 'schedule', 'route', or 'xy')
         * VarDim (List) : (Necessary) If your variable has indices, determine corresponding sets in a list (e.g., [I] where I=range(2))
-
         '''
 
         match self.SolutionMethod:
@@ -695,17 +659,22 @@ class model:
 
                 if self.AgentProperties[0] == 'idle':
 
-                    self.VariablesSpread[VarName] = [
-                        self.ToTalVariableCounter[1], 0]
-                    self.ToTalVariableCounter, self.IntegerVariableCounter = UpdateCounter(
-                        VarDim, self.ToTalVariableCounter, self.IntegerVariableCounter)
+                    self.VariablesSpread[VarName] = [self.ToTalVariableCounter[1], 0]
+
+                    self.ToTalVariableCounter, self.IntegerVariableCounter = UpdateCounter(VarDim, self.ToTalVariableCounter, self.IntegerVariableCounter)
+                    
                     self.VariablesSpread[VarName][1] = self.ToTalVariableCounter[1]
+                    
                     self.VariablesType[VarName] = 'svar'
+                    
                     self.VariablesDim[VarName] = VarDim
 
                     if self.Vectorized =='FelooPyMethod':
+
                         return np.random.rand(*tuple([10]+[len(dims) for dims in VarDim]))
+                    
                     else:
+
                         return np.random.rand(*tuple([len(dims) for dims in VarDim]))
 
                 else:
@@ -1004,10 +973,8 @@ class model:
         '''
         Dependent Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
         * VarName (String): Determine a name for your variable (e.g., 'x' or 'flow' or 'xy')
         * VarDim (List) : If your variable has indices, determine corresponding sets in a list (e.g., [I] or [I,J] where I=range(2), J=range(3))
-
         '''
 
         if self.AgentProperties[0] == 'idle':

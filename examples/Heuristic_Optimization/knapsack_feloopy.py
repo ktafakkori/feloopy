@@ -12,6 +12,7 @@ def instance(X):
 
     # Environment
     m = model('heuristic', 'kp', 'feloopy',AgentProperties=X)
+
     # Variables
     x = m.bvar('x', [J])
 
@@ -28,7 +29,7 @@ def instance(X):
 
 m = implement(instance)
 
-m.sol(PenaltyMultiplier=150,Times=50)
+m.sol(PenaltyMultiplier=150,Times=1)
 m.inf()
 m.dis_obj()
 
