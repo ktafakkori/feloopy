@@ -67,7 +67,7 @@ class implement:
                 self.ModelObject = FeloopyHeuristicModelGenerator.GenerateModel(
                     self.ToTalVariableCounter[1], self.ObjectivesDirections, self.SolverName, self.AlgOptions)
 
-    def sol(self, PenaltyMultiplier=0, Times=1):
+    def sol(self, PenaltyMultiplier=0, Times=1, Plots=False, Save=False):
 
         self.PenaltyMultiplier = PenaltyMultiplier
 
@@ -77,13 +77,13 @@ class implement:
 
                 from .SolutionFactory import MealpySolutionGenerator
                 self.BestAgent, self.BestReward = MealpySolutionGenerator.GenerateSolution(
-                    self.ModelObject, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, Times)
+                    self.ModelObject, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, Times, Plots, Save)
 
             case 'feloopy':
 
                 from .SolutionFactory import FeloopyHeuristicSolutionGenerator
                 self.BestAgent, self.BestReward = FeloopyHeuristicSolutionGenerator.GenerateSolution(
-                    self.ModelObject, self.Fitness, Times)
+                    self.ModelObject, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, Times, Plots)
 
     def Fitness(self, X):
 

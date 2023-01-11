@@ -10,9 +10,9 @@ Script Edited by: Keivan Tafakkori (12 December 2022)
 import numpy as np
 import timeit
 from tabulate import tabulate as tb
+from mealpy.utils.visualize import *
 
-
-def GenerateSolution(ModelObject, Fitness, ToTalVariableCounter, ObjectivesDirections, ObjectiveBeingOptimized, Times):
+def GenerateSolution(ModelObject, Fitness, ToTalVariableCounter, ObjectivesDirections, ObjectiveBeingOptimized, Times, Plots, Save):
 
     problem = {
         "fit_func": Fitness,
@@ -25,6 +25,20 @@ def GenerateSolution(ModelObject, Fitness, ToTalVariableCounter, ObjectivesDirec
 
     if Times == 1:
         BestAgent, BestReward = ModelObject.solve(problem)
+        if Plots:
+            export_convergence_chart(ModelObject.history.list_global_best_fit, title='Global Best Fitness')          
+            export_convergence_chart(ModelObject.history.list_current_best_fit, title='Local Best Fitness')          
+            export_convergence_chart(ModelObject.history.list_epoch_time, title='Runtime chart', y_label="Second")      
+            export_explore_exploit_chart([ModelObject.history.list_exploration, ModelObject.history.list_exploitation])  
+            export_diversity_chart([ModelObject.history.list_diversity],list_legends=[''])
+
+            if Save:
+                
+                ModelObject.history.save_global_best_fitness_chart(filename="results/gbfc")
+                ModelObject.history.save_local_best_fitness_chart(filename="results/lbfc")
+                ModelObject.history.save_runtime_chart(filename="results/rtc")
+                ModelObject.history.save_exploration_exploitation_chart(filename="results/eec")
+                ModelObject.history.save_diversity_chart(filename="results/dc")
 
     else:
 

@@ -37,6 +37,7 @@ for i, j in sets(I, J):
         print(f"agent {i} assigned to job {j}")
 
 '''
+
 Output:
 
 | info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |

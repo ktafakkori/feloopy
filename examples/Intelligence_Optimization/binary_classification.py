@@ -65,7 +65,7 @@ PROBLEM FEATURES
 | interface | gekko    | binary     | [0, 0]            | constraint | [5, 5]             |
 | solver    | ipopt    | integer    | [0, 0]            |            |                    |
 | direction | ['min']  | free       | [3, 9]            |            |                    |
-| method    | exact    | tot        | [3, 9]           |            |                    |
+| method    | exact    | tot        | [3, 9]            |            |                    |
 objective:  1.2744287658e-26
 status:  optimal
 Input = [1, 2.1, 2] -> Output = 0

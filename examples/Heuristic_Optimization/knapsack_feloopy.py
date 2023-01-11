@@ -22,13 +22,13 @@ def instance(X):
     m.con(sum(w[j]*x[:,j] for j in J) |ll| W)
 
     # Solve
-    m.sol(['max'], 'TS')
+    m.sol(['max'], 'GWO')
 
     return m[X]
 
 m = implement(instance)
 
-m.sol(PenaltyMultiplier=150,Times=1)
+m.sol(PenaltyMultiplier=150,Times=50)
 m.inf()
 m.dis_obj()
 
@@ -61,6 +61,5 @@ item 3 is 1.0
 item 4 is 1.0
 item 5 is 0.0
 item 6 is 1.0
-
 
 '''

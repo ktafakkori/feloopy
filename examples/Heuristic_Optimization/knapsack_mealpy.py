@@ -30,7 +30,9 @@ def instance(X):
 m = implement(instance)
 
 m.sol(PenaltyMultiplier=150,Times=1)
+
 m.inf()
+
 m.dis_obj()
 
 # Display
@@ -62,6 +64,5 @@ item 3 is 1.0
 item 4 is 1.0
 item 5 is 0.0
 item 6 is 1.0
-
 
 '''
