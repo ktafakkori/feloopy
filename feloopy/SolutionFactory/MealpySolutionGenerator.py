@@ -1,0 +1,114 @@
+'''
+INFO
+~~~~
+Package Version: 0.2.0
+Copyright: (2022) Keivan Tafakkori & FELOOP (http://k.tafakkori.github.io/)
+License: MIT (Please Refer to the LICENSE.txt File)
+Script Edited by: Keivan Tafakkori (12 December 2022)
+'''
+
+import numpy as np
+import timeit
+from tabulate import tabulate as tb
+from mealpy.utils.visualize import *
+
+def GenerateSolution(ModelObject, Fitness, ToTalVariableCounter, ObjectivesDirections, ObjectiveBeingOptimized, Times, Plots, Save):
+
+    problem = {
+        "fit_func": Fitness,
+        "lb": [0, ] * ToTalVariableCounter[1],
+        "ub": [1, ] * ToTalVariableCounter[1],
+        "minmax": ObjectivesDirections[ObjectiveBeingOptimized],
+        "log_to": None,
+        "save_population": False,
+    }
+
+    if Times == 1:
+        BestAgent, BestReward = ModelObject.solve(problem)
+        if Plots:
+            export_convergence_chart(ModelObject.history.list_global_best_fit, title='Global Best Fitness')          
+            export_convergence_chart(ModelObject.history.list_current_best_fit, title='Local Best Fitness')          
+            export_convergence_chart(ModelObject.history.list_epoch_time, title='Runtime chart', y_label="Second")      
+            export_explore_exploit_chart([ModelObject.history.list_exploration, ModelObject.history.list_exploitation])  
+            export_diversity_chart([ModelObject.history.list_diversity],list_legends=[''])
+
+            if Save:
+                
+                ModelObject.history.save_global_best_fitness_chart(filename="results/gbfc")
+                ModelObject.history.save_local_best_fitness_chart(filename="results/lbfc")
+                ModelObject.history.save_runtime_chart(filename="results/rtc")
+                ModelObject.history.save_exploration_exploitation_chart(filename="results/eec")
+                ModelObject.history.save_diversity_chart(filename="results/dc")
+
+    else:
+
+        Multiplier = {'max': 1, 'min': -1}
+
+        dir = Multiplier[ObjectivesDirections[ObjectiveBeingOptimized]]
+
+        time_solve_begin = []
+
+        time_solve_end = []
+
+        bestreward = [-dir*np.inf]
+
+        bestallreward = -dir*np.inf
+
+        for i in range(Times):
+
+            time_solve_begin.append(timeit.default_timer())
+
+            BestAgent, BestReward = ModelObject.solve(problem)
+
+            time_solve_end.append(timeit.default_timer())
+
+            Result = [BestAgent, BestReward]
+
+            Result[1] = np.asarray(Result[1])
+
+            Result[1] = Result[1].item()
+
+            bestreward.append(BestReward)
+
+            if dir*(Result[1]) >= dir*(bestallreward):
+                bestagent = Result[0]
+                bestallreward = Result[1]
+
+        bestreward.pop(0)
+
+        print()
+        hour = []
+        min = []
+        sec = []
+        ave = []
+        for i in range(Times):
+            tothour = round(
+                (time_solve_end[i] - time_solve_begin[i]), 3) % (24 * 3600) // 3600
+            totmin = round(
+                (time_solve_end[i] - time_solve_begin[i]), 3) % (24 * 3600) % 3600 // 60
+            totsec = round(
+                (time_solve_end[i] - time_solve_begin[i]), 3) % (24 * 3600) % 3600 % 60
+            hour.append(tothour)
+            min.append(totmin)
+            sec.append(totsec)
+            ave.append(round((time_solve_end[i]-time_solve_begin[i])*10**6))
+
+        print("TIME \n --------")
+        print(tb({
+            "cpt (ave)": [np.average(ave), "%02d:%02d:%02d" % (np.average(hour), np.average(min), np.average(sec))],
+            "cpt (std)": [np.std(ave), "%02d:%02d:%02d" % (np.std(hour), np.std(min), np.std(sec))],
+            "unit": ["micro sec", "h:m:s"]
+        }, headers="keys", tablefmt="github"))
+        print()
+
+        print("OBJ \n --------")
+        print(tb({
+            "obj": [np.max(bestreward), np.average(bestreward), np.std(bestreward), np.min(bestreward)],
+            "unit": ["max", "average", "standard deviation", "min"]
+        }, headers="keys", tablefmt="github"))
+        print()
+
+        BestAgent = bestagent
+        BestReward = bestallreward
+
+    return BestAgent, BestReward
