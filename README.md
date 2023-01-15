@@ -35,7 +35,7 @@ FelooPy (/fɛlupaɪ/, an abbreviation for feasible, logical, optimal, and Python
 
 ## Installation
 
-*Note 1*: Installation process requires `python==3.10.x`, `pip>=22.3.1` and a stable internet connection (Total Pure Installation Time: ~15 min).
+*Note 1*: Installation process requires `python==3.10.x`, `pip>=22.3.1` and a stable internet connection (Pure Installation Time: ~15 min).
 
 *Note 2:* Ensure to add Python to PATH during the installation process (usually the first menu).
 
