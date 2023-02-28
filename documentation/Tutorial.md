@@ -97,34 +97,30 @@ for i, j in sets(N, N):
 
 
 ```
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   FelooPy (Version 0.2.0) - Released: 12 December 2022
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-PROBLEM FEATURES
- --------
-| info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail   | variable   | count [cat,tot]   | other      | count [cat,tot]    |
 |-----------|----------|------------|-------------------|------------|--------------------|
 | model     | tsp      | positive   | [0, 0]            | objective  | [1, 1]             |
-| interface | ortools  | binary     | [1, 100]          | constraint | [101, 101]         |
+| interface | ortools  | binary     | [1, 100]          | constraint | [1, 101]           |
 | solver    | scip     | integer    | [1, 10]           |            |                    |
 | direction | ['min']  | free       | [0, 0]            |            |                    |
 | method    | exact    | tot        | [2, 110]          |            |                    |
+~~~~~~~~~~~~
 
 objective:  25.0
 status:  optimal
-
-when the traveler is at 0 goes to 2
-when the traveler is at 1 goes to 5
-when the traveler is at 2 goes to 8
-when the traveler is at 3 goes to 4
-when the traveler is at 4 goes to 1
-when the traveler is at 5 goes to 6
-when the traveler is at 6 goes to 9
-when the traveler is at 7 goes to 0
-when the traveler is at 8 goes to 3
-when the traveler is at 9 goes to 7
+when the traveler is at 0 goes to 7
+when the traveler is at 1 goes to 4
+when the traveler is at 2 goes to 0
+when the traveler is at 3 goes to 8
+when the traveler is at 4 goes to 3
+when the traveler is at 5 goes to 1
+when the traveler is at 6 goes to 5
+when the traveler is at 7 goes to 9
+when the traveler is at 8 goes to 2
+when the traveler is at 9 goes to 6
 ```
 
 # How to do a sensitivity analysis?
@@ -145,7 +141,7 @@ c = np.random.randint(1, 10, size=(len(N), len(N)))
 def tsp(c):
 
     # Environment
-    m = model('exact', 'tsp', 'ortools',Key=0) 
+    m = model('exact', 'tsp', 'ortools',key=0) 
     for i, j in sets(N, N):
         c[i][i] = 0
         c[i][j] = c[j][i]
@@ -179,7 +175,7 @@ def tsp(c):
 * This code generates a table:
 
 ```python
-sensitivity(tsp, [c], [-6,6],Table=True)
+sensitivity(tsp, [c], [-6,6],show_table=True)
 ```
 
 Output:
@@ -208,7 +204,7 @@ SENSITIVITY ANALYSIS (PARAM: 1)
 * This code generates a table and a figure.
 
 ```python
-sensitivity(tsp, [c], [-6,6],Table=True, Plot=True)
+sensitivity(tsp, [c], [-6,6],show_table=True, show_plot=True)
 ```
 
 Output:
@@ -241,7 +237,7 @@ p = [40, 60, 10, 10, 3, 20, 60]  # Value of the items
 def instance(X):
 
     # Environment
-    m = model('heuristic', 'kp', 'mealpy',AgentProperties=X)
+    m = model('heuristic', 'kp', 'mealpy', X)
 
     # Variables
     x = m.bvar('x', [J])
@@ -262,7 +258,7 @@ def instance(X):
 ```python
 m = implement(instance)
 
-m.sol(PenaltyMultiplier=150,Times=10)
+m.sol(penalty_coefficient=150,number_of_times=10)
 m.inf()
 m.dis_obj()
 
@@ -276,37 +272,38 @@ Output:
 ```
 Output:
 
-TIME
- --------
-| cpt (ave)   | cpt (std)         | unit      |
-|-------------|-------------------|-----------|
-| 775322.9    | 99388.31470796755 | micro sec |
-| 00:00:00    | 00:00:00          | h:m:s     |
+~~~~~~~
+TIME INFO
+~~~~~~~
+| cpt (ave)   | cpt (std)          | unit      |
+|-------------|--------------------|-----------|
+| 424623.8    | 25778.781331940423 | micro sec |
+| 00:00:00    | 00:00:00           | h:m:s     |
+~~~~~~~
 
-OBJ
- --------
+~~~~~~~
+OBJ INFO
+~~~~~~~
 |   obj | unit               |
 |-------|--------------------|
 |   133 | max                |
 |   133 | average            |
 |     0 | standard deviation |
 |   133 | min                |
+~~~~~~~
 
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   FelooPy (Version 0.2.0) - Released: 12 December 2022
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-PROBLEM FEATURES
- --------
-| info      | detail    | variable   | count (cat,tot)   | other      | count (cat, tot)   |
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail    | variable   | count [cat,tot]   | other      | count [cat,tot]    |
 |-----------|-----------|------------|-------------------|------------|--------------------|
 | model     | kp        | positive   | [0, 0]            | objective  | [1, 1]             |
 | interface | mealpy    | binary     | [1, 7]            | constraint | [1, 1]             |
 | solver    | BaseSMA   | integer    | [0, 0]            |            |                    |
 | direction | ['max']   | free       | [0, 0]            |            |                    |
 | method    | heuristic | tot        | [1, 7]            |            |                    |
+~~~~~~~~~~~~
+
 objective:  133.0
 item 0 is 0.0
 item 1 is 1.0

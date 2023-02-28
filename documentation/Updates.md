@@ -1,5 +1,12 @@
 # CHANGELOG (SINCE 14 SEPTEMBER 2022)
 
+## Version 0.2.3 (28 February 2023)
+
+- Fixed errors in counting variables.
+- Revised vectorized heuristic algorithms by 'feloopy'.
+- Fixed errors during installation.
+- Fixed errors during implementation.
+
 ## Version 0.2.0 (12 December 2022)
 
 - Support for 172+5 (vectorized) heuristic solvers.
