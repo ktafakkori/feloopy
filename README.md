@@ -1,5 +1,5 @@
 
-[![GitHub release](https://img.shields.io/badge/version-0.2.0-orange.svg)](https://github.com/ktafakkori/feloopy/releases)
+[![GitHub release](https://img.shields.io/badge/version-0.2.3-orange.svg)](https://github.com/ktafakkori/feloopy/releases)
 [![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-310/)
 ![Package Size](https://img.shields.io/github/languages/code-size/ktafakkori/feloopy)
 ![Supporters](https://img.shields.io/github/stars/ktafakkori/feloopy)
@@ -18,29 +18,63 @@
 
 # FelooPy: An integrated optimization environment for AutoOR in Python
 
-FelooPy (/fɛlupaɪ/, an abbreviation for feasible, logical, optimal, and Python) is a hyper-optimization interface and an integrated optimization environment (IOE) that provides an all-in-one exact and heuristic optimization tool for AutoOR in Python. The motivation behind the development of FelooPy is to move the focus of operations research scientists from coding to modeling, and from modeling to analysis/analytics to automate time-consuming, iterative tasks of optimization model development, debugging, and implementation. FelooPy can currently give you access to more than 172 single-objective heuristic optimization solvers (thanks to `mealpy` interface) and 82 single-objective commercial and open-source exact optimization solvers  (thanks to `pyomo`,`pulp`,`ortools`, `gekko`, `cplex`, `gurobi`, `xpress`, `picos`, `pymprog`, `cvxpy`, `cylp`, `linopy`, and `mip` interfaces), all with the same coding syntax! This means that switching from one solver to the other one is not costly. Besides, FelooPy automates common tasks in the optimization process and analytics, by providing tools such as sensitivity analysis, automated encoding/decoding (representation method) for heuristic optimization, timers, and more, all in the Python programming language environment.
+*Version 0.2.3 is out! More stable than ever*!
 
+FelooPy (/fɛlupaɪ/, an acronym for feasible, logical, optimal, and Python), is both a hyper-optimization interface and an integrated optimization environment for automated operations research in Python. 
 
-## Features
+Using FelooPy, operations research scientists can: provide their target, representor, or learner model to get results; move focus from coding to modeling, and from modeling to analytics; automate time-consuming, iterative tasks of optimization model development, debugging, and implementation; access to 259 single-objective heuristic and exact optimization algorithms; switch between optimization interfaces and algorithms with no need of code changes; and use tools such as sensitivity analysis, automated encoding and decoding for heuristic optimization, timers, etc.
+
+## Specific features
 
 - **Free** and **Open-Source** integrated optimization environment developed under **MIT** license.
 - **Straightforward** mathematical programming **workflow**.
-- Using **single** optimization programming syntax for **14** **exact** and **heuristic** optimization interfaces in Python.
-- Accessing **82** exact and **172+5** heuristic optimization solvers (total: **259** optimization algorithms).
+- Using **single** optimization programming syntax for **15** **exact** and **heuristic** optimization interfaces in Python.
+- Accessing **82** exact and **177** heuristic optimization algorithms (total: **259**).
 - Supporting **scalable** optimization for **large-scale** real-world problems.
 - Supporting **benchmarking** with various optimization solvers.
 - Supporting **multi-parameter** sensitivity analysis on a single objective.
-- Supporting **multi-criteria** and **multi-objective** optimization (coming soon).
-- ...
+- Supporting specific **solver options** such as **logging**, **number of threads**, **absolute gap** or **releative gap**.
+
+## Supported optimization interfaces
+
+### Exact optimization:
+
+- cplex
+- cvxpy
+- cylp
+- gekko
+- gurobi
+- linopy
+- mip
+- ortools
+- picos
+- pulp
+- pymprog
+- pyomo
+- xpress
+  
+### Heuristic optimization:
+
+- feloopy
+- mealpy
 
 ## Installation
 
-*Note 1*: Installation process requires `python==3.10.x`, `pip>=22.3.1` and a stable internet connection (Pure Installation Time: ~15 min).
+*Optional downloads*: [Python 3.10][py], ([Visual Studio Code][vs] or [Anaconda][sp])
+
+*Note 1*: Installation process requires `python==3.10.x`, `pip>=22.3.1` and a stable internet connection.
 
 *Note 2:* Ensure to add Python to PATH during the installation process (usually the first menu).
 
-- *Downloads*: [Python 3.10][py], ([Visual Studio Code][vs] or [Anaconda][sp])
-- *Cloud*: [Google Colab][gc]
+*Note 3:* To use FelooPy inside [Google Colab][gc] environment, please first run the following code to configure Python version. Note that this code requires you to choose the desired version during implementation.
+
+```python
+!sudo apt-get update -y
+!sudo apt-get install python3.10
+!sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
+!sudo update-alternatives --config python3
+!sudo apt install python3-pip
+```
 
 [py]: https://www.python.org/downloads/release/python-3100/
 [vs]: https://code.visualstudio.com/
@@ -50,7 +84,7 @@ FelooPy (/fɛlupaɪ/, an abbreviation for feasible, logical, optimal, and Python
 ### Method 1: Terminal command (e.g., CMD or GC):
 
 ```text
-pip install feloopy==0.2.0
+pip install feloopy==0.2.3
 ```
 
 ### Method 2: IDE command (e.g., Spyder):
@@ -58,7 +92,7 @@ pip install feloopy==0.2.0
 *Note*: After installation, this line of code should be deleted.
 
 ```text
-!pip install feloopy==0.2.0
+!pip install feloopy==0.2.3
 ```
 
 ### Method 3: Inside your Python code
@@ -79,14 +113,14 @@ install('feloopy')
 
 ### Method 4: From GitHub [Releases][a] section
 
-1. Download the [feloopy-0.2.0.zip][c] file.
+1. Download the [feloopy-0.2.3.zip][c] file.
 2. Extract it into a specific directory.
 3. Open a terminal in that directory.
 4. Type: `pip install .`
 
 [a]: https://github.com/ktafakkori/feloopy/releases
 [b]: https://git-scm.com/downloads
-[c]: https://github.com/ktafakkori/feloopy/releases/download/0.2.0/feloopy-0.2.0.zip
+[c]: https://github.com/ktafakkori/feloopy/releases/download/0.2.3/feloopy-0.2.3.zip
 
 ### Method 5: From GitHub repository (insiders version)
 
@@ -114,14 +148,22 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 
 ## Citation
 
+* APA 7:
+
 ```text
-@software{ktafakkori2022Dec,
+Tafakkori, K. (2023). Feloopy: An integrated optimization environment for AutoOR in Python (0.2.3) [Python]. https://github.com/ktafakkori/feloopy (Original work published 2023)
+```
+  
+* LaTeX:
+  
+```text
+@software{ktafakkori2023Feb,
   author       = {Keivan Tafakkori},
   title        = {{FelooPy: An integrated optimization environment for AutoOR in Python}},
-  year         = {2022},
-  month        = dec,
+  year         = {2023},
+  month        = feb,
   publisher    = {GitHub},
-  version      = {v0.2.0},
+  version      = {v0.2.3},
   url          = {https://github.com/ktafakkori/feloopy/}
 }
 ```

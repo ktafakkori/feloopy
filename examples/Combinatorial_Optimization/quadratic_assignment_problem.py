@@ -53,24 +53,25 @@ for i, j in sets(I, J):
         print(f"agent {i} assigned to job {j}")
 
 '''
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   FelooPy (Version 0.2.0) - Released: 11 December 2022
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-PROBLEM FEATURES
- --------
-| info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail   | variable   | count [cat,tot]   | other      | count [cat,tot]    |
 |-----------|----------|------------|-------------------|------------|--------------------|
 | model     | qap      | positive   | [0, 0]            | objective  | [1, 1]             |
-| interface | gekko    | binary     | [1, 16]           | constraint | [8, 8]             |
+| interface | gekko    | binary     | [1, 16]           | constraint | [1, 8]             |
 | solver    | apopt    | integer    | [0, 0]            |            |                    |
 | direction | ['min']  | free       | [0, 0]            |            |                    |
 | method    | exact    | tot        | [1, 16]           |            |                    |
+~~~~~~~~~~~~
+
 objective:  790.0
 status:  optimal
 agent 0 assigned to job 2
 agent 1 assigned to job 3
 agent 2 assigned to job 0
 agent 3 assigned to job 1
+
+
 '''

@@ -37,20 +37,21 @@ for i, j in sets(I, J):
         print(f"agent {i} is assigned to job {j}")
 
 '''
-
-Output:
-
-| info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail   | variable   | count [cat,tot]   | other      | count [cat,tot]    |
 |-----------|----------|------------|-------------------|------------|--------------------|
 | model     | ap       | positive   | [0, 0]            | objective  | [1, 1]             |
-| interface | cplex    | binary     | [1, 9]            | constraint | [6, 6]             |
+| interface | cplex    | binary     | [1, 9]            | constraint | [1, 6]             |
 | solver    | cplex    | integer    | [0, 0]            |            |                    |
 | direction | ['min']  | free       | [0, 0]            |            |                    |
 | method    | exact    | tot        | [1, 9]            |            |                    |
+~~~~~~~~~~~~
+
 objective:  9.0
 status:  integer optimal solution
-agent 0 assigned to job 1
-agent 1 assigned to job 0
-agent 2 assigned to job 2
-
+agent 0 is assigned to job 1
+agent 1 is assigned to job 0
+agent 2 is assigned to job 2
 '''

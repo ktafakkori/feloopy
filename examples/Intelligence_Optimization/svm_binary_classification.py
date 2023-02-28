@@ -49,18 +49,19 @@ for item in aa:
 
 '''
 
-Output:
-
-PROBLEM FEATURES
- --------
-| info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail   | variable   | count [cat,tot]   | other      | count [cat,tot]    |
 |-----------|----------|------------|-------------------|------------|--------------------|
 | model     | svm      | positive   | [1, 5]            | objective  | [1, 1]             |
 | interface | gekko    | binary     | [0, 0]            | constraint | [1, 1]             |
 | solver    | apopt    | integer    | [0, 0]            |            |                    |
 | direction | ['max']  | free       | [0, 0]            |            |                    |
 | method    | exact    | tot        | [1, 5]            |            |                    |
-objective:  -13.0
+~~~~~~~~~~~~
+
+objective:  13.0
 status:  optimal
 Input = [1, 2.1, 2] -> Output = -1
 Input = [1.9, 3, 3] -> Output = -1

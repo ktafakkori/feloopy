@@ -65,17 +65,18 @@ for item in aa:
 
 '''
 
-Output:
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail   | variable   | count [cat,tot]   | other      | count [cat,tot]    |
+|-----------|----------|------------|-------------------|------------|--------------------|
+| model     | slr      | positive   | [0, 0]            | objective  | [1, 1]             |
+| interface | gekko    | binary     | [1, 3]            | constraint | [1, 12]            |
+| solver    | apopt    | integer    | [0, 0]            |            |                    |
+| direction | ['min']  | free       | [3, 9]            |            |                    |
+| method    | exact    | tot        | [4, 12]           |            |                    |
+~~~~~~~~~~~~
 
-PROBLEM FEATURES
- --------
-| info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |       
-|-----------|----------|------------|-------------------|------------|--------------------|       
-| model     | slr      | positive   | [0, 0]            | objective  | [1, 1]             |       
-| interface | gekko    | binary     | [1, 3]            | constraint | [12, 12]           |       
-| solver    | apopt    | integer    | [0, 0]            |            |                    |       
-| direction | ['min']  | free       | [3, 9]            |            |                    |       
-| method    | exact    | tot        | [4, 12]           |            |                    |       
 objective:  2.4208334274e-20
 status:  optimal
 Input = [6, 8, 9] -> Output = 5.999999991152457
@@ -83,4 +84,5 @@ Input = [7, 4, 3] -> Output = 7.00000001037623
 Input = [8, 3, 5] -> Output = 8.000000017957174
 Input = [9, 1, 6] -> Output = 9.00000002941906
 Input = [10, 9, 3] -> Output = 10.000000002071515
+
 '''

@@ -44,22 +44,23 @@ for i,j in sets(I,J):
         
 '''
 
-Output:
-
-PROBLEM FEATURES
- --------
-| info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail   | variable   | count [cat,tot]   | other      | count [cat,tot]    |
 |-----------|----------|------------|-------------------|------------|--------------------|
 | model     | sm       | positive   | [1, 4]            | objective  | [1, 1]             |
-| interface | pulp     | binary     | [1, 16]           | constraint | [12, 12]           |
+| interface | pulp     | binary     | [1, 16]           | constraint | [1, 12]            |
 | solver    | cbc      | integer    | [0, 0]            |            |                    |
 | direction | ['min']  | free       | [0, 0]            |            |                    |
 | method    | exact    | tot        | [2, 20]           |            |                    |
+~~~~~~~~~~~~
+
 objective:  18.25
 status:  Optimal
-| job  0  | position 2 | finish: 19.0 |
-| job  1  | position 0 | finish: 8.0 |
-| job  2  | position 3 | finish: 28.0 |
-| job  3  | position 1 | finish: 12.0 |
+| job  0  | position 2 | finish: 19.0 | 
+| job  1  | position 0 | finish: 8.0 | 
+| job  2  | position 3 | finish: 28.0 | 
+| job  3  | position 1 | finish: 12.0 | 
 
 '''

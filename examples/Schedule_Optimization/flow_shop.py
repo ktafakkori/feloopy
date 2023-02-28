@@ -70,18 +70,18 @@ for j,k in sets(J,K):
 
 
 '''
-
-Output:
-
-PROBLEM FEATURES
- --------
-| info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail   | variable   | count [cat,tot]   | other      | count [cat,tot]    |
 |-----------|----------|------------|-------------------|------------|--------------------|
 | model     | fs       | positive   | [2, 16]           | objective  | [1, 1]             |
-| interface | pulp     | binary     | [1, 16]           | constraint | [23, 23]           |
+| interface | pulp     | binary     | [1, 16]           | constraint | [1, 23]            |
 | solver    | cbc      | integer    | [0, 0]            |            |                    |
 | direction | ['min']  | free       | [0, 0]            |            |                    |
-| method    | exact    | tot        | [3, 40]           |            |                    |
+| method    | exact    | tot        | [3, 32]           |            |                    |
+~~~~~~~~~~~~
+
 objective:  24.950000000000003
 status:  Optimal
 x02 = 1.0

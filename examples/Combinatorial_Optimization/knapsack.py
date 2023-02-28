@@ -31,16 +31,18 @@ for j in J:
     print(f"item {j} is {m.get(x[j])}")
 
 '''
-Output:
-PROBLEM FEATURES
- --------
-| info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail   | variable   | count [cat,tot]   | other      | count [cat,tot]    |
 |-----------|----------|------------|-------------------|------------|--------------------|
 | model     | kp       | positive   | [0, 0]            | objective  | [1, 1]             |
 | interface | ortools  | binary     | [1, 7]            | constraint | [1, 1]             |
 | solver    | scip     | integer    | [0, 0]            |            |                    |
 | direction | ['max']  | free       | [0, 0]            |            |                    |
 | method    | exact    | tot        | [1, 7]            |            |                    |
+~~~~~~~~~~~~
+
 objective:  133.0
 status:  optimal
 item 0 is 0.0
@@ -50,4 +52,5 @@ item 3 is 1.0
 item 4 is 1.0
 item 5 is 0.0
 item 6 is 1.0
+
 '''

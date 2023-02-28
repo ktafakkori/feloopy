@@ -52,43 +52,41 @@ for i in I:
         f"Number of employees who start working on {list(Data.keys())[i]}: {m.get(x[i])} ")
 
 '''
-Output:
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   FelooPy (Version 0.2.0) - Released: 11 December 2022
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-PROBLEM FEATURES
- --------
-| info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail   | variable   | count [cat,tot]   | other      | count [cat,tot]    |
 |-----------|----------|------------|-------------------|------------|--------------------|
 | model     | ws       | positive   | [0, 0]            | objective  | [1, 1]             |
-| interface | pulp     | binary     | [0, 0]            | constraint | [7, 7]             |
+| interface | pulp     | binary     | [0, 0]            | constraint | [1, 7]             |
 | solver    | cbc      | integer    | [1, 7]            |            |                    |
 | direction | ['min']  | free       | [0, 0]            |            |                    |
 | method    | exact    | tot        | [1, 7]            |            |                    |
-~~~~~~~~~~~~~~~~~~~~~~
-model: ws
-~~~~~~~~~~~~~~~~~~~~~~
-min x0 + x1 + x2 + x3 + x4 + x5 + x6
-s.t.
-x0 + x3 + x4 + x5 + x6 >= 17
-x0 + x1 + x4 + x5 + x6 >= 13
-x0 + x1 + x2 + x5 + x6 >= 15
-x0 + x1 + x2 + x3 + x6 >= 19
-x0 + x1 + x2 + x3 + x4 >= 14
-x1 + x2 + x3 + x4 + x5 >= 16
-x2 + x3 + x4 + x5 + x6 >= 11
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+
+~~~~~~~~~~
+MODEL INFO
+~~~~~~~~~~
+name: ws
+objective: min x0 + x1 + x2 + x3 + x4 + x5 + x6
+subject to:
+constraint 0: x0 + x3 + x4 + x5 + x6 >= 17
+constraint 1: x0 + x1 + x4 + x5 + x6 >= 13
+constraint 2: x0 + x1 + x2 + x5 + x6 >= 15
+constraint 3: x0 + x1 + x2 + x3 + x6 >= 19
+constraint 4: x0 + x1 + x2 + x3 + x4 >= 14
+constraint 5: x1 + x2 + x3 + x4 + x5 >= 16
+constraint 6: x2 + x3 + x4 + x5 + x6 >= 11
+~~~~~~~~~~
+
 objective:  23.0
 status:  Optimal
-Number of employees who start working on Mon: 2.0
-Number of employees who start working on Tue: 6.0
-Number of employees who start working on Wed: 0.0
-Number of employees who start working on Thu: 7.0
-Number of employees who start working on Fri: 0.0
-Number of employees who start working on Sat: 3.0
-Number of employees who start working on Sun: 5.0
+Number of employees who start working on Mon: 2.0 
+Number of employees who start working on Tue: 6.0 
+Number of employees who start working on Wed: 0.0 
+Number of employees who start working on Thu: 7.0 
+Number of employees who start working on Fri: 0.0 
+Number of employees who start working on Sat: 3.0 
+Number of employees who start working on Sun: 5.0 
 
 '''

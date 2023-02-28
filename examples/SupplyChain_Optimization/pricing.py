@@ -60,41 +60,34 @@ print("optimal sales (consumption level): ", m.get(q) , "units")
 
 '''
 
-Output:
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   FelooPy (Version 0.2.0) - Released: 11 December 2022
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-PROBLEM FEATURES
- --------
-| info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail   | variable   | count [cat,tot]   | other      | count [cat,tot]    |
 |-----------|----------|------------|-------------------|------------|--------------------|
 | model     | lr       | positive   | [0, 0]            | objective  | [1, 1]             |
-| interface | gekko    | binary     | [0, 0]            | constraint | [7, 7]             |
+| interface | gekko    | binary     | [0, 0]            | constraint | [1, 7]             |
 | solver    | apopt    | integer    | [0, 0]            |            |                    |
 | direction | ['min']  | free       | [3, 9]            |            |                    |
-| method    | exact    | tot        | [3, 12]           |            |                    |
+| method    | exact    | tot        | [3, 9]            |            |                    |
+~~~~~~~~~~~~
+
 objective:  71.498759054
 status:  optimal
 -0.02980603901 32.526238806
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   FelooPy (Version 0.2.0) - Released: 11 December 2022
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-PROBLEM FEATURES
- --------
-| info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail   | variable   | count [cat,tot]   | other      | count [cat,tot]    |
 |-----------|----------|------------|-------------------|------------|--------------------|
 | model     | pricing  | positive   | [1, 1]            | objective  | [1, 1]             |
 | interface | gekko    | binary     | [0, 0]            | constraint | [0, 0]             |
 | solver    | bpopt    | integer    | [0, 0]            |            |                    |
 | direction | ['max']  | free       | [0, 0]            |            |                    |
 | method    | exact    | tot        | [1, 1]            |            |                    |
-objective:  -8873.6733059
+~~~~~~~~~~~~
+
+objective:  8873.6733059
 status:  optimal
 total revenue:  8873.673305852495 $
 marginal revenue:  -5.7734276026621956e-08 $

@@ -56,16 +56,19 @@ for item in aa:
 
 
 '''
-Output:
-PROBLEM FEATURES
- --------
-| info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |
+
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail   | variable   | count [cat,tot]   | other      | count [cat,tot]    |
 |-----------|----------|------------|-------------------|------------|--------------------|
 | model     | bc       | positive   | [0, 0]            | objective  | [1, 1]             |
-| interface | gekko    | binary     | [0, 0]            | constraint | [5, 5]             |
+| interface | gekko    | binary     | [0, 0]            | constraint | [1, 5]             |
 | solver    | ipopt    | integer    | [0, 0]            |            |                    |
 | direction | ['min']  | free       | [3, 9]            |            |                    |
 | method    | exact    | tot        | [3, 9]            |            |                    |
+~~~~~~~~~~~~
+
 objective:  1.2744287658e-26
 status:  optimal
 Input = [1, 2.1, 2] -> Output = 0
@@ -73,4 +76,5 @@ Input = [1.9, 3, 3] -> Output = 1
 Input = [3.2, 4, 5] -> Output = 1
 Input = [4.1, 5, 6] -> Output = 1
 Input = [4.9, 7, 8] -> Output = 0
+
 '''

@@ -37,33 +37,30 @@ for i in I:
     print(f"Minutes of AD {i} purchased: {m.get(x[i])}")
 
 '''
-Output:
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   FelooPy (Version 0.2.0) - Released: 11 December 2022
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-PROBLEM FEATURES
- --------
-| info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail   | variable   | count [cat,tot]   | other      | count [cat,tot]    |
 |-----------|----------|------------|-------------------|------------|--------------------|
 | model     | ads      | positive   | [1, 2]            | objective  | [1, 1]             |
-| interface | pulp     | binary     | [0, 0]            | constraint | [2, 2]             |
+| interface | pulp     | binary     | [0, 0]            | constraint | [1, 2]             |
 | solver    | cbc      | integer    | [0, 0]            |            |                    |
 | direction | ['min']  | free       | [0, 0]            |            |                    |
 | method    | exact    | tot        | [1, 2]            |            |                    |
-~~~~~~~~~~~~~~~~~~~~~~
-model: ads
-~~~~~~~~~~~~~~~~~~~~~~
-min 50*x0 + 100*x1
-s.t.
-7*x0 + 2*x1 >= 28
-2*x0 + 12*x1 >= 24
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+
+~~~~~~~~~~
+MODEL INFO
+~~~~~~~~~~
+name: ads
+objective: min 50*x0 + 100*x1
+subject to:
+constraint 0: 7*x0 + 2*x1 >= 28
+constraint 1: 2*x0 + 12*x1 >= 24
+~~~~~~~~~~
+
 objective:  320.0
 status:  Optimal
 Minutes of AD 0 purchased: 3.6
 Minutes of AD 1 purchased: 1.4
-
 '''

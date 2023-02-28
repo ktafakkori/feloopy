@@ -1,7 +1,7 @@
 from feloopy import *
 
 # Environment
-m = model('exact', 'tsp', 'ortools',Key=0)
+m = model('exact', 'tsp', 'ortools',key=0)
 
 # Sets
 N = m.set(10)
@@ -44,28 +44,29 @@ for i, j in sets(N, N):
         print(f"when the traveler is at {i} goes to {j}")
 
 '''
-Output:
-
-PROBLEM FEATURES
- --------
-| info      | detail   | variable   | count (cat,tot)   | other      | count (cat, tot)   |
+~~~~~~~~~~~~
+PROBLEM INFO
+~~~~~~~~~~~~
+| info      | detail   | variable   | count [cat,tot]   | other      | count [cat,tot]    |
 |-----------|----------|------------|-------------------|------------|--------------------|
 | model     | tsp      | positive   | [0, 0]            | objective  | [1, 1]             |
-| interface | ortools  | binary     | [1, 100]          | constraint | [101, 101]         |
+| interface | ortools  | binary     | [1, 100]          | constraint | [1, 101]           |
 | solver    | scip     | integer    | [1, 10]           |            |                    |
 | direction | ['min']  | free       | [0, 0]            |            |                    |
 | method    | exact    | tot        | [2, 110]          |            |                    |
+~~~~~~~~~~~~
+
 objective:  25.0
 status:  optimal
-when the traveler is at 0 goes to 2
-when the traveler is at 1 goes to 5
-when the traveler is at 2 goes to 8
-when the traveler is at 3 goes to 4
-when the traveler is at 4 goes to 1
-when the traveler is at 5 goes to 6
-when the traveler is at 6 goes to 9
-when the traveler is at 7 goes to 0
-when the traveler is at 8 goes to 3
-when the traveler is at 9 goes to 7
+when the traveler is at 0 goes to 7
+when the traveler is at 1 goes to 4
+when the traveler is at 2 goes to 0
+when the traveler is at 3 goes to 8
+when the traveler is at 4 goes to 3
+when the traveler is at 5 goes to 1
+when the traveler is at 6 goes to 5
+when the traveler is at 7 goes to 9
+when the traveler is at 8 goes to 2
+when the traveler is at 9 goes to 6
 
 '''
