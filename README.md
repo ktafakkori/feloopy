@@ -33,7 +33,7 @@ Using FelooPy, operations research scientists can: provide their target, represe
 - Supporting **scalable** optimization for **large-scale** real-world problems.
 - Supporting **benchmarking** with various optimization solvers.
 - Supporting **multi-parameter** sensitivity analysis on a single objective.
-- Supporting specific **solver options** such as **logging**, **number of threads**, **absolute gap** or **releative gap**.
+- Supporting specific **solver options** such as **logs**, **number of threads**, **time limit**, **absolute gap** or **releative gap**.
 
 ## Supported optimization interfaces
 
