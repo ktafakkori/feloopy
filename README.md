@@ -74,6 +74,8 @@ Using FelooPy, operations research scientists can: provide their target, represe
 !sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
 !sudo update-alternatives --config python3
 !sudo apt install python3-pip
+!sudo apt-get install python3.10-distutils
+!curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
 ```
 
 [py]: https://www.python.org/downloads/release/python-3100/
@@ -151,7 +153,7 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 * APA 7:
 
 ```text
-Tafakkori, K. (2023). Feloopy: An integrated optimization environment for AutoOR in Python (0.2.3) [Python]. https://github.com/ktafakkori/feloopy (Original work published 2023)
+Tafakkori, K. (2023). FelooPy: An integrated optimization environment for AutoOR in Python (0.2.3) [Python Library]. https://github.com/ktafakkori/feloopy (Original work published 2023)
 ```
   
 * LaTeX:
