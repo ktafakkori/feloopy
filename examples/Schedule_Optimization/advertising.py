@@ -1,6 +1,6 @@
 from feloopy import *
 
-#Environemnt
+#Environment
 m = model('exact','ads', 'pulp')
 
 #Data

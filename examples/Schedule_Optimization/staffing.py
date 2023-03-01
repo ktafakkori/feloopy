@@ -10,7 +10,7 @@ def roll(n, d):
     return x
 
 
-# Environemnt
+# Environment
 m = model('exact', 'ws', 'pulp')
 
 # Data
