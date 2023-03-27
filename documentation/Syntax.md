@@ -1,6 +1,6 @@
 
 
-# FelooPy v0.2.3 Syntax
+# FelooPy v0.2.3 Coding Syntax
 
 ## **Environment definition**
 
@@ -19,7 +19,7 @@
             * Required.
         * _interface_name_
             * What is the desired optimization interface?
-            * Answer= A predefined string. Examples: `feloopy` or `mealpy` (for heuristic optimization), `cplex`, `pyomo`, `'ortools'`, or `gekko` (for exact optimization).
+            * Answer= A predefined string. Examples: `feloopy` or `mealpy` (for heuristic optimization), `cplex`, `pyomo`, `'ortools'`, or `gekko` (for exact optimization). (See [Exact Interfaces][03] or [Heuristic Interfaces][04])
             * Required
         * _agent_
             * What is the algorithm agent?
@@ -229,7 +229,7 @@
             * Required.
         * _solver_name_
             * What is the name of the desired solver? Please note that this should match the interface defined for the environment.
-            * Answer= A predefined string. Examples: `cplex` or `highs` (for exact optimization), `GA`, `DE`, `BaseGA`, or `OriginalSSpiderA` (for heuristic optimization).
+            * Answer= A predefined string. Examples: `cplex` or `highs` (for exact optimization), `GA`, `DE`, `BaseGA`, or `OriginalSSpiderA` (for heuristic optimization). (See [Exact Solvers][03] or [Heuristic Solvers][04])
             * Required.
         * _solver_options_
             * How is the solver configured? (Currently available for heuristic optimization only).
