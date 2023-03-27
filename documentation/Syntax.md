@@ -2,11 +2,11 @@
 
 # FelooPy v0.2.3 Syntax
 
-* **Environment definition**
+## **Environment definition**
 
     * `Model(solution_method, model_name, interface_name, agent=None, key=None)`
 
-        * Used to define a target, representor or a learner `model_object`.
+        * Used to define a target, representor, or learner `model_object`.
 
         * Arguments:
             * _solution_method_
@@ -32,7 +32,7 @@
 
         * Required, if you need to optimize something.
 
-* **Set definition**
+## **Set definition**
 
     * `model_object.set(size)`
 
@@ -68,7 +68,7 @@
 
         * Optional. `len(set)` can be used instead.
 
-* **Variable definition**
+## **Variable definition**
 
     * `model_object.bvar(name, dim=0, b=[0, 1])`
 
@@ -92,7 +92,7 @@
 
         * Alternatives: `binary_variable` | `add_binary_variable` 
 
-        * Optional. If your mathematical model does contain, need to be represented using binary decision values.
+        * Optional. If your mathematical model does contain, needs to be represented using binary decision values.
 
 
     * `model_object.ivar(name, dim=0, b=[0, None])`
@@ -117,7 +117,7 @@
 
         * Alternatives: `integer_variable` | `add_integer_variable`
 
-        * Optional. If your mathematical model does contain, need to be represented using integer decision values.
+        * Optional. If your mathematical model does contain, needs to be represented using integer decision values.
 
     * `model_object.pvar(name, dim=0, b=[0, None])`
 
@@ -141,7 +141,7 @@
 
         * Alternatives: `positive_variable | add_positive_variable`
 
-        * Optional. If your mathematical model does contain, need to be represented using positive decision values.
+        * Optional. If your mathematical model does contain, needs to be represented using positive decision values.
 
     * `model_object.fvar(name, dim=0, b=[None, None])`
 
@@ -165,17 +165,17 @@
 
         * Alternatives: `free_variable` | `add_free_variable`
 
-        * Optional. If your mathematical model does contain, need to be represented using free (real or float point) decision values.
+        * Optional. If your mathematical model does contain, needs to be represented using free (real or float point) decision values.
 
-* **Objective definition**
+## **Objective definition**
 
     * `model_object.obj(expression, direction=None, label=None)`
 
-        * Used to add an objective function, i.e., a function that guides the target, representor or learner models to the `model_object`.
+        * Used to add an objective function, i.e., a function that guides the target, representor, or learner models to the `model_object`.
 
         * Arguments:
             * _expression_
-                * What it the mathematical formula of this objective function?
+                * What is the mathematical formula of this objective function?
                 * Answer= A required mathematical formula. Examples `2*x+y`, `(x-2)**3`, `sum(x[i,j] for i,j in sets(I,J))`, etc.
                 * Required.
             * _direction_
@@ -193,16 +193,16 @@
 
         * Required. 
 
-* **Constraint definition**
+## **Constraint definition**
 
     * `model_object.con(expression, label=None)`
 
-        * Used to add a constraint (an equality or inequality) to logically limit the target, representor or learner models for making feasible decisions, to the `model_object`.
+        * Used to add a constraint (equality or inequality) to logically limit the target, representor, or learner models for making feasible decisions, to the `model_object`.
 
         * Arguments:
             * _expression_
                 * What it the mathematical expression of this constraint?
-                * Answer= A required mathematical experession. 
+                * Answer= A required mathematical expression. 
                     * Examples for exact optimization algorithms: `2*x+y <= 10`, `2*x+y |l| 10`, `2*x+y >= 10`, `2*x+y |g| 10`, `2*x+y == 10`, or `2*x+y |e| 10` etc.
                     * Examples for heuristic optimization algorithms: `2*x+y |ll| 10` or `2*x+y |gg| 10`.
                 * Required.
@@ -217,18 +217,18 @@
 
         * Optional. 
 
-* **Solve definition**
+## **Solve definition**
 
     * `model_object.sol(directions=None, solver_name=None, solver_options=dict(), objective_id=0, email=None, time_limit=28800, cpu_threads=None, absolute_gap=None, relative_gap=None, log=False)`
 
-    * Used to find the best possible/optimal solution, region, or policy, for a target, representor or a learner `model_object`.
+    * Used to find the best possible/optimal solution, region, or policy, for a target, representor, or learner `model_object`.
         * Arguments:
             * _directions_
                 * What is the direction of the optimization?
                 * Answer= An optinal list containing the string `'max'`, or `'min'`. Example: `['max']` or `['min']`.
                 * Required.
             * _solver_name_
-                * What is the name of the desired solver? Please note that this should match the used interface defined as the environment.
+                * What is the name of the desired solver? Please note that this should match the interface defined for the environment.
                 * Answer= A predefined string. Examples: `cplex` or `highs` (for exact optimization), `GA`, `DE`, `BaseGA`, or `OriginalSSpiderA` (for heuristic optimization).
                 * Required.
             * _solver_options_
@@ -240,25 +240,25 @@
                 * Answer= An optional integer. Defaults to 0.
                 * Optional
             * _email_
-                * What is your email address? This would be used by cloud powered optimization server 'NEOS' to send you the results after a specific amount of time. The interface should be set to `'pyomo'` and the solver name should end with `_online`.
+                * What is your email address? This would be used by the cloud-powered optimization server 'NEOS' to send you the results after a specific amount of time. The interface should be set to `'pyomo'` and the solver name should end with `_online`.
                 * Answer= An string defining your email address. Example: `you@example.com`
-                * Optinal.
+                * Optional.
             * _time_limit_
-                * What is the maximum alloable time for the solution process?
+                * What is the maximum allowable time for the solution process?
                 * Answer= An integer determining a value in seconds.
-                * Optional. Currently only suppoerted by `cplex` as interface and `cplex` as solver.
+                * Optional. Currently only supported by `cplex` as the interface and `cplex` as the solver.
             * _cpu_threads_
                 * How many CPU threads can be used in the solution process?
                 * Answer= An integer defining the number of CPU threads. 
-                * Optional. Currently only suppoerted by `cplex` as interface and `cplex` as solver.
+                * Optional. Currently only supported by `cplex` as the interface and `cplex` as the solver.
             * _absolute_gap_
                 * What is the absolute gap for optimization?
-                * Answer= A value as absolute gap. 
-                * Optional. Currently only suppoerted by `cplex` as interface and `cplex` as solver.
+                * Answer= A value as an absolute gap. 
+                * Optional. Currently only supported by `cplex` as the interface and `cplex` as the solver.
             * _absolute_gap_
                 * What is the relative gap for optimization?
-                * Answer= A ratio as relative gap. 
-                * Optional. Currently only suppoerted by `cplex` as interface and `cplex` as solver.
+                * Answer= A ratio as a relative gap. 
+                * Optional. Currently only supported by `cplex` as the interface and `cplex` as the solver.
             * _log_
                 * Do you need to see the solver log?
                 * Answer= `True` or `False`.
