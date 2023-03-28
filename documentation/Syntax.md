@@ -139,7 +139,7 @@
 
     * Example: `x = model_object.pvar('level', [I])`
 
-    * Alternatives: `positive_variable | add_positive_variable`
+    * Alternatives: `positive_variable` | `add_positive_variable`
 
     * Optional. If your mathematical model does contain, needs to be represented using positive decision values.
 
