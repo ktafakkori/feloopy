@@ -137,7 +137,7 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 ## Documentation
 
 * [Tutorial][01]
-* [Syntax] [06]
+* [Syntax][06]
 * [Examples][02]
 * [Exact Solvers][03]
 * [Heuristic Solvers][04]
