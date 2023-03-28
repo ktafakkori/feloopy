@@ -263,3 +263,9 @@
             * Do you need to see the solver log?
             * Answer= `True` or `False`.
             * Optional.
+
+[01]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Tutorial.md
+[02]: https://github.com/ktafakkori/feloopy/tree/main/examples
+[03]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Exact_List.md
+[04]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Heuristic_List.md
+[05]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Updates.md
