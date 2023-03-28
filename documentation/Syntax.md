@@ -30,7 +30,7 @@
             * Answer= An optional value. Examples: `0`, `19038`, etc.
             * Optional. If you are using FelooPy's specific random number generators and want to keep the results reproducible.
 
-    * Example: `model_object = model(solution_method, model_name, interface_name, agent=None, key=None)`
+    * Example: `model_object = model('exact', 'deep_neural_network', 'ortools', key=0)`
 
     * Alternatives: `add_model` | `create_environment` | `env` | `feloopy` | `model`
 
