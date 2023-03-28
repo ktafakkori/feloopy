@@ -137,6 +137,7 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 ## Documentation
 
 * [Tutorial][01]
+* [Syntax] [06]
 * [Examples][02]
 * [Exact Solvers][03]
 * [Heuristic Solvers][04]
@@ -147,6 +148,8 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 [03]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Exact_List.md
 [04]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Heuristic_List.md
 [05]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Updates.md
+[06]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Syntax.md
+
 
 ## Citation
 
