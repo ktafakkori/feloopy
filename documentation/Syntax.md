@@ -245,7 +245,7 @@
             * Optional
         * _email_
             * What is your email address? This would be used by the cloud-powered optimization server 'NEOS' to send you the results after a specific amount of time. The interface should be set to `'pyomo'` and the solver name should end with `_online`.
-            * Answer= An string defining your email address. Example: `you@example.com`
+            * Answer= An string defining your email address. Example: `'you@example.com'`
             * Optional.
         * _time_limit_
             * What is the maximum allowable time for the solution process?
@@ -259,7 +259,7 @@
             * What is the absolute gap for optimization?
             * Answer= A value as an absolute gap. 
             * Optional. Currently only supported by `'cplex'` as the interface and `'cplex'` as the solver.
-        * _absolute_gap_
+        * _relative_gap_
             * What is the relative gap for optimization?
             * Answer= A ratio as a relative gap. 
             * Optional. Currently only supported by `'cplex'` as the interface and `'cplex'` as the solver.
