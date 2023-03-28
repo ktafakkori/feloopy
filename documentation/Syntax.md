@@ -25,6 +25,10 @@
             * What is the algorithm agent?
             * Answer= An input argument from a higher level function. Example: `X`, which has been previously defined as a function argument `def model(X):`. 
             * Optional. Only if _solution_method_ is set to `heuristic`.
+        * _key_
+            * What is the key (seed) for random number generator?
+            * Answer= An optional value. Examples: `0`, `19038`, etc.
+            * Optional. If you are using FelooPy's specific random number generators and want to keep the results reproducible.
 
     * Example: `model_object = model(solution_method, model_name, interface_name, agent=None, key=None)`
 
