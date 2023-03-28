@@ -19,12 +19,12 @@
             * Required.
         * _interface_name_
             * What is the desired optimization interface?
-            * Answer= A predefined string. Examples: `feloopy` or `mealpy` (for heuristic optimization), `cplex`, `pyomo`, `'ortools'`, or `gekko` (for exact optimization). (See [Exact Interfaces][03] or [Heuristic Interfaces][04])
+            * Answer= A predefined string. Examples: `'feloopy'` or `'mealpy'` (for heuristic optimization), `'cplex'`, `'pyomo'`, `'ortools'`, or `'gekko'` (for exact optimization). (See [Exact Interfaces][03] or [Heuristic Interfaces][04])
             * Required
         * _agent_
             * What is the algorithm agent?
             * Answer= An input argument from a higher level function. Example: `X`, which has been previously defined as a function argument `def model(X):`. 
-            * Optional. Only if _solution_method_ is set to `heuristic`.
+            * Optional. Only if _solution_method_ is set to `'heuristic'`.
         * _key_
             * What is the key (seed) for random number generator?
             * Answer= An optional value. Examples: `0`, `19038`, etc.
@@ -233,7 +233,7 @@
             * Required.
         * _solver_name_
             * What is the name of the desired solver? Please note that this should match the interface defined for the environment.
-            * Answer= A predefined string. Examples: `cplex` or `highs` (for exact optimization), `GA`, `DE`, `BaseGA`, or `OriginalSSpiderA` (for heuristic optimization). (See [Exact Solvers][03] or [Heuristic Solvers][04])
+            * Answer= A predefined string. Examples: `'cplex'` or `'highs'` (for exact optimization), `'GA'`, `'DE'`, `'BaseGA'`, or `'OriginalSSpiderA'` (for heuristic optimization). (See [Exact Solvers][03] or [Heuristic Solvers][04])
             * Required.
         * _solver_options_
             * How is the solver configured? (Currently available for heuristic optimization only).
@@ -250,19 +250,19 @@
         * _time_limit_
             * What is the maximum allowable time for the solution process?
             * Answer= An integer determining a value in seconds.
-            * Optional. Currently only supported by `cplex` as the interface and `cplex` as the solver.
+            * Optional. Currently only supported by `'cplex'` as the interface and `'cplex'` as the solver.
         * _cpu_threads_
             * How many CPU threads can be used in the solution process?
             * Answer= An integer defining the number of CPU threads. 
-            * Optional. Currently only supported by `cplex` as the interface and `cplex` as the solver.
+            * Optional. Currently only supported by `'cplex'` as the interface and `'cplex'` as the solver.
         * _absolute_gap_
             * What is the absolute gap for optimization?
             * Answer= A value as an absolute gap. 
-            * Optional. Currently only supported by `cplex` as the interface and `cplex` as the solver.
+            * Optional. Currently only supported by `'cplex'` as the interface and `'cplex'` as the solver.
         * _absolute_gap_
             * What is the relative gap for optimization?
             * Answer= A ratio as a relative gap. 
-            * Optional. Currently only supported by `cplex` as the interface and `cplex` as the solver.
+            * Optional. Currently only supported by `'cplex'` as the interface and `'cplex'` as the solver.
         * _log_
             * Do you need to see the solver log?
             * Answer= `True` or `False`.
