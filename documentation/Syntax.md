@@ -242,11 +242,11 @@
         * _objective_id_
             * What is the id of the objective being optimized?
             * Answer= An optional integer. Defaults to 0.
-            * Optional
+            * Optional.
         * _email_
             * What is your email address? This would be used by the cloud-powered optimization server 'NEOS' to send you the results after a specific amount of time. The interface should be set to `'pyomo'` and the solver name should end with `_online`.
             * Answer= An string defining your email address. Example: `'you@example.com'`
-            * Optional.
+            * Optional. Only for for exact optimization algorithms.
         * _time_limit_
             * What is the maximum allowable time for the solution process?
             * Answer= An integer determining a value in seconds.
@@ -266,7 +266,7 @@
         * _log_
             * Do you need to see the solver log?
             * Answer= `True` or `False`.
-            * Optional.
+            * Optional. Only for for exact optimization algorithms.
 
 [01]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Tutorial.md
 [02]: https://github.com/ktafakkori/feloopy/tree/main/examples
