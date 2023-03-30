@@ -1,7 +1,7 @@
 from feloopy import *
 
 #Environment
-m = model('exact','lr','gekko') 
+m = model('exact','lr_single','gekko') 
 
 #Data
 #     Monday   Tuesday    Wednesday   Thursday   Friday   Saturday   Sunday

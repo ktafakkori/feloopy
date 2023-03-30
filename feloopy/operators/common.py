@@ -68,7 +68,7 @@ def end_timer(show=False):
         print("Elapsed time (hour:min:sec):", "%02d:%02d:%02d" % (hour, min, sec))
     return EndTime
 
-def load_from_excel(data_file: str, data_dimension: list, number_of_row_id_cols: int, number_of_col_id_rows: int, indices_list: list, sheet_name: str, path=None):
+def load_from_excel(data_file: str, data_dimension: list, shape: list, indices_list: None, sheet_name: str, path=None):
         
         '''
         Multi-Dimensional Excel Parameter Reader! 
@@ -76,38 +76,45 @@ def load_from_excel(data_file: str, data_dimension: list, number_of_row_id_cols:
 
         *data_file: Name of the dataset file (e.g., data.xlsx)
         *data_dimension: data_dimension of the dataset
-        *number_of_row_id_cols: Number of indices that exist in each row from left (e.g., 0, 1, 2, 3...)
-        *number_of_col_id_rows: Number of indices that exist in each column from top (e.g., 0, 1, 2, 3...)
+        *shape[0]: Number of indices that exist in each row from left (e.g., 0, 1, 2, 3...)
+        *shape[1]: Number of indices that exist in each column from top (e.g., 0, 1, 2, 3...)
         *indices_list: The string which accompanies index counter (e.g., if row0, row1, ... and col0,col1, then index is ['row','col'])
         *sheet_name: Name of the excel sheet in which the corresponding parameter exists.
         *path: specify directory of the dataset file (if not provided, the dataset file should exist in the same directory as the code.)
         '''
+
         if path == None:
             data_file = os.path.join(sys.path[0], data_file)
         else:
             data_file = path
 
-        parameter = pd.read_excel(data_file, header=[i for i in range(number_of_col_id_rows)], index_col=[i for i in range(number_of_row_id_cols)], sheet_name=sheet_name)
+        if len(shape) ==2:
 
-        if (number_of_row_id_cols == 1 and number_of_col_id_rows == 1) or (number_of_row_id_cols == 1 and number_of_col_id_rows == 0) or (number_of_row_id_cols == 0 and number_of_col_id_rows == 0) or (number_of_row_id_cols == 0 and number_of_col_id_rows == 1):
+            if (shape[0] == 1 and shape[1] == 1) or (shape[0] == 1 and shape[1] == 0) or (shape[0] == 0 and shape[1] == 0) or (shape[0] == 0 and shape[1] == 1):
 
-            return parameter.to_numpy()
+                return  pd.read_excel(data_file, index_col=0, sheet_name=sheet_name).to_numpy()
 
+            else:
+
+                parameter = pd.read_excel(data_file, header=[i for i in range(shape[1])], index_col=[i for i in range(shape[0])], sheet_name=sheet_name)
+
+                created_par = np.zeros(shape=([len(i) for i in data_dimension]))
+
+                for keys in it.product(*data_dimension):
+
+                    try:
+
+                        created_par[keys] = parameter.loc[tuple([indices_list[i]+str(keys[i]) for i in range(shape[0])]), tuple([indices_list[i]+str(keys[i]) for i in range(shape[0], len(indices_list))])]
+
+                    except:
+
+                        created_par[keys] = None
+
+                return created_par
         else:
+            par = pd.read_excel(data_file, index_col=0, sheet_name=sheet_name).to_numpy()
 
-            created_par = np.zeros(shape=([len(i) for i in data_dimension]))
-
-            for keys in it.product(*data_dimension):
-
-                try:
-
-                    created_par[keys] = parameter.loc[tuple([indices_list[i]+str(keys[i]) for i in range(number_of_row_id_cols)]), tuple([indices_list[i]+str(keys[i]) for i in range(number_of_row_id_cols, len(indices_list))])]
-
-                except:
-
-                    created_par[keys] = None
-
-            return created_par
+            return par.reshape(par.shape[0],)
 
 def version(INPUT):
 
