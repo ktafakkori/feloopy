@@ -1,7 +1,7 @@
 from feloopy import *
 
 # Environment
-m = model('exact', 'kp', 'ortools')
+m = model('exact', 'kp', 'pyomo')
 
 # Sets
 J = range(7)  # Set of the items
@@ -21,7 +21,7 @@ m.obj(sum(p[j]*x[j] for j in J))
 m.con(sum(w[j]*x[j] for j in J) |l| W)
 
 # Solve
-m.sol(['max'], 'scip')
+m.sol(['max'], 'gurobi')
 m.inf()
 m.dis_obj()
 m.dis_status()

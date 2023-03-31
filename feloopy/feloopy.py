@@ -15,70 +15,48 @@ class EMPTY:
 
     def __init__(self, val):
         self.val = val
-
     def __call__(self, *args):
         return 5
-
     def __getitem__(self, *args):
         return 5
-    
     def __setitem__(self, *args):
         'none'
-
     def __hash__(self):
         return 5
-
     def __str__(self):
         return 5
-
     def __repr__(self):
         return 5
-
     def __neg__(self):
         return 5
-
     def __pos__(self):
         return 5
-    
     def __pow__(self,other):
         return 5
-
     def __bool__(self):
         return 5
-
     def __add__(self, other):
         return 5
-
     def __radd__(self, other):
         return 5
-
     def __sub__(self, other):
         return 5
-
     def __rsub__(self, other):
         return 5
-
     def __mul__(self, other):
         return 5
-
     def __rmul__(self, other):
         return 5
-
     def __div__(self, other):
         return 5
-
     def __rdiv__(self, other):
         raise 5
-
     def __le__(self, other):
         return 5
-
     def __ge__(self, other):
         return 5
-
     def __eq__(self, other):
         return 5
-
     def __ne__(self, other):
         return 5
 
@@ -87,13 +65,13 @@ def sets(*args):
     """
     return it.product(*args)
 
-def count_variable(dim, total_count, special_count):
+def count_variable(variable_dim, total_count, special_count):
     """ For calculating total number of variables of each category.
     """
     total_count[0] += 1
     special_count[0] += 1
-    special_count[1] += 1 if dim == 0 else product(len(dims) for dims in dim)
-    total_count[1] += 1 if dim == 0 else product(len(dims) for dims in dim)
+    special_count[1] += 1 if variable_dim == 0 else product(len(dims) for dims in variable_dim)
+    total_count[1] += 1 if variable_dim == 0 else product(len(dims) for dims in variable_dim)
     return total_count, special_count
 
 def create_random_number_generator(key):
@@ -101,7 +79,7 @@ def create_random_number_generator(key):
     """
     return np.random.default_rng(key)
 
-def update_variable_features(name, dim, b, variable_counter_type, features):
+def update_variable_features(name, variable_dim, variable_bound, variable_counter_type, features):
     """ For hierarchical updating the features of the problem.
     """
     match features['solution_method']:
@@ -109,7 +87,7 @@ def update_variable_features(name, dim, b, variable_counter_type, features):
         case 'exact':
 
             features['total_variable_counter'], features['variable_counter_type'] = count_variable(
-                dim, features['total_variable_counter'], features[variable_counter_type])
+                variable_dim, features['total_variable_counter'], features[variable_counter_type])
 
         case 'heuristic':
 
@@ -118,7 +96,7 @@ def update_variable_features(name, dim, b, variable_counter_type, features):
                 features['variable_spread'][name] = [
                     features['total_variable_counter'][1], 0]
                 features['total_variable_counter'], features[variable_counter_type] = count_variable(
-                    dim, features['total_variable_counter'], features[variable_counter_type])
+                    variable_dim, features['total_variable_counter'], features[variable_counter_type])
                 features['variable_spread'][name][1] = features['total_variable_counter'][1]
                 if variable_counter_type=='free_variable_counter':
                     features['variable_type'][name] = 'fvar'
@@ -128,57 +106,57 @@ def update_variable_features(name, dim, b, variable_counter_type, features):
                     features['variable_type'][name] = 'ivar'
                 if variable_counter_type=='positive_variable_counter':
                     features['variable_type'][name] = 'pvar'
-                features['variable_bound'][name] = b
-                features['variable_dim'][name] = dim
+                features['variable_bound'][name] = variable_bound
+                features['variable_dim'][name] = variable_dim
 
     return features
 
-def generate_heuristic_variable(features, type, name, dim, b, agent):
+def generate_heuristic_variable(features, type, name, variable_dim, variable_bound, agent):
 
     if features['agent_status'] == 'idle':
         if features['vectorized']:
-            if dim==0:
+            if variable_dim==0:
                 return EMPTY(0)
             else:
-                return np.random.rand(*tuple([100]+[len(dims) for dims in dim]))
+                return np.random.rand(*tuple([100]+[len(dims) for dims in variable_dim]))
         else:
-            if dim==0:
+            if variable_dim==0:
                 return EMPTY(0)
             else:
-                return np.random.rand(*tuple([len(dims) for dims in dim]))
+                return np.random.rand(*tuple([len(dims) for dims in variable_dim]))
     else:
         spread = features['variable_spread'][name]
 
         if features['vectorized']:
-            if dim == 0:
+            if variable_dim == 0:
                 if type == 'bvar' or type == 'ivar':
-                    return np.round(b[0] + agent[:, spread[0]:spread[1]] * (b[1] - b[0]))
+                    return np.round(variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0]))
                 elif type == 'pvar' or type == 'fvar':
-                    return b[0] + agent[:, spread[0]:spread[1]] * (b[1] - b[0])
+                    return variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])
                 else:
                     return np.argsort(agent[:, spread[name][0]:spread[name][1]])
             else:
                 if type == 'bvar' or type == 'ivar':
-                    var = np.round(b[0] + agent[:, spread[0]:spread[1]] * (b[1] - b[0]))
-                    return np.reshape(var, [var.shape[0]]+[len(dims) for dims in dim])
+                    var = np.round(variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0]))
+                    return np.reshape(var, [var.shape[0]]+[len(dims) for dims in variable_dim])
                 elif type == 'pvar' or type == 'fvar':
-                    var = b[0] + agent[:, spread[0]:spread[1]] * (b[1] - b[0])
-                    return np.reshape(var, [var.shape[0]]+[len(dims) for dims in dim])
+                    var = variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])
+                    return np.reshape(var, [var.shape[0]]+[len(dims) for dims in variable_dim])
                 else:
                     return np.argsort(agent[:, spread[name][0]:spread[name][1]])
         else:
-            if dim == 1:
+            if variable_dim == 1:
                 if type == 'bvar' or type == 'ivar':
-                    return np.round(b[0] + agent[spread[0]:spread[1]] * (b[1] - b[0]))
+                    return np.round(variable_bound[0] + agent[spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0]))
                 elif type == 'pvar' or type == 'fvar':
-                    return b[0] + agent[spread[0]:spread[1]] * (b[1] - b[0])
+                    return variable_bound[0] + agent[spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])
                 else:
                     return np.argsort(agent[spread[name][0]:spread[name][1]])
             else:
                 if type == 'bvar' or type == 'ivar':
-                    return np.reshape(np.round(b[0] + agent[spread[0]:spread[1]] * (b[1] - b[0])), [len(dims) for dims in dim])
+                    return np.reshape(np.round(variable_bound[0] + agent[spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])), [len(dims) for dims in variable_dim])
                 elif type == 'pvar' or type == 'fvar':
-                    return np.reshape(b[0] + agent[spread[0]:spread[1]] * (b[1] - b[0]), [len(dims) for dims in dim])
+                    return np.reshape(variable_bound[0] + agent[spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0]), [len(dims) for dims in variable_dim])
                 else:
                     return np.argsort(agent[spread[name][0]:spread[name][1]])
 
@@ -205,7 +183,7 @@ class Model:
         """
 
         self.binary_variable = self.add_binary_variable = self.bvar
-        self.positive_variable = self.positive_variable = self.pvar
+        self.positive_variable = self.add_positive_variable = self.pvar
         self.integer_variable = self.add_integer_variable = self.ivar
         self.free_variable = self.add_free_variable = self.fvar
         self.sequential_variable = self.add_sequential_variable = self.svar
@@ -215,7 +193,10 @@ class Model:
         self.solve = self.implement = self.run = self.optimize = self.sol
         self.get_obj = self.get_objective
         self.get_stat = self.get_status
-        self.get_var = self.get = self.get_variable
+        self.get_var = self.value = self.get = self.get_variable
+        self.dis_var = self.display = self.show = self.print = self.display_variable = self.dis_variable
+        self.status = self.show_status = self.dis_status
+        self.objective_value = self.show_objective = self.display_objective = self.dis_obj
 
         self.RNG = create_random_number_generator(key)
 
@@ -322,7 +303,7 @@ class Model:
             else:
                 return self.response
 
-    def bvar(self, name, dim=0, b=[0, 1]):
+    def bvar(self, name, variable_dim=0, variable_bound=[0, 1]):
         """
         Binary Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -330,8 +311,8 @@ class Model:
 
         Args:
             name (str): what is the name of this variable?
-            dim (list, optional): what are dimensions of this variable?. Defaults to 0.
-            b (list, optional): what are bounds on this variable?. Defaults to [0, 1].
+            variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
+            variable_bound (list, optional): what are bounds on this variable?. Defaults to [0, 1].
 
         Examples:
             * x = bvar('x')
@@ -339,16 +320,16 @@ class Model:
             * x = bvar('x', [I,J], [0, 1])
         """
 
-        self.features = update_variable_features(name, dim, b, 'binary_variable_counter', self.features)
+        self.features = update_variable_features(name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
 
         match self.features['solution_method']:
             case 'exact':
                 from .generators.variable_generator import generate_variable
-                return generate_variable(self.features['interface_name'], self.model, 'bvar', name, b, dim)
+                return generate_variable(self.features['interface_name'], self.model, 'bvar', name, variable_bound, variable_dim)
             case 'heuristic':
-                return generate_heuristic_variable(self.features, 'bvar', name, dim, b, self.agent)
+                return generate_heuristic_variable(self.features, 'bvar', name, variable_dim, variable_bound, self.agent)
 
-    def pvar(self, name, dim=0, b=[0, None]):
+    def pvar(self, name, variable_dim=0, variable_bound=[0, None]):
         """
         Positive Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -356,8 +337,8 @@ class Model:
 
         Args:
             name (str): what is the name of this variable?
-            dim (list, optional): what are dimensions of this variable?. Defaults to 0.
-            b (list, optional): what are bounds on this variable?. Defaults to [0, 1].
+            variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
+            variable_bound (list, optional): what are bounds on this variable?. Defaults to [0, 1].
 
         Examples:
             * x = pvar('x')
@@ -365,16 +346,16 @@ class Model:
             * x = pvar('x', [I,J], [0, 100])
         """
 
-        self.features = update_variable_features(name, dim, b, 'positive_variable_counter', self.features)
+        self.features = update_variable_features(name, variable_dim, variable_bound, 'positive_variable_counter', self.features)
 
         match self.features['solution_method']:
             case 'exact':
                 from .generators import variable_generator
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'pvar', name, b, dim)
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'pvar', name, variable_bound, variable_dim)
             case 'heuristic':
-                return generate_heuristic_variable(self.features, 'pvar', name, dim, b, self.agent)
+                return generate_heuristic_variable(self.features, 'pvar', name, variable_dim, variable_bound, self.agent)
 
-    def ivar(self, name, dim=0, b=[0, None]):
+    def ivar(self, name, variable_dim=0, variable_bound=[0, None]):
         """
         Integer Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -382,8 +363,8 @@ class Model:
 
         Args:
             name (str): what is the name of this variable?
-            dim (list, optional): what are dimensions of this variable?. Defaults to 0.
-            b (list, optional): what are bounds on this variable?. Defaults to [0, 1].
+            variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
+            variable_bound (list, optional): what are bounds on this variable?. Defaults to [0, 1].
 
         Examples:
             * x = ivar('x')
@@ -391,16 +372,16 @@ class Model:
             * x = ivar('x', [I,J], [0, 100])
         """
 
-        self.features = update_variable_features( name, dim, b, 'integer_variable_counter', self.features)
+        self.features = update_variable_features( name, variable_dim, variable_bound, 'integer_variable_counter', self.features)
 
         match self.features['solution_method']:
             case 'exact':
                 from .generators import variable_generator
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'ivar', name, b, dim)
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'ivar', name, variable_bound, variable_dim)
             case 'heuristic':
-                return generate_heuristic_variable(self.features, 'ivar', name, dim, b, self.agent)
+                return generate_heuristic_variable(self.features, 'ivar', name, variable_dim, variable_bound, self.agent)
 
-    def fvar(self, name, dim=0, b=[0, None]):
+    def fvar(self, name, variable_dim=0, variable_bound=[0, None]):
         """
         Integer Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -408,8 +389,8 @@ class Model:
 
         Args:
             name (str): what is the name of this variable?
-            dim (list, optional): what are dimensions of this variable?. Defaults to 0.
-            b (list, optional): what are bounds on this variable?. Defaults to [0, 1].
+            variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
+            variable_bound (list, optional): what are bounds on this variable?. Defaults to [0, 1].
 
         Examples:
             * x = fvar('x')
@@ -417,16 +398,16 @@ class Model:
             * x = fvar('x', [I,J], [0, 100])
         """
 
-        self.features = update_variable_features(name, dim, b, 'free_variable_counter', self.features)
+        self.features = update_variable_features(name, variable_dim, variable_bound, 'free_variable_counter', self.features)
 
         match self.features['solution_method']:
             case 'exact':
                 from .generators import variable_generator
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'fvar', name, b, dim)
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'fvar', name, variable_bound, variable_dim)
             case 'heuristic':
-                return generate_heuristic_variable(self.features, 'fvar', name, dim, b, self.agent)
+                return generate_heuristic_variable(self.features, 'fvar', name, variable_dim, variable_bound, self.agent)
 
-    def dvar(self, name, dim=0):
+    def dvar(self, name, variable_dim=0):
         """
         Dependent Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -434,7 +415,7 @@ class Model:
 
         Args:
             name (str): what is the name of this variable?
-            dim (list, optional): what are dimensions of this variable?. Defaults to 0.
+            variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
 
         Examples:
             * x = dvar('x')
@@ -443,29 +424,29 @@ class Model:
 
         if self.features['agent_status'] == 'idle':
             if self.features['vectorized']:
-                if dim == 0:
+                if variable_dim == 0:
                     return 0
                 else:
-                    return np.random.rand(*tuple([50]+[len(dims) for dims in dim]))
+                    return np.random.rand(*tuple([50]+[len(dims) for dims in variable_dim]))
             else:
-                if dim == 0:
+                if variable_dim == 0:
                     return 0
                 else:
-                    return np.zeros([len(dims) for dims in dim])
+                    return np.zeros([len(dims) for dims in variable_dim])
 
         else:
             if self.features['vectorized']:
-                if dim == 0:
+                if variable_dim == 0:
                     return np.zeros(self.features['pop_size'])
                 else:
-                    return np.zeros([self.features['pop_size']]+[len(dims) for dims in dim])
+                    return np.zeros([self.features['pop_size']]+[len(dims) for dims in variable_dim])
             else:
-                if dim == 0:
+                if variable_dim == 0:
                     return 0
                 else:
-                    return np.zeros([len(dims) for dims in dim])
+                    return np.zeros([len(dims) for dims in variable_dim])
 
-    def svar(self, name, dim=0):
+    def svar(self, name, variable_dim=0):
         """
         Sequential Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -473,15 +454,15 @@ class Model:
 
         Args:
             name (str): what is the name of this variable?
-            dim (list, optional): what are dimensions of this variable?. Defaults to 0.
+            variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
 
         Examples:
             * x = svar('x',[I])
         """
 
-        self.features = update_variable_features(name, dim, [0, 1], 'integer_variable_counter', self.features)
+        self.features = update_variable_features(name, variable_dim, [0, 1], 'integer_variable_counter', self.features)
         self.features['variable_type'][name] = 'svar'
-        return generate_heuristic_variable(self.features, 'fvar', name, dim, [0, 1], self.agent)
+        return generate_heuristic_variable(self.features, 'fvar', name, variable_dim, [0, 1], self.agent)
 
     def set(self, *size):
         """
@@ -502,7 +483,7 @@ class Model:
         """
         return len(set)
 
-    def uniform(self, lb, ub, dim=0):
+    def uniform(self, lb, ub, variable_dim=0):
 
         """
         Uniform Parameter Definition
@@ -511,12 +492,12 @@ class Model:
         
         """
 
-        if dim == 0:
+        if variable_dim == 0:
             return self.RNG.uniform(low=lb, high=ub)
         else:
-            return self.RNG.uniform(low=lb, high=ub, size=([len(i) for i in dim]))
+            return self.RNG.uniform(low=lb, high=ub, size=([len(i) for i in variable_dim]))
 
-    def uniformint(self, lb, ub, dim=0):
+    def uniformint(self, lb, ub, variable_dim=0):
 
         """
         Uniform Integer Parameter Definition
@@ -525,10 +506,10 @@ class Model:
         
         """
 
-        if dim == 0:
+        if variable_dim == 0:
             return self.RNG.integers(low=lb, high=ub)
         else:
-            return self.RNG.integers(low=lb, high=ub+1, size=([len(i) for i in dim]))
+            return self.RNG.integers(low=lb, high=ub+1, size=([len(i) for i in variable_dim]))
 
     def obj(self, expression, direction=None, label=None):
         """
@@ -570,7 +551,7 @@ class Model:
         """
         Constraint Definition
         ~~~~~~~~~~~~~~~~~~~~~
-        To define an objective function.
+        To define a constraint.
 
         Args:
             expression (formula): what are the terms of this constraint?
@@ -593,13 +574,15 @@ class Model:
                 if self.features['agent_status'] == 'idle':
 
                     self.features['constraint_labels'].append(label)
-                    self.features['constraint_counter'][0] = len(
-                        set(self.features['constraint_labels']))
+                    
+                    self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                    
                     self.features['constraints'].append(expression)
-                    self.features['constraint_counter'][1] = len(
-                        self.features['constraints'])
+                    
+                    self.features['constraint_counter'][1] = len(self.features['constraints'])
 
                 else:
+                    
                     if self.features['vectorized']:
 
                         self.features['constraints'].append(np.reshape(expression,[np.shape(self.agent)[0],1]))
@@ -608,7 +591,7 @@ class Model:
                         self.features['constraints'].append(expression)
 
 
-    def sol(self, directions=None, solver_name=None, solver_options=dict(), objective_id=0, email=None, debug=False, time_limit=28800, cpu_threads=None, absolute_gap=None, relative_gap=None, log=False):
+    def sol(self, directions=None, solver_name=None, solver_options=dict(), objective_id=0, email=None, debug=False, time_limit=28800, cpu_threads=None, absolute_gap=None, relative_gap=None, log=False, save_log=False, max_iterations=None):
         """
         Solve Command Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -630,7 +613,16 @@ class Model:
         self.features['objective_being_optimized'] = objective_id
         self.features['solver_name'] = solver_name
         self.features['solver_options'] = solver_options
-
+        self.features['debug_mode'] = debug
+        self.features['time_limit'] = time_limit
+        self.features['thread_count'] = cpu_threads
+        self.features['absolute_gap'] = absolute_gap
+        self.features['relative_gap'] = relative_gap
+        self.features['log'] = log
+        self.features['save_solver_log'] = save_log
+        self.features['email_address'] = email
+        self.features['max_iterations'] = max_iterations
+        
         if type(objective_id) != str:
             if self.features['directions'][objective_id] == None:
                 self.features['directions'][objective_id] = directions[objective_id]
@@ -645,13 +637,17 @@ class Model:
         match self.features['solution_method']:
 
             case 'exact':
-                self.features['log'] = log
+
+                self.features['model_object_before_solve'] = self.model
+                
                 from .generators import solution_generator
-                self.solution = solution_generator.generate_solution(self.features, self.model, email, debug, time_limit, cpu_threads, absolute_gap, relative_gap)
+                self.solution = solution_generator.generate_solution(self.features)
+
                 try:
                     self.obj_val = self.get_objective()
                     self.status = self.get_status()
                     self.cpt = self.get_time()
+
                 except:
                     "None"
 
@@ -684,6 +680,7 @@ class Model:
                             self.agent[np.where(self.penalty>0), -2] = -1
                     
                         else:
+
                             self.agent[:, -2] = 2
 
                         if type(objective_id) != str:
@@ -788,7 +785,7 @@ class Model:
 
         print("\n~~~~~~~~~~~\nDATE & TIME\n~~~~~~~~~~~")
         print(e.strftime("%Y-%m-%d %H:%M:%S"))
-        print(e.strftime("%a, %b %d, %Y"))
+        print(e.strftime("%a, %variable_bound %d, %Y"))
 
         try:
             print()
@@ -1153,7 +1150,7 @@ class implement:
 
         print("\n~~~~~~~~~~~\nDATE & TIME\n~~~~~~~~~~~")
         print(e.strftime("%Y-%m-%d %H:%M:%S"))
-        print(e.strftime("%a, %b %d, %Y"))
+        print(e.strftime("%a, %variable_bound %d, %Y"))
 
         print()
         self.inf()

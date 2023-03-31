@@ -6,9 +6,9 @@ sets = it.product
 VariableGenerator = pymprog_interface.var
 
 
-def generate_variable(modelobject, var_type, var_name, b, dim=0):
+def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
-    match var_type:
+    match variable_type:
 
         case 'pvar':
 
@@ -19,13 +19,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
-                GeneratedVariable =  VariableGenerator(var_name, bounds=(b[0], b[1]))
+            if variable_dim == 0:
+                GeneratedVariable =  VariableGenerator(variable_name, bounds=(variable_bound[0], variable_bound[1]))
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: VariableGenerator(var_name, bounds=(b[0], b[1])) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: VariableGenerator(variable_name, bounds=(variable_bound[0], variable_bound[1])) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: VariableGenerator(var_name, bounds=(b[0], b[1])) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: VariableGenerator(variable_name, bounds=(variable_bound[0], variable_bound[1])) for key in it.product(*variable_dim)}
 
 
         case 'bvar':
@@ -36,13 +36,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
 
             '''
-            if dim == 0:
-                GeneratedVariable =  VariableGenerator(var_name, bounds=(b[0], b[1]), kind=int)
+            if variable_dim == 0:
+                GeneratedVariable =  VariableGenerator(variable_name, bounds=(variable_bound[0], variable_bound[1]), kind=int)
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: VariableGenerator(var_name, bounds=(b[0], b[1]), kind=int) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: VariableGenerator(variable_name, bounds=(variable_bound[0], variable_bound[1]), kind=int) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: VariableGenerator(var_name, bounds=(b[0], b[1]), kind=int) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: VariableGenerator(variable_name, bounds=(variable_bound[0], variable_bound[1]), kind=int) for key in it.product(*variable_dim)}
        
         case 'ivar':
 
@@ -53,13 +53,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
-                GeneratedVariable =  VariableGenerator(var_name, bounds=(b[0], b[1]), kind=int)
+            if variable_dim == 0:
+                GeneratedVariable =  VariableGenerator(variable_name, bounds=(variable_bound[0], variable_bound[1]), kind=int)
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: VariableGenerator(var_name, bounds=(b[0], b[1]), kind=int) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: VariableGenerator(variable_name, bounds=(variable_bound[0], variable_bound[1]), kind=int) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: VariableGenerator(var_name, bounds=(b[0], b[1]), kind=int) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: VariableGenerator(variable_name, bounds=(variable_bound[0], variable_bound[1]), kind=int) for key in it.product(*variable_dim)}
 
                 
         case 'fvar':
@@ -71,12 +71,12 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
-                GeneratedVariable =  VariableGenerator(var_name, bounds=(b[0], b[1]))
+            if variable_dim == 0:
+                GeneratedVariable =  VariableGenerator(variable_name, bounds=(variable_bound[0], variable_bound[1]))
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: VariableGenerator(var_name, bounds=(b[0], b[1])) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: VariableGenerator(variable_name, bounds=(variable_bound[0], variable_bound[1])) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: VariableGenerator(var_name, bounds=(b[0], b[1])) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: VariableGenerator(variable_name, bounds=(variable_bound[0], variable_bound[1])) for key in it.product(*variable_dim)}
 
     return  GeneratedVariable

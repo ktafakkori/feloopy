@@ -5,9 +5,9 @@ sets = it.product
 
 VariableGenerator = cvxpy_interface.Variable
 
-def generate_variable(modelobject, var_type, var_name, b, dim=0):
+def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
-    match var_type:
+    match variable_type:
 
         case 'pvar':
 
@@ -18,19 +18,19 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
                 
                 GeneratedVariable = VariableGenerator(1, integer=False)
             
             else:
                 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
                     
-                    GeneratedVariable = {key: VariableGenerator(1, integer=False) for key in dim[0]}
+                    GeneratedVariable = {key: VariableGenerator(1, integer=False) for key in variable_dim[0]}
                 
                 else:
                     
-                    GeneratedVariable = {key: VariableGenerator(1, integer=False) for key in sets(*dim)}
+                    GeneratedVariable = {key: VariableGenerator(1, integer=False) for key in sets(*variable_dim)}
                     
         case 'bvar':
 
@@ -41,19 +41,19 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
                 
                 GeneratedVariable = VariableGenerator(1, integer=True)
             
             else:
                 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
                     
-                    GeneratedVariable = {key: VariableGenerator(1, integer=True) for key in dim[0]}
+                    GeneratedVariable = {key: VariableGenerator(1, integer=True) for key in variable_dim[0]}
                 
                 else:
                     
-                    GeneratedVariable = {key: VariableGenerator(1, integer=True) for key in sets(*dim)}
+                    GeneratedVariable = {key: VariableGenerator(1, integer=True) for key in sets(*variable_dim)}
                     
                     
         case 'ivar':
@@ -65,19 +65,19 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
                 
                 GeneratedVariable = VariableGenerator(1, integer=True)
             
             else:
                 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
                     
-                    GeneratedVariable = {key: VariableGenerator(1, integer=True) for key in dim[0]}
+                    GeneratedVariable = {key: VariableGenerator(1, integer=True) for key in variable_dim[0]}
                 
                 else:
                     
-                    GeneratedVariable = {key: VariableGenerator(1, integer=True) for key in sets(*dim)}
+                    GeneratedVariable = {key: VariableGenerator(1, integer=True) for key in sets(*variable_dim)}
                             
         case 'fvar':
 
@@ -88,19 +88,19 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
                 
                 GeneratedVariable = VariableGenerator(1, integer=False)
             
             else:
                 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
                     
-                    GeneratedVariable = {key: VariableGenerator(1, integer=False) for key in dim[0]}
+                    GeneratedVariable = {key: VariableGenerator(1, integer=False) for key in variable_dim[0]}
                 
                 else:
                     
-                    GeneratedVariable = {key: VariableGenerator(1, integer=False) for key in sets(*dim)}
+                    GeneratedVariable = {key: VariableGenerator(1, integer=False) for key in sets(*variable_dim)}
     
     return GeneratedVariable
 

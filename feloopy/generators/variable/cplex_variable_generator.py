@@ -1,10 +1,11 @@
+import cplex
 import itertools as it
 
 sets = it.product
 
-def generate_variable(modelobject, var_type, var_name, b, dim=0):
+def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
-    match var_type:
+    match variable_type:
 
         case 'pvar':
 
@@ -15,19 +16,19 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
 
-                GeneratedVariable = modelobject.continuous_var(lb=b[0], ub=b[1])
+                GeneratedVariable = model_object.continuous_var(lb=variable_bound[0], ub=variable_bound[1])
 
             else:
 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
 
-                    GeneratedVariable = {key: modelobject.continuous_var(lb=b[0], ub=b[1]) for key in dim[0]}
+                    GeneratedVariable = {key: model_object.continuous_var(lb=variable_bound[0], ub=variable_bound[1]) for key in variable_dim[0]}
 
                 else:
 
-                    GeneratedVariable = {key: modelobject.continuous_var(lb=b[0], ub=b[1]) for key in sets(*dim)}
+                    GeneratedVariable = {key: model_object.continuous_var(lb=variable_bound[0], ub=variable_bound[1]) for key in sets(*variable_dim)}
 
         case 'bvar':
 
@@ -38,19 +39,19 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
 
-                GeneratedVariable = modelobject.binary_var()
+                GeneratedVariable = model_object.binary_var()
 
             else:
 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
 
-                    GeneratedVariable = {key: modelobject.binary_var() for key in dim[0]}
+                    GeneratedVariable = {key: model_object.binary_var() for key in variable_dim[0]}
 
                 else:
 
-                    GeneratedVariable = {key: modelobject.binary_var() for key in sets(*dim)}
+                    GeneratedVariable = {key: model_object.binary_var() for key in sets(*variable_dim)}
 
         case 'ivar':
 
@@ -61,18 +62,18 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
 
-                GeneratedVariable = modelobject.integer_var(lb=b[0], ub=b[1])
+                GeneratedVariable = model_object.integer_var(lb=variable_bound[0], ub=variable_bound[1])
 
             else:
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
 
-                    GeneratedVariable = {key: modelobject.integer_var(lb=b[0], ub=b[1]) for key in dim[0]}
+                    GeneratedVariable = {key: model_object.integer_var(lb=variable_bound[0], ub=variable_bound[1]) for key in variable_dim[0]}
 
                 else:
 
-                    GeneratedVariable = {key: modelobject.integer_var(lb=b[0], ub=b[1]) for key in sets(*dim)}
+                    GeneratedVariable = {key: model_object.integer_var(lb=variable_bound[0], ub=variable_bound[1]) for key in sets(*variable_dim)}
 
         case 'fvar':
 
@@ -83,18 +84,18 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
 
-                GeneratedVariable = modelobject.continuous_var(lb=b[0], ub=b[1])
+                GeneratedVariable = model_object.continuous_var(lb=variable_bound[0], ub=variable_bound[1])
 
             else:
 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
 
-                    GeneratedVariable = {key: modelobject.continuous_var(lb=b[0], ub=b[1]) for key in dim[0]}
+                    GeneratedVariable = {key: model_object.continuous_var(lb=variable_bound[0], ub=variable_bound[1]) for key in variable_dim[0]}
 
                 else:
 
-                    GeneratedVariable = {key: modelobject.continuous_var(lb=b[0], ub=b[1]) for key in sets(*dim)}
+                    GeneratedVariable = {key: model_object.continuous_var(lb=variable_bound[0], ub=variable_bound[1]) for key in sets(*variable_dim)}
 
     return GeneratedVariable

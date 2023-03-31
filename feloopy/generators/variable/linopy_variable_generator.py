@@ -3,9 +3,9 @@ import pandas as pd
 
 sets = it.product
 
-def generate_variable(modelobject, var_type, var_name, b, dim=0):
+def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
-    match var_type:
+    match variable_type:
 
         case 'pvar':
 
@@ -15,10 +15,10 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
 
             '''
-            if dim == 0:
-                GeneratedVariable =  modelobject.add_variables(lower=b[0], upper=b[1], name=var_name)
+            if variable_dim == 0:
+                GeneratedVariable =  model_object.add_variables(lower=variable_bound[0], upper=variable_bound[1], name=variable_name)
             else:
-                GeneratedVariable =  modelobject.add_variables(lower=b[0], upper=b[1], coords=pd.Index(dim), name=var_name)
+                GeneratedVariable =  model_object.add_variables(lower=variable_bound[0], upper=variable_bound[1], coords=pd.Index(variable_dim), name=variable_name)
       
         case 'bvar':
 
@@ -29,10 +29,10 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
-                GeneratedVariable =  modelobject.add_variables(name=var_name, binary=True)
+            if variable_dim == 0:
+                GeneratedVariable =  model_object.add_variables(name=variable_name, binary=True)
             else:
-                GeneratedVariable =  modelobject.add_variables(coords=pd.Index(dim), name=var_name,  binary=True)
+                GeneratedVariable =  model_object.add_variables(coords=pd.Index(variable_dim), name=variable_name,  binary=True)
 
                     
                     
@@ -45,10 +45,10 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
-                GeneratedVariable =  modelobject.add_variables(lower=b[0], upper=b[1], name=var_name, binary=True)
+            if variable_dim == 0:
+                GeneratedVariable =  model_object.add_variables(lower=variable_bound[0], upper=variable_bound[1], name=variable_name, binary=True)
             else:
-                GeneratedVariable =  modelobject.add_variables(lower=b[0], upper=b[1], coords=pd.Index(dim), name=var_name,  integer=True)
+                GeneratedVariable =  model_object.add_variables(lower=variable_bound[0], upper=variable_bound[1], coords=pd.Index(variable_dim), name=variable_name,  integer=True)
 
                             
         case 'fvar':
@@ -60,10 +60,10 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
-                GeneratedVariable =  modelobject.add_variables(lower=b[0], upper=b[1], name=var_name)
+            if variable_dim == 0:
+                GeneratedVariable =  model_object.add_variables(lower=variable_bound[0], upper=variable_bound[1], name=variable_name)
             else:
-                GeneratedVariable =  modelobject.add_variables(lower=b[0], upper=b[1], coords=pd.Index(dim), name=var_name)
+                GeneratedVariable =  model_object.add_variables(lower=variable_bound[0], upper=variable_bound[1], coords=pd.Index(variable_dim), name=variable_name)
 
     
     return  GeneratedVariable

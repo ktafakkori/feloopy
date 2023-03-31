@@ -8,9 +8,9 @@ POSITIVE = mip_interface.CONTINUOUS
 INTEGER = mip_interface.INTEGER
 FREE = mip_interface.CONTINUOUS
 
-def generate_variable(modelobject, var_type, var_name, b, dim=0):
+def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
-    match var_type:
+    match variable_type:
 
         case 'pvar':
 
@@ -21,13 +21,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
-                GeneratedVariable =  modelobject.add_var(var_type=POSITIVE)
+            if variable_dim == 0:
+                GeneratedVariable =  model_object.add_var(var_type=POSITIVE)
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: modelobject.add_var(var_type=POSITIVE) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: model_object.add_var(var_type=POSITIVE) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: modelobject.add_var(var_type=POSITIVE) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: model_object.add_var(var_type=POSITIVE) for key in it.product(*variable_dim)}
                             
         case 'bvar':
 
@@ -38,13 +38,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
-                GeneratedVariable =  modelobject.add_var(var_type=BINARY)
+            if variable_dim == 0:
+                GeneratedVariable =  model_object.add_var(var_type=BINARY)
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: modelobject.add_var(var_type=BINARY) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: model_object.add_var(var_type=BINARY) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: modelobject.add_var(var_type=BINARY) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: model_object.add_var(var_type=BINARY) for key in it.product(*variable_dim)}
       
                     
         case 'ivar':
@@ -56,13 +56,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
-                GeneratedVariable =  modelobject.add_var(var_type=INTEGER)
+            if variable_dim == 0:
+                GeneratedVariable =  model_object.add_var(var_type=INTEGER)
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: modelobject.add_var(var_type=INTEGER) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: model_object.add_var(var_type=INTEGER) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: modelobject.add_var(var_type=INTEGER) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: model_object.add_var(var_type=INTEGER) for key in it.product(*variable_dim)}
 
                             
         case 'fvar':
@@ -73,13 +73,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
 
             '''
-            if dim == 0:
-                GeneratedVariable =  modelobject.add_var(var_type=POSITIVE)
+            if variable_dim == 0:
+                GeneratedVariable =  model_object.add_var(var_type=POSITIVE)
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: modelobject.add_var(var_type=POSITIVE) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: model_object.add_var(var_type=POSITIVE) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: modelobject.add_var(var_type=POSITIVE) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: model_object.add_var(var_type=POSITIVE) for key in it.product(*variable_dim)}
 
 
 

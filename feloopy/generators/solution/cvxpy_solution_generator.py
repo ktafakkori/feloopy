@@ -19,24 +19,24 @@ cvxpy_solver_selector = {
     'scip': cvxpy_interface.SCIP,
     'xpress': cvxpy_interface.XPRESS}
 
-def generate_solution(model_object, objectives_list, constraints_list, dir, labels, mode, solver_name, objective_number=0, algortihm_options=None, user_email=None):
+def generate_solution(model_object, model_objectives, model_constraints, directions, constraint_labels, debug, time_limit, absolute_gap, relative_gap, thread_count, solver_name, log, save, max_iterations, objective_id, solver_options,email):
 
     if solver_name not in cvxpy_solver_selector.keys():
         raise RuntimeError("Using solver '%s' is not supported by 'cvxpy'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
 
-    match mode:
+    match debug:
 
         case False:
 
-            match dir[objective_number]:
+            match directions[objective_id]:
 
                 case 'min':
-                    obj = cvxpy_interface.Minimize(objectives_list[objective_number])
+                    obj = cvxpy_interface.Minimize(model_objectives[objective_id])
 
                 case 'max':
-                    obj = cvxpy_interface.Maximize(objectives_list[objective_number])
+                    obj = cvxpy_interface.Maximize(model_objectives[objective_id])
 
-            prob = cvxpy_interface.Problem(obj, constraints_list)
+            prob = cvxpy_interface.Problem(obj, model_constraints)
             time_solve_begin = timeit.default_timer()
             result = prob.solve(solver=cvxpy_solver_selector[solver_name])
             time_solve_end = timeit.default_timer()

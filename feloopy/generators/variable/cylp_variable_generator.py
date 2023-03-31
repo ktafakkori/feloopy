@@ -2,9 +2,9 @@ import itertools as it
 
 sets = it.product
 
-def generate_variable(modelobject, var_type, var_name, b, dim=0):
+def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
-    match var_type:
+    match variable_type:
 
         case 'pvar':
 
@@ -15,13 +15,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
-                GeneratedVariable =  modelobject.addVariable(var_name, 1, isInt=False)
+            if variable_dim == 0:
+                GeneratedVariable =  model_object.addVariable(variable_name, 1, isInt=False)
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: modelobject.addVariable(f"{var_name}{key}", 1, isInt=False) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: model_object.addVariable(f"{variable_name}{key}", 1, isInt=False) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: modelobject.addVariable(f"{var_name}{key}", 1, isInt=False) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: model_object.addVariable(f"{variable_name}{key}", 1, isInt=False) for key in it.product(*variable_dim)}
                     
                     
         case 'bvar':
@@ -33,13 +33,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
-                GeneratedVariable =  modelobject.addVariable(var_name, 0, isInt=False)
+            if variable_dim == 0:
+                GeneratedVariable =  model_object.addVariable(variable_name, 0, isInt=False)
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: modelobject.addVariable(f"{var_name}{key}", 1, isInt=True) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: model_object.addVariable(f"{variable_name}{key}", 1, isInt=True) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: modelobject.addVariable(f"{var_name}{key}", 1, isInt=True) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: model_object.addVariable(f"{variable_name}{key}", 1, isInt=True) for key in it.product(*variable_dim)}
 
 
                     
@@ -52,13 +52,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
-                GeneratedVariable =  modelobject.addVariable(var_name, 1, isInt=False)
+            if variable_dim == 0:
+                GeneratedVariable =  model_object.addVariable(variable_name, 1, isInt=False)
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: modelobject.addVariable(f"{var_name}{key}", 1, isInt=True) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: model_object.addVariable(f"{variable_name}{key}", 1, isInt=True) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: modelobject.addVariable(f"{var_name}{key}", 1, isInt=True) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: model_object.addVariable(f"{variable_name}{key}", 1, isInt=True) for key in it.product(*variable_dim)}
 
                             
         case 'fvar':
@@ -70,12 +70,12 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
-                GeneratedVariable =  modelobject.addVariable(var_name, 1, isInt=False)
+            if variable_dim == 0:
+                GeneratedVariable =  model_object.addVariable(variable_name, 1, isInt=False)
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: modelobject.addVariable(f"{var_name}{key}", 1, isInt=False) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: model_object.addVariable(f"{variable_name}{key}", 1, isInt=False) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: modelobject.addVariable(f"{var_name}{key}", 1, isInt=False) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: model_object.addVariable(f"{variable_name}{key}", 1, isInt=False) for key in it.product(*variable_dim)}
                    
     return GeneratedVariable

@@ -1,7 +1,7 @@
 from feloopy import *
 
 #Environment
-m = model('exact','transportation','ortools')
+m = model('exact','transportation','pyomo')
 
 #Sets
 I = m.set(5) # set of loactions
@@ -31,7 +31,7 @@ for i in I:
     m.con(sum(x[i,j] for j in I if j !=i) <= sum(ca[i,lv]*y[i,lv]*1000 for lv in L))
 
 #Solve
-m.sol(['min'],'scip')
+m.sol(['min'],'gurobi')
 
 #Report
 

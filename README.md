@@ -17,7 +17,6 @@
 </p>
 
 
-
 # FelooPy: An integrated optimization environment for AutoOR in Python
 
 *Version 0.2.3 is out! More stable than ever*!
@@ -141,14 +140,12 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 * [Tutorial][01]
 * [Syntax][06]
 * [Examples][02]
-* [Exact Solvers][03]
-* [Heuristic Solvers][04]
+* [Solvers & Interfaces][03]
 * [Changelog][05]
 
 [01]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Tutorial.md
 [02]: https://github.com/ktafakkori/feloopy/tree/main/examples
-[03]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Exact_List.md
-[04]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Heuristic_List.md
+[03]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Solvers.md
 [05]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Updates.md
 [06]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Syntax.md
 

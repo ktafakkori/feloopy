@@ -265,6 +265,7 @@ m.dis_obj()
 # Display
 for j in J:
     print(f"item {j} is {m.get(['x',(j,)])}")
+    
 ```
 
 Output:

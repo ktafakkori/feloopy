@@ -38,11 +38,11 @@ def generate_solution(model_object, fitness_function, total_features, objectives
     else:
 
         Multiplier = {'max': 1, 'min': -1}
-        dir = Multiplier[objectives_directions[objective_number]]
+        directions = Multiplier[objectives_directions[objective_number]]
         time_solve_begin = []
         time_solve_end = []
-        bestreward = [-dir*np.inf]
-        best_reward_found = -dir*np.inf
+        bestreward = [-directions*np.inf]
+        best_reward_found = -directions*np.inf
 
         for i in range(number_of_times):
             time_solve_begin.append(timeit.default_timer())
@@ -52,7 +52,7 @@ def generate_solution(model_object, fitness_function, total_features, objectives
             Result[1] = np.asarray(Result[1])
             Result[1] = Result[1].item()
             bestreward.append(best_reward)
-            if dir*(Result[1]) >= dir*(best_reward_found):
+            if directions*(Result[1]) >= directions*(best_reward_found):
                 best_agent_found = Result[0]
                 best_reward_found = Result[1]
         bestreward.pop(0)

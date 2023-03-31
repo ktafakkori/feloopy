@@ -8,22 +8,22 @@ linopy_solver_selector = {'cbc': 'cbc',
                           'xpress': 'xpress', 
                           'cplex': 'cplex'}
 
-def generate_solution(model_object, objectives_list, constraints_list, dir, labels, mode, solver_name, objective_number=0, algorithm_options=None, user_email=None):
+def generate_solution(model_object, model_objectives, model_constraints, directions, constraint_labels, debug, time_limit, absolute_gap, relative_gap, thread_count, solver_name, log, save, max_iterations, objective_id, solver_options, email):
     
     if solver_name not in linopy_solver_selector.keys():
         raise RuntimeError("Using solver '%s' is not supported by 'linopy'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
     
-    match mode:
+    match debug:
 
         case False:
 
-            match dir[objective_number]:
+            match directions[objective_id]:
                 case "min":
-                    model_object.add_objective(objectives_list[objective_number])
+                    model_object.add_objective(model_objectives[objective_id])
                 case "max":
-                    model_object.add_objective(-objectives_list[objective_number])
+                    model_object.add_objective(-model_objectives[objective_id])
 
-            for constraint in constraints_list:
+            for constraint in model_constraints:
                 model_object.add_constraints(constraint)
     
             time_solve_begin = timeit.default_timer()

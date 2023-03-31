@@ -19,7 +19,7 @@
             * Required.
         * _interface_name_
             * What is the desired optimization interface?
-            * Answer= A predefined string. Examples: `'feloopy'` or `'mealpy'` (for heuristic optimization), `'cplex'`, `'pyomo'`, `'ortools'`, or `'gekko'` (for exact optimization). (See [Exact Interfaces][03] or [Heuristic Interfaces][04])
+            * Answer= A predefined string. Examples: `'feloopy'` or `'mealpy'` (for heuristic optimization), `'cplex'`, `'pyomo'`, `'ortools'`, or `'gekko'` (for exact optimization). (See [Solvers & Interfaces][03])
             * Required
         * _agent_
             * What is the algorithm agent?
@@ -233,7 +233,7 @@
             * Required.
         * _solver_name_
             * What is the name of the desired solver? Please note that this should match the interface defined for the environment.
-            * Answer= A predefined string. Examples: `'cplex'` or `'highs'` (for exact optimization), `'GA'`, `'DE'`, `'BaseGA'`, or `'OriginalSSpiderA'` (for heuristic optimization). (See [Exact Solvers][03] or [Heuristic Solvers][04])
+            * Answer= A predefined string. Examples: `'cplex'` or `'highs'` (for exact optimization), `'GA'`, `'DE'`, `'BaseGA'`, or `'OriginalSSpiderA'` (for heuristic optimization). (See [Solvers & Interfaces][03])
             * Required.
         * _solver_options_
             * How is the solver configured? (Currently available for heuristic optimization only).
@@ -268,8 +268,4 @@
             * Answer= `True` or `False`.
             * Optional. Only for for exact optimization algorithms.
 
-[01]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Tutorial.md
-[02]: https://github.com/ktafakkori/feloopy/tree/main/examples
-[03]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Exact_List.md
-[04]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Heuristic_List.md
-[05]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Updates.md
+[03]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Solvers.md

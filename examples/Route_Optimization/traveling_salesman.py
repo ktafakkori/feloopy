@@ -1,7 +1,7 @@
 from feloopy import *
 
 # Environment
-m = model('exact', 'tsp', 'ortools',key=0)
+m = model('exact', 'tsp', 'mip',key=0)
 
 # Sets
 N = m.set(10)
@@ -33,7 +33,7 @@ for i, j in sets(U, N):
         m.con(u[i] - u[j] + x[i, j] * len(N) |l| len(N)-1)
 
 # Solve
-m.sol(['min'], 'scip')
+m.sol(['min'], 'cbc')
 m.inf()
 m.dis_obj()
 m.dis_status()

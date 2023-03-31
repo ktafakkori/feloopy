@@ -1,6 +1,7 @@
+import cplex
 from docplex.mp.model import Model as CPLEXMODEL
 
-def Get(modelobject, result, input1, input2=None):
+def Get(model_object, result, input1, input2=None):
    
    input1 = input1[0]
 
@@ -10,10 +11,10 @@ def Get(modelobject, result, input1, input2=None):
         return input2.solution_value
     
     case 'status':
-        return modelobject.solve_details.status
+        return model_object.solve_details.status
 
     case 'objective':
-        return modelobject.objective_value
+        return model_object.objective_value
 
     case 'time':
         return (result[1][1]-result[1][0])*10**6

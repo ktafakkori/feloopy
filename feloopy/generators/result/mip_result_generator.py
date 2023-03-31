@@ -1,6 +1,6 @@
 import mip as mip_interface
 
-def Get(modelobject, result, input1, input2=None):
+def Get(model_object, result, input1, input2=None):
 
    input1 = input1[0]
    
@@ -13,7 +13,7 @@ def Get(modelobject, result, input1, input2=None):
         return result[0]
          
     case 'objective':
-        return  modelobject.objective_value
+        return  model_object.objective_value
 
     case 'time':
         return (result[1][1]-result[1][0])

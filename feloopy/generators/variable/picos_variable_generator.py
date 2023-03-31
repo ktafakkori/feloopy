@@ -9,9 +9,9 @@ POSITIVE = picos_interface.RealVariable
 INTEGER = picos_interface.IntegerVariable
 FREE = picos_interface.RealVariable
 
-def generate_variable(modelobject, var_type, var_name, b, dim=0):
+def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
-    match var_type:
+    match variable_type:
 
         case 'pvar':
 
@@ -22,13 +22,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
-                GeneratedVariable =  POSITIVE(var_name, lower=b[0], upper=b[1])
+            if variable_dim == 0:
+                GeneratedVariable =  POSITIVE(variable_name, lower=variable_bound[0], upper=variable_bound[1])
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: POSITIVE(var_name, lower=b[0], upper=b[1]) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: POSITIVE(variable_name, lower=variable_bound[0], upper=variable_bound[1]) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: POSITIVE(var_name, lower=b[0], upper=b[1]) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: POSITIVE(variable_name, lower=variable_bound[0], upper=variable_bound[1]) for key in it.product(*variable_dim)}
                             
         case 'bvar':
 
@@ -38,13 +38,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
 
             '''
-            if dim == 0:
-                GeneratedVariable =  BINARY(var_name)
+            if variable_dim == 0:
+                GeneratedVariable =  BINARY(variable_name)
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: BINARY(var_name) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: BINARY(variable_name) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: BINARY(var_name) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: BINARY(variable_name) for key in it.product(*variable_dim)}
 
         case 'ivar':
 
@@ -54,13 +54,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
 
             '''
-            if dim == 0:
-                GeneratedVariable =  INTEGER(var_name, lower=b[0], upper=b[1])
+            if variable_dim == 0:
+                GeneratedVariable =  INTEGER(variable_name, lower=variable_bound[0], upper=variable_bound[1])
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: INTEGER(var_name, lower=b[0], upper=b[1]) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: INTEGER(variable_name, lower=variable_bound[0], upper=variable_bound[1]) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: INTEGER(var_name, lower=b[0], upper=b[1]) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: INTEGER(variable_name, lower=variable_bound[0], upper=variable_bound[1]) for key in it.product(*variable_dim)}
                             
         case 'fvar':
 
@@ -70,13 +70,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
 
             '''
-            if dim == 0:
-                GeneratedVariable = FREE(var_name, lower=b[0], upper=b[1])
+            if variable_dim == 0:
+                GeneratedVariable = FREE(variable_name, lower=variable_bound[0], upper=variable_bound[1])
             else:
-                if len(dim) == 1:
-                    GeneratedVariable =  {key: FREE(var_name, lower=b[0], upper=b[1]) for key in dim[0]}
+                if len(variable_dim) == 1:
+                    GeneratedVariable =  {key: FREE(variable_name, lower=variable_bound[0], upper=variable_bound[1]) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: FREE(var_name, lower=b[0], upper=b[1]) for key in it.product(*dim)}
+                    GeneratedVariable =  {key: FREE(variable_name, lower=variable_bound[0], upper=variable_bound[1]) for key in it.product(*variable_dim)}
 
     return  GeneratedVariable
 

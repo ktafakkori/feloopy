@@ -17,7 +17,7 @@ gurobi_status_dict = {
     gurobi_interface.GRB.INPROGRESS: 'inprogress'
 }
 
-def Get(modelobject, result, input1, input2=None):
+def Get(model_object, result, input1, input2=None):
    
    input1 = input1[0]
 
@@ -27,10 +27,10 @@ def Get(modelobject, result, input1, input2=None):
         return input2.X
     
     case 'status':
-        return  gurobi_status_dict[modelobject.status]
+        return  gurobi_status_dict[model_object.status]
          
     case 'objective':
-        return  modelobject.ObjVal
+        return  model_object.ObjVal
 
     case 'time':
         return (result[1][1]-result[1][0])

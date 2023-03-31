@@ -48,7 +48,7 @@ pyomo_online_solver_selector = {
     'filter_online': 'filter',
     'ipopt_online': 'ipopt',
     'knitro_online': 'knitro',
-    'l-bfgs-b_online': 'l-bfgs-b',
+    'l-bfgs-b_online': 'l-bfgs-variable_bound',
     'lancelot_online': 'lancelot',
     'lgo_online': 'lgo',
     'loqo_online': 'loqo',
@@ -63,23 +63,31 @@ pyomo_online_solver_selector = {
     'snopt_online': 'snopt'
 }
 
-def generate_solution(model_object, objectives_list, constraints_list, dir, labels, mode, solver_name, objective_number=0, algorithm_options=None, user_email=None):
+def generate_solution(model_object, model_objectives, model_constraints, directions, constraint_labels, debug, time_limit, absolute_gap, relative_gap, thread_count, solver_name, log, save, max_iterations, objective_id, solver_options, email):
 
-    match mode:
+    if log:
+        tee = True
+    else:
+        tee = False
+
+    if max_iterations != None:
+        "None"
+
+    match debug:
 
         case False:
 
-            match dir[objective_number]:
+            match directions[objective_id]:
 
                 case "min":
-                    model_object.OBJ = pyomo_interface.Objective(expr=objectives_list[objective_number], sense=pyomo_interface.minimize)
+                    model_object.OBJ = pyomo_interface.Objective(expr=model_objectives[objective_id], sense=pyomo_interface.minimize)
                 
                 case "max":
-                    model_object.OBJ = pyomo_interface.Objective(expr=objectives_list[objective_number], sense=pyomo_interface.maximize)
+                    model_object.OBJ = pyomo_interface.Objective(expr=model_objectives[objective_id], sense=pyomo_interface.maximize)
 
             model_object.constraint = pyomo_interface.ConstraintList()
 
-            for element in constraints_list:
+            for element in model_constraints:
 
                 model_object.constraint.add(expr=element)
 
@@ -91,16 +99,27 @@ def generate_solution(model_object, objectives_list, constraints_list, dir, labe
                 
                 solver_manager = pyomo_interface.SolverFactory(pyomo_offline_solver_selector[solver_name])
 
-                if algorithm_options == None:
+                if thread_count != None:
+                
+                    solver_manager.options['threads'] = thread_count
 
+                if time_limit != None:
+
+                    solver_manager.options['timelimit'] = time_limit 
+
+                if relative_gap != None:
+
+                    solver_manager.options['mipgap'] = relative_gap
+                
+                if len(solver_options) == 0:
                     time_solve_begin = timeit.default_timer()
-                    result = solver_manager.solve(model_object)
+                    result = solver_manager.solve(model_object, tee=tee)
                     time_solve_end = timeit.default_timer()
 
                 else:
 
                     time_solve_begin = timeit.default_timer()
-                    result = solver_manager.solve(model_object, options=algorithm_options)
+                    result = solver_manager.solve(model_object, tee=tee, options=solver_options)
                     time_solve_end = timeit.default_timer()     
 
             else:
@@ -109,10 +128,10 @@ def generate_solution(model_object, objectives_list, constraints_list, dir, labe
 
                     raise RuntimeError("Using solver '%s' is not supported by 'pyomo'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
                 
-                os.environ['NEOS_EMAIL'] = user_email
+                os.environ['NEOS_EMAIL'] = email
                 solver_manager = pyomo_interface.SolverManagerFactory('neos')
                 time_solve_begin = timeit.default_timer()
-                result = solver_manager.solve(model_object, solver=pyomo_online_solver_selector[solver_name])
+                result = solver_manager.solve(model_object, solver=pyomo_online_solver_selector[solver_name], tee=tee)
                 time_solve_end = timeit.default_timer()
 
             generated_solution = result, [time_solve_begin, time_solve_end]

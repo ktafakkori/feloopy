@@ -1,7 +1,7 @@
 from feloopy import *
 
 # Environment
-m = model('exact', 'ap', 'cplex')
+m = model('exact', 'ap', 'pyomo')
 
 # Sets
 I = m.set(3)  # Agents
@@ -21,12 +21,12 @@ m.obj(sum(c[i, j]*x[i, j] for i, j in sets(I, J)))
 
 # Constraints
 for i in I:
-    m.con(sum(x[i, j] for j in J) |e| 1)
+    m.con(sum(x[i, j] for j in J) == 1)
 
 for j in J:
-    m.con(sum(x[i, j] for i in I) |e| 1)
+    m.con(sum(x[i, j] for i in I) == 1)
 
-m.sol(['min'], 'cplex')
+m.sol(['min'], 'cplex', log=False)
 m.inf()
 m.dis_obj()
 m.dis_status()

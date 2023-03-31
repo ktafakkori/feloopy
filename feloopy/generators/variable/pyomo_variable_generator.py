@@ -11,9 +11,9 @@ INTEGER = pyomo_interface.NonNegativeIntegers
 FREE = pyomo_interface.Reals
 
 
-def generate_variable(modelobject, var_type, var_name, b, dim=0):
+def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
-    match var_type:
+    match variable_type:
 
         case 'pvar':
 
@@ -24,12 +24,12 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
 
-                modelobject.add_component(var_name, variable(initialize=0, domain=POSITIVE, bounds=(b[0], b[1])))
+                model_object.add_component(variable_name, variable(initialize=0, domain=POSITIVE, bounds=(variable_bound[0], variable_bound[1])))
 
             else:
-                modelobject.add_component(var_name, variable([i for i in sets(*dim)], domain=POSITIVE, bounds=(b[0], b[1])))
+                model_object.add_component(variable_name, variable([i for i in sets(*variable_dim)], domain=POSITIVE, bounds=(variable_bound[0], variable_bound[1])))
 
         case 'bvar':
 
@@ -40,13 +40,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
 
-                modelobject.add_component(var_name, variable(domain=BINARY, bounds=(b[0], b[1])))
+                model_object.add_component(variable_name, variable(domain=BINARY, bounds=(variable_bound[0], variable_bound[1])))
 
             else:
 
-                modelobject.add_component(var_name, variable([i for i in sets(*dim)], domain=BINARY, bounds=(b[0], b[1])))
+                model_object.add_component(variable_name, variable([i for i in sets(*variable_dim)], domain=BINARY, bounds=(variable_bound[0], variable_bound[1])))
 
         case 'ivar':
 
@@ -57,13 +57,13 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
 
-                modelobject.add_component(var_name, variable(domain=INTEGER, bounds=(b[0], b[1])))
+                model_object.add_component(variable_name, variable(domain=INTEGER, bounds=(variable_bound[0], variable_bound[1])))
 
             else:
 
-                modelobject.add_component(var_name, variable([i for i in sets(*dim)], domain=INTEGER, bounds=(b[0], b[1])))
+                model_object.add_component(variable_name, variable([i for i in sets(*variable_dim)], domain=INTEGER, bounds=(variable_bound[0], variable_bound[1])))
 
         case 'fvar':
 
@@ -74,12 +74,12 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
 
-                modelobject.add_component(var_name, variable(domain=FREE, bounds=(b[0], b[1])))
+                model_object.add_component(variable_name, variable(domain=FREE, bounds=(variable_bound[0], variable_bound[1])))
 
             else:
 
-                modelobject.add_component(var_name, variable([i for i in sets(*dim)], domain=FREE, bounds=(b[0], b[1])))
+                model_object.add_component(variable_name, variable([i for i in sets(*variable_dim)], domain=FREE, bounds=(variable_bound[0], variable_bound[1])))
 
-    return modelobject.component(var_name)
+    return model_object.component(variable_name)

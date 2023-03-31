@@ -9,13 +9,13 @@ BINARY = gurobi_interface.GRB.BINARY
 FREE = gurobi_interface.GRB.CONTINUOUS
 INFINITY = gurobi_interface.GRB.INFINITY
 
-def generate_variable(modelobject, var_type, var_name, b, dim=0):
+def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
-    if b[0] == None: b[0] = -INFINITY
+    if variable_bound[0] == None: variable_bound[0] = -INFINITY
     
-    if b[1] == None: b[1] = +INFINITY
+    if variable_bound[1] == None: variable_bound[1] = +INFINITY
 
-    match var_type:
+    match variable_type:
 
         case 'pvar':
 
@@ -26,19 +26,19 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
                 
-                GeneratedVariable = modelobject.addVar(vtype=POSITIVE, lb=b[0], ub=b[1], name=var_name)
+                generated_variable = model_object.addVar(vtype=POSITIVE, lb=variable_bound[0], ub=variable_bound[1], name=variable_name)
 
             else:
                 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
                 
-                    GeneratedVariable = {key: modelobject.addVar(vtype=POSITIVE, lb=b[0], ub=b[1], name=f"{var_name}{key}") for key in dim[0]}
+                    generated_variable = {key: model_object.addVar(vtype=POSITIVE, lb=variable_bound[0], ub=variable_bound[1], name=f"{variable_name}{key}") for key in variable_dim[0]}
                 
                 else:
                     
-                    GeneratedVariable = {key: modelobject.addVar(vtype=POSITIVE, lb=b[0], ub=b[1], name=f"{var_name}{key}") for key in sets(*dim)}
+                    generated_variable = {key: model_object.addVar(vtype=POSITIVE, lb=variable_bound[0], ub=variable_bound[1], name=f"{variable_name}{key}") for key in sets(*variable_dim)}
 
         case 'bvar':
 
@@ -49,19 +49,19 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
                 
-                GeneratedVariable = modelobject.addVar(vtype=BINARY, lb=b[0], ub=b[1], name=var_name)
+                generated_variable = model_object.addVar(vtype=BINARY, lb=variable_bound[0], ub=variable_bound[1], name=variable_name)
 
             else:
                 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
                 
-                    GeneratedVariable = {key: modelobject.addVar(vtype=BINARY, lb=b[0], ub=b[1], name=f"{var_name}{key}") for key in dim[0]}
+                    generated_variable = {key: model_object.addVar(vtype=BINARY, lb=variable_bound[0], ub=variable_bound[1], name=f"{variable_name}{key}") for key in variable_dim[0]}
                 
                 else:
                     
-                    GeneratedVariable = {key: modelobject.addVar(vtype=BINARY, lb=b[0], ub=b[1], name=f"{var_name}{key}") for key in sets(*dim)}
+                    generated_variable = {key: model_object.addVar(vtype=BINARY, lb=variable_bound[0], ub=variable_bound[1], name=f"{variable_name}{key}") for key in sets(*variable_dim)}
 
        
         case 'ivar':
@@ -73,19 +73,19 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
                 
-                GeneratedVariable = modelobject.addVar(vtype=INTEGER, lb=b[0], ub=b[1], name=var_name)
+                generated_variable = model_object.addVar(vtype=INTEGER, lb=variable_bound[0], ub=variable_bound[1], name=variable_name)
 
             else:
                 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
                 
-                    GeneratedVariable = {key: modelobject.addVar(vtype=INTEGER, lb=b[0], ub=b[1], name=f"{var_name}{key}") for key in dim[0]}
+                    generated_variable = {key: model_object.addVar(vtype=INTEGER, lb=variable_bound[0], ub=variable_bound[1], name=f"{variable_name}{key}") for key in variable_dim[0]}
                 
                 else:
                     
-                    GeneratedVariable = {key: modelobject.addVar(vtype=INTEGER, lb=b[0], ub=b[1], name=f"{var_name}{key}") for key in sets(*dim)}
+                    generated_variable = {key: model_object.addVar(vtype=INTEGER, lb=variable_bound[0], ub=variable_bound[1], name=f"{variable_name}{key}") for key in sets(*variable_dim)}
 
 
     
@@ -99,21 +99,21 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
                 
-                GeneratedVariable = modelobject.addVar(vtype=POSITIVE, lb=b[0], ub=b[1], name=var_name)
+                generated_variable = model_object.addVar(vtype=POSITIVE, lb=variable_bound[0], ub=variable_bound[1], name=variable_name)
 
             else:
                 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
                 
-                    GeneratedVariable = {key: modelobject.addVar(vtype=POSITIVE, lb=b[0], ub=b[1], name=f"{var_name}{key}") for key in dim[0]}
+                    generated_variable = {key: model_object.addVar(vtype=POSITIVE, lb=variable_bound[0], ub=variable_bound[1], name=f"{variable_name}{key}") for key in variable_dim[0]}
                 
                 else:
                     
-                    GeneratedVariable = {key: modelobject.addVar(vtype=POSITIVE, lb=b[0], ub=b[1], name=f"{var_name}{key}") for key in sets(*dim)}
+                    generated_variable = {key: model_object.addVar(vtype=POSITIVE, lb=variable_bound[0], ub=variable_bound[1], name=f"{variable_name}{key}") for key in sets(*variable_dim)}
 
     
-    return GeneratedVariable
+    return generated_variable
     
     

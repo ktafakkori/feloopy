@@ -1,4 +1,4 @@
-def Get(modelobject, result, input1, input2=None):
+def Get(model_object, result, input1, input2=None):
 
    input1 = input1[0]
 

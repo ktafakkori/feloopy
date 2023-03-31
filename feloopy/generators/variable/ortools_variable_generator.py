@@ -3,13 +3,13 @@ import itertools as it
 sets = it.product
 
 
-def generate_variable(modelobject, var_type, var_name, b, dim=0):
+def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
-    if b[0] == None: b[0] = -modelobject.infinity()
+    if variable_bound[0] == None: variable_bound[0] = -model_object.infinity()
     
-    if b[1] == None: b[1] = modelobject.infinity()
+    if variable_bound[1] == None: variable_bound[1] = model_object.infinity()
 
-    match var_type:
+    match variable_type:
 
         case 'pvar':
 
@@ -21,19 +21,19 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
             '''
 
             
-            if dim == 0:
+            if variable_dim == 0:
                 
-                GeneratedVariable =  modelobject.NumVar(b[0], b[1], var_name)
+                GeneratedVariable =  model_object.NumVar(variable_bound[0], variable_bound[1], variable_name)
             
             else:
                 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
                     
-                    GeneratedVariable =  {key: modelobject.NumVar(b[0], b[1], f"{var_name}{key}") for key in dim[0]}
+                    GeneratedVariable =  {key: model_object.NumVar(variable_bound[0], variable_bound[1], f"{variable_name}{key}") for key in variable_dim[0]}
                 
                 else:
                     
-                    GeneratedVariable =  {key: modelobject.NumVar(b[0], b[1], f"{var_name}{key}") for key in it.product(*dim)}
+                    GeneratedVariable =  {key: model_object.NumVar(variable_bound[0], variable_bound[1], f"{variable_name}{key}") for key in it.product(*variable_dim)}
 
 
                     
@@ -46,19 +46,19 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if dim == 0:
+            if variable_dim == 0:
                 
-                GeneratedVariable =  modelobject.IntVar(b[0], b[1], var_name)
+                GeneratedVariable =  model_object.IntVar(variable_bound[0], variable_bound[1], variable_name)
             
             else:
                 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
                     
-                    GeneratedVariable =  {key: modelobject.IntVar(b[0], b[1], f"{var_name}{key}") for key in dim[0]}
+                    GeneratedVariable =  {key: model_object.IntVar(variable_bound[0], variable_bound[1], f"{variable_name}{key}") for key in variable_dim[0]}
                 
                 else:
                     
-                    GeneratedVariable =  {key: modelobject.IntVar(b[0], b[1], f"{var_name}{key}") for key in it.product(*dim)}
+                    GeneratedVariable =  {key: model_object.IntVar(variable_bound[0], variable_bound[1], f"{variable_name}{key}") for key in it.product(*variable_dim)}
 
                   
                     
@@ -71,27 +71,27 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if b[0] == 0:
+            if variable_bound[0] == 0:
 
-                b[0] = 0
+                variable_bound[0] = 0
 
-            if b[1] == None:
+            if variable_bound[1] == None:
 
-                b[1] = modelobject.infinity()
+                variable_bound[1] = model_object.infinity()
 
-            if dim == 0:
+            if variable_dim == 0:
 
-                GeneratedVariable = modelobject.IntVar(b[0], b[1], var_name)
+                GeneratedVariable = model_object.IntVar(variable_bound[0], variable_bound[1], variable_name)
 
             else:
                 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
                     
-                    GeneratedVariable = {key: modelobject.IntVar(b[0], b[1], f"{var_name}{key}") for key in dim[0]}
+                    GeneratedVariable = {key: model_object.IntVar(variable_bound[0], variable_bound[1], f"{variable_name}{key}") for key in variable_dim[0]}
                 
                 else:
                     
-                    GeneratedVariable = {key: modelobject.IntVar(b[0], b[1], f"{var_name}{key}") for key in it.product(*dim)}
+                    GeneratedVariable = {key: model_object.IntVar(variable_bound[0], variable_bound[1], f"{variable_name}{key}") for key in it.product(*variable_dim)}
 
 
 
@@ -104,26 +104,26 @@ def generate_variable(modelobject, var_type, var_name, b, dim=0):
 
             '''
 
-            if b[0] == None:
+            if variable_bound[0] == None:
                 
-                b[0] = -modelobject.infinity()
+                variable_bound[0] = -model_object.infinity()
             
-            if b[1] == None:
+            if variable_bound[1] == None:
                 
-                b[1] = modelobject.infinity()
+                variable_bound[1] = model_object.infinity()
 
-            if dim == 0:
+            if variable_dim == 0:
                 
-                GeneratedVariable = modelobject.NumVar(b[0], b[1], var_name)
+                GeneratedVariable = model_object.NumVar(variable_bound[0], variable_bound[1], variable_name)
             
             else:
                 
-                if len(dim) == 1:
+                if len(variable_dim) == 1:
                     
-                    GeneratedVariable = {key: modelobject.NumVar(b[0], b[1], f"{var_name}{key}") for key in dim[0]}
+                    GeneratedVariable = {key: model_object.NumVar(variable_bound[0], variable_bound[1], f"{variable_name}{key}") for key in variable_dim[0]}
                 
                 else:
                     
-                    GeneratedVariable = {key: modelobject.NumVar(b[0], b[1], f"{var_name}{key}") for key in it.product(*dim)}
+                    GeneratedVariable = {key: model_object.NumVar(variable_bound[0], variable_bound[1], f"{variable_name}{key}") for key in it.product(*variable_dim)}
     
     return GeneratedVariable
