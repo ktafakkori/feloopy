@@ -19,11 +19,9 @@
 
 <div align="center">
 
-## _Optimization in Python for Operations Research has never been this easy_!
+ _Optimization in Python for Operations Research has never been this easy_!
 
 <div align="left">
-
-#
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -55,7 +53,7 @@ FelooPy (/fɛlupaɪ/, an acronym for feasible, logical, optimal, and Python), is
 
 Using FelooPy, operations research scientists can: provide their target, representor, or learner model to get results; move focus from coding to modeling, and from modeling to analytics; automate time-consuming, iterative tasks of optimization model development, debugging, and implementation; access to 259 single-objective heuristic and exact optimization algorithms; switch between optimization interfaces and algorithms with no need of code changes; and use tools such as sensitivity analysis, automated encoding and decoding for heuristic optimization, timers, etc.
 
-#
+
 ## Features
 
 In summary, learning a new optimization package or debugging the unreliable codes generated using chat bots is no more a need. You can focus on the modeling and analytics aspects instead!
@@ -102,7 +100,6 @@ m.dis_variable(x,y)
 - Supporting **multi-parameter** sensitivity analysis on a single objective.
 - Supporting specific **solver options** such as **logs**, **number of threads**, **time limit**, **absolute gap** or **releative gap**.
 
-#
 
 ## Prerequisits
 
@@ -116,7 +113,7 @@ m.dis_variable(x,y)
 [09]: https://ktafakkori.github.io/use-cases-of-operations-research-list/
 [10]: https://ktafakkori.github.io/optimization-packages-in-python-list/
 
-#
+
 ## Installation
 
 _Optional downloads_: [Python 3.10][py], ([Visual Studio Code][vs] or [Anaconda][sp])
@@ -192,7 +189,6 @@ install('feloopy')
 ```text
 pip install -U git+https://github.com/ktafakkori/feloopy
 ```
-#
 
 ## Documentation
 
@@ -208,7 +204,6 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 [05]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Updates.md
 [06]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Syntax.md
 
-#
 
 ## Supports and contributions
 
@@ -218,7 +213,6 @@ If you find this project useful, please consider giving it a star on GitHub (htt
 
 [07]: https://ktafakkori.github.io/support/
 
-#
 
 ## Citation
 
@@ -243,7 +237,6 @@ Tafakkori, K. (2023). FelooPy: An integrated optimization environment for AutoOR
   url          = {https://github.com/ktafakkori/feloopy/}
 }
 ```
-#
 
 ## License
 
