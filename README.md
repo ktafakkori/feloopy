@@ -19,13 +19,11 @@
 
 <div align="center">
 
-
 <div align="left">
 
 🎉 _Version 0.2.3 is out: More stable than ever!_ 🎉
 
 💻 _Quick install_: `pip install --upgrade feloopy`
-
 
 FelooPy (/fɛlupaɪ/, an acronym for feasible, logical, optimal, and Python), is both a hyper-optimization interface and an integrated optimization environment for automated operations research in Python. The name comes from the idea of proposing practical and applicable solutions. The name also emphasizes on feasibility and logicality before optimality. In another view, it emphasizes on the importance of "loops" in programming and algorithm development. Finally, it refers to the memory efficiency, by being similar to the name Floppy, in which the available memory is too low.
 
@@ -35,26 +33,49 @@ Using FelooPy, operations research scientists can: provide their target, represe
 
 - **Free** and **Open-Source** integrated optimization environment developed under **MIT** license.
 - **Straightforward** mathematical programming **workflow**.
-- Using **single** optimization programming syntax for **15** **exact** and **heuristic** optimization interfaces in Python.
-- Accessing **82** exact and **177** heuristic optimization algorithms (total: **259**).
+
+```python
+
+from feloopy import *
+
+m = model('exact', 'simple_problem', 'cplex')
+
+x = m.pvar('x')
+y = m.ivar('y')
+
+m.obj(2*x+5*y)
+m.con(5*x+3*y <= 10)
+m.con(2*x+7*y <= 9)
+
+m.sol(['max'], 'cplex')
+
+m.dis_status()
+m.dis_obj()
+m.dis_variable(x,y)
+
+```
+
+- Using **single** optimization programming syntax (simple as above!) for **15** **exact** and **heuristic** optimization interfaces in Python.
+
+<div align="center">
+
+| Solution method | Available interfaces                                                                                                   |
+| :-------------- | :--------------------------------------------------------------------------------------------------------------------- |
+| exact           | `cplex`, `cvxpy`, `cylp`, `gekko`, `gurobi`, `linopy`, `mip`, `ortools`, `picos`, `pulp`, `pymprog`, `pyomo`, `xpress` |
+| heuristic       | `feloopy`, `mealpy`                                                                                                    |
+
+<div align="left">
+
+
+- Accessing **82** exact and **177** heuristic optimization algorithms (total: **259**) (See [Solvers & Interfaces][03]).
 - Supporting **scalable** optimization for **large-scale** real-world problems.
 - Supporting **benchmarking** with various optimization solvers.
 - Supporting **multi-parameter** sensitivity analysis on a single objective.
 - Supporting specific **solver options** such as **logs**, **number of threads**, **time limit**, **absolute gap** or **releative gap**.
 
+
 ## Supported optimization interfaces
 
-### Exact optimization:
-
-| Optimization method | Available Interfaces                                                                                                   |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| exact               | `cplex`, `cvxpy`, `cylp`, `gekko`, `gurobi`, `linopy`, `mip`, `ortools`, `picos`, `pulp`, `pymprog`, `pyomo`, `xpress` |
-| heuristic           | `feloopy`, `mealpy`                                                                                                    |
-
-### Heuristic optimization:
-
-- feloopy
-- mealpy
 
 ## Installation
 
