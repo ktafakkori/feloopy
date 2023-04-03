@@ -31,7 +31,8 @@
 - [Prerequisits](#prerequisits)
 - [Installation](#installation)
 - [Documentation](#documentation)
-- [Examples](https://github.com/ktafakkori/feloopy/tree/main/examples)
+- [How to get started?](https://github.com/ktafakkori/feloopy/blob/main/documentation/Tutorial.md)
+- [Learn by examples](https://github.com/ktafakkori/feloopy/tree/main/examples)
 - [Supports and contributions](#documentation)
 - [Citation](#citation)
 - [License](#license)
@@ -96,7 +97,7 @@ m.dis_variable(x,y)
 <div align="left">
 
 
-- Accessing **82** exact and **177** heuristic optimization algorithms (total: **259**) (See [Solvers & Interfaces][03]).
+- Accessing **82** exact and **177** heuristic optimization algorithms (total: **259**) (see [solvers and interfaces][03]).
 - Supporting **scalable** optimization for **large-scale** real-world problems.
 - Supporting **benchmarking** with various optimization solvers.
 - Supporting **multi-parameter** sensitivity analysis on a single objective.
@@ -106,7 +107,7 @@ m.dis_variable(x,y)
 ## Prerequisits
 
 * Knowledge of what interfaces and solvers are (see [interfaces and solvers for optimization in Python][10])
-* Knowledge of what operations research can do for you and your business (See [use cases][09]).
+* Knowledge of what operations research can do for you and your business (see [use cases][09]).
 * Basic knowledge of optimization techniques.
 * Python version `3.10.x`
 * Linux-based distributions, Windows or macOS.
@@ -118,7 +119,7 @@ m.dis_variable(x,y)
 
 ## Installation
 
-_Optional downloads_: [Python 3.10][py], ([Visual Studio Code][vs] or [Anaconda][sp])
+_Optional downloads_: [Python 3.10][py] | [Visual Studio Code][vs] | [Anaconda][sp]
 
 _Note 1_: Installation process requires `python==3.10.x`, `pip>=22.3.1` and a stable internet connection.
 
@@ -197,7 +198,7 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 - [Tutorial][01]
 - [Syntax][06]
 - [Examples][02]
-- [Solvers & Interfaces][03]
+- [Solvers and Interfaces][03]
 - [Changelog][05]
 
 [01]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Tutorial.md
@@ -207,11 +208,11 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 [06]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Syntax.md
 
 
-## Supports and contributions
+## Supports and Contributions
 
 We welcome your contributions to this project, such as reporting bugs, submitting pull requests, testing changes, and so on. We will acknowledge your contributions in the contributors section.
 
-If you find this project useful, please consider giving it a star on GitHub (https://github.com/ktafakkori/feloopy) to show your appreciation and help us continue its development! Starring a project makes it easier for you to find it again later, and also helps other people discover it. For more ways to support this project, please visit [this page][07].
+If you find this project useful, please consider giving it a star on GitHub (https://github.com/ktafakkori/feloopy) and introducing it to your colleagues to show your appreciation and help us continue its development! Starring a project makes it easier for you to find it again later, and also helps other people discover it. For more ways to support this project, please visit [this page][07].
 
 [07]: https://ktafakkori.github.io/support/
 
