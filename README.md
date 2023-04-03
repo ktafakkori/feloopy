@@ -46,6 +46,8 @@
 
 🎉 _Version 0.2.3 is out: More stable than ever!_ 🎉
 
+🎉 _The next version would focus on solve facilities_ 🎉
+
 💻 _Quick install_: `pip install --upgrade feloopy`
 
 #
@@ -65,24 +67,16 @@ In summary, learning a new optimization package or debugging the unreliable code
 - **Straightforward** mathematical programming **workflow**.
 
 ```python
-
 from feloopy import *
-
 m = model('exact', 'simple_problem', 'cplex')
-
 x = m.pvar('x')
 y = m.ivar('y')
-
 m.obj(2*x+5*y)
 m.con(5*x+3*y <= 10)
 m.con(2*x+7*y <= 9)
-
 m.sol(['max'], 'cplex')
-
-m.dis_status()
-m.dis_obj()
+m.report()
 m.dis_variable(x,y)
-
 ```
 
 - Using **single** optimization programming syntax (simple as above!) for **15** **exact** and **heuristic** optimization interfaces in Python.
