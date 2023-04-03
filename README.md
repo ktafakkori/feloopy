@@ -12,11 +12,10 @@
 
 <p align="center">
   <img src="logo/feloopy.gif" 
-  width=“100” height=“100”
+  width=“80” height=“80”
     />
 </p>
 
- />1
 
 # FelooPy: An integrated optimization environment for AutoOR in Python
 
