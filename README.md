@@ -27,12 +27,12 @@
 
 ## Table of Contents
 - [Introduction](#introduction)
-- [Why do I need FelooPy in the era of chatbots?](#features)
+- [Features](#features)
 - [Prerequisits](#prerequisits)
 - [Installation](#installation)
 - [Documentation](#documentation)
 - [How to get started?](https://github.com/ktafakkori/feloopy/blob/main/documentation/Tutorial.md)
-- [Learn by examples](https://github.com/ktafakkori/feloopy/tree/main/examples)
+- [Examples](https://github.com/ktafakkori/feloopy/tree/main/examples)
 - [Contributions](#contributions)
 - [Support](#support)
 - [Citation](#citation)
