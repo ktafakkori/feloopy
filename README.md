@@ -33,7 +33,8 @@
 - [Documentation](#documentation)
 - [How to get started?](https://github.com/ktafakkori/feloopy/blob/main/documentation/Tutorial.md)
 - [Learn by examples](https://github.com/ktafakkori/feloopy/tree/main/examples)
-- [Supports and contributions](#documentation)
+- [Contributions](#contributions)
+- [Support](#support)
 - [Citation](#citation)
 - [License](#license)
 
@@ -205,9 +206,11 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 [06]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Syntax.md
 
 
-## Supports and Contributions
+## Contributions
 
 We welcome your contributions to this project, such as reporting bugs, submitting pull requests, testing changes, and so on. We will acknowledge your contributions in the contributors section.
+
+## Support
 
 If you find this project useful, please consider giving it a star on GitHub (https://github.com/ktafakkori/feloopy) and introducing it to your colleagues to show your appreciation and help us continue its development! Starring a project makes it easier for you to find it again later, and also helps other people discover it. For more ways to support this project, please visit [this page][07].
 
