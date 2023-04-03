@@ -21,7 +21,7 @@
 
 <div align="center">
 
- _Optimization in Python for Operations Research has never been this easy_!
+ _Optimization in Python for **Operations Research** has never been this easy_!
 
 <div align="left">
 
