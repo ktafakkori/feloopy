@@ -99,6 +99,7 @@ m.dis_variable(x,y)
 - Supporting **multi-parameter** sensitivity analysis on a single objective.
 - Supporting specific **solver options** such as **logs**, **number of threads**, **time limit**, **absolute gap** or **releative gap**.
 
+Try this optimization package today and see its capabilities for yourself!
 
 ## Prerequisits
 
