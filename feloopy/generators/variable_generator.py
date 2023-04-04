@@ -23,6 +23,11 @@ def generate_variable(interface_name, model_object, variable_type, variable_name
             from .variable import ortools_variable_generator
             return ortools_variable_generator.generate_variable(**inputs)
 
+        case 'ortools_cp':
+
+            from .variable import ortools_cp_variable_generator
+            return ortools_cp_variable_generator.generate_variable(**inputs)
+
         case 'gekko':
 
             from .variable import gekko_variable_generator
@@ -52,6 +57,11 @@ def generate_variable(interface_name, model_object, variable_type, variable_name
 
             from .variable import cplex_variable_generator
             return cplex_variable_generator.generate_variable(**inputs)
+
+        case 'cplex_cp':
+
+            from .variable import cplex_cp_variable_generator
+            return cplex_cp_variable_generator.generate_variable(**inputs)
 
         case 'gurobi':
 

@@ -194,7 +194,7 @@ class Model:
         self.get_obj = self.get_objective
         self.get_stat = self.get_status
         self.get_var = self.value = self.get = self.get_variable
-        self.dis_var = self.display = self.show = self.print = self.display_variable = self.dis_variable
+        self.dis = self.dis_var = self.display = self.show = self.print = self.display_variable = self.dis_variable
         self.status = self.show_status = self.dis_status
         self.objective_value = self.show_objective = self.display_objective = self.dis_obj
 
@@ -381,9 +381,9 @@ class Model:
             case 'heuristic':
                 return generate_heuristic_variable(self.features, 'ivar', name, variable_dim, variable_bound, self.agent)
 
-    def fvar(self, name, variable_dim=0, variable_bound=[0, None]):
+    def fvar(self, name, variable_dim=0, variable_bound=[None, None]):
         """
-        Integer Variable Definition
+        Free Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         To define a free variable.
 
@@ -623,7 +623,7 @@ class Model:
         self.features['email_address'] = email
         self.features['max_iterations'] = max_iterations
         
-        if type(objective_id) != str:
+        if type(objective_id) != str and directions!=None:
             if self.features['directions'][objective_id] == None:
                 self.features['directions'][objective_id] = directions[objective_id]
             for i in range(len(self.features['objectives'])):

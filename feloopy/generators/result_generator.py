@@ -22,6 +22,12 @@ def get(input, ModelObject, ModelSolution, Thing, VariableNameWithIndex):
                 from .result import ortools_result_generator
                 return ortools_result_generator.Get(ModelObject, ModelSolution, indicator, VariableNameWithIndex)
 
+            case 'ortools_cp':
+
+                from .result import ortools_cp_result_generator
+                return ortools_cp_result_generator.Get(ModelObject, ModelSolution, indicator, VariableNameWithIndex)
+
+
             case 'gekko':
 
                 from .result import gekko_result_generator
@@ -51,6 +57,11 @@ def get(input, ModelObject, ModelSolution, Thing, VariableNameWithIndex):
 
                 from .result import cplex_result_generator
                 return cplex_result_generator.Get(ModelObject, ModelSolution, indicator, VariableNameWithIndex)
+
+            case 'cplex_cp':
+
+                from .result import cplex_cp_result_generator
+                return cplex_cp_result_generator.Get(ModelObject, ModelSolution, indicator, VariableNameWithIndex)
 
             case 'gurobi':
 
@@ -91,6 +102,11 @@ def get(input, ModelObject, ModelSolution, Thing, VariableNameWithIndex):
                 from .result import ortools_result_generator
                 return ortools_result_generator.Get(ModelObject, ModelSolution, indicator)
 
+            case 'ortools_cp':
+
+                from .result import ortools_cp_result_generator
+                return ortools_cp_result_generator.Get(ModelObject, ModelSolution, indicator)
+
             case 'gekko':
 
                 from .result import gekko_result_generator
@@ -120,6 +136,12 @@ def get(input, ModelObject, ModelSolution, Thing, VariableNameWithIndex):
 
                 from .result import cplex_result_generator
                 return cplex_result_generator.Get(ModelObject, ModelSolution, indicator)
+
+            case 'cplex_cp':
+
+                from .result import cplex_cp_result_generator
+                return cplex_cp_result_generator.Get(ModelObject, ModelSolution, indicator)
+
 
             case 'gurobi':
 

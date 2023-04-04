@@ -17,6 +17,11 @@ def generate_model(interface_name):
             from .model import ortools_model_generator
             model_object = ortools_model_generator.generate_model()
 
+        case 'ortools_cp':
+
+            from .model import ortools_cp_model_generator
+            model_object = ortools_cp_model_generator.generate_model()
+
         case 'gekko':
 
             from .model import gekko_model_generator
@@ -46,6 +51,11 @@ def generate_model(interface_name):
 
             from .model import cplex_model_generator
             model_object = cplex_model_generator.generate_model()
+
+        case 'cplex_cp':
+
+            from .model import cplex_cp_model_generator
+            model_object = cplex_cp_model_generator.generate_model()
 
         case 'gurobi':
 

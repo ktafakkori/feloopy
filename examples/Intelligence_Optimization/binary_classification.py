@@ -34,7 +34,7 @@ m.obj(sum((g[t]-b[t])**2 for t in T) + lam*sum(x[i]**2 for i in U))
 #m.obj(sum(b[t]*m.ModelObject.log(g[t])+(1-b[t])*m.ModelObject.log(1-g[t]) for t in T))
 
 for t in T:
-    m.con(g[t] == (1+2.73**(-(sum(a[t,i]*x[i] for i in U) + z)))**(-1))
+    m.con(g[t] == (1+2.73**(-sum(a[t,i]*x[i] for i in U) + z))**(-1))
 
 m.sol(['min'], 'ipopt')
 m.inf()

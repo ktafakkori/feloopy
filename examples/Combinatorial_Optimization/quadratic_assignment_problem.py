@@ -1,7 +1,7 @@
 from feloopy import *
 
 # Environment
-m = model('exact', 'qap', 'gekko')
+m = model('exact', 'qap', 'cplex')
 
 # Data
 w = [[0, 3, 0, 2],
@@ -36,13 +36,13 @@ m.obj(sum(a[i, j, k, l]*x[i, j]*x[k, l] for i, j, k, l in sets(I, J, K, L)))
 
 # Constraints
 for j in J:
-    m.con(sum(x[i, j] for i in I) |e| 1)
+    m.con(sum(x[i, j] for i in I) == 1)
 
 for i in I:
-    m.con(sum(x[i, j] for j in J) |e| 1)
+    m.con(sum(x[i, j] for j in J) == 1)
 
 # Solve
-m.sol(['min'], 'apopt')
+m.sol(['min'], 'cplex',log=True)
 m.inf()
 m.dis_obj()
 m.dis_status()

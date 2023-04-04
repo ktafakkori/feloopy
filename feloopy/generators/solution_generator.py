@@ -37,6 +37,11 @@ def generate_solution(features):
             from .solution import ortools_solution_generator
             ModelSolution = ortools_solution_generator.generate_solution(**inputs)
 
+        case 'ortools_cp':
+
+            from .solution import ortools_cp_solution_generator
+            ModelSolution = ortools_cp_solution_generator.generate_solution(**inputs)
+
         case 'gekko':
 
             from .solution import gekko_solution_generator
@@ -66,6 +71,11 @@ def generate_solution(features):
 
             from .solution import cplex_solution_generator
             ModelSolution = cplex_solution_generator.generate_solution(**inputs)
+
+        case 'cplex_cp':
+
+            from .solution import cplex_cp_solution_generator
+            ModelSolution = cplex_cp_solution_generator.generate_solution(**inputs)
 
         case 'gurobi':
 
