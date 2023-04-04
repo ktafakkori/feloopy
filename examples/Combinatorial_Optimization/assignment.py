@@ -1,7 +1,7 @@
 from feloopy import *
 
 # Environment
-m = model('exact', 'ap', 'ortools')
+m = model('exact', 'ap', 'gurobi')
 
 # Sets
 I = m.set(3)  # Agents
@@ -26,7 +26,7 @@ for i in I:
 for j in J:
     m.con(sum(x[i, j] for i in I) == 1)
 
-m.sol(['min'], 'scip', log=False)
+m.sol(['min'], 'gurobi', log=True)
 m.inf()
 m.dis_obj()
 m.dis_status()
