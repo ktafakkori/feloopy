@@ -62,7 +62,7 @@ Using FelooPy, operations research scientists can: provide their target, represe
 
 ## Features
 
-Are you tired of wasting time and energy on debugging codes provided by chatbots for optimization in Python? Do you wish there was a better way to create reliable and efficient codes without hassle? Well, now there is! Introducing this new optimization package that does all the hard work for you! You don’t need to learn any new skills or debug any faulty codes. You can just focus on the creative aspects of modeling and analytics!
+Are you tired of wasting time and energy on debugging codes provided by chatbots for optimization in Python? Do you wish there was a better way to create reliable and efficient codes without hassle? Well, now there is! Introducing this new optimization package that does all the hard work for you! You don’t need to learn any new packages or debug any faulty codes. You can just focus on the creative aspects of modeling and analytics!
 
 But wait, there’s more! This optimization package also offers you these amazing features:
 

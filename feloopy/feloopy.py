@@ -7,6 +7,7 @@ import sys
 
 product = mt.prod
 
+
 class EMPTY:
 
     '''
@@ -14,70 +15,128 @@ class EMPTY:
     '''
 
     def __init__(self, val):
+
         self.val = val
+
     def __call__(self, *args):
-        return 5
-    def __getitem__(self, *args):
-        return 5
-    def __setitem__(self, *args):
-        'none'
-    def __hash__(self):
-        return 5
-    def __str__(self):
-        return 5
-    def __repr__(self):
-        return 5
-    def __neg__(self):
-        return 5
-    def __pos__(self):
-        return 5
-    def __pow__(self,other):
-        return 5
-    def __bool__(self):
-        return 5
-    def __add__(self, other):
-        return 5
-    def __radd__(self, other):
-        return 5
-    def __sub__(self, other):
-        return 5
-    def __rsub__(self, other):
-        return 5
-    def __mul__(self, other):
-        return 5
-    def __rmul__(self, other):
-        return 5
-    def __div__(self, other):
-        return 5
-    def __rdiv__(self, other):
-        raise 5
-    def __le__(self, other):
-        return 5
-    def __ge__(self, other):
-        return 5
-    def __eq__(self, other):
-        return 5
-    def __ne__(self, other):
+
         return 5
 
-def sets(*args):
-    """ For easier multidimensional (nested) loop coding.
+    def __getitem__(self, *args):
+
+        return 5
+
+    def __setitem__(self, *args):
+        'none'
+
+    def __hash__(self):
+
+        return 5
+
+    def __str__(self):
+
+        return 5
+
+    def __repr__(self):
+
+        return 5
+
+    def __neg__(self):
+
+        return 5
+
+    def __pos__(self):
+
+        return 5
+
+    def __pow__(self, other):
+
+        return 5
+
+    def __bool__(self):
+
+        return 5
+
+    def __add__(self, other):
+
+        return 5
+
+    def __radd__(self, other):
+
+        return 5
+
+    def __sub__(self, other):
+
+        return 5
+
+    def __rsub__(self, other):
+
+        return 5
+
+    def __mul__(self, other):
+
+        return 5
+
+    def __rmul__(self, other):
+
+        return 5
+
+    def __div__(self, other):
+
+        return 5
+
+    def __rdiv__(self, other):
+
+        raise 5
+
+    def __le__(self, other):
+
+        return 5
+
+    def __ge__(self, other):
+
+        return 5
+
+    def __eq__(self, other):
+
+        return 5
+
+    def __ne__(self, other):
+
+        return 5
+
+def sets(*args):    
+
+    """ 
+    Multi-dimensional Loop Definer
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    For easier multi-dimensional (nested) loop coding.
+
+    Example:
+    
     """
+
     return it.product(*args)
+
 
 def count_variable(variable_dim, total_count, special_count):
     """ For calculating total number of variables of each category.
     """
     total_count[0] += 1
     special_count[0] += 1
-    special_count[1] += 1 if variable_dim == 0 else product(len(dims) for dims in variable_dim)
-    total_count[1] += 1 if variable_dim == 0 else product(len(dims) for dims in variable_dim)
+    special_count[1] += 1 if variable_dim == 0 else product(
+        len(dims) for dims in variable_dim)
+    total_count[1] += 1 if variable_dim == 0 else product(
+        len(dims) for dims in variable_dim)
     return total_count, special_count
+
 
 def create_random_number_generator(key):
     """ For creating a random number generator with a fixed special seed.
     """
     return np.random.default_rng(key)
+
 
 def update_variable_features(name, variable_dim, variable_bound, variable_counter_type, features):
     """ For hierarchical updating the features of the problem.
@@ -98,29 +157,30 @@ def update_variable_features(name, variable_dim, variable_bound, variable_counte
                 features['total_variable_counter'], features[variable_counter_type] = count_variable(
                     variable_dim, features['total_variable_counter'], features[variable_counter_type])
                 features['variable_spread'][name][1] = features['total_variable_counter'][1]
-                if variable_counter_type=='free_variable_counter':
+                if variable_counter_type == 'free_variable_counter':
                     features['variable_type'][name] = 'fvar'
-                if variable_counter_type=='binary_variable_counter':
+                if variable_counter_type == 'binary_variable_counter':
                     features['variable_type'][name] = 'bvar'
-                if variable_counter_type=='integer_variable_counter':
+                if variable_counter_type == 'integer_variable_counter':
                     features['variable_type'][name] = 'ivar'
-                if variable_counter_type=='positive_variable_counter':
+                if variable_counter_type == 'positive_variable_counter':
                     features['variable_type'][name] = 'pvar'
                 features['variable_bound'][name] = variable_bound
                 features['variable_dim'][name] = variable_dim
 
     return features
 
+
 def generate_heuristic_variable(features, type, name, variable_dim, variable_bound, agent):
 
     if features['agent_status'] == 'idle':
         if features['vectorized']:
-            if variable_dim==0:
+            if variable_dim == 0:
                 return EMPTY(0)
             else:
                 return np.random.rand(*tuple([100]+[len(dims) for dims in variable_dim]))
         else:
-            if variable_dim==0:
+            if variable_dim == 0:
                 return EMPTY(0)
             else:
                 return np.random.rand(*tuple([len(dims) for dims in variable_dim]))
@@ -137,10 +197,12 @@ def generate_heuristic_variable(features, type, name, variable_dim, variable_bou
                     return np.argsort(agent[:, spread[name][0]:spread[name][1]])
             else:
                 if type == 'bvar' or type == 'ivar':
-                    var = np.round(variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0]))
+                    var = np.round(
+                        variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0]))
                     return np.reshape(var, [var.shape[0]]+[len(dims) for dims in variable_dim])
                 elif type == 'pvar' or type == 'fvar':
-                    var = variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])
+                    var = variable_bound[0] + agent[:, spread[0]:spread[1]
+                                                    ] * (variable_bound[1] - variable_bound[0])
                     return np.reshape(var, [var.shape[0]]+[len(dims) for dims in variable_dim])
                 else:
                     return np.argsort(agent[:, spread[name][0]:spread[name][1]])
@@ -159,6 +221,7 @@ def generate_heuristic_variable(features, type, name, variable_dim, variable_bou
                     return np.reshape(variable_bound[0] + agent[spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0]), [len(dims) for dims in variable_dim])
                 else:
                     return np.argsort(agent[spread[name][0]:spread[name][1]])
+
 
 class Model:
 
@@ -225,7 +288,8 @@ class Model:
                 }
 
                 from .generators import model_generator
-                self.model = model_generator.generate_model(self.features['interface_name'])
+                self.model = model_generator.generate_model(
+                    self.features['interface_name'])
 
             case 'heuristic':
 
@@ -320,7 +384,8 @@ class Model:
             * x = bvar('x', [I,J], [0, 1])
         """
 
-        self.features = update_variable_features(name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
+        self.features = update_variable_features(
+            name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
 
         match self.features['solution_method']:
             case 'exact':
@@ -346,7 +411,8 @@ class Model:
             * x = pvar('x', [I,J], [0, 100])
         """
 
-        self.features = update_variable_features(name, variable_dim, variable_bound, 'positive_variable_counter', self.features)
+        self.features = update_variable_features(
+            name, variable_dim, variable_bound, 'positive_variable_counter', self.features)
 
         match self.features['solution_method']:
             case 'exact':
@@ -372,7 +438,8 @@ class Model:
             * x = ivar('x', [I,J], [0, 100])
         """
 
-        self.features = update_variable_features( name, variable_dim, variable_bound, 'integer_variable_counter', self.features)
+        self.features = update_variable_features(
+            name, variable_dim, variable_bound, 'integer_variable_counter', self.features)
 
         match self.features['solution_method']:
             case 'exact':
@@ -398,13 +465,19 @@ class Model:
             * x = fvar('x', [I,J], [0, 100])
         """
 
-        self.features = update_variable_features(name, variable_dim, variable_bound, 'free_variable_counter', self.features)
+        self.features = update_variable_features(
+            name, variable_dim, variable_bound, 'free_variable_counter', self.features)
 
         match self.features['solution_method']:
+
             case 'exact':
+
                 from .generators import variable_generator
+
                 return variable_generator.generate_variable(self.features['interface_name'], self.model, 'fvar', name, variable_bound, variable_dim)
+
             case 'heuristic':
+
                 return generate_heuristic_variable(self.features, 'fvar', name, variable_dim, variable_bound, self.agent)
 
     def dvar(self, name, variable_dim=0):
@@ -460,7 +533,8 @@ class Model:
             * x = svar('x',[I])
         """
 
-        self.features = update_variable_features(name, variable_dim, [0, 1], 'integer_variable_counter', self.features)
+        self.features = update_variable_features(
+            name, variable_dim, [0, 1], 'integer_variable_counter', self.features)
         self.features['variable_type'][name] = 'svar'
         return generate_heuristic_variable(self.features, 'fvar', name, variable_dim, [0, 1], self.agent)
 
@@ -469,7 +543,6 @@ class Model:
         Set Definition
         ~~~~~~~~~~~~~~
         To define a set.
-
         """
 
         return range(*size)
@@ -479,17 +552,15 @@ class Model:
         Card Definition
         ~~~~~~~~~~~~~~~~
         To measure size of the set, etc.
-        
         """
+
         return len(set)
 
     def uniform(self, lb, ub, variable_dim=0):
-
         """
         Uniform Parameter Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         To generate a real-valued parameter using uniform distribution inside a range.
-        
         """
 
         if variable_dim == 0:
@@ -498,12 +569,10 @@ class Model:
             return self.RNG.uniform(low=lb, high=ub, size=([len(i) for i in variable_dim]))
 
     def uniformint(self, lb, ub, variable_dim=0):
-
         """
         Uniform Integer Parameter Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         To generate an integer parameter using uniform distribution inside a range.
-        
         """
 
         if variable_dim == 0:
@@ -574,22 +643,24 @@ class Model:
                 if self.features['agent_status'] == 'idle':
 
                     self.features['constraint_labels'].append(label)
-                    
-                    self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
-                    
+
+                    self.features['constraint_counter'][0] = len(
+                        set(self.features['constraint_labels']))
+
                     self.features['constraints'].append(expression)
-                    
-                    self.features['constraint_counter'][1] = len(self.features['constraints'])
+
+                    self.features['constraint_counter'][1] = len(
+                        self.features['constraints'])
 
                 else:
-                    
+
                     if self.features['vectorized']:
 
-                        self.features['constraints'].append(np.reshape(expression,[np.shape(self.agent)[0],1]))
-                    
+                        self.features['constraints'].append(
+                            np.reshape(expression, [np.shape(self.agent)[0], 1]))
+
                     else:
                         self.features['constraints'].append(expression)
-
 
     def sol(self, directions=None, solver_name=None, solver_options=dict(), objective_id=0, email=None, debug=False, time_limit=28800, cpu_threads=None, absolute_gap=None, relative_gap=None, log=False, save_log=False, max_iterations=None):
         """
@@ -622,26 +693,27 @@ class Model:
         self.features['save_solver_log'] = save_log
         self.features['email_address'] = email
         self.features['max_iterations'] = max_iterations
-        
-        if type(objective_id) != str and directions!=None:
+
+        if type(objective_id) != str and directions != None:
             if self.features['directions'][objective_id] == None:
                 self.features['directions'][objective_id] = directions[objective_id]
             for i in range(len(self.features['objectives'])):
-                if i!=objective_id:
+                if i != objective_id:
                     del self.features['directions'][i]
                     del directions[i]
                     del self.features['objectives'][i]
             objective_id = 0
-            self.features['objective_counter']=[1,1]
+            self.features['objective_counter'] = [1, 1]
 
         match self.features['solution_method']:
 
             case 'exact':
 
                 self.features['model_object_before_solve'] = self.model
-                
+
                 from .generators import solution_generator
-                self.solution = solution_generator.generate_solution(self.features)
+                self.solution = solution_generator.generate_solution(
+                    self.features)
 
                 try:
                     self.obj_val = self.get_objective()
@@ -663,22 +735,27 @@ class Model:
 
                         self.penalty = np.zeros(np.shape(self.agent)[0])
 
-                        if self.features['penalty_coefficient'] != 0 and len(self.features['constraints'])==1:
+                        if self.features['penalty_coefficient'] != 0 and len(self.features['constraints']) == 1:
 
-                            self.features['constraints'][0] = np.reshape(self.features['constraints'][0],[np.shape(self.agent)[0],1])
-                            self.features['constraints'].append(np.zeros(shape=(np.shape(self.agent)[0],1)))
-                            self.penalty = np.amax(np.concatenate(self.features['constraints'],axis=1),axis=1)
+                            self.features['constraints'][0] = np.reshape(
+                                self.features['constraints'][0], [np.shape(self.agent)[0], 1])
+                            self.features['constraints'].append(
+                                np.zeros(shape=(np.shape(self.agent)[0], 1)))
+                            self.penalty = np.amax(np.concatenate(
+                                self.features['constraints'], axis=1), axis=1)
 
-                            self.agent[np.where(self.penalty==0), -2] =1
-                            self.agent[np.where(self.penalty>0), -2] = -1
+                            self.agent[np.where(self.penalty == 0), -2] = 1
+                            self.agent[np.where(self.penalty > 0), -2] = -1
 
-                        if self.features['penalty_coefficient'] != 0 and len(self.features['constraints'])>1:
+                        if self.features['penalty_coefficient'] != 0 and len(self.features['constraints']) > 1:
 
-                            self.features['constraints'].append(np.zeros(shape=(np.shape(self.agent)[0],1)))
-                            self.penalty = np.amax(np.concatenate(self.features['constraints'], axis=1 ),axis=1)
-                            self.agent[np.where(self.penalty==0), -2] =1
-                            self.agent[np.where(self.penalty>0), -2] = -1
-                    
+                            self.features['constraints'].append(
+                                np.zeros(shape=(np.shape(self.agent)[0], 1)))
+                            self.penalty = np.amax(np.concatenate(
+                                self.features['constraints'], axis=1), axis=1)
+                            self.agent[np.where(self.penalty == 0), -2] = 1
+                            self.agent[np.where(self.penalty > 0), -2] = -1
+
                         else:
 
                             self.agent[:, -2] = 2
@@ -686,24 +763,31 @@ class Model:
                         if type(objective_id) != str:
 
                             if directions[objective_id] == 'max':
-                                self.agent[:, -1] = np.reshape(self.features['objectives'][objective_id],[self.agent.shape[0],]) - np.reshape(self.features['penalty_coefficient'] * (self.penalty)**2,[self.agent.shape[0],])
+                                self.agent[:, -1] = np.reshape(self.features['objectives'][objective_id], [self.agent.shape[0],]) - np.reshape(
+                                    self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
 
                             if directions[objective_id] == 'min':
-                                self.agent[:, -1] = np.reshape(self.features['objectives'][objective_id],[self.agent.shape[0],]) + np.reshape(self.features['penalty_coefficient'] * (self.penalty)**2,[self.agent.shape[0],])
+                                self.agent[:, -1] = np.reshape(self.features['objectives'][objective_id], [self.agent.shape[0],]) + np.reshape(
+                                    self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
 
                     else:
 
                         self.penalty = 0
 
                         if len(self.features['constraints']) >= 1:
-                            self.penalty = np.amax(np.array([0]+self.features['constraints'], dtype=object))
+                            self.penalty = np.amax(
+                                np.array([0]+self.features['constraints'], dtype=object))
 
                         if directions[objective_id] == 'max':
-                            self.response = self.features['objectives'][objective_id] -  self.features['penalty_coefficient'] * (self.penalty-0)**2
+                            self.response = self.features['objectives'][objective_id] - \
+                                self.features['penalty_coefficient'] * \
+                                (self.penalty-0)**2
 
                         if directions[objective_id] == 'min':
-                            self.response = self.features['objectives'][objective_id] + self.features['penalty_coefficient'] * (self.penalty-0)**2
-                            
+                            self.response = self.features['objectives'][objective_id] + \
+                                self.features['penalty_coefficient'] * \
+                                (self.penalty-0)**2
+
     def get_variable(self, variable_with_index):
         from .generators import result_generator
         return result_generator.get(self.features, self.model, self.solution, 'variable', variable_with_index)
@@ -805,9 +889,11 @@ class Model:
             self.dis_obj()
             self.dis_time()
 
+
 model = add_model = create_environment = env = feloopy = Model
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
+
 
 class implement:
 
@@ -856,12 +942,14 @@ class implement:
             case 'mealpy':
 
                 from .generators.model import mealpy_model_generator
-                self.ModelObject = mealpy_model_generator.generate_model(self.SolverName, self.AlgOptions)
+                self.ModelObject = mealpy_model_generator.generate_model(
+                    self.SolverName, self.AlgOptions)
 
             case 'feloopy':
 
                 from .generators.model import feloopy_model_generator
-                self.ModelObject = feloopy_model_generator.generate_model(self.ToTalVariableCounter[1], self.ObjectivesDirections, self.SolverName, self.AlgOptions)
+                self.ModelObject = feloopy_model_generator.generate_model(
+                    self.ToTalVariableCounter[1], self.ObjectivesDirections, self.SolverName, self.AlgOptions)
 
     def sol(self, penalty_coefficient=0, number_of_times=1, show_plots=False, save_plots=False):
 
@@ -886,13 +974,13 @@ class implement:
 
     def get_status(self):
 
-        if self.status[0] ==1:
+        if self.status[0] == 1:
             return 'feasible (constrained)'
-        elif self.status[0] ==2:
+        elif self.status[0] == 2:
             return 'feasible (unconstrained)'
-        elif self.status[0] ==-1:
+        elif self.status[0] == -1:
             return 'infeasible'
-    
+
     def Fitness(self, X):
 
         self.AgentProperties[0] = 'active'
@@ -903,7 +991,7 @@ class implement:
         return self.ModelFunction(self.AgentProperties)
 
     def get(self, *args):
-        if self.ObjectivesCounter[0]==1:
+        if self.ObjectivesCounter[0] == 1:
             match self.InterfaceName:
                 case 'mealpy':
                     for i in args:
@@ -975,8 +1063,6 @@ class implement:
                                         return var(*i[1])
                                 case 'fvar':
 
-                                    
-
                                     if self.VariablesDim[i[0]] == 0:
                                         return (self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
 
@@ -1030,17 +1116,17 @@ class implement:
 
             for i in args:
                 if len(i) >= 2:
-                
+
                     match self.VariablesType[i[0]]:
 
                         case 'pvar':
 
                             if self.VariablesDim[i[0]] == 0:
-                                return (self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                return (self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
 
                             else:
                                 def var(*args):
-                                    self.NewAgentProperties = (self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                    self.NewAgentProperties = (self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
                                         self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                                     return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
 
@@ -1048,11 +1134,11 @@ class implement:
 
                         case 'fvar':
                             if self.VariablesDim[i[0]] == 0:
-                                return (self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                return (self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
 
                             else:
                                 def var(*args):
-                                    self.NewAgentProperties = (self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                    self.NewAgentProperties = (self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
                                         self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                                     return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
 
@@ -1060,49 +1146,51 @@ class implement:
 
                         case 'bvar':
                             if self.VariablesDim[i[0]] == 0:
-                                return np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                return np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
 
                             else:
                                 def var(*args):
-                                    self.NewAgentProperties = np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                    self.NewAgentProperties = np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
                                         self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                                     return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
 
                                 return var(*i[1])
                         case 'ivar':
                             if self.VariablesDim[i[0]] == 0:
-                                return np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                return np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                             else:
                                 def var(*args):
-                                    self.NewAgentProperties = np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                    self.NewAgentProperties = np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
                                         self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                                     return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
                                 return var(*i[1])
 
                         case 'svar':
 
-                            return np.argsort(self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])[i[1]]
+                            return np.argsort(self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])[i[1]]
 
                 else:
 
                     match self.VariablesType[i[0]]:
                         case 'pvar':
-                            return (self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                            return (self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                         case 'fvar':
-                            return (self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                            return (self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                         case 'bvar':
-                            return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                            return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                         case 'ivar':
-                            return np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                            return np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                         case 'svar':
-                            return np.argsort(self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])
-                        
+                            return np.argsort(self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])
+
     def dis_time(self):
 
         hour = round(((self.end-self.start)/10**6), 3) % (24 * 3600) // 3600
-        min = round(((self.end-self.start)/10**6), 3) % (24 * 3600) % 3600 // 60
+        min = round(((self.end-self.start)/10**6),
+                    3) % (24 * 3600) % 3600 // 60
         sec = round(((self.end-self.start)/10**6), 3) % (24 * 3600) % 3600 % 60
-        print(f"cpu time [{self.InterfaceName}]: ", (self.end-self.start),'(microseconds)', "%02d:%02d:%02d" % (hour, min, sec), '(h, m, s)')
+        print(f"cpu time [{self.InterfaceName}]: ", (self.end-self.start),
+              '(microseconds)', "%02d:%02d:%02d" % (hour, min, sec), '(h, m, s)')
 
     def get_time(self):
         return self.end-self.start
@@ -1111,7 +1199,7 @@ class implement:
         return self.BestReward
 
     def dis(self, input):
-        if len(input)>=2:
+        if len(input) >= 2:
             print(input[0]+str(input[1])+': ', self.get(input))
         else:
             print(str(input[0])+': ', self.get(input))
@@ -1159,5 +1247,6 @@ class implement:
         self.dis_obj()
         self.dis_time()
         print("~~~~~~~~~\n")
+
 
 construct = implement

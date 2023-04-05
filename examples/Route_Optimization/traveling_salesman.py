@@ -33,7 +33,7 @@ for i, j in sets(U, N):
         m.con(u[i] - u[j] + x[i, j] * len(N) |l| len(N)-1)
 
 # Solve
-m.sol(['min'], 'cbc')
+m.sol(['min'], 'cbc',log=False)
 m.inf()
 m.dis_obj()
 m.dis_status()
