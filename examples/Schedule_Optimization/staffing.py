@@ -37,7 +37,7 @@ m.obj(sum(x[i] for i in I))
 
 # Constraint
 for i in I:
-    m.con(sum(x[j] for j in roll(i, RD)) | g | list(Data.values())[i])
+    m.con(sum(x[j] for j in roll(i, RD)) >= list(Data.values())[i])
 
 # Solve
 m.sol(['min'], 'cbc')

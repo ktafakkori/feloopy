@@ -21,7 +21,7 @@ g = m.fvar('g', [T])
 
 #Optimization model
 m.obj((2*len(T))**(-1)*sum((g[t]-b[t])**2 for t in T))
-for t in T: m.con(g[t] |e| x[0]*(2.73)**(a[t]*x[1])  + z)
+for t in T: m.con(g[t] == x[0]*(2.73)**(a[t]*x[1])  + z)
 
 #Solve
 m.sol(['min'], 'ipopt')

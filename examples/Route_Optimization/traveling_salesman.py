@@ -23,14 +23,14 @@ m.obj(sum(c[i, j]*x[i, j] for i, j in sets(N, N)))
 
 # Constraints
 for j in N:
-    m.con(sum(x[i, j] for i in N if i != j) |e| 1)
+    m.con(sum(x[i, j] for i in N if i != j) == 1)
 
 for i in N:
-    m.con(sum(x[i, j] for j in N if j != i) |e| 1)
+    m.con(sum(x[i, j] for j in N if j != i) == 1)
 
 for i, j in sets(U, N):
     if i != j:
-        m.con(u[i] - u[j] + x[i, j] * len(N) |l| len(N)-1)
+        m.con(u[i] - u[j] + x[i, j] * len(N) <= len(N)-1)
 
 # Solve
 m.sol(['min'], 'cbc',log=False)

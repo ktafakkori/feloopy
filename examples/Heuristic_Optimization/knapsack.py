@@ -22,7 +22,7 @@ def instance(X):
     m.obj(sum(p[j]*x[:,j] for j in J))
 
     # Constraints
-    m.con(sum(w[j]*x[:,j] for j in J) |ll| W)
+    m.con(sum(w[j]*x[:,j] for j in J) |l| W)
 
     # Solve
     m.sol(['max'], 'GA')
@@ -88,7 +88,7 @@ def instance(X):
     m.obj(sum(p[j]*x[j] for j in J))
 
     # Constraints
-    m.con(sum(w[j]*x[j] for j in J) |ll| W)
+    m.con(sum(w[j]*x[j] for j in J) |l| W)
 
     # Solve
     m.sol(['max'], 'BaseSMA', {'epoch':100, 'pop_size': 20})

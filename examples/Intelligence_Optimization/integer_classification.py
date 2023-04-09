@@ -37,7 +37,7 @@ for j in C:
     
     #Optimization model
     m.obj(sum((g[t]-b[t])**2 for t in T) + lam*sum(x[i]**2 for i in U))
-    for t in T: m.con(g[t] |e| (1+2.73**(-(sum(a[t][i]*x[i] for i in U) + z)))**(-1))
+    for t in T: m.con(g[t] == (1+2.73**(-(sum(a[t][i]*x[i] for i in U) + z)))**(-1))
 
     #Solve
     m.sol(['min'], 'ipopt')

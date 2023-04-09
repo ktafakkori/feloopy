@@ -5,13 +5,17 @@ def Get(model_object, result, input1, input2=None):
    match input1:
 
     case 'variable':
+        
         return result[0][input2]
     
     case 'status':
+
         return result[0].get_solve_status()
 
     case 'objective':
+
         return result[0].get_objective_values()[0]
 
     case 'time':
+
         return (result[1][1]-result[1][0])*10**6

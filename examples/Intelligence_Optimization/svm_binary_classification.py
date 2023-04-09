@@ -22,7 +22,7 @@ alpha = m.pvar('alpha',[T])
 
 #Optimization model
 m.obj(sum(alpha[t] for t in T) - sum(alpha[t]*alpha[tt] * b[t]*b[tt] * sum(a[t][i]*a[tt][i] for i in U) for t,tt in sets(T,T)))
-m.con(sum(alpha[t]*b[t] for t in T) |e| 0)
+m.con(sum(alpha[t]*b[t] for t in T) == 0)
 
 #Solve
 m.sol(['max'],'apopt')

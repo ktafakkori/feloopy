@@ -21,15 +21,15 @@ m.obj(sum(w[j]*c[j] for j in J))
 
 #Constraint
 for i in I: 
-    m.con(sum(x[i,j] for j in J) |e| 1)
+    m.con(sum(x[i,j] for j in J) == 1)
 
 for j in J: 
-    m.con(sum(x[i,j] for i in I) |e| 1)
+    m.con(sum(x[i,j] for i in I) == 1)
 
-m.con(c[0] |e| s + sum(x[i,0]*p[i] for i in I))
+m.con(c[0] == s + sum(x[i,0]*p[i] for i in I))
 
 for j in J:
-    if j!=0: m.con(c[j] |g| c[j-1] + sum(x[i,j]*p[i] for i in I))
+    if j!=0: m.con(c[j] >= c[j-1] + sum(x[i,j]*p[i] for i in I))
 
 #Solve
 m.sol(['min'],'cbc')

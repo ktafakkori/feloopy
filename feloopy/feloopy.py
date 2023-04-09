@@ -108,12 +108,14 @@ class EMPTY:
 def sets(*args):    
 
     """ 
-    Multi-dimensional Loop Definer
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Used to mimic 'for all' in mathamatical modeling, for multiple sets.
 
-    For easier multi-dimensional (nested) loop coding.
+    Arguments:
 
-    Example:
+        * Multiple sets separated by commas.
+        * Required
+
+    Example: `for i,j in sets(I,J):`
     
     """
 
@@ -481,6 +483,7 @@ class Model:
                 return generate_heuristic_variable(self.features, 'fvar', name, variable_dim, variable_bound, self.agent)
 
     def dvar(self, name, variable_dim=0):
+        
         """
         Dependent Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -520,6 +523,7 @@ class Model:
                     return np.zeros([len(dims) for dims in variable_dim])
 
     def svar(self, name, variable_dim=0):
+
         """
         Sequential Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -537,6 +541,32 @@ class Model:
             name, variable_dim, [0, 1], 'integer_variable_counter', self.features)
         self.features['variable_type'][name] = 'svar'
         return generate_heuristic_variable(self.features, 'fvar', name, variable_dim, [0, 1], self.agent)
+
+    def invar(self,name, variable_dim=0, variable_bound=[None, None, None]):
+        
+        """        
+        Interval Variable Definition
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        Used to define an interval variable for constraint programming.
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.interval_var(start=variable_bound[0], size=variable_bound[1], end=variable_bound[2], name=name)
+
+
+    def sqvar(self,name, variable_dim=0, variable_bound=[None, None, None]):
+        """        
+        Sequence Variable Definition
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        Used to define an interval variable for constraint programming.
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.interval_var(start=variable_bound[0], size=variable_bound[1], end=variable_bound[2], name=name)
 
     def set(self, *size):
         """
@@ -888,6 +918,253 @@ class Model:
             self.dis_status()
             self.dis_obj()
             self.dis_time()
+
+    def abs(self, input):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.abs(input)
+    
+        else:
+
+            return abs(input)
+        
+    def plus(self, input1, input2):
+    
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.plus(input1,input2)
+
+        else:
+
+            return input1+input2
+        
+    def minus(self, input1, input2):
+        """
+        
+        Creates an expression that represents the product of two expressions.
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.minus(input1,input2)
+
+        else:
+
+            return input1-input2     
+        
+    def times(self, input1, input2):
+
+        """
+        
+        Creates an expression that represents the product of two expressions.
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.times(input1,input2)
+
+        else:
+
+            return input1*input2 
+
+    def true(self):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.true()
+
+        else:
+
+            return True
+
+    def false(self):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.false()
+
+        else:
+
+            return False
+    
+    def trunc(self, input):
+
+        '''
+        Builds the truncated integer parts of a float expression
+        '''
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.trunc(input)
+
+        else:
+
+            return "None"
+        
+    def int_div(self, input1, input2):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.int_div(input)
+
+        else:
+
+            return input1//input2
+
+    def float_div(self, input1, input2):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.int_div(input)
+
+        else:
+
+            return input1/input2
+
+    def mod(self, input1, input2):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.mod(input1,input2)
+
+        else:
+
+            return input1 % input2
+
+    def square(self, input):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.square(input)
+
+        else:
+
+            return input * input
+
+    def power(self, input1, input2):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.power(input1,input2)
+
+        else:
+
+            return input1 ** input2
+
+    def log(self, input):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.log(input)
+
+        else:
+
+            return np.log(input)
+
+    def exponent(self, input):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.exp(input)
+
+        else:
+
+            return np.exp(input)
+    
+    def count(self, input, value):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.count(input,value)
+
+        else:
+
+            return input.count(value)
+        
+    def scal_prod(self, input1, input2):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.scal_prod(input1,input2)
+
+        else:
+
+            return np.dot(input1, input2)
+        
+    def range(self,x, lb=None, ub=None):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.range(x, lb, ub)
+
+        else:
+
+            return [x>=lb] + [x<=ub]
+        
+    def floor(self, x):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.floor(x)
+
+        else:
+
+            return np.floor(x)
+    
+    def ceil(self,x):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.ceil(x)
+
+        else:
+
+            return np.ceil(x)
+        
+    def round(self,x):
+        
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.round(x)
+
+        else:
+
+            return np.round(x)
+
+    def all_dist_above(self, exprs, value):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.all_min_distance(exprs, value)
+
+        else:
+
+            return abs(exprs) >= value
+        
+    def if_then(self, input1, input2):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.if_then(input1, input2)
+
+        else:
+
+            if input1:
+
+                return input2
+        
+        
+
+
+
+        
+
+        
+def count_occurrences(arr, value):
+    return 
 
 
 model = add_model = create_environment = env = feloopy = Model

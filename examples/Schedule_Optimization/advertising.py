@@ -23,7 +23,7 @@ m.obj(sum(c[i]*x[i] for i in I))
 
 #Constraint
 for j in J:
-    m.con(sum(p[i,j]*x[i] for i in I) |g| v[j])
+    m.con(sum(p[i,j]*x[i] for i in I) >= v[j])
 
 #Solve
 m.sol(['min'],'cbc')

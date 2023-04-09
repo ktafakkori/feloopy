@@ -9,13 +9,17 @@ def Get(model_object, result, input1, input2=None):
    match input1:
 
     case 'variable':
+        
         return input2.solution_value()
     
     case 'status':
+
         return ortools_status_dict.get(result[0], "Not Optimal")
          
     case 'objective':
+
         return  model_object.Objective().Value()
 
     case 'time':
+
         return (result[1][1]-result[1][0])

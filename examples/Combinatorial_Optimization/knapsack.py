@@ -18,7 +18,7 @@ x = m.bvar('x', [J])
 m.obj(sum(p[j]*x[j] for j in J))
 
 # Constraints
-m.con(sum(w[j]*x[j] for j in J) |l| W)
+m.con(sum(w[j]*x[j] for j in J) <= W)
 
 # Solve
 m.sol(['max'], 'gurobi')

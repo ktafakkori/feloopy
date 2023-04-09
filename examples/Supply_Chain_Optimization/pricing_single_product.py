@@ -23,7 +23,7 @@ g = m.fvar('g', [T])
 
 #Optimization model
 m.obj((2*len(T))**(-1)*sum((g[t]-b[t])**2 for t in T))
-for t in T: m.con(g[t] |e| sum(a[t][i]*x[i] for i in U) + z)
+for t in T: m.con(g[t] == sum(a[t][i]*x[i] for i in U) + z)
 
 #Solve
 m.sol(['min'], 'apopt')
