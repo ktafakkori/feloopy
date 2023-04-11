@@ -1,7 +1,7 @@
 from feloopy import *
 
 # Environment
-m = model('exact', 'kp', 'pyomo')
+m = model('exact', 'kp', 'cvxpy')
 
 # Sets
 J = range(7)  # Set of the items
@@ -20,8 +20,12 @@ m.obj(sum(p[j]*x[j] for j in J))
 # Constraints
 m.con(sum(w[j]*x[j] for j in J) <= W)
 
+for j in J:
+    m.con(x[j]<=1)
+    m.con(x[j]>=0)
+
 # Solve
-m.sol(['max'], 'gurobi')
+m.sol(['max'], 'gurobi',show_log=True)
 m.inf()
 m.dis_obj()
 m.dis_status()
@@ -29,6 +33,8 @@ m.dis_status()
 # Display
 for j in J:
     print(f"item {j} is {m.get(x[j])}")
+
+m.report()
 
 '''
 ~~~~~~~~~~~~

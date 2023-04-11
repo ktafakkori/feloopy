@@ -1,11 +1,14 @@
 from feloopy import *
 
-# Classification function
-def classify(w, b, a): 
-    print(f"Input = {a} -> Output = {round((1+2.73**(-(sum(w[i]*a[i] for i in U) + b)))**(-1))}")
 
 # Creating the environment
 m = model('exact', 'bc', 'gekko')
+
+
+# Classification function
+def classify(w, b, a): 
+    print(f"Input = {a} -> Output = {round((1+exponent(-(sum(w[i]*a[i] for i in U) + b)))**(-1))}")
+
 
 # Training dataset
 
@@ -15,7 +18,7 @@ b = [ 0     , 1     , 0     , 1     , 0     ] #Target
 a=np.array(a)
 b=np.array(b)
 
-lam = 0  # Regularization factor
+lam = 0 # Regularization factor
 
 # Defining sets (based on input data):
 U = range(3)  # Features
@@ -34,7 +37,7 @@ m.obj(sum((g[t]-b[t])**2 for t in T) + lam*sum(x[i]**2 for i in U))
 #m.obj(sum(b[t]*m.ModelObject.log(g[t])+(1-b[t])*m.ModelObject.log(1-g[t]) for t in T))
 
 for t in T:
-    m.con(g[t] == (1+2.73**(-sum(a[t,i]*x[i] for i in U) + z))**(-1))
+    m.con(g[t] == (1+m.exponent(-sum(a[t,i]*x[i] for i in U) + z))**(-1))
 
 m.sol(['min'], 'ipopt')
 m.inf()
@@ -48,15 +51,14 @@ for i in U:
 b = m.get(z)
 
 # Test dataset
-aa = [[1, 2.1, 2], [1.9, 3, 3], [3.2, 4, 5], [4.1, 5, 6], [4.9, 7, 8]]  # Features
-bb = [0, 1, 0, 1, 0]  # Target
+aa = [[1, 2.1, 2], [4, 3, 3], [10, 4, 5], [3, 5, 6], [9, 7, 8]]  # Features
+bb = [0, 1, 1, 0, 0]  # Target
 
 for item in aa:
     classify(w, b, item)
 
 
 '''
-
 ~~~~~~~~~~~~
 PROBLEM INFO
 ~~~~~~~~~~~~
@@ -69,12 +71,11 @@ PROBLEM INFO
 | method    | exact    | tot        | [3, 9]            |            |                    |
 ~~~~~~~~~~~~
 
-objective:  1.2744287658e-26
+objective:  5.6118960513e-32
 status:  optimal
 Input = [1, 2.1, 2] -> Output = 0
-Input = [1.9, 3, 3] -> Output = 1
-Input = [3.2, 4, 5] -> Output = 1
-Input = [4.1, 5, 6] -> Output = 1
-Input = [4.9, 7, 8] -> Output = 0
-
+Input = [4, 3, 3] -> Output = 1
+Input = [10, 4, 5] -> Output = 1
+Input = [3, 5, 6] -> Output = 0
+Input = [9, 7, 8] -> Output = 1
 '''

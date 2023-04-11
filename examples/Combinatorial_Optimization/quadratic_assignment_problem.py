@@ -42,18 +42,17 @@ for i in I:
     m.con(sum(x[i, j] for j in J) == 1)
 
 # Solve
-m.sol(['min'], 'cplex',log=True)
+m.sol(['min'], 'cplex',show_log=True, time_limit=0.01, save_model='model.lp')
 m.inf()
 m.dis_obj()
 m.dis_status()
-
+m.report()
 # Display
 for i, j in sets(I, J):
     if m.get(x[i, j]) == 1:
         print(f"agent {i} assigned to job {j}")
 
 '''
-
 ~~~~~~~~~~~~
 PROBLEM INFO
 ~~~~~~~~~~~~
@@ -72,6 +71,5 @@ agent 0 assigned to job 2
 agent 1 assigned to job 3
 agent 2 assigned to job 0
 agent 3 assigned to job 1
-
 
 '''

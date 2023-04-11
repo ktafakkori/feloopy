@@ -3,7 +3,7 @@ from feloopy import *
 def argmax(x): return max(range(len(x)), key=lambda i: x[i])
 
 #Classification function
-def classify(x,z,a): print(f"Input = {a} -> Output = {argmax([((1+2.73**(-(sum(a[i]*x[j][i] for i in range(len(a))) + z[j])))**(-1)) for j in range(len(x))])}")
+def classify(x,z,a): print(f"Input = {a} -> Output = {argmax([((1+exponent(-(sum(a[i]*x[j][i] for i in range(len(a))) + z[j])))**(-1)) for j in range(len(x))])}")
 
 #Training dataset
 a = [[1,2,2],[2,3,3],[3,4,5],[4,5,6],[5,7,8]] #Features
@@ -11,9 +11,9 @@ b = [ 0     , 1     , 2     , 3     , 4     ] #Target
 lam = 0 #Regularization factor
 
 #Defining sets based on input data:
-C = range(5) #Classes
-U = range(len(a[0])) #Features
-T = range(len(b)) #Observations
+C = is_a_set(5) #Classes
+U = is_a_set(len(a[0])) #Features
+T = is_a_set(len(b)) #Observations
 
 save_b = tuple(b)
 
@@ -37,7 +37,7 @@ for j in C:
     
     #Optimization model
     m.obj(sum((g[t]-b[t])**2 for t in T) + lam*sum(x[i]**2 for i in U))
-    for t in T: m.con(g[t] == (1+2.73**(-(sum(a[t][i]*x[i] for i in U) + z)))**(-1))
+    for t in T: m.con(g[t] == (1+m.exponent(-(sum(a[t][i]*x[i] for i in U) + z)))**(-1))
 
     #Solve
     m.sol(['min'], 'ipopt')
@@ -81,12 +81,11 @@ PROBLEM INFO
 | method    | exact    | tot        | [3, 9]            |            |                    |
 ~~~~~~~~~~~~
 
-objective:  1.2359071965e-27
+objective:  4.0088850414e-30
 status:  optimal
 Input = [1, 2.1, 2] -> Output = 0
 Input = [1.9, 3, 3] -> Output = 1
 Input = [3.2, 4, 5] -> Output = 3
 Input = [4.1, 5, 6] -> Output = 3
 Input = [4.9, 7, 8] -> Output = 4
-
 '''

@@ -1,7 +1,7 @@
 
 from feloopy import *
 
-m = model('exact','production_plan','cplex')
+m = model('exact','production_plan','pulp')
 
 I  = m.set(10) #Set of items in product portfolio
 R  = m.set(3) #Set of resources
@@ -17,7 +17,7 @@ m.obj(sum(p[i]*x[i] for i in I))
 for r in R:
     m.con(sum(a[i,r]*x[i] for i in I) <= b[r])
 
-m.sol(['max'],'cplex')
+m.sol(['max'],'cbc')
 
 m.dis_obj()
 
@@ -26,6 +26,6 @@ for i in I:
         print(f" produce {m.get(x[i])} units of item {i} and earn {p[i]*m.get(x[i])} dollars")
 
 for r in R:
-    if m.get(sum(a[i,r]*x[i] for i in I))>0:
+    if sum(a[i,r]*m.get(x[i]) for i in I)>0:
 
         print(f" utilization rate of resource {r}: {sum(a[i,r]*m.get(x[i]) for i in I)/b[r]*100}%")

@@ -14,7 +14,7 @@ def Get(model_object, result, input1, input2=None):
 
     case 'objective':
 
-        return result[0][1]
+        return result[0][0].value
 
     case 'time':
 

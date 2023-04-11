@@ -1,3 +1,12 @@
+from .classes.empty import *
+
+from .functions.set_operators import *
+from .functions.math_operators import *
+from .functions.count_operators import *
+from .functions.update_operators import *
+from .functions.random_operators import *
+from .functions.heuristic_operators import *
+
 import warnings
 import itertools as it
 import math as mt
@@ -5,229 +14,12 @@ import numpy as np
 from tabulate import tabulate as tb
 import sys
 
-product = mt.prod
-
-
-class EMPTY:
-
-    '''
-    A class to manage variables in the heuristic optimization process.
-    '''
-
-    def __init__(self, val):
-
-        self.val = val
-
-    def __call__(self, *args):
-
-        return 5
-
-    def __getitem__(self, *args):
-
-        return 5
-
-    def __setitem__(self, *args):
-        'none'
-
-    def __hash__(self):
-
-        return 5
-
-    def __str__(self):
-
-        return 5
-
-    def __repr__(self):
-
-        return 5
-
-    def __neg__(self):
-
-        return 5
-
-    def __pos__(self):
-
-        return 5
-
-    def __pow__(self, other):
-
-        return 5
-
-    def __bool__(self):
-
-        return 5
-
-    def __add__(self, other):
-
-        return 5
-
-    def __radd__(self, other):
-
-        return 5
-
-    def __sub__(self, other):
-
-        return 5
-
-    def __rsub__(self, other):
-
-        return 5
-
-    def __mul__(self, other):
-
-        return 5
-
-    def __rmul__(self, other):
-
-        return 5
-
-    def __div__(self, other):
-
-        return 5
-
-    def __rdiv__(self, other):
-
-        raise 5
-
-    def __le__(self, other):
-
-        return 5
-
-    def __ge__(self, other):
-
-        return 5
-
-    def __eq__(self, other):
-
-        return 5
-
-    def __ne__(self, other):
-
-        return 5
-
-def sets(*args):    
-
-    """ 
-    Used to mimic 'for all' in mathamatical modeling, for multiple sets.
-
-    Arguments:
-
-        * Multiple sets separated by commas.
-        * Required
-
-    Example: `for i,j in sets(I,J):`
-    
-    """
-
-    return it.product(*args)
-
-
-def count_variable(variable_dim, total_count, special_count):
-    """ For calculating total number of variables of each category.
-    """
-    total_count[0] += 1
-    special_count[0] += 1
-    special_count[1] += 1 if variable_dim == 0 else product(
-        len(dims) for dims in variable_dim)
-    total_count[1] += 1 if variable_dim == 0 else product(
-        len(dims) for dims in variable_dim)
-    return total_count, special_count
-
-
-def create_random_number_generator(key):
-    """ For creating a random number generator with a fixed special seed.
-    """
-    return np.random.default_rng(key)
-
-
-def update_variable_features(name, variable_dim, variable_bound, variable_counter_type, features):
-    """ For hierarchical updating the features of the problem.
-    """
-    match features['solution_method']:
-
-        case 'exact':
-
-            features['total_variable_counter'], features['variable_counter_type'] = count_variable(
-                variable_dim, features['total_variable_counter'], features[variable_counter_type])
-
-        case 'heuristic':
-
-            if features['agent_status'] == 'idle':
-
-                features['variable_spread'][name] = [
-                    features['total_variable_counter'][1], 0]
-                features['total_variable_counter'], features[variable_counter_type] = count_variable(
-                    variable_dim, features['total_variable_counter'], features[variable_counter_type])
-                features['variable_spread'][name][1] = features['total_variable_counter'][1]
-                if variable_counter_type == 'free_variable_counter':
-                    features['variable_type'][name] = 'fvar'
-                if variable_counter_type == 'binary_variable_counter':
-                    features['variable_type'][name] = 'bvar'
-                if variable_counter_type == 'integer_variable_counter':
-                    features['variable_type'][name] = 'ivar'
-                if variable_counter_type == 'positive_variable_counter':
-                    features['variable_type'][name] = 'pvar'
-                features['variable_bound'][name] = variable_bound
-                features['variable_dim'][name] = variable_dim
-
-    return features
-
-
-def generate_heuristic_variable(features, type, name, variable_dim, variable_bound, agent):
-
-    if features['agent_status'] == 'idle':
-        if features['vectorized']:
-            if variable_dim == 0:
-                return EMPTY(0)
-            else:
-                return np.random.rand(*tuple([100]+[len(dims) for dims in variable_dim]))
-        else:
-            if variable_dim == 0:
-                return EMPTY(0)
-            else:
-                return np.random.rand(*tuple([len(dims) for dims in variable_dim]))
-    else:
-        spread = features['variable_spread'][name]
-
-        if features['vectorized']:
-            if variable_dim == 0:
-                if type == 'bvar' or type == 'ivar':
-                    return np.round(variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0]))
-                elif type == 'pvar' or type == 'fvar':
-                    return variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])
-                else:
-                    return np.argsort(agent[:, spread[name][0]:spread[name][1]])
-            else:
-                if type == 'bvar' or type == 'ivar':
-                    var = np.round(
-                        variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0]))
-                    return np.reshape(var, [var.shape[0]]+[len(dims) for dims in variable_dim])
-                elif type == 'pvar' or type == 'fvar':
-                    var = variable_bound[0] + agent[:, spread[0]:spread[1]
-                                                    ] * (variable_bound[1] - variable_bound[0])
-                    return np.reshape(var, [var.shape[0]]+[len(dims) for dims in variable_dim])
-                else:
-                    return np.argsort(agent[:, spread[name][0]:spread[name][1]])
-        else:
-            if variable_dim == 1:
-                if type == 'bvar' or type == 'ivar':
-                    return np.round(variable_bound[0] + agent[spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0]))
-                elif type == 'pvar' or type == 'fvar':
-                    return variable_bound[0] + agent[spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])
-                else:
-                    return np.argsort(agent[spread[name][0]:spread[name][1]])
-            else:
-                if type == 'bvar' or type == 'ivar':
-                    return np.reshape(np.round(variable_bound[0] + agent[spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])), [len(dims) for dims in variable_dim])
-                elif type == 'pvar' or type == 'fvar':
-                    return np.reshape(variable_bound[0] + agent[spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0]), [len(dims) for dims in variable_dim])
-                else:
-                    return np.argsort(agent[spread[name][0]:spread[name][1]])
-
+warnings.filterwarnings("ignore")
 
 class Model:
 
     def __init__(self, solution_method, model_name, interface_name, agent=None, key=None):
+
         """ 
         Environment Definition
         ~~~~~~~~~~~~~~~~~~~~~~
@@ -262,7 +54,6 @@ class Model:
         self.dis = self.dis_var = self.display = self.show = self.print = self.display_variable = self.dis_variable
         self.status = self.show_status = self.dis_status
         self.objective_value = self.show_objective = self.display_objective = self.dis_obj
-
         self.RNG = create_random_number_generator(key)
 
         match solution_method:
@@ -290,8 +81,7 @@ class Model:
                 }
 
                 from .generators import model_generator
-                self.model = model_generator.generate_model(
-                    self.features['interface_name'])
+                self.model = model_generator.generate_model(self.features)
 
             case 'heuristic':
 
@@ -368,6 +158,37 @@ class Model:
                 return self.agent
             else:
                 return self.response
+            
+    def tvar(self, name, tensor_dim=0, tensor_bound=[None, None], type='free'):
+
+        """
+        Tensor Variable Definition
+
+        """
+        lens = [len(i) for i in tensor_dim]
+
+        var = np.empty(shape=tuple(lens),dtype=object)
+
+        variable_dim = 0
+        variable_bound = tensor_bound
+
+        if type=='free':
+
+            var[:] = self.fvar(name, variable_dim, variable_bound)
+
+        if type=='binary':
+
+            var[:] = self.bvar(name, variable_dim, variable_bound)
+
+        if type=='integer':
+
+            var[:] = self.ivar(name, variable_dim, variable_bound)
+
+        if type=='positive':
+
+            var[:] = self.pvar(name, variable_dim, variable_bound)
+
+        return var
 
     def bvar(self, name, variable_dim=0, variable_bound=[0, 1]):
         """
@@ -692,7 +513,7 @@ class Model:
                     else:
                         self.features['constraints'].append(expression)
 
-    def sol(self, directions=None, solver_name=None, solver_options=dict(), objective_id=0, email=None, debug=False, time_limit=28800, cpu_threads=None, absolute_gap=None, relative_gap=None, log=False, save_log=False, max_iterations=None):
+    def sol(self, directions=None, solver_name=None, solver_options=dict(), objective_id=0, email=None, debug=False, time_limit=None, cpu_threads=None, absolute_gap=None, relative_gap=None, show_log=False, save_log=False, save_model=False, max_iterations=None):
         """
         Solve Command Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -719,7 +540,8 @@ class Model:
         self.features['thread_count'] = cpu_threads
         self.features['absolute_gap'] = absolute_gap
         self.features['relative_gap'] = relative_gap
-        self.features['log'] = log
+        self.features['log'] = show_log
+        self.features['write_model_file'] = save_model
         self.features['save_solver_log'] = save_log
         self.features['email_address'] = email
         self.features['max_iterations'] = max_iterations
@@ -899,7 +721,7 @@ class Model:
 
         print("\n~~~~~~~~~~~\nDATE & TIME\n~~~~~~~~~~~")
         print(e.strftime("%Y-%m-%d %H:%M:%S"))
-        print(e.strftime("%a, %variable_bound %d, %Y"))
+        print(e.strftime("%a, %b %d, %Y"))
 
         try:
             print()
@@ -921,14 +743,125 @@ class Model:
 
     def abs(self, input):
 
-        if self.features['interface_name'] == 'cplex_cp':
+        if self.features['interface_name'] in ['cplex_cp', 'gekko']:
 
             return self.model.abs(input)
-    
+            
         else:
 
             return abs(input)
+
+    def acos(self,input):
+
+        """
+
+        Inverse cosine
+
+        """
+
+        if self.features['interface_name'] == 'gekko':
+
+            return self.model.acos(input)
+
+    def acosh(self,input):
         
+        """
+
+        Inverse hyperbolic cosine
+
+        """
+
+        if self.features['interface_name'] == 'gekko':
+
+            return self.model.acosh(input)
+        
+    def asin(self,input):
+        
+        """
+
+        Inverse sine
+
+        """
+
+        if self.features['interface_name'] == 'gekko':
+
+            return self.model.acos(input)  
+
+    def asinh(self,input):
+        
+        """
+
+        Inverse hyperbolic sine
+
+        """
+
+        if self.features['interface_name'] == 'gekko':
+
+            return self.model.acos(input)       
+
+    def atan(self,input):
+        
+        """
+
+        Inverse tangent
+
+        """
+
+        if self.features['interface_name'] == 'gekko':
+
+            return self.model.acos(input)     
+
+    def atanh(self,input):
+        
+        """
+
+        Inverse hyperbolic tangent
+
+        """
+
+        if self.features['interface_name'] == 'gekko':
+
+            return self.model.atanh(input)   
+              
+
+    def cos(self,input):
+
+        """
+
+        Cosine
+        
+        """
+
+        if self.features['interface_name'] == 'gekko':
+
+            return self.model.cos(input)     
+        
+    def erf(self,input):
+
+        """
+
+        Error function
+        
+        """
+
+        if self.features['interface_name'] == 'gekko':
+
+            return self.model.erf(input)   
+        
+    def erfc(self,input):
+
+        """
+
+        complementary error function
+
+        """
+        if self.features['interface_name'] == 'gekko':
+
+            return self.model.erfc(input)   
+
+
+        
+
     def plus(self, input1, input2):
     
         if self.features['interface_name'] == 'cplex_cp':
@@ -1056,17 +989,112 @@ class Model:
 
     def log(self, input):
 
-        if self.features['interface_name'] == 'cplex_cp':
+        """
+
+        Natural Logarithm
+
+        """
+
+        if self.features['interface_name'] in ['cplex_cp']:
 
             return self.model.log(input)
 
+        elif self.features['interface_name'] in ['gekko']:
+
+            return self.model.log(input)
+               
         else:
 
             return np.log(input)
 
+    def log10(self, input):
+
+        """
+
+        Logarithm Base 10
+
+        """
+
+        if self.features['interface_name'] in ['gekko']:
+
+            return self.model.log10(input)
+
+    def sin(self,input):
+
+        """
+        
+        Sine
+
+        """
+
+        if self.features['interface_name'] in ['gekko']:
+
+            return self.model.sin(input)
+
+
+    def sinh(self,input):
+
+        """
+        
+        Hyperbolic sine
+
+        """
+
+        if self.features['interface_name'] in ['gekko']:
+
+            return self.model.sinh(input)
+        
+    def sqrt(self, input):
+
+        """
+        
+        Square root
+        
+        """  
+
+        if self.features['interface_name'] in ['gekko']:
+
+            return self.model.sqrt(input)
+
+    def tan(self,input):
+
+        """
+        
+        Tangent
+        
+        """
+
+        if self.features['interface_name'] in ['gekko']:
+
+            return self.model.tan(input)
+
+    def tanh(self,input):
+
+        """
+        
+        Hyperbolic tangent
+        
+        """
+
+        if self.features['interface_name'] in ['gekko']:
+
+            return self.model.tanh(input)          
+
+    def sigmoid(self,input):
+
+        """
+        
+        Sigmoid function
+        
+        """
+
+        if self.features['interface_name'] in ['gekko']:
+
+            return self.model.sigmoid(input) 
+        
     def exponent(self, input):
 
-        if self.features['interface_name'] == 'cplex_cp':
+        if self.features['interface_name'] in ['cplex_cp', 'gekko']:
 
             return self.model.exp(input)
 
@@ -1149,7 +1177,7 @@ class Model:
         if self.features['interface_name'] == 'cplex_cp':
 
             return self.model.if_then(input1, input2)
-
+            
         else:
 
             if input1:
@@ -1515,7 +1543,7 @@ class implement:
 
         print("\n~~~~~~~~~~~\nDATE & TIME\n~~~~~~~~~~~")
         print(e.strftime("%Y-%m-%d %H:%M:%S"))
-        print(e.strftime("%a, %variable_bound %d, %Y"))
+        print(e.strftime("%a, %b %d, %Y"))
 
         print()
         self.inf()
@@ -1526,4 +1554,4 @@ class implement:
         print("~~~~~~~~~\n")
 
 
-construct = implement
+construct = implement        

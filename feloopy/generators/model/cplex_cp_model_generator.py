@@ -1,6 +1,8 @@
 import cplex
 from docplex.cp.model import CpoModel as CPLEXMODEL
 
-def generate_model():
+def generate_model(features):
 
-    return CPLEXMODEL(name="None")
+
+
+    return CPLEXMODEL(name=features['model_name'])

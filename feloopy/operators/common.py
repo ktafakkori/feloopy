@@ -7,10 +7,68 @@ import numpy as np
 import itertools as it
 import matplotlib.style as style
 import matplotlib.pyplot as plt
+import math as mt
 
 from tabulate import tabulate as tb
 
 sets = it.product
+
+def random_number_generator(key):
+
+    return np.random.default_rng(key)
+
+def make_set(input): 
+
+    if type(input)==int: 
+
+        return range(input) 
+    
+    else: 
+
+        return set(input)
+    
+def make_uniform_param(rng, lb, ub, variable_dim=0):
+
+    if variable_dim == 0:
+
+        return rng.uniform(low=lb, high=ub)
+    
+    else:
+
+        return rng.uniform(low=lb, high=ub, size=([len(i) for i in variable_dim]))
+
+def exponent(input):
+    return np.exp(input)
+
+def floor(input):
+    return np.floor(input)
+
+def ceil(input):
+    return np.ceil(input)
+
+def round(input):
+    return np.round(input)
+
+def log_of_base(input, base):
+    return mt.log(input, base)
+
+def log(input):
+    return np.log(input)
+
+def log10(input):
+    return np.log10(input)
+
+def sqrt(input):
+    return np.sqrt(input)
+
+def sin(input):
+    return np.sin(input)
+
+def cos(input):
+    return np.cos(input)
+
+def power(input1, input2):
+    return input1**input2
 
 def install(package):
     '''
@@ -67,6 +125,7 @@ def end_timer(show=False):
         print("Elapsed time (microseconds):", (EndTime-StartTime)*10**6)
         print("Elapsed time (hour:min:sec):", "%02d:%02d:%02d" % (hour, min, sec))
     return EndTime
+
 
 def load_from_excel(data_file: str, data_dimension: list, shape: list, indices_list: None, sheet_name: str, path=None):
         

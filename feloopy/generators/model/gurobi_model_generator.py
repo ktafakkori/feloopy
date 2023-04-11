@@ -1,5 +1,5 @@
 import gurobipy as gurobi_interface
 
-def generate_model():
+def generate_model(features):
     
-    return gurobi_interface.Model("None")
+    return gurobi_interface.Model(features['model_name'])
