@@ -31,6 +31,7 @@
 - [Prerequisits](#prerequisits)
 - [Installation](#installation)
 - [Documentation](#documentation)
+- [Benchmarks](#benchmarks)
 - [How to get started?](https://github.com/ktafakkori/feloopy/blob/main/documentation/Tutorial.md)
 - [Examples](https://github.com/ktafakkori/feloopy/tree/main/examples)
 - [Contributions](#contributions)
@@ -205,6 +206,17 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 [05]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Updates.md
 [06]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Syntax.md
 
+
+## Benchmarks
+
+Benchmark results for 34 exact optimization interfaces and solvers!
+
+Using FelooPy (v0.2.3x) for a 0/1 knapsack problem with 1000 items, the following results can be obtained. It is interesting to see that almost all of the interfaces and solvers can handle this optimization problem in less than 1 second.
+
+<p align="center">
+  <img src="images/benchmark-kp1000.png"
+    />
+</p>
 
 ## Contributions
 
