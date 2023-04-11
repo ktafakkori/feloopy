@@ -4,9 +4,7 @@ import plotly.express as px
 
 success_list = []
 error_list = []
-
 time = []
-input = []
 
 size = 1000
 for combination in exact_algorithms:
