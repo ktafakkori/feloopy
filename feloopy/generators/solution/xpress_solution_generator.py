@@ -31,7 +31,7 @@ def generate_solution(features):
 
         case False:
 
-            for constraint in model_constraints[0]:
+            for constraint in model_constraints:
                 model_object.addConstraint(constraint)
 
             match directions[objective_id]:

@@ -1,11 +1,11 @@
 from feloopy import *
 
 # Environment
-m = model('exact', 'tsp', 'cplex',key=0)
+m = model('exact', 'tsp', 'pyomo',key=0)
 
 # Sets
-N = m.set(10)
-U = m.set(9)
+N = m.set(90)
+U = m.set(89)
 
 # Parameters
 c = m.uniformint(1, 10, [N,N])
@@ -33,15 +33,20 @@ for i, j in sets(U, N):
         m.con(u[i] - u[j] + x[i, j] * len(N) <= len(N)-1)
 
 # Solve
+begin_timer()
 m.sol(['min'], 'cplex')
+end_timer(True)
 m.inf()
 m.dis_obj()
 m.dis_status()
 
 # Display
 for i, j in sets(N, N):
-    if m.get(x[i, j]) == 1:
-        print(f"when the traveler is at {i} goes to {j}")
+    if i!=j:
+        if m.get(x[i, j]) == 1:
+            print(f"when the traveler is at {i} goes to {j}")
+
+m.report()
 
 '''
 ~~~~~~~~~~~~

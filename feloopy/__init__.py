@@ -195,7 +195,7 @@ exact_algorithms = [
     ['ortools', 'scip'],
     ['ortools', 'xpress_'],
     ['ortools', 'xpress'],
-    ['ortools_cp', 'ortools'],
+#    ['ortools_cp', 'ortools'],
 
     #pulp
     ['pulp', 'cbc'],
@@ -207,7 +207,7 @@ exact_algorithms = [
     ['pulp', 'glpk'],
     ['pulp', 'gurobi_cmd'],
     ['pulp', 'gurobi'],
-    ['pulp', 'highs'],
+#    ['pulp', 'highs'],
     ['pulp', 'mipcl'],
     ['pulp', 'mosek'],
     ['pulp', 'pyglpk'],
@@ -241,7 +241,7 @@ exact_algorithms = [
 
     #cplex
     ['cplex', 'cplex'],
-    ['cplex_cp','cplex'],
+#    ['cplex_cp','cplex'],
 
     #linopy
     ['linopy', 'cbc'],

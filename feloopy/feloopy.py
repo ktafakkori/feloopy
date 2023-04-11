@@ -570,7 +570,7 @@ class Model:
                 try:
                     self.obj_val = self.get_objective()
                     self.status = self.get_status()
-                    self.cpt = self.get_time()
+                    self.cpt = self.get_time()*10**6
 
                 except:
                     "None"
@@ -691,12 +691,11 @@ class Model:
 
     def dis_time(self):
 
-        hour = round((self.get_time()/10**6), 3) % (24 * 3600) // 3600
-        min = round((self.get_time()/10**6), 3) % (24 * 3600) % 3600 // 60
-        sec = round((self.get_time()/10**6), 3) % (24 * 3600) % 3600 % 60
+        hour = round((self.get_time()), 3) % (24 * 3600) // 3600
+        min = round((self.get_time()), 3) % (24 * 3600) % 3600 // 60
+        sec = round((self.get_time()), 3) % (24 * 3600) % 3600 % 60
 
-        print(f"cpu time [{self.features['interface_name']}]: ", self.get_time(
-        ), '(microseconds)', "%02d:%02d:%02d" % (hour, min, sec), '(h, m, s)')
+        print(f"cpu time [{self.features['interface_name']}]: ", self.get_time()*10**6, '(microseconds)', "%02d:%02d:%02d" % (hour, min, sec), '(h, m, s)')
 
     def inf(self):
 
@@ -1490,14 +1489,21 @@ class implement:
 
     def dis_time(self):
 
-        hour = round(((self.end-self.start)/10**6), 3) % (24 * 3600) // 3600
-        min = round(((self.end-self.start)/10**6),
-                    3) % (24 * 3600) % 3600 // 60
-        sec = round(((self.end-self.start)/10**6), 3) % (24 * 3600) % 3600 % 60
-        print(f"cpu time [{self.InterfaceName}]: ", (self.end-self.start),
-              '(microseconds)', "%02d:%02d:%02d" % (hour, min, sec), '(h, m, s)')
+        hour = round(((self.end-self.start)), 3) % (24 * 3600) // 3600
+        min = round(((self.end-self.start)),3) % (24 * 3600) % 3600 // 60
+        sec = round(((self.end-self.start)), 3) % (24 * 3600) % 3600 % 60
+
+        print(f"cpu time [{self.InterfaceName}]: ", (self.end-self.start)*10**6, '(microseconds)', "%02d:%02d:%02d" % (hour, min, sec), '(h, m, s)')
 
     def get_time(self):
+
+        """
+
+        Used to get solution time in seconds.
+
+        
+        """
+
         return self.end-self.start
 
     def get_obj(self):

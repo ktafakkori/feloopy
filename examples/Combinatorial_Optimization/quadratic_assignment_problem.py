@@ -1,7 +1,7 @@
 from feloopy import *
 
 # Environment
-m = model('exact', 'qap', 'cplex')
+m = model('exact', 'qap', 'pyomo')
 
 # Data
 w = [[0, 3, 0, 2],

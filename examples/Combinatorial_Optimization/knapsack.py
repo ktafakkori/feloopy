@@ -1,7 +1,7 @@
 from feloopy import *
 
 # Environment
-m = model('exact', 'kp', 'cvxpy')
+m = model('exact', 'kp', 'pulp')
 
 # Sets
 J = range(7)  # Set of the items
@@ -25,7 +25,9 @@ for j in J:
     m.con(x[j]>=0)
 
 # Solve
-m.sol(['max'], 'gurobi',show_log=True)
+begin_timer()
+m.sol(['max'], 'highs',show_log=True)
+end_timer(show=True)
 m.inf()
 m.dis_obj()
 m.dis_status()
@@ -33,6 +35,7 @@ m.dis_status()
 # Display
 for j in J:
     print(f"item {j} is {m.get(x[j])}")
+
 
 m.report()
 

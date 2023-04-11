@@ -116,7 +116,7 @@ def end_timer(show=False):
     '''
     global EndTime
     EndTime = timeit.default_timer()
-    sec = round((EndTime - StartTime), 3)% (24 * 3600)
+    sec = round(EndTime - StartTime)% (24 * 3600)
     hour = sec // 3600
     sec %= 3600
     min = sec // 60

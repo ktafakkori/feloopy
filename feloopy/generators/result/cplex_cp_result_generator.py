@@ -18,4 +18,4 @@ def Get(model_object, result, input1, input2=None):
 
     case 'time':
 
-        return (result[1][1]-result[1][0])*10**6
+        return (result[1][1]-result[1][0])
