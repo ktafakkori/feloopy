@@ -216,7 +216,7 @@ pip install -U git+https://github.com/ktafakkori/feloopy
     />
 </p>
 
-2| Traveling Salesperson Problem | Benchmark results for 16 exact optimization interfaces and solvers: Using FelooPy (v0.2.3x), I solved the Traveling Salesperson Problem with 50 cities in less than 1 second. The Miller-Tucker-Zemlin formulation was used for this problem.
+2| Traveling Salesperson Problem | Benchmark results for 16 exact optimization interfaces and solvers: I used FelooPy (v0.2.3x) to solve the Traveling Salesperson Problem with 50 cities in under a second, using the Miller-Tucker-Zemlin formulation. It seems that the solution time also depends on the interface, not just the solver.
 
 <p align="center">
   <img src="images/benchmark-tsp50.png"
