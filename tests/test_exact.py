@@ -14,7 +14,7 @@ for combination in exact_algorithms:
     m = model('exact', 'kp', combination[0], key=0)
 
     # Sets
-    J = range(100)  # Set of the items
+    J = range(size)  # Set of the items
 
     # Parameters
     w = m.uniform(10,30,[J])  # Weight of the items
