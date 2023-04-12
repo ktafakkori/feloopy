@@ -23,6 +23,17 @@ def generate_solution(features):
     email = features['email_address']
     max_iterations= features['max_iterations']
     solver_options= features['solver_options']
+
+    if log:
+
+        ""
+    
+    else:
+
+        msg_lev=pymprog_interface.glpk.GLP_MSG_OFF
+
+    if time_limit!=None:
+        tmlim = time_limit
     
     if solver_name not in pymprog_solver_selector.keys():
         raise RuntimeError("Using solver '%s' is not supported by 'pymprog'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
@@ -41,7 +52,7 @@ def generate_solution(features):
             for constraint in model_constraints:
                 constraint
             time_solve_begin = timeit.default_timer()
-            result = pymprog_interface.solve()
+            result = pymprog_interface.solve(msg_lev=msg_lev, tmlim= tmlim)
             time_solve_end = timeit.default_timer()
             generated_solution = result, [time_solve_begin, time_solve_end]
     

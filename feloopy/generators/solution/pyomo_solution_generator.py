@@ -131,6 +131,7 @@ def generate_solution(features):
                     solver_manager.options['mipgap'] = relative_gap
                 
                 if len(solver_options) == 0:
+                    
                     time_solve_begin = timeit.default_timer()
                     result = solver_manager.solve(model_object, tee=tee)
                     time_solve_end = timeit.default_timer()

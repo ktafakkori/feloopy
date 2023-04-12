@@ -176,9 +176,9 @@ heuristic_algorithms = ['OriginalEP',
 exact_algorithms = [
 
     #gekko
-    ['gekko', 'apopt'],
-    ['gekko', 'bpopt'],
-    ['gekko', 'ipopt'],
+ #   ['gekko', 'apopt'],
+ #   ['gekko', 'bpopt'],
+ #   ['gekko', 'ipopt'],
 
     #ortools
     ['ortools', 'bop'],
@@ -216,22 +216,22 @@ exact_algorithms = [
     ['pulp', 'xpress'],
 
     #cvxpy
-    ['cvxpy', 'qsqp'],
-    ['cvxpy', 'ecos'],
-    ['cvxpy', 'cvxopt'],
-    ['cvxpy', 'scs'],
-    ['cvxpy', 'highs'],
-    ['cvxpy', 'glop'],
-    ['cvxpy', 'glpk'],
-    ['cvxpy', 'glpk_mi'],
-    ['cvxpy', 'gurobi'],
-    ['cvxpy', 'mosek'],
-    ['cvxpy', 'cbc'],
-    ['cvxpy', 'cplex'],
-    ['cvxpy', 'nag'],
-    ['cvxpy', 'pdlp'],
-    ['cvxpy', 'scip'],
-    ['cvxpy', 'xpress'],
+    # ['cvxpy', 'qsqp'],
+    # ['cvxpy', 'ecos'],
+    # ['cvxpy', 'cvxopt'],
+    # ['cvxpy', 'scs'],
+    # ['cvxpy', 'highs'],
+    # ['cvxpy', 'glop'],
+    # ['cvxpy', 'glpk'],
+    # ['cvxpy', 'glpk_mi'],
+    # ['cvxpy', 'gurobi'],
+    # ['cvxpy', 'mosek'],
+    # ['cvxpy', 'cbc'],
+    # ['cvxpy', 'cplex'],
+    # ['cvxpy', 'nag'],
+    # ['cvxpy', 'pdlp'],
+    # ['cvxpy', 'scip'],
+    # ['cvxpy', 'xpress'],
 
     #cylp
     ['cylp','cbc'],

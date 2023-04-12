@@ -36,13 +36,13 @@ m.obj(sum(a[i, j, k, l]*x[i, j]*x[k, l] for i, j, k, l in sets(I, J, K, L)))
 
 # Constraints
 for j in J:
-    m.con(sum(x[i, j] for i in I) == 1)
+    m.con(sum(x[i, j] for i in I if i !=j) == 1)
 
 for i in I:
-    m.con(sum(x[i, j] for j in J) == 1)
+    m.con(sum(x[i, j] for j in J if j!=i) == 1)
 
 # Solve
-m.sol(['min'], 'cplex',show_log=True, time_limit=0.01, save_model='model.lp')
+m.sol(['min'], 'cplex',show_log=True, save_model='model.lp')
 m.inf()
 m.dis_obj()
 m.dis_status()

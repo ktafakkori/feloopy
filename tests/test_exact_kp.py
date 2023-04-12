@@ -14,13 +14,11 @@ for combination in exact_algorithms:
 
     m = model('exact', 'kp', combination[0], key=0)
 
-    # Sets
-    J = range(size)  # Set of the items
+    J = range(size)  
 
-    # Parameters
-    w = m.uniform(10,30,[J])  # Weight of the items
-    W = 1000  # Capacity of the knapsack
-    p = m.uniform(10,30,[J])  # Value of the items
+    w = m.uniform(10,30,[J]) 
+    W = 1000  
+    p = m.uniform(10,30,[J])
 
     x = m.bvar('x', [J])
 
@@ -37,9 +35,6 @@ for combination in exact_algorithms:
     try:
         m.sol(['max'], combination[1])
 
-        for j in J:
-            print(f"item {j} is {m.get(x[j])}")
-
         success_list.append(combination)
 
         time.append(m.get_time())
@@ -48,6 +43,8 @@ for combination in exact_algorithms:
 
         print(f"combination {combination} has errors")
         error_list.append(combination)
+
+        pass
 
 print('success: ', success_list)
 print('error: ', error_list)
