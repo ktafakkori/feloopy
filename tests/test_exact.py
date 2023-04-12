@@ -28,7 +28,9 @@ for combination in exact_algorithms:
     m.con(sum(w[j]*x[j] for j in J) <= W)
 
     for j in J:
+
         m.con(x[j]<=1)
+
         m.con(x[j]>=0)
 
     try:
@@ -51,10 +53,8 @@ print('error: ', error_list)
 print(len(time))
 print(len(success_list))
 
-
 for i in range(len(success_list)):
     success_list[i]=str(success_list[i])
-
 
 fig = px.bar(x=success_list, y=time)
 fig.show()
