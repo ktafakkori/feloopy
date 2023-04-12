@@ -7,6 +7,7 @@ error_list = []
 time = []
 
 size = 1000
+
 for combination in exact_algorithms:
 
     print(combination)
