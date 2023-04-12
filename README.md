@@ -209,7 +209,7 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 
 ## Benchmarks
 
-1| Benchmark results for 34 exact optimization interfaces and solvers: Using FelooPy (v0.2.3x) for a 0/1 knapsack problem with 1000 items, the following results can be obtained. It is interesting to see that almost all of the interfaces and solvers can handle this optimization problem in less than 1 second. It should be noted that in this case, the knapsack constraint itself is speeding up the solution process! (why?)
+1| Benchmark results for 34 exact optimization interfaces and solvers: Using FelooPy (v0.2.3x) for a 0/1 knapsack problem with 1000 items, the following results can be obtained. It is interesting to see that almost all of the interfaces and solvers can handle this optimization problem in less than 1 second. It should be noted that in this case, the knapsack constraint itself is speeding up the solution process! (Why?)
 
 <p align="center">
   <img src="images/benchmark-kp1000.png"
