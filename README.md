@@ -83,7 +83,7 @@ m.report()
 m.dis_variable(x,y)
 ```
 
-- Using **single** optimization programming syntax (simple as above!) for **15** **exact** and **heuristic** optimization interfaces in Python.
+- Using **single** optimization programming syntax (simple as above!) for **17** **exact**, **constraint**, and **heuristic** optimization interfaces in Python.
 
 <div align="center">
 

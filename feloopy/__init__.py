@@ -175,12 +175,12 @@ heuristic_algorithms = ['OriginalEP',
 
 exact_algorithms = [
 
-    #gekko
- #   ['gekko', 'apopt'],
- #   ['gekko', 'bpopt'],
- #   ['gekko', 'ipopt'],
+    # gekko
+    ['gekko', 'apopt'],
+    ['gekko', 'bpopt'],
+    ['gekko', 'ipopt'],
 
-    #ortools
+    # ortools
     ['ortools', 'bop'],
     ['ortools', 'cbc'],
     ['ortools', 'clp'],
@@ -195,9 +195,8 @@ exact_algorithms = [
     ['ortools', 'scip'],
     ['ortools', 'xpress_'],
     ['ortools', 'xpress'],
-#    ['ortools_cp', 'ortools'],
 
-    #pulp
+    # pulp
     ['pulp', 'cbc'],
     ['pulp', 'choco'],
     ['pulp', 'coin'],
@@ -207,7 +206,7 @@ exact_algorithms = [
     ['pulp', 'glpk'],
     ['pulp', 'gurobi_cmd'],
     ['pulp', 'gurobi'],
-#    ['pulp', 'highs'],
+    ['pulp', 'highs'],
     ['pulp', 'mipcl'],
     ['pulp', 'mosek'],
     ['pulp', 'pyglpk'],
@@ -215,35 +214,37 @@ exact_algorithms = [
     ['pulp', 'xpress_py'],
     ['pulp', 'xpress'],
 
-    #cvxpy
-    # ['cvxpy', 'qsqp'],
-    # ['cvxpy', 'ecos'],
-    # ['cvxpy', 'cvxopt'],
-    # ['cvxpy', 'scs'],
-    # ['cvxpy', 'highs'],
-    # ['cvxpy', 'glop'],
-    # ['cvxpy', 'glpk'],
-    # ['cvxpy', 'glpk_mi'],
-    # ['cvxpy', 'gurobi'],
-    # ['cvxpy', 'mosek'],
-    # ['cvxpy', 'cbc'],
-    # ['cvxpy', 'cplex'],
-    # ['cvxpy', 'nag'],
-    # ['cvxpy', 'pdlp'],
-    # ['cvxpy', 'scip'],
-    # ['cvxpy', 'xpress'],
+    # cvxpy
+    ['cvxpy', 'osqp'],
+    ['cvxpy', 'ecos'],
+    ['cvxpy', 'cvxopt'],
+    ['cvxpy', 'scs'],
+    ['cvxpy', 'scipy'],
+    ['cvxpy', 'glop'],
+    ['cvxpy', 'glpk'],
+    ['cvxpy', 'glpk_mi'],
+    ['cvxpy', 'gurobi'],
+    ['cvxpy', 'mosek'],
+    ['cvxpy', 'cbc'],
+    ['cvxpy', 'cplex'],
+    ['cvxpy', 'nag'],
+    ['cvxpy', 'pdlp'],
+    ['cvxpy', 'scip'],
+    ['cvxpy', 'xpress'],
+    ['cvxpy', 'copt'],
+    ['cvxpy', 'clarabel'],
+    ['cvxpy', 'proxqp'],
 
-    #cylp
-    ['cylp','cbc'],
+    # cylp
+    ['cylp', 'cbc'],
 
-    #gurobi
+    # gurobi
     ['gurobi', 'gurobi'],
 
-    #cplex
+    # cplex
     ['cplex', 'cplex'],
-#    ['cplex_cp','cplex'],
 
-    #linopy
+    # linopy
     ['linopy', 'cbc'],
     ['linopy', 'glpk'],
     ['linopy', 'highs'],
@@ -251,61 +252,68 @@ exact_algorithms = [
     ['linopy', 'xpress'],
     ['linopy', 'cplex'],
 
-    #mip
+    # mip
     ['mip', 'cbc'],
 
-    #picos
+    # picos
     ['picos', 'cplex'],
     ['picos', 'cvxopt'],
-    ['picos','ecos'],
-    ['picos','glpk'],
-    ['picos','gurobi'],
-    ['picos','mosek'],
-    ['picos','mskfn'],
-    ['picos','osqp'],
-    ['picos','scip'],
-    ['picos','smcp'],
+    ['picos', 'ecos'],
+    ['picos', 'glpk'],
+    ['picos', 'gurobi'],
+    ['picos', 'mosek'],
+    ['picos', 'mskfn'],
+    ['picos', 'osqp'],
+    ['picos', 'scip'],
+    ['picos', 'smcp'],
 
-    #pymprog
+    # pymprog
     ['pymprog', 'glpk'],
-    
-    #pyomo
-    ['pyomo', 'baron'],
-    ['pyomo','cbc'],
-    ['pyomo','conopt'],
-    ['pyomo','cplex'],
-    ['pyomo','cplex_direct'],
-    ['pyomo','cplex_persistent'],
-    ['pyomo','cyipopt'],
-    ['pyomo','gams'],
-    ['pyomo','highs'],
-    ['pyomo','asl'],
-    ['pyomo','gdpopt'],
-    ['pyomo','gdpopt.gloa'],
-    ['pyomo','gdpopt.lbb'],
-    ['pyomo','gdpopt.loa'],
-    ['pyomo','gdpopt.ric'],
-    ['pyomo','glpk'],
-    ['pyomo','gurobi'],
-    ['pyomo','gurobi_direct'],
-    ['pyomo','gurobi_persistent'],
-    ['pyomo','ipopt'],
-    ['pyomo','mindtpy'],
-    ['pyomo','mosek'],
-    ['pyomo','mosek_direct'],
-    ['pyomo','mosek_persistent'],
-    ['pyomo','mpec_minlp'],
-    ['pyomo','mpec_nlp'],
-    ['pyomo','multistart'],
-    ['pyomo','path'],
-    ['pyomo','scip'],
-    ['pyomo','trustregion'],
-    ['pyomo','xpress'],
-    ['pyomo','xpress_direct'],
-    ['pyomo','xpress_persistent'],
 
-    #xpress
-    ['xpress','xpress'],
+    # pyomo
+    ['pyomo', 'baron'],
+    ['pyomo', 'cbc'],
+    ['pyomo', 'conopt'],
+    ['pyomo', 'cplex'],
+    ['pyomo', 'cplex_direct'],
+    ['pyomo', 'cplex_persistent'],
+    ['pyomo', 'cyipopt'],
+    ['pyomo', 'gams'],
+    ['pyomo', 'highs'],
+    ['pyomo', 'asl'],
+    ['pyomo', 'gdpopt'],
+    ['pyomo', 'gdpopt.gloa'],
+    ['pyomo', 'gdpopt.lbb'],
+    ['pyomo', 'gdpopt.loa'],
+    ['pyomo', 'gdpopt.ric'],
+    ['pyomo', 'glpk'],
+    ['pyomo', 'gurobi'],
+    ['pyomo', 'gurobi_direct'],
+    ['pyomo', 'gurobi_persistent'],
+    ['pyomo', 'ipopt'],
+    ['pyomo', 'mindtpy'],
+    ['pyomo', 'mosek'],
+    ['pyomo', 'mosek_direct'],
+    ['pyomo', 'mosek_persistent'],
+    ['pyomo', 'mpec_minlp'],
+    ['pyomo', 'mpec_nlp'],
+    ['pyomo', 'multistart'],
+    ['pyomo', 'path'],
+    ['pyomo', 'scip'],
+    ['pyomo', 'trustregion'],
+    ['pyomo', 'xpress'],
+    ['pyomo', 'xpress_direct'],
+    ['pyomo', 'xpress_persistent'],
+
+    # xpress
+    ['xpress', 'xpress'],
+]
+
+constraint_algorithms = [
+
+    ['cplex_cp', 'cplex'],
+    ['ortools_cp', 'ortools']
+
 ]
 
 

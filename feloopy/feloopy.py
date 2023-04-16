@@ -16,10 +16,10 @@ import sys
 
 warnings.filterwarnings("ignore")
 
+
 class Model:
 
     def __init__(self, solution_method, model_name, interface_name, agent=None, key=None):
-
         """ 
         Environment Definition
         ~~~~~~~~~~~~~~~~~~~~~~
@@ -39,8 +39,8 @@ class Model:
             * def instance(X): m = Model('heuristic', 'tsp', 'feloopy', X, 0)
         """
 
-        if solution_method =='constraint':
-        
+        if solution_method == 'constraint':
+
             solution_method = 'exact'
 
         self.binary_variable = self.add_binary_variable = self.bvar
@@ -146,7 +146,6 @@ class Model:
                     case 'feloopy': self.features['vectorized'] = True
 
     def __getitem__(self, agent):
-
         """To return required Model data.
         Args:
             agent (X): if you are using a heuristic optimization method, provide the input of the function here.
@@ -164,14 +163,14 @@ class Model:
                 return self.response
 
     def ptvar(self, name, variable_dim=0, variable_bound=[0, None]):
-
         """
 
         Positive Tensor Variable Definition
 
         """
 
-        self.features = update_variable_features(name, variable_dim, variable_bound, 'positive_variable_counter', self.features)
+        self.features = update_variable_features(
+            name, variable_dim, variable_bound, 'positive_variable_counter', self.features)
 
         match self.features['solution_method']:
 
@@ -188,14 +187,14 @@ class Model:
         return self.vars[name]
 
     def btvar(self, name, variable_dim=0, variable_bound=[0, None]):
-
         """
 
         Binary Tensor Variable Definition
 
         """
 
-        self.features = update_variable_features(name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
+        self.features = update_variable_features(
+            name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
 
         match self.features['solution_method']:
 
@@ -212,14 +211,14 @@ class Model:
         return self.vars[name]
 
     def itvar(self, name, variable_dim=0, variable_bound=[0, None]):
-
         """
 
         Integer Tensor Variable Definition
 
         """
 
-        self.features = update_variable_features(name, variable_dim, variable_bound, 'integer_variable_counter', self.features)
+        self.features = update_variable_features(
+            name, variable_dim, variable_bound, 'integer_variable_counter', self.features)
 
         match self.features['solution_method']:
 
@@ -236,14 +235,14 @@ class Model:
         return self.vars[name]
 
     def ftvar(self, name, variable_dim=0, variable_bound=[0, None]):
-
         """
 
         Free Tensor Variable Definition
 
         """
 
-        self.features = update_variable_features(name, variable_dim, variable_bound, 'free_variable_counter', self.features)
+        self.features = update_variable_features(
+            name, variable_dim, variable_bound, 'free_variable_counter', self.features)
 
         match self.features['solution_method']:
 
@@ -258,7 +257,7 @@ class Model:
                 return generate_heuristic_variable(self.features, 'tvar', name, variable_dim, variable_bound, self.agent)
 
         return self.vars[name]
-    
+
     def bvar(self, name, variable_dim=0, variable_bound=[0, 1]):
         """
         Binary Variable Definition
@@ -373,7 +372,6 @@ class Model:
                 return generate_heuristic_variable(self.features, 'fvar', name, variable_dim, variable_bound, self.agent)
 
     def dvar(self, name, variable_dim=0):
-        
         """
         Dependent Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -413,7 +411,6 @@ class Model:
                     return np.zeros([len(dims) for dims in variable_dim])
 
     def svar(self, name, variable_dim=0):
-
         """
         Sequential Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -432,8 +429,7 @@ class Model:
         self.features['variable_type'][name] = 'svar'
         return generate_heuristic_variable(self.features, 'fvar', name, variable_dim, [0, 1], self.agent)
 
-    def invar(self,name, variable_dim=0, variable_bound=[None, None, None]):
-        
+    def invar(self, name, variable_dim=0, variable_bound=[None, None, None]):
         """        
         Interval Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -445,8 +441,7 @@ class Model:
 
             return self.model.interval_var(start=variable_bound[0], size=variable_bound[1], end=variable_bound[2], name=name)
 
-
-    def sqvar(self,name, variable_dim=0, variable_bound=[None, None, None]):
+    def sqvar(self, name, variable_dim=0, variable_bound=[None, None, None]):
         """        
         Sequence Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -764,7 +759,8 @@ class Model:
         min = round((self.get_time()), 3) % (24 * 3600) % 3600 // 60
         sec = round((self.get_time()), 3) % (24 * 3600) % 3600 % 60
 
-        print(f"cpu time [{self.features['interface_name']}]: ", self.get_time()*10**6, '(microseconds)', "%02d:%02d:%02d" % (hour, min, sec), '(h, m, s)')
+        print(f"cpu time [{self.features['interface_name']}]: ", self.get_time(
+        )*10**6, '(microseconds)', "%02d:%02d:%02d" % (hour, min, sec), '(h, m, s)')
 
     def inf(self):
 
@@ -814,13 +810,12 @@ class Model:
         if self.features['interface_name'] in ['cplex_cp', 'gekko']:
 
             return self.model.abs(input)
-            
+
         else:
 
             return abs(input)
 
-    def acos(self,input):
-
+    def acos(self, input):
         """
 
         Inverse cosine
@@ -831,8 +826,7 @@ class Model:
 
             return self.model.acos(input)
 
-    def acosh(self,input):
-        
+    def acosh(self, input):
         """
 
         Inverse hyperbolic cosine
@@ -842,9 +836,8 @@ class Model:
         if self.features['interface_name'] == 'gekko':
 
             return self.model.acosh(input)
-        
-    def asin(self,input):
-        
+
+    def asin(self, input):
         """
 
         Inverse sine
@@ -853,10 +846,9 @@ class Model:
 
         if self.features['interface_name'] == 'gekko':
 
-            return self.model.acos(input)  
+            return self.model.acos(input)
 
-    def asinh(self,input):
-        
+    def asinh(self, input):
         """
 
         Inverse hyperbolic sine
@@ -865,10 +857,9 @@ class Model:
 
         if self.features['interface_name'] == 'gekko':
 
-            return self.model.acos(input)       
+            return self.model.acos(input)
 
-    def atan(self,input):
-        
+    def atan(self, input):
         """
 
         Inverse tangent
@@ -877,10 +868,9 @@ class Model:
 
         if self.features['interface_name'] == 'gekko':
 
-            return self.model.acos(input)     
+            return self.model.acos(input)
 
-    def atanh(self,input):
-        
+    def atanh(self, input):
         """
 
         Inverse hyperbolic tangent
@@ -889,35 +879,31 @@ class Model:
 
         if self.features['interface_name'] == 'gekko':
 
-            return self.model.atanh(input)   
-              
+            return self.model.atanh(input)
 
-    def cos(self,input):
-
+    def cos(self, input):
         """
 
         Cosine
-        
+
         """
 
         if self.features['interface_name'] == 'gekko':
 
-            return self.model.cos(input)     
-        
-    def erf(self,input):
+            return self.model.cos(input)
 
+    def erf(self, input):
         """
 
         Error function
-        
+
         """
 
         if self.features['interface_name'] == 'gekko':
 
-            return self.model.erf(input)   
-        
-    def erfc(self,input):
+            return self.model.erf(input)
 
+    def erfc(self, input):
         """
 
         complementary error function
@@ -925,51 +911,47 @@ class Model:
         """
         if self.features['interface_name'] == 'gekko':
 
-            return self.model.erfc(input)   
-
-
-        
+            return self.model.erfc(input)
 
     def plus(self, input1, input2):
-    
+
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.plus(input1,input2)
+            return self.model.plus(input1, input2)
 
         else:
 
             return input1+input2
-        
+
     def minus(self, input1, input2):
         """
-        
+
         Creates an expression that represents the product of two expressions.
 
         """
 
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.minus(input1,input2)
+            return self.model.minus(input1, input2)
 
         else:
 
-            return input1-input2     
-        
+            return input1-input2
+
     def times(self, input1, input2):
-
         """
-        
+
         Creates an expression that represents the product of two expressions.
 
         """
 
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.times(input1,input2)
+            return self.model.times(input1, input2)
 
         else:
 
-            return input1*input2 
+            return input1*input2
 
     def true(self):
 
@@ -990,9 +972,8 @@ class Model:
         else:
 
             return False
-    
-    def trunc(self, input):
 
+    def trunc(self, input):
         '''
         Builds the truncated integer parts of a float expression
         '''
@@ -1004,7 +985,7 @@ class Model:
         else:
 
             return "None"
-        
+
     def int_div(self, input1, input2):
 
         if self.features['interface_name'] == 'cplex_cp':
@@ -1029,7 +1010,7 @@ class Model:
 
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.mod(input1,input2)
+            return self.model.mod(input1, input2)
 
         else:
 
@@ -1049,14 +1030,13 @@ class Model:
 
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.power(input1,input2)
+            return self.model.power(input1, input2)
 
         else:
 
             return input1 ** input2
 
     def log(self, input):
-
         """
 
         Natural Logarithm
@@ -1070,13 +1050,12 @@ class Model:
         elif self.features['interface_name'] in ['gekko']:
 
             return self.model.log(input)
-               
+
         else:
 
             return np.log(input)
 
     def log10(self, input):
-
         """
 
         Logarithm Base 10
@@ -1087,10 +1066,9 @@ class Model:
 
             return self.model.log10(input)
 
-    def sin(self,input):
-
+    def sin(self, input):
         """
-        
+
         Sine
 
         """
@@ -1099,11 +1077,9 @@ class Model:
 
             return self.model.sin(input)
 
-
-    def sinh(self,input):
-
+    def sinh(self, input):
         """
-        
+
         Hyperbolic sine
 
         """
@@ -1111,55 +1087,51 @@ class Model:
         if self.features['interface_name'] in ['gekko']:
 
             return self.model.sinh(input)
-        
+
     def sqrt(self, input):
+        """
+
+        Square root
 
         """
-        
-        Square root
-        
-        """  
 
         if self.features['interface_name'] in ['gekko']:
 
             return self.model.sqrt(input)
 
-    def tan(self,input):
-
+    def tan(self, input):
         """
-        
+
         Tangent
-        
+
         """
 
         if self.features['interface_name'] in ['gekko']:
 
             return self.model.tan(input)
 
-    def tanh(self,input):
-
+    def tanh(self, input):
         """
-        
+
         Hyperbolic tangent
-        
+
         """
 
         if self.features['interface_name'] in ['gekko']:
 
-            return self.model.tanh(input)          
+            return self.model.tanh(input)
 
-    def sigmoid(self,input):
-
+    def sigmoid(self, input):
         """
-        
+
         Sigmoid function
-        
+
         """
 
         if self.features['interface_name'] in ['gekko']:
 
-            return self.model.sigmoid(input) 
-        
+            return self.model.sigmoid(input)
+
     def exponent(self, input):
 
         if self.features['interface_name'] in ['cplex_cp', 'gekko']:
@@ -1169,28 +1141,28 @@ class Model:
         else:
 
             return np.exp(input)
-    
+
     def count(self, input, value):
 
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.count(input,value)
+            return self.model.count(input, value)
 
         else:
 
             return input.count(value)
-        
+
     def scal_prod(self, input1, input2):
 
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.scal_prod(input1,input2)
+            return self.model.scal_prod(input1, input2)
 
         else:
 
             return np.dot(input1, input2)
-        
-    def range(self,x, lb=None, ub=None):
+
+    def range(self, x, lb=None, ub=None):
 
         if self.features['interface_name'] == 'cplex_cp':
 
@@ -1198,8 +1170,8 @@ class Model:
 
         else:
 
-            return [x>=lb] + [x<=ub]
-        
+            return [x >= lb] + [x <= ub]
+
     def floor(self, x):
 
         if self.features['interface_name'] == 'cplex_cp':
@@ -1209,8 +1181,8 @@ class Model:
         else:
 
             return np.floor(x)
-    
-    def ceil(self,x):
+
+    def ceil(self, x):
 
         if self.features['interface_name'] == 'cplex_cp':
 
@@ -1219,9 +1191,9 @@ class Model:
         else:
 
             return np.ceil(x)
-        
-    def round(self,x):
-        
+
+    def round(self, x):
+
         if self.features['interface_name'] == 'cplex_cp':
 
             return self.model.round(x)
@@ -1239,36 +1211,28 @@ class Model:
         else:
 
             return abs(exprs) >= value
-        
+
     def if_then(self, input1, input2):
 
         if self.features['interface_name'] == 'cplex_cp':
 
             return self.model.if_then(input1, input2)
-            
+
         else:
 
             if input1:
 
                 return input2
-        
-        
 
 
+# Alternatives for defining this class:
 
-        
-
-        
-def count_occurrences(arr, value):
-    return 
-
-
-model = add_model = create_environment = env = feloopy = Model
+model = add_model = create_environment = env = feloopy = representor_model = leaner_model = target_model = Model
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
-class implement:
+class Implement:
 
     def __init__(self, ModelFunction):
         '''
@@ -1559,18 +1523,18 @@ class implement:
     def dis_time(self):
 
         hour = round(((self.end-self.start)), 3) % (24 * 3600) // 3600
-        min = round(((self.end-self.start)),3) % (24 * 3600) % 3600 // 60
+        min = round(((self.end-self.start)), 3) % (24 * 3600) % 3600 // 60
         sec = round(((self.end-self.start)), 3) % (24 * 3600) % 3600 % 60
 
-        print(f"cpu time [{self.InterfaceName}]: ", (self.end-self.start)*10**6, '(microseconds)', "%02d:%02d:%02d" % (hour, min, sec), '(h, m, s)')
+        print(f"cpu time [{self.InterfaceName}]: ", (self.end-self.start)*10 **
+              6, '(microseconds)', "%02d:%02d:%02d" % (hour, min, sec), '(h, m, s)')
 
     def get_time(self):
-
         """
 
         Used to get solution time in seconds.
 
-        
+
         """
 
         return self.end-self.start
@@ -1634,4 +1598,6 @@ class implement:
         print("~~~~~~~~~\n")
 
 
-construct = implement        
+# Alternatives for defining this class:
+
+construct = make_model = implementor = implement = Implement
