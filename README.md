@@ -16,16 +16,16 @@
     />
 </p>
 
-
 # FelooPy: An integrated optimization environment for AutoOR in Python
 
 <div align="center">
 
- _Optimization in Python for **Operations Research** has never been this easy_!
+_Optimization in Python for **Operations Research** has never been this easy_!
 
 <div align="left">
 
 ## Table of Contents
+
 - [Introduction](#introduction)
 - [Features](#features)
 - [Prerequisits](#prerequisits)
@@ -40,6 +40,7 @@
 - [License](#license)
 
 #
+
 <div align="center">
 
 <div align="left">
@@ -58,8 +59,7 @@
 
 FelooPy (/fɛlupaɪ/, an acronym for feasible, logical, optimal, and Python), is both a hyper-optimization interface and an integrated optimization environment for automated operations research in Python. The name comes from the idea of proposing practical and applicable solutions. The name also emphasizes on feasibility and logicality before optimality. In another view, it emphasizes on the importance of "loops" in programming and algorithm development. Finally, it refers to the memory efficiency, by being similar to the name Floppy, in which the available memory is too low.
 
-Using FelooPy, operations research scientists can: provide their target, representor, or learner model to get results; move focus from coding to modeling, and from modeling to analytics; automate time-consuming, iterative tasks of optimization model development, debugging, and implementation; access to 259 single-objective heuristic and exact optimization algorithms; switch between optimization interfaces and algorithms with no need of code changes; and use tools such as sensitivity analysis, automated encoding and decoding for heuristic optimization, timers, etc.
-
+Using FelooPy, operations research scientists can: provide their target, representor, or learner model to get results; move focus from coding to modeling, and from modeling to analytics; automate time-consuming, iterative tasks of optimization model development, debugging, and implementation; access to 263 single-objective heuristic and exact optimization algorithms; switch between optimization interfaces and algorithms with no need of code changes; and use tools such as sensitivity analysis, automated encoding and decoding for heuristic optimization, timers, etc.
 
 ## Features
 
@@ -91,11 +91,11 @@ m.dis_variable(x,y)
 | :-------------- | :--------------------------------------------------------------------------------------------------------------------- |
 | exact           | `cplex`, `cvxpy`, `cylp`, `gekko`, `gurobi`, `linopy`, `mip`, `ortools`, `picos`, `pulp`, `pymprog`, `pyomo`, `xpress` |
 | heuristic       | `feloopy`, `mealpy`                                                                                                    |
+| constraint      | `cplex_cp`, `ortools_cp`                                                                                               |
 
 <div align="left">
 
-
-- Accessing **82** exact and **177** heuristic optimization algorithms (total: **259**) (see [solvers and interfaces][03]).
+- Accessing **86** exact and **177** heuristic optimization algorithms (total: **263**) (see [solvers and interfaces][03]).
 - Supporting **scalable** optimization for **large-scale** real-world problems.
 - Supporting **benchmarking** with various optimization solvers.
 - Supporting **multi-parameter** sensitivity analysis on a single objective.
@@ -105,16 +105,14 @@ Try this optimization package today and see its capabilities for yourself!
 
 ## Prerequisits
 
-* Knowledge of what interfaces and solvers are (see [interfaces and solvers for optimization in Python][10])
-* Knowledge of what operations research can do for you and your business (see [use cases][09]).
-* Basic knowledge of optimization techniques.
-* Python version `3.10.x`
-* Linux-based distributions, Windows or macOS.
-
+- Knowledge of what interfaces and solvers are (see [interfaces and solvers for optimization in Python][10])
+- Knowledge of what operations research can do for you and your business (see [use cases][09]).
+- Basic knowledge of optimization techniques.
+- Python version `3.10.x`
+- Linux-based distributions, Windows or macOS.
 
 [09]: https://ktafakkori.github.io/use-cases-of-operations-research-list/
 [10]: https://ktafakkori.github.io/optimization-packages-in-python-list/
-
 
 ## Installation
 
@@ -206,7 +204,6 @@ pip install -U git+https://github.com/ktafakkori/feloopy
 [05]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Updates.md
 [06]: https://github.com/ktafakkori/feloopy/blob/main/documentation/Syntax.md
 
-
 ## Benchmarks
 
 1| Knapsack Problem | Benchmark results for 34 exact optimization interfaces and solvers: Using FelooPy (v0.2.3x) for a 0/1 Knapsack Problem with 1000 items, the following results can be obtained. It is interesting to see that almost all of the interfaces and solvers can handle this optimization problem in less than 1 second. It should be noted that in this case, the knapsack constraint itself is speeding up the solution process! (Why?)
@@ -232,7 +229,6 @@ We welcome your contributions to this project, such as reporting bugs, submittin
 If you find this project useful, please consider giving it a star on GitHub (https://github.com/ktafakkori/feloopy) and introducing it to your colleagues to show your appreciation and help us continue its development! Starring a project makes it easier for you to find it again later, and also helps other people discover it. For more ways to support this project, please visit [this page][07].
 
 [07]: https://ktafakkori.github.io/support/
-
 
 ## Citation
 

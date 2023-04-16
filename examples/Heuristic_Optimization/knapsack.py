@@ -31,9 +31,10 @@ def instance(X):
 
 m = implement(instance)
 
-m.sol(penalty_coefficient=150)
+m.sol(penalty_coefficient=0)
 m.inf()
 m.dis_obj()
+m.dis_status()
 
 # Display
 for j in J:

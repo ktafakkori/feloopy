@@ -5,8 +5,13 @@ def Get(model_object, result, input1, input2=None):
    match input1:
 
     case 'variable':
+
+        if len(input2.value)==1:
         
-        return input2.value[0]
+            return input2.value[0]
+        
+        else:
+            return input2.value
     
     case 'status':
 

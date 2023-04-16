@@ -35,6 +35,7 @@ def generate_solution(features):
 
     if log:
         disp=True
+        
     else:
         disp=False
 

@@ -6,6 +6,7 @@ from .functions.count_operators import *
 from .functions.update_operators import *
 from .functions.random_operators import *
 from .functions.heuristic_operators import *
+from .functions.array_operators import *
 
 import warnings
 import itertools as it
@@ -38,6 +39,10 @@ class Model:
             * def instance(X): m = Model('heuristic', 'tsp', 'feloopy', X)
             * def instance(X): m = Model('heuristic', 'tsp', 'feloopy', X, 0)
         """
+
+        if solution_method =='constraint':
+        
+            solution_method = 'exact'
 
         self.binary_variable = self.add_binary_variable = self.bvar
         self.positive_variable = self.add_positive_variable = self.pvar
@@ -142,8 +147,8 @@ class Model:
                     case 'feloopy': self.features['vectorized'] = True
 
     def __getitem__(self, agent):
-        """To return required Model data.
 
+        """To return required Model data.
         Args:
             agent (X): if you are using a heuristic optimization method, provide the input of the function here.
 
@@ -158,38 +163,103 @@ class Model:
                 return self.agent
             else:
                 return self.response
-            
-    def tvar(self, name, tensor_dim=0, tensor_bound=[None, None], type='free'):
+
+    def ptvar(self, name, variable_dim=0, variable_bound=[0, None]):
 
         """
-        Tensor Variable Definition
+
+        Positive Tensor Variable Definition
 
         """
-        lens = [len(i) for i in tensor_dim]
 
-        var = np.empty(shape=tuple(lens),dtype=object)
+        self.features = update_variable_features(name, variable_dim, variable_bound, 'positive_variable_counter', self.features)
 
-        variable_dim = 0
-        variable_bound = tensor_bound
+        match self.features['solution_method']:
 
-        if type=='free':
+            case 'exact':
 
-            var[:] = self.fvar(name, variable_dim, variable_bound)
+                from .generators import variable_generator
 
-        if type=='binary':
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'ptvar', name, variable_bound, variable_dim)
 
-            var[:] = self.bvar(name, variable_dim, variable_bound)
+            case 'heuristic':
 
-        if type=='integer':
+                return generate_heuristic_variable(self.features, 'ptvar', name, variable_dim, variable_bound, self.agent)
 
-            var[:] = self.ivar(name, variable_dim, variable_bound)
+        return self.vars[name]
 
-        if type=='positive':
+    def btvar(self, name, variable_dim=0, variable_bound=[0, None]):
 
-            var[:] = self.pvar(name, variable_dim, variable_bound)
+        """
 
-        return var
+        Binary Tensor Variable Definition
 
+        """
+
+        self.features = update_variable_features(name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
+
+        match self.features['solution_method']:
+
+            case 'exact':
+
+                from .generators import variable_generator
+
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'btvar', name, variable_bound, variable_dim)
+
+            case 'heuristic':
+
+                return generate_heuristic_variable(self.features, 'btvar', name, variable_dim, variable_bound, self.agent)
+
+        return self.vars[name]
+
+    def itvar(self, name, variable_dim=0, variable_bound=[0, None]):
+
+        """
+
+        Integer Tensor Variable Definition
+
+        """
+
+        self.features = update_variable_features(name, variable_dim, variable_bound, 'integer_variable_counter', self.features)
+
+        match self.features['solution_method']:
+
+            case 'exact':
+
+                from .generators import variable_generator
+
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'itvar', name, variable_bound, variable_dim)
+
+            case 'heuristic':
+
+                return generate_heuristic_variable(self.features, 'itvar', name, variable_dim, variable_bound, self.agent)
+
+        return self.vars[name]
+
+    def ftvar(self, name, variable_dim=0, variable_bound=[0, None]):
+
+        """
+
+        Free Tensor Variable Definition
+
+        """
+
+        self.features = update_variable_features(name, variable_dim, variable_bound, 'free_variable_counter', self.features)
+
+        match self.features['solution_method']:
+
+            case 'exact':
+
+                from .generators import variable_generator
+
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'tvar', name, variable_bound, variable_dim)
+
+            case 'heuristic':
+
+                return generate_heuristic_variable(self.features, 'tvar', name, variable_dim, variable_bound, self.agent)
+
+        return self.vars[name]
+    
     def bvar(self, name, variable_dim=0, variable_bound=[0, 1]):
         """
         Binary Variable Definition
@@ -1510,12 +1580,17 @@ class implement:
         return self.BestReward
 
     def dis(self, input):
+
         if len(input) >= 2:
+
             print(input[0]+str(input[1])+': ', self.get(input))
+
         else:
+
             print(str(input[0])+': ', self.get(input))
 
     def dis_obj(self):
+
         print('objective: ', self.BestReward)
 
     def inf(self):
