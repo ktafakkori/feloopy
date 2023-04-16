@@ -6,7 +6,7 @@ setup(
 
     version='0.2.31',
 
-    description='FelooPy: An Integrated Optimization Environment (IOE) for AutoOR in Python.',
+    description='FelooPy: An Integrated Optimization Environment (IOE) for Automated operations research (AutoOR) in Python.',
 
     long_description=open('README.md', encoding="utf8").read(),
 
