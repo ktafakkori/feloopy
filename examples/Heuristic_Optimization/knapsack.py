@@ -103,6 +103,7 @@ m.sol(penalty_coefficient=150,number_of_times=1)
 m.inf()
 
 m.dis_obj()
+m.dis_status()
 
 # Display
 for j in J:

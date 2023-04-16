@@ -11,9 +11,9 @@ b = [ 0     , 1     , 2     , 3     , 4     ] #Target
 lam = 0 #Regularization factor
 
 #Defining sets based on input data:
-C = is_a_set(5) #Classes
-U = is_a_set(len(a[0])) #Features
-T = is_a_set(len(b)) #Observations
+C = range(5) #Classes
+U = range(len(a[0])) #Features
+T = range(len(b)) #Observations
 
 save_b = tuple(b)
 

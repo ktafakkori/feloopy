@@ -4,7 +4,7 @@ setup(
 
     name='feloopy',
 
-    version='0.2.31',
+    version='0.2.4',
 
     description='FelooPy: An Integrated Optimization Environment (IOE) for Automated operations research (AutoOR) in Python.',
 

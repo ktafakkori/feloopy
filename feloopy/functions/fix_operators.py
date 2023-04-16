@@ -8,10 +8,10 @@ def fix_dims(dim):
     
     elif dim!=0:
 
-        for i in dim:
+        for i in range(len(dim)):
 
-            if type(dim) != range:
+            if type(dim[i]) != range:
 
-                dim[i] = range(dim)
+                dim[i] = range(dim[i])
 
         return dim

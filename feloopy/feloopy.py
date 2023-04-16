@@ -230,10 +230,6 @@ class Model:
 
                 return variable_generator.generate_variable(self.features['interface_name'], self.model, 'ptvar', name, variable_bound, variable_dim)
 
-            case 'heuristic':
-
-                return generate_heuristic_variable(self.features, 'ptvar', name, variable_dim, variable_bound, self.agent)
-
         return self.vars[name]
 
     def itvar(self, name, variable_dim=0, variable_bound=[0, None]):
@@ -266,9 +262,6 @@ class Model:
 
                 return variable_generator.generate_variable(self.features['interface_name'], self.model, 'itvar', name, variable_bound, variable_dim)
 
-            case 'heuristic':
-
-                return generate_heuristic_variable(self.features, 'itvar', name, variable_dim, variable_bound, self.agent)
 
         return self.vars[name]
 
@@ -300,11 +293,7 @@ class Model:
 
                 from .generators import variable_generator
 
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'tvar', name, variable_bound, variable_dim)
-
-            case 'heuristic':
-
-                return generate_heuristic_variable(self.features, 'tvar', name, variable_dim, variable_bound, self.agent)
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'ftvar', name, variable_bound, variable_dim)
 
         return self.vars[name]
 
@@ -1199,7 +1188,7 @@ class Model:
 
     def report(self):
 
-        print("\n~~~~~~~~~~~~~~\nFELOOPY v0.2.3\n~~~~~~~~~~~~~~")
+        print("\n~~~~~~~~~~~~~~\nFELOOPY v0.2.4\n~~~~~~~~~~~~~~")
 
         import datetime
 
@@ -1999,7 +1988,7 @@ class Implement:
 
     def report(self):
 
-        print("\n~~~~~~~~~~~~~~\nFELOOPY v0.2.3\n~~~~~~~~~~~~~~")
+        print("\n~~~~~~~~~~~~~~\nFELOOPY v0.2.4\n~~~~~~~~~~~~~~")
 
         import datetime
 

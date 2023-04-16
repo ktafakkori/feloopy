@@ -137,7 +137,7 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
                     
                     generated_variable = model_object.addMVar(tuple([len(key) for key in variable_dim]),vtype=POSITIVE,lb=variable_bound[0], ub=variable_bound[1], name=variable_name)
 
-        case 'ptvar':
+        case 'ftvar':
 
             '''
 
@@ -149,9 +149,9 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
             else:
                 
-                if len(variable_dim) == 1:generated_variable = model_object.addMVar((len(variable_dim[0])),vtype=FREE,lb=variable_bound[0], ub=variable_bound[1], name=variable_name)
-                elif len(variable_dim) == 2:generated_variable = model_object.addMVar((len(variable_dim[0]),len(variable_dim[1])),vtype=FREE,lb=variable_bound[0], ub=variable_bound[1], name=variable_name)
-                else:generated_variable = model_object.addMVar(tuple([len(key) for key in variable_dim]),vtype=FREE,lb=variable_bound[0], ub=variable_bound[1], name=variable_name)
+                if len(variable_dim) == 1: generated_variable = model_object.addMVar((len(variable_dim[0])),vtype=FREE,lb=variable_bound[0], ub=variable_bound[1], name=variable_name)
+                elif len(variable_dim) == 2: generated_variable = model_object.addMVar((len(variable_dim[0]),len(variable_dim[1])),vtype=FREE,lb=variable_bound[0], ub=variable_bound[1], name=variable_name)
+                else: generated_variable = model_object.addMVar(tuple([len(key) for key in variable_dim]),vtype=FREE,lb=variable_bound[0], ub=variable_bound[1], name=variable_name)
 
 
         case 'btvar':

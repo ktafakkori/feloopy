@@ -47,7 +47,7 @@ _Optimization in Python for **Operations Research** has never been this easy_!
 
 ## News
 
-🎉 _Version 0.2.31 is out: Added new functionalities for convex and constraint optimization!_ 🎉
+🎉 _Version 0.2.4 is out: Added new functionalities!_ 🎉
 
 🎉 _The next version would focus on more facilities_ 🎉
 
@@ -142,7 +142,7 @@ _Note 3:_ To use FelooPy inside [Google Colab][gc] environment, please first run
 ### Method 1: Terminal command (e.g., CMD or GC):
 
 ```text
-pip install feloopy==0.2.31
+pip install feloopy==0.2.4
 ```
 
 ### Method 2: IDE command (e.g., Spyder):
@@ -150,7 +150,7 @@ pip install feloopy==0.2.31
 _Note_: After installation, this line of code should be deleted.
 
 ```text
-!pip install feloopy==0.2.31
+!pip install feloopy==0.2.4
 ```
 
 ### Method 3: Inside your Python code
@@ -171,7 +171,7 @@ install('feloopy')
 
 ### Method 4: From GitHub [Releases][a] section
 
-1. Download the [feloopy-0.2.31.zip][c] file.
+1. Download the [feloopy-0.2.4.zip][c] file.
 2. Extract it into a specific directory.
 3. Open a terminal in that directory.
 4. Type: `pip install .`
@@ -237,19 +237,19 @@ It is recommended to cite this GitHub repository or the Python library if you us
 - APA 7:
 
 ```text
-Tafakkori, K. (2023). FelooPy: An integrated optimization environment for AutoOR in Python (0.2.31) [Python Library]. https://github.com/ktafakkori/feloopy (Original work published 2023)
+Tafakkori, K. (2023). FelooPy: An integrated optimization environment for AutoOR in Python (0.2.4) [Python Library]. https://github.com/ktafakkori/feloopy (Original work published 2023)
 ```
 
 - LaTeX:
 
 ```text
-@software{ktafakkori2023Feb,
+@software{ktafakkori2023Apr,
   author       = {Keivan Tafakkori},
   title        = {{FelooPy: An integrated optimization environment for AutoOR in Python}},
   year         = {2023},
-  month        = feb,
+  month        = apr,
   publisher    = {GitHub},
-  version      = {v0.2.31},
+  version      = {v0.2.4},
   url          = {https://github.com/ktafakkori/feloopy/}
 }
 ```
