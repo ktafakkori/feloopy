@@ -6,7 +6,6 @@ from .functions.count_operators import *
 from .functions.update_operators import *
 from .functions.random_operators import *
 from .functions.heuristic_operators import *
-from .functions.array_operators import *
 
 import warnings
 import itertools as it
