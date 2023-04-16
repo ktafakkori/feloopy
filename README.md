@@ -47,9 +47,9 @@ _Optimization in Python for **Operations Research** has never been this easy_!
 
 ## News
 
-🎉 _Version 0.2.3 is out: More stable than ever!_ 🎉
+🎉 _Version 0.2.31 is out: Added new functionalities for convex and constraint optimization!_ 🎉
 
-🎉 _The next version would focus on solve facilities_ 🎉
+🎉 _The next version would focus on more facilities_ 🎉
 
 💻 _Quick install_: `pip install --upgrade feloopy`
 
@@ -59,7 +59,7 @@ _Optimization in Python for **Operations Research** has never been this easy_!
 
 FelooPy (/fɛlupaɪ/, an acronym for feasible, logical, optimal, and Python), is both a hyper-optimization interface and an integrated optimization environment for automated operations research in Python. The name comes from the idea of proposing practical and applicable solutions. The name also emphasizes on feasibility and logicality before optimality. In another view, it emphasizes on the importance of "loops" in programming and algorithm development. Finally, it refers to the memory efficiency, by being similar to the name Floppy, in which the available memory is too low.
 
-Using FelooPy, operations research scientists can: provide their target, representor, or learner model to get results; move focus from coding to modeling, and from modeling to analytics; automate time-consuming, iterative tasks of optimization model development, debugging, and implementation; access to 263 single-objective heuristic, exact, and constraint optimization algorithms; switch between optimization interfaces and algorithms with no need of code changes; and use tools such as sensitivity analysis, automated encoding and decoding for heuristic optimization, timers, etc.
+Using FelooPy, operations research scientists can: provide their target, representor, or learner model to get results; move focus from coding to modeling, and from modeling to analytics; automate time-consuming, iterative tasks of optimization model development, debugging, and implementation; access to 265 single-objective heuristic, exact, and constraint optimization algorithms; switch between optimization interfaces and algorithms with no need of code changes; and use tools such as sensitivity analysis, automated encoding and decoding for heuristic optimization, timers, etc.
 
 ## Features
 
@@ -95,7 +95,7 @@ m.dis_variable(x,y)
 
 <div align="left">
 
-- Accessing **86** exact, **2** constraint and **177** heuristic optimization algorithms (total: **263**) (see [solvers and interfaces][03]).
+- Accessing **86** exact, **2** constraint, and **177** heuristic optimization algorithms (total: **265**) (see [solvers and interfaces][03]).
 - Supporting **scalable** optimization for **large-scale** real-world problems.
 - Supporting **benchmarking** with various optimization solvers.
 - Supporting **multi-parameter** sensitivity analysis on a single objective.
@@ -142,7 +142,7 @@ _Note 3:_ To use FelooPy inside [Google Colab][gc] environment, please first run
 ### Method 1: Terminal command (e.g., CMD or GC):
 
 ```text
-pip install feloopy==0.2.3
+pip install feloopy==0.2.31
 ```
 
 ### Method 2: IDE command (e.g., Spyder):
@@ -150,7 +150,7 @@ pip install feloopy==0.2.3
 _Note_: After installation, this line of code should be deleted.
 
 ```text
-!pip install feloopy==0.2.3
+!pip install feloopy==0.2.31
 ```
 
 ### Method 3: Inside your Python code
@@ -171,7 +171,7 @@ install('feloopy')
 
 ### Method 4: From GitHub [Releases][a] section
 
-1. Download the [feloopy-0.2.3.zip][c] file.
+1. Download the [feloopy-0.2.31.zip][c] file.
 2. Extract it into a specific directory.
 3. Open a terminal in that directory.
 4. Type: `pip install .`
@@ -237,7 +237,7 @@ It is recommended to cite this GitHub repository or the Python library if you us
 - APA 7:
 
 ```text
-Tafakkori, K. (2023). FelooPy: An integrated optimization environment for AutoOR in Python (0.2.3) [Python Library]. https://github.com/ktafakkori/feloopy (Original work published 2023)
+Tafakkori, K. (2023). FelooPy: An integrated optimization environment for AutoOR in Python (0.2.31) [Python Library]. https://github.com/ktafakkori/feloopy (Original work published 2023)
 ```
 
 - LaTeX:
@@ -249,7 +249,7 @@ Tafakkori, K. (2023). FelooPy: An integrated optimization environment for AutoOR
   year         = {2023},
   month        = feb,
   publisher    = {GitHub},
-  version      = {v0.2.3},
+  version      = {v0.2.31},
   url          = {https://github.com/ktafakkori/feloopy/}
 }
 ```
