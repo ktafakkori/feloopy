@@ -316,8 +316,7 @@ constraint_algorithms = [
 
 ]
 
-
-feloopy_algorithms = [
+feloopy_heuristic_algorithms = [
     'GA',
     'SA',
     'TS',

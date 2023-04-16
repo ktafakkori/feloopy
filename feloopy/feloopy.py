@@ -6,6 +6,7 @@ from .functions.count_operators import *
 from .functions.update_operators import *
 from .functions.random_operators import *
 from .functions.heuristic_operators import *
+from .functions.fix_operators import *
 
 import warnings
 import itertools as it
@@ -16,40 +17,42 @@ import sys
 
 warnings.filterwarnings("ignore")
 
-
 class Model:
 
     def __init__(self, solution_method, model_name, interface_name, agent=None, key=None):
-        """ 
+
+        """
         Environment Definition
         ~~~~~~~~~~~~~~~~~~~~~~
-        To define the modeling environment.
+        This class is used to define the modeling environment.
 
         Args:
-            solution_method (str): what is your desired solution (optimization) method?
-            model_name (str): what is your Model name?
-            interface_name (str): what is the interface name?
-            agent (X, optional): if you are using a heuristic optimization method, provide the input of the function here. Defaults to None.
-            key (number, optional): what is your desired key for random number generator?. Defaults to None.
+            solution_method (str): The desired solution (optimization) method.
+            model_name (str): The name of this model.
+            interface_name (str): The interface name.
+            agent (X, optional): If you are using a heuristic optimization method, provide the input of the function here. Defaults to None.
+            key (number, optional): The desired key for random number generator. Defaults to None.
 
         Examples:
-            * m = Model('exact', 'tsp', 'ortools', None, None)
-            * m = Model('exact', 'tsp', 'ortools', key=0)
-            * def instance(X): m = Model('heuristic', 'tsp', 'feloopy', X)
-            * def instance(X): m = Model('heuristic', 'tsp', 'feloopy', X, 0)
+            m = Model('exact', 'tsp', 'ortools', None, None)
+            m = Model('exact', 'tsp', 'ortools', key=0)
+            def instance(X): m = Model('heuristic', 'tsp', 'feloopy', X)
+            def instance(X): m = Model('heuristic', 'tsp', 'feloopy', X, 0)
         """
 
-        if solution_method == 'constraint':
+        if solution_method == 'constraint': solution_method = 'exact'
 
-            solution_method = 'exact'
-
-        self.binary_variable = self.add_binary_variable = self.bvar
+        self.binary_variable = self.add_binary_variable = self.boolean_variable = self.add_boolean_variable = self.bvar
         self.positive_variable = self.add_positive_variable = self.pvar
         self.integer_variable = self.add_integer_variable = self.ivar
         self.free_variable = self.add_free_variable = self.fvar
         self.sequential_variable = self.add_sequential_variable = self.svar
+        self.positive_tensor_variable = self.add_positive_tensor_variable = self.ptvar
+        self.binary_tensor_variable = self.add_binary_tensor_variable = self.add_boolean_tensor_variable = self.boolean_tensor_variable = self.btvar
+        self.integer_tensor_variable = self.add_integer_tensor_variable = self.itvar
+        self.free_tensor_variable = self.add_free_tensor_variable = self.ftvar
         self.dependent_variable = self.add_dependent_variable = self.dvar
-        self.objective = self.add_objective = self.obj
+        self.objective = self.reward = self.hypothesis = self.fitness = self.goal = self.add_objective = self.obj
         self.constraint = self.equation = self.add_constraint = self.add_equation = self.con
         self.solve = self.implement = self.run = self.optimize = self.sol
         self.get_obj = self.get_objective
@@ -58,7 +61,7 @@ class Model:
         self.dis = self.dis_var = self.display = self.show = self.print = self.display_variable = self.dis_variable
         self.status = self.show_status = self.dis_status
         self.objective_value = self.show_objective = self.display_objective = self.dis_obj
-        self.RNG = create_random_number_generator(key)
+        self.random = create_random_number_generator(key)
 
         match solution_method:
 
@@ -146,9 +149,12 @@ class Model:
                     case 'feloopy': self.features['vectorized'] = True
 
     def __getitem__(self, agent):
-        """To return required Model data.
+
+        """
+        Returns the required model data.
+
         Args:
-            agent (X): if you are using a heuristic optimization method, provide the input of the function here.
+            agent (X): If you are using a heuristic optimization method, provide the input of the function here.
 
         Examples:
             * def instance(X): return m[X]
@@ -162,15 +168,59 @@ class Model:
             else:
                 return self.response
 
+    def btvar(self, name, variable_dim=0, variable_bound=[0, 1]):
+
+        """
+        Binary Tensor Variable Definition
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        To define a binary tensor (N*M) variable.
+
+        Args:
+            name (str): What is the name of this variable?
+            variable_dim (list, optional): What are the dimensions of this variable? Defaults to 0.
+            variable_bound (list, optional): What are the bounds on this variable? Defaults to [0, 1].
+
+        Examples:
+            * x = btvar('x')
+            * x = btvar('x',[I,J])
+            * x = btvar('x',[I,J], [0, 1])
+        """
+
+        variable_dim = fix_dims(variable_dim)
+
+        self.features = update_variable_features(name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
+
+        match self.features['solution_method']:
+
+            case 'exact':
+
+                from .generators import variable_generator
+
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'btvar', name, variable_bound, variable_dim)
+
+        return self.vars[name]
+
     def ptvar(self, name, variable_dim=0, variable_bound=[0, None]):
-        """
 
+        """
         Positive Tensor Variable Definition
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        To define a positive tensor (N*M) variable.
 
+        Args:
+            name (str): What is the name of this variable?
+            variable_dim (list, optional): What are the dimensions of this variable? Defaults to 0.
+            variable_bound (list, optional): What are the bounds on this variable? Defaults to [0, None].
+
+        Examples:
+            * x = ptvar('x')
+            * x = ptvar('x',[I,J])
+            * x = ptvar('x',[I,J], [0, 100])
         """
 
-        self.features = update_variable_features(
-            name, variable_dim, variable_bound, 'positive_variable_counter', self.features)
+        variable_dim = fix_dims(variable_dim)
+
+        self.features = update_variable_features(name, variable_dim, variable_bound, 'positive_variable_counter', self.features)
 
         match self.features['solution_method']:
 
@@ -186,39 +236,27 @@ class Model:
 
         return self.vars[name]
 
-    def btvar(self, name, variable_dim=0, variable_bound=[0, None]):
-        """
-
-        Binary Tensor Variable Definition
-
-        """
-
-        self.features = update_variable_features(
-            name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
-
-        match self.features['solution_method']:
-
-            case 'exact':
-
-                from .generators import variable_generator
-
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'btvar', name, variable_bound, variable_dim)
-
-            case 'heuristic':
-
-                return generate_heuristic_variable(self.features, 'btvar', name, variable_dim, variable_bound, self.agent)
-
-        return self.vars[name]
-
     def itvar(self, name, variable_dim=0, variable_bound=[0, None]):
-        """
 
+        """
         Integer Tensor Variable Definition
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        To define an integer tensor (N*M) variable.
 
+        Args:
+            name (str): What is the name of this variable?
+            variable_dim (list, optional): What are the dimensions of this variable? Defaults to 0.
+            variable_bound (list, optional): What are the bounds on this variable? Defaults to [0, None].
+
+        Examples:
+            * x = itvar('x')
+            * x = itvar('x',[I,J])
+            * x = itvar('x',[I,J], [0, 100])
         """
 
-        self.features = update_variable_features(
-            name, variable_dim, variable_bound, 'integer_variable_counter', self.features)
+        variable_dim = fix_dims(variable_dim)
+
+        self.features = update_variable_features(name, variable_dim, variable_bound, 'integer_variable_counter', self.features)
 
         match self.features['solution_method']:
 
@@ -234,15 +272,27 @@ class Model:
 
         return self.vars[name]
 
-    def ftvar(self, name, variable_dim=0, variable_bound=[0, None]):
-        """
+    def ftvar(self, name, variable_dim=0, variable_bound=[None, None]):
 
+        """
         Free Tensor Variable Definition
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        To define a free tensor (N*M) variable.
 
+        Args:
+            name (str): What is the name of this variable?
+            variable_dim (list, optional): What are the dimensions of this variable? Defaults to 0.
+            variable_bound (list, optional): What are the bounds on this variable? Defaults to [None, None].
+
+        Examples:
+            * x = ftvar('x')
+            * x = ftvar('x',[I,J])
+            * x = ftvar('x',[I,J], [-100, 100])
         """
 
-        self.features = update_variable_features(
-            name, variable_dim, variable_bound, 'free_variable_counter', self.features)
+        variable_dim = fix_dims(variable_dim)
+
+        self.features = update_variable_features(name, variable_dim, variable_bound, 'free_variable_counter', self.features)
 
         match self.features['solution_method']:
 
@@ -259,15 +309,16 @@ class Model:
         return self.vars[name]
 
     def bvar(self, name, variable_dim=0, variable_bound=[0, 1]):
+
         """
         Binary Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
         To define a binary variable.
 
         Args:
-            name (str): what is the name of this variable?
-            variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
-            variable_bound (list, optional): what are bounds on this variable?. Defaults to [0, 1].
+            name (str): What is the name of this variable?
+            variable_dim (list, optional): What are the dimensions of this variable? Defaults to 0.
+            variable_bound (list, optional): What are the bounds on this variable? Defaults to [0, 1].
 
         Examples:
             * x = bvar('x')
@@ -275,8 +326,9 @@ class Model:
             * x = bvar('x', [I,J], [0, 1])
         """
 
-        self.features = update_variable_features(
-            name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
+        variable_dim = fix_dims(variable_dim)
+
+        self.features = update_variable_features(name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
 
         match self.features['solution_method']:
             case 'exact':
@@ -286,6 +338,7 @@ class Model:
                 return generate_heuristic_variable(self.features, 'bvar', name, variable_dim, variable_bound, self.agent)
 
     def pvar(self, name, variable_dim=0, variable_bound=[0, None]):
+
         """
         Positive Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -294,13 +347,15 @@ class Model:
         Args:
             name (str): what is the name of this variable?
             variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
-            variable_bound (list, optional): what are bounds on this variable?. Defaults to [0, 1].
+            variable_bound (list, optional): what are bounds on this variable?. Defaults to [0, None].
 
         Examples:
             * x = pvar('x')
             * x = pvar('x',[I,J])
             * x = pvar('x', [I,J], [0, 100])
         """
+
+        variable_dim = fix_dims(variable_dim)
 
         self.features = update_variable_features(
             name, variable_dim, variable_bound, 'positive_variable_counter', self.features)
@@ -313,6 +368,7 @@ class Model:
                 return generate_heuristic_variable(self.features, 'pvar', name, variable_dim, variable_bound, self.agent)
 
     def ivar(self, name, variable_dim=0, variable_bound=[0, None]):
+
         """
         Integer Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -321,7 +377,7 @@ class Model:
         Args:
             name (str): what is the name of this variable?
             variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
-            variable_bound (list, optional): what are bounds on this variable?. Defaults to [0, 1].
+            variable_bound (list, optional): what are bounds on this variable?. Defaults to [0, None].
 
         Examples:
             * x = ivar('x')
@@ -340,6 +396,7 @@ class Model:
                 return generate_heuristic_variable(self.features, 'ivar', name, variable_dim, variable_bound, self.agent)
 
     def fvar(self, name, variable_dim=0, variable_bound=[None, None]):
+
         """
         Free Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -348,7 +405,7 @@ class Model:
         Args:
             name (str): what is the name of this variable?
             variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
-            variable_bound (list, optional): what are bounds on this variable?. Defaults to [0, 1].
+            variable_bound (list, optional): what are bounds on this variable?. Defaults to [None, None].
 
         Examples:
             * x = fvar('x')
@@ -372,6 +429,7 @@ class Model:
                 return generate_heuristic_variable(self.features, 'fvar', name, variable_dim, variable_bound, self.agent)
 
     def dvar(self, name, variable_dim=0):
+
         """
         Dependent Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -411,6 +469,7 @@ class Model:
                     return np.zeros([len(dims) for dims in variable_dim])
 
     def svar(self, name, variable_dim=0):
+
         """
         Sequential Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -422,6 +481,7 @@ class Model:
 
         Examples:
             * x = svar('x',[I])
+
         """
 
         self.features = update_variable_features(
@@ -430,30 +490,392 @@ class Model:
         return generate_heuristic_variable(self.features, 'fvar', name, variable_dim, [0, 1], self.agent)
 
     def invar(self, name, variable_dim=0, variable_bound=[None, None, None]):
+
         """        
         Interval Variable Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        Used to define an interval variable for constraint programming.
+        
+        To define an interval variable (which is a constraint) for constraint programming. Can be used inside other constraints.
 
+        Notably: start + size == end.
+
+        Args:
+            name: The name of the interval variable.
+            variable_dim: The dimension of the interval variable (is ignored).
+            variable_bound: [start, size, end] for interval definiton. 
+       
         """
 
         if self.features['interface_name'] == 'cplex_cp':
 
             return self.model.interval_var(start=variable_bound[0], size=variable_bound[1], end=variable_bound[2], name=name)
 
-    def sqvar(self, name, variable_dim=0, variable_bound=[None, None, None]):
-        """        
-        Sequence Variable Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        Used to define an interval variable for constraint programming.
+        if self.features['interface_name'] == 'ortools_cp':
+
+            return self.model.NewIntervalVar(start=variable_bound[0], size=variable_bound[1], end=variable_bound[2], name=name)
+
+    def start_of(self, interval, absentValue=None):
+
+        """
+
+        To get the start of an interval variable. If it is absent, then the value of the expression is absentValue (zero by default).
 
         """
 
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.interval_var(start=variable_bound[0], size=variable_bound[1], end=variable_bound[2], name=name)
+            return self.model.start_of(interval, absentValue)
 
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def end_of(self, interval, absentValue=None):
+
+        """
+
+        To get the end of an interval variable. If it is absent, then the value of the expression is absentValue (zero by default).
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.end_of(interval, absentValue)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def length_of(self, interval, absentValue=None):
+
+        """
+
+        To get the length (end - start) of an interval variable. If it is absent, then the value of the expression is absentValue (zero by default).
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.length_of(interval, absentValue)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def size_of(self, interval, absentValue=None):
+
+        """
+
+        To get the size of an interval variable. If it is absent, then the value of the expression is absentValue (zero by default).
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.size_of(interval, absentValue)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def presence_of(self, interval):
+
+        """
+
+        To get the presence status of an interval variable. If interval is present then the value of the expression is 1; if interval is absent then the value is 0.
+
+        """
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.presence_of(interval)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def start_at_start(self, interval1, interval2, delay=None):
+
+        """
+        To constrain the delay between the starts of two interval variables.
+
+        If interval1 and interval2 are present, then interval interval2 must start exactly at start_of(interval1) + delay. 
+        
+        If interval1 or interval2 is absent, then the constraint is automatically satisfied.
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.start_at_start(interval1, interval2, delay)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def start_at_end(self, interval1, interval2, delay=None):
+
+        """
+        To constrain the delay between the start of one interval variable and end of another one.
+
+        If interval1 and interval2 are present then interval2 must end exactly at start_of(interval1) + delay. 
+        
+        If interval1 or interval2 is absent then the constraint is automatically satisfied.
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.start_at_end(interval1, interval2, delay)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def start_before_start(self, interval1, interval2, delay=None):
+
+        """
+
+        To constrain the minimum delay between starts of two interval variables.
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.start_before_start(interval1, interval2, delay)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def start_before_end(self, interval1, interval2, delay=None):
+
+        """
+
+        To constrain minimum delay between the start of one interval variable and end of another one.
+
+        """
+
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.start_before_end(interval1, interval2, delay)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def end_at_start(self, interval1, interval2, delay=None):
+
+        """
+        To constrain the delay between the end of one interval variable and start of another one.
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.end_at_start(interval1, interval2, delay)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def end_at_end(self, interval1, interval2, delay=None):
+
+        """
+
+        To constrain the delay between the ends of two interval variables
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.end_at_end(interval1, interval2, delay)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def end_before_start(self, interval1, interval2, delay=None):
+
+        """
+
+        To constrain minimum delay between the end of one interval variable and start of another one.
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.end_before_start(interval1, interval2, delay)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def end_before_end(self, interval1, interval2, delay=None):
+
+        """
+
+        To constrain the minimum delay between the ends of two interval variables.
+
+        """
+
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.end_before_end(interval1, interval2, delay)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def forbid_start(self, interval, function):
+
+        """
+
+        To forbid an interval variable to start during specified regions.
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.forbid_start(interval, function)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def forbid_end(self, interval, function):
+
+        """
+
+        To forbid an interval variable to end during specified regions.
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.forbid_end(interval, function)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def forbid_extent(self, interval, function):
+
+        """
+
+        To forbid an interval variable to overlap with specified regions.
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.forbid_extent(interval, function)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def overlap_length(self, interval1, interval2, absentValue=None):
+
+        """
+        To get the length of the overlap of two interval variables.
+        """
+        
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.overlap_length(interval1, interval2, absentValue)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""   
+
+    def start_eval(self, interval, function, absentValue=None):
+
+        """
+        To evaluate a segmented function at the start of an interval variable
+        """
+        
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.start_eval(interval, function, absentValue)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""   
+
+    def end_eval(self, interval, function, absentValue=None):
+
+        """
+        To evaluate a segmented function at the end of an interval variable
+        """
+        
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.end_eval(interval, function, absentValue)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""   
+
+    def size_eval(self, interval, function, absentValue=None):
+
+        """
+        To evaluate a segmented function on the size of an interval variable
+        """
+        
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.size_eval(interval, function, absentValue)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""    
+
+    def length_eval(self, interval, function, absentValue=None):
+
+        """
+        To evaluate a segmented function on the length of an interval variable
+        """
+        
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.length_eval(interval, function, absentValue)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""    
+
+    def span(self, interval, function, absentValue=None):
+
+        """
+        To create a span constraint between interval variables.
+        """
+        
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.span(interval, function, absentValue)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""    
+
+    def alternative(self, interval, array, cardinality=None):
+
+        """
+        To create an alternative constraint between interval variables.
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.alternative(interval, array, cardinality)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""       
+      
     def set(self, *size):
+
         """
         Set Definition
         ~~~~~~~~~~~~~~
@@ -479,9 +901,9 @@ class Model:
         """
 
         if variable_dim == 0:
-            return self.RNG.uniform(low=lb, high=ub)
+            return self.random.uniform(low=lb, high=ub)
         else:
-            return self.RNG.uniform(low=lb, high=ub, size=([len(i) for i in variable_dim]))
+            return self.random.uniform(low=lb, high=ub, size=([len(i) for i in variable_dim]))
 
     def uniformint(self, lb, ub, variable_dim=0):
         """
@@ -491,9 +913,9 @@ class Model:
         """
 
         if variable_dim == 0:
-            return self.RNG.integers(low=lb, high=ub)
+            return self.random.integers(low=lb, high=ub)
         else:
-            return self.RNG.integers(low=lb, high=ub+1, size=([len(i) for i in variable_dim]))
+            return self.random.integers(low=lb, high=ub+1, size=([len(i) for i in variable_dim]))
 
     def obj(self, expression, direction=None, label=None):
         """
@@ -1224,13 +1646,11 @@ class Model:
 
                 return input2
 
-
 # Alternatives for defining this class:
 
-model = add_model = create_environment = env = feloopy = representor_model = leaner_model = target_model = Model
+model = add_model = create_environment = env = feloopy = representor_model = leaner_model = target_model = op = Model
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
-
 
 class Implement:
 
@@ -1596,7 +2016,6 @@ class Implement:
         self.dis_obj()
         self.dis_time()
         print("~~~~~~~~~\n")
-
 
 # Alternatives for defining this class:
 
