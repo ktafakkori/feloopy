@@ -61,6 +61,13 @@ FelooPy (/fɛlupaɪ/, an acronym for feasible, logical, optimal, and Python), is
 
 Using FelooPy, operations research scientists can: provide their target, representor, or learner model to get results; move focus from coding to modeling, and from modeling to analytics; automate time-consuming, iterative tasks of optimization model development, debugging, and implementation; access to 265 single-objective heuristic, exact, and constraint optimization algorithms; switch between optimization interfaces and algorithms with no need of code changes; and use tools such as sensitivity analysis, automated encoding and decoding for heuristic optimization, timers, etc.
 
+```mermaid
+graph TD;
+    FelooPy-->Exact Optimization;
+    FelooPy-->Heuristic Optimization;
+    FelooPy-->Constraint Optimization;
+```
+
 ## Features
 
 Are you tired of wasting time and energy on debugging codes provided by chatbots for optimization in Python? Do you wish there was a better way to create reliable and efficient codes without hassle? Well, now there is! Introducing this new optimization package that does all the hard work for you! You don’t need to learn any new packages or debug any faulty codes. You can just focus on the creative aspects of modeling and analytics!
