@@ -1,5 +1,5 @@
 |FelooPy  | [![GitHub release](https://img.shields.io/badge/version-0.2.4-orange.svg)](https://github.com/ktafakkori/feloopy/releases) ![Release Date](https://img.shields.io/github/release-date/ktafakkori/feloopy.svg)  ![Downloads](https://img.shields.io/pypi/dm/feloopy.svg) [![Total Downloads](https://static.pepy.tech/personalized-badge/feloopy?period=total&units=international_system&left_color=grey&right_color=blue&left_text=users)](https://pepy.tech/project/feloopy) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) |
-| --- | --- |
+| :--- | :--- |
 | ![Image description](logo/logo1.png) | FelooPy (/fɛlupaɪ/, an acronym for feasible, logical, optimal, and Python), is both a hyper-optimization interface and an integrated optimization environment for automated operations research in Python. The name comes from the idea of proposing practical and applicable solutions. The name also emphasizes on feasibility and logicality before optimality. In another view, it emphasizes on the importance of "loops" in programming and algorithm development. Finally, it refers to the memory efficiency, by being similar to the name Floppy, in which the available memory is too low. |
 
 
