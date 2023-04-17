@@ -10,6 +10,11 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/ktafakkori/feloopy.svg)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true });
+</script>
+
 <p align="center">
   <img src="logo/feloopy-logo.png" 
   width=“80” height=“80”
