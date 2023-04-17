@@ -11,7 +11,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 <p align="center">
-  <img src="logo/feloopy.gif" 
+  <img src="logo/feloopy-logo.png" 
   width=“80” height=“80”
     />
 </p>
