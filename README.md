@@ -10,18 +10,11 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/ktafakkori/feloopy.svg)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-  mermaid.initialize({ startOnLoad: true });
-</script>
 
-<p align="center">
-  <img src="logo/feloopy-logo.png" 
-  width=“80” height=“80”
-    />
-</p>
+| | FelooPy: An integrated optimization environment for AutoOR in Python  |
+| --- | --- |
+| ![Image description](logo/logo1.png) | FelooPy (/fɛlupaɪ/, an acronym for feasible, logical, optimal, and Python), is both a hyper-optimization interface and an integrated optimization environment for automated operations research in Python. The name comes from the idea of proposing practical and applicable solutions. The name also emphasizes on feasibility and logicality before optimality. In another view, it emphasizes on the importance of "loops" in programming and algorithm development. Finally, it refers to the memory efficiency, by being similar to the name Floppy, in which the available memory is too low. |
 
-# FelooPy: An integrated optimization environment for AutoOR in Python
 
 <div align="center">
 
@@ -62,16 +55,10 @@ _Optimization in Python for **Operations Research** has never been this easy_!
 
 ## Introduction
 
-FelooPy (/fɛlupaɪ/, an acronym for feasible, logical, optimal, and Python), is both a hyper-optimization interface and an integrated optimization environment for automated operations research in Python. The name comes from the idea of proposing practical and applicable solutions. The name also emphasizes on feasibility and logicality before optimality. In another view, it emphasizes on the importance of "loops" in programming and algorithm development. Finally, it refers to the memory efficiency, by being similar to the name Floppy, in which the available memory is too low.
+
 
 Using FelooPy, operations research scientists can: provide their target, representor, or learner model to get results; move focus from coding to modeling, and from modeling to analytics; automate time-consuming, iterative tasks of optimization model development, debugging, and implementation; access to 265 single-objective heuristic, exact, and constraint optimization algorithms; switch between optimization interfaces and algorithms with no need of code changes; and use tools such as sensitivity analysis, automated encoding and decoding for heuristic optimization, timers, etc.
 
-```mermaid
-graph TD;
-    FelooPy-->Exact Optimization;
-    FelooPy-->Heuristic Optimization;
-    FelooPy-->Constraint Optimization;
-```
 
 ## Features
 
