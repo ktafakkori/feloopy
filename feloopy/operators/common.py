@@ -126,7 +126,6 @@ def end_timer(show=False):
         print("Elapsed time (hour:min:sec):", "%02d:%02d:%02d" % (hour, min, sec))
     return EndTime
 
-
 def load_from_excel(data_file: str, data_dimension: list, shape: list, indices_list: None, sheet_name: str, path=None):
         
         '''

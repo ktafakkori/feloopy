@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
 
     name='feloopy',
-
+    
     version='0.2.4',
 
     description='FelooPy: An Integrated Optimization Environment (IOE) for Automated operations research (AutoOR) in Python.',
