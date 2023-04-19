@@ -6,6 +6,7 @@
 
 ### **Features**
 
+* The simplest universal optimization programming language based on Python for exact, heuristic, and constraint optimization.
 
 <table>
 <tr>
@@ -14,15 +15,18 @@
 <tr>
 <td>
 
+*
+
+
 ```python
 from feloopy import *
-m = model('exact', 'simple_problem', 'cplex')
+m = model('exact', 'simple_problem', <interface>)
 x = m.pvar('x')
 y = m.ivar('y')
 m.obj(2*x+5*y)
 m.con(5*x+3*y <= 10)
 m.con(2*x+7*y <= 9)
-m.sol(['max'], 'cplex')
+m.sol(['max'], <solver>)
 m.report()
 m.dis(x,y)
 ```
@@ -33,13 +37,13 @@ m.dis(x,y)
 ```python
 from feloopy import *
 def instance(X):
-    m = model('heuristic', 'simple_problem', 'feloopy', X)
+    m = model('heuristic', 'simple_problem', <interface>, X)
     x = m.pvar('x',variable_bound=[0,10])
     y = m.ivar('y',variable_bound=[0,10])
     m.obj(2*x+5*y)
     m.con(5*x+3*y |l| 10)
     m.con(2*x+7*y |l| 9)
-    m.sol(['max'], 'GA')
+    m.sol(['max'], <solver>)
     return m[X]
 m = implement(instance)
 m.sol(penalty_coefficient=300)
@@ -53,21 +57,19 @@ m.dis(['y'])
     
 ```python
 from feloopy import *
-m = model('constraint', 'simple_problem', 'cplex_cp')
+m = model('constraint', 'simple_problem', <interface>)
 x = m.ivar('x')
 y = m.ivar('y')
-m.obj(2*x+5*y)
-m.con(5*x+3*y <= 10)
-m.con(2*x+7*y <= 9)
-m.sol(['max'], 'cplex')
+m.obj(m.plus(2*x,5*y))
+m.con(m.plus(5*x,3*y) <= 10)
+m.con(m.plus(2*x,7*y)<= 9)
+m.sol(['max'], <solver>)
 m.report()
 m.dis(x,y)
 ```
 </td>
 </tr>
 </table>
-
-
 
 
 ### **Installation**
