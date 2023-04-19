@@ -77,17 +77,6 @@ install('feloopy')
 </tr>
 
 <tr>
-<td> Git </td>
-<td>
-    
-`pip install -U git+https://github.com/ktafakkori/feloopy`
-</td>
-
-<td> Python 3.10 </td>
-
-</tr>
-
-<tr>
 <td> Colab </td>
 <td>
 
@@ -105,6 +94,17 @@ install('feloopy')
 !pip install feloopy==0.2.4
 ```
 
+</td>
+
+<td> Python 3.10 </td>
+
+</tr>
+
+<tr>
+<td> Git </td>
+<td>
+    
+`pip install -U git+https://github.com/ktafakkori/feloopy`
 </td>
 
 <td> Python 3.10 </td>
