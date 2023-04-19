@@ -70,6 +70,35 @@ m.dis(x,y)
 
 * Supporting 17 exact, constraint, and heuristic optimization interfaces and solvers, just by changing two parameters, `<interface>` and `<solver>`, in the above examples.
 
+
+* Supporting benchmarking with verios interfaces and solvers. 
+
+<table>
+<tr>
+<td> Exact optimization </td> <td> Heuristic optimization </td> <td> Constraint optimization </td>
+</tr>
+<tr>
+<td>
+
+```python
+from feloopy import *
+m = model('exact', 'simple_problem', <interface>)
+x = m.pvar('x')
+y = m.ivar('y')
+m.obj(2*x+5*y)
+m.con(5*x+3*y <= 10)
+m.con(2*x+7*y <= 9)
+m.sol(['max'], <solver>)
+m.report()
+m.dis(x,y)
+```
+
+</td>
+
+</tr>
+</table>
+
+
 ### **Installation**
 
 FelooPy and its dependencies should work on Linux-based distributions, Windows, or macOS. To install this Python library, you might follow one of the following methods. Note that the installed Python compiler version should be greater than or equal to 3.10.
@@ -182,6 +211,10 @@ install('feloopy')
 
 </div>
 
+### **Supporters**
 
+[![Stargazers repo roster for @ktafakkori/feloopy](https://reporoster.com/stars/notext/ktafakkori/feloopy)](https://github.com/ktafakkori/feloopy/stargazers)
+
+[![Forkers repo roster for @ktafakkori/feloopy](https://reporoster.com/forks/notext/ktafakkori/feloopy)](https://github.com/ktafakkori/feloopy/network/members)
 
 [c]: https://github.com/ktafakkori/feloopy/releases
