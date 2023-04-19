@@ -3,6 +3,7 @@
 | FelooPy                                            | [![version code](https://img.shields.io/badge/version-0.2.4-darkgreen.svg)](https://github.com/ktafakkori/feloopy/releases) [![number of users](https://static.pepy.tech/personalized-badge/feloopy?period=total&units=international_system&left_color=grey&right_color=darkgreen&left_text=users)](https://pepy.tech/project/feloopy) ![release date](https://img.shields.io/github/release-date/ktafakkori/feloopy?color=blue) [![monthly Downloads](https://static.pepy.tech/personalized-badge/feloopy?period=month&units=international_system&left_color=grey&right_color=blue&left_text=monthly%20downloads%20)](https://pepy.tech/project/feloopy) [![license type](https://img.shields.io/badge/license-MIT-darkred.svg)](https://opensource.org/licenses/MIT) |
 | :------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ![Image description](miscellaneous/logo/logo1.png) | FelooPy (pronounced /fɛlupaɪ/) is a free and open-source Python library for automated operations research. It serves as both a hyper-optimization interface and an integrated optimization environment. The name comes from the idea of suggesting practical and applicable solutions for systems, industries, and supply chains. It also references the importance of loops in programming and algorithm development, and draws similarities to the name "Floppy" to highlight memory efficiency. FelooPy helps operations research scientists achieve their goals using various target, representor, and learner models, shifting their focus from coding to modeling and analytics.   |
+|News | 🎉 _Version 0.2.4 is out: Added new functionalities!_ 🎉 |
 
 ### **Features**
 
@@ -197,6 +198,9 @@ If you find this project useful, please consider giving it a star on GitHub (htt
 
 [![Forks](https://reporoster.com/forks/notext/ktafakkori/feloopy)](https://github.com/ktafakkori/feloopy/network/members)
 
+## Contributions
+
+We welcome your contributions to this project, such as reporting bugs, submitting pull requests, testing changes, providing examples, and so on. We will acknowledge your contributions in the contributors section.
 
 ## Citation
 
@@ -223,3 +227,9 @@ Tafakkori, K. (2023). FelooPy: An integrated optimization environment for AutoOR
 
 [c]: https://github.com/ktafakkori/feloopy/releases
 [support]: https://ktafakkori.github.io/support/
+
+## License
+
+FelooPy is completely free and open-source and licensed under the [MIT][08] license.
+
+[08]: https://github.com/ktafakkori/feloopy/blob/main/LICENSE
