@@ -187,6 +187,8 @@ install('feloopy')
 
 ### **Supporters**
 
+If you find this project useful, please consider giving it a star on GitHub (https://github.com/ktafakkori/feloopy) and introducing it to your colleagues to show your appreciation and help us continue its development! Starring a project makes it easier for you to find it again later, and also helps other people discover it. For more ways to support this project, please visit [this page][support].
+
 - Stars:
 
 [![Stars](https://reporoster.com/stars/notext/ktafakkori/feloopy)](https://github.com/ktafakkori/feloopy/stargazers)
@@ -195,4 +197,29 @@ install('feloopy')
 
 [![Forks](https://reporoster.com/forks/notext/ktafakkori/feloopy)](https://github.com/ktafakkori/feloopy/network/members)
 
+
+## Citation
+
+It is recommended to cite this GitHub repository or the Python library if you use its facilities in your work, as it helps others reproduce the results of your research. You may also provide the specific version of this Python library that you used in your research or project.
+
+- APA 7:
+
+```text
+Tafakkori, K. (2023). FelooPy: An integrated optimization environment for AutoOR in Python [Python Library]. https://github.com/ktafakkori/feloopy (Original work published September 2022)
+```
+
+- LaTeX:
+
+```text
+@software{ktafakkori2022Sep,
+  author       = {Keivan Tafakkori},
+  title        = {{FelooPy: An integrated optimization environment for AutoOR in Python}},
+  year         = {2022},
+  month        = sep,
+  publisher    = {GitHub},
+  url          = {https://github.com/ktafakkori/feloopy/}
+}
+```
+
 [c]: https://github.com/ktafakkori/feloopy/releases
+[support]: https://ktafakkori.github.io/support/
