@@ -187,7 +187,11 @@ install('feloopy')
 
 ### **Supporters**
 
+- Stars:
+
 [![Stars](https://reporoster.com/stars/notext/ktafakkori/feloopy)](https://github.com/ktafakkori/feloopy/stargazers)
+
+- Forks:
 
 [![Forks](https://reporoster.com/forks/notext/ktafakkori/feloopy)](https://github.com/ktafakkori/feloopy/network/members)
 
