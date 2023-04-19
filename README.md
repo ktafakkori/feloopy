@@ -209,7 +209,7 @@ It is recommended to cite this GitHub repository or the Python library if you us
 - APA 7:
 
 ```text
-Tafakkori, K. (2023). FelooPy: An integrated optimization environment for AutoOR in Python [Python Library]. https://github.com/ktafakkori/feloopy (Original work published September 2022)
+Tafakkori, K. (2022). FelooPy: An integrated optimization environment for AutoOR in Python [Python Library]. https://github.com/ktafakkori/feloopy (Original work published September 2022)
 ```
 
 - LaTeX:
