@@ -3,9 +3,10 @@
 | FelooPy                                            | [![version code](https://img.shields.io/badge/version-0.2.4-darkgreen.svg)](https://github.com/ktafakkori/feloopy/releases) [![number of users](https://static.pepy.tech/personalized-badge/feloopy?period=total&units=international_system&left_color=grey&right_color=darkgreen&left_text=users)](https://pepy.tech/project/feloopy) ![release date](https://img.shields.io/github/release-date/ktafakkori/feloopy?color=blue) [![monthly Downloads](https://static.pepy.tech/personalized-badge/feloopy?period=month&units=international_system&left_color=grey&right_color=blue&left_text=monthly%20downloads%20)](https://pepy.tech/project/feloopy) [![license type](https://img.shields.io/badge/license-MIT-darkred.svg)](https://opensource.org/licenses/MIT) |
 | :------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ![Image description](miscellaneous/logo/logo1.png) | FelooPy (pronounced /fɛlupaɪ/) is a free and open-source Python library for automated operations research. It serves as both a hyper-optimization interface and an integrated optimization environment. The name comes from the idea of suggesting practical and applicable solutions for systems, industries, and supply chains. It also references the importance of loops in programming and algorithm development, and draws similarities to the name "Floppy" to highlight memory efficiency. FelooPy helps operations research scientists achieve their goals using various target, representor, and learner models, shifting their focus from coding to modeling and analytics.   |
-| Python | |
 
 ### **Installation**
+
+FelooPy and its dependencies should work on Linux-based distributions, Windows, or macOS. To install this Python library, you might follow one of the following methods. Note that the installed Python compiler version should be greater than or equal to 3.10.
 
 <div align="center">
 
@@ -20,7 +21,7 @@
     
 `pip install --upgrade feloopy`
 </td>
-<td> Python 3.10 </td>
+<td> Python >= 3.10 </td>
 </tr>
 
 
@@ -30,7 +31,7 @@
     
 `pip install feloopy==0.2.4`
 </td>
-<td> Python 3.10 </td>
+<td> Python >= 3.10 </td>
 </tr>
 
 <tr>
@@ -39,7 +40,7 @@
     
 `!pip install feloopy==0.2.4`
 </td>
-<td> Python 3.10 </td>
+<td> Python >= 3.10 </td>
 </tr>
 
 <tr>
@@ -58,7 +59,7 @@ def install(package):
 install('feloopy')
 ```
 </td>
-<td> Python 3.10 </td>
+<td> Python >= 3.10 </td>
 </tr>
 
 <tr>
@@ -72,7 +73,7 @@ install('feloopy')
 
 </td>
 
-<td> Python 3.10 </td>
+<td> Python >= 3.10 </td>
 
 </tr>
 
@@ -96,7 +97,7 @@ install('feloopy')
 
 </td>
 
-<td> Python 3.10 </td>
+<td> Python >= 3.10 </td>
 
 </tr>
 
@@ -107,7 +108,7 @@ install('feloopy')
 `pip install -U git+https://github.com/ktafakkori/feloopy`
 </td>
 
-<td> Python 3.10 </td>
+<td> Python >= 3.10 </td>
 
 </tr>
 
