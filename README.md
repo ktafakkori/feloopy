@@ -238,7 +238,7 @@ FelooPy is completely free and open-source and licensed under the [MIT][08] lice
 ### **Appendix**
 ______
 
-### **Exact Solvers**
+### **Exact optimization solvers**
 
 <div align="center">
 
@@ -335,7 +335,8 @@ ______
 
 Source: The author.
 
-### **Heuristic Solvers**
+
+### **Heuristic optimization solvers**
 
 `<interface>` = `feloopy`
 
