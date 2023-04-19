@@ -69,7 +69,7 @@ m.dis(x,y)
 </tr>
 </table>
 
-* Supporting 17 exact, constraint, and heuristic optimization interfaces and solvers, just by changing two parameters, `<interface>` and `<solver>`, in the above examples.
+* Supporting 17 exact, constraint, and heuristic optimization interfaces and solvers, just by changing two parameters, `<interface>` and `<solver>`, in the above examples. Please see the [appendix](#appendix).
 * Supporting benchmarking with verios interfaces and solvers. 
 * Supporting multi-parameter sensitivity analysis on a single objective.
 * Supporting solve options such as logs, number of threads, time limit, absolute gap or releative gap.
