@@ -4,6 +4,72 @@
 | :------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ![Image description](miscellaneous/logo/logo1.png) | FelooPy (pronounced /fɛlupaɪ/) is a free and open-source Python library for automated operations research. It serves as both a hyper-optimization interface and an integrated optimization environment. The name comes from the idea of suggesting practical and applicable solutions for systems, industries, and supply chains. It also references the importance of loops in programming and algorithm development, and draws similarities to the name "Floppy" to highlight memory efficiency. FelooPy helps operations research scientists achieve their goals using various target, representor, and learner models, shifting their focus from coding to modeling and analytics.   |
 
+### **Features**
+
+
+<table>
+<tr>
+<td> Exact </td> <td> Heuristic </td> <td> Constraint </td>
+</tr>
+<tr>
+<td>
+
+```python
+from feloopy import *
+m = model('exact', 'simple_problem', 'cplex')
+x = m.pvar('x')
+y = m.ivar('y')
+m.obj(2*x+5*y)
+m.con(5*x+3*y <= 10)
+m.con(2*x+7*y <= 9)
+m.sol(['max'], 'cplex')
+m.report()
+m.dis(x,y)
+```
+
+</td>
+<td>
+    
+```python
+from feloopy import *
+def instance(X):
+    m = model('heuristic', 'simple_problem', 'feloopy', X)
+    x = m.pvar('x',variable_bound=[0,10])
+    y = m.ivar('y',variable_bound=[0,10])
+    m.obj(2*x+5*y)
+    m.con(5*x+3*y |l| 10)
+    m.con(2*x+7*y |l| 9)
+    m.sol(['max'], 'GA')
+    return m[X]
+m = implement(instance)
+m.sol(penalty_coefficient=300)
+m.report()
+m.dis(['x'])
+m.dis(['y'])
+```
+</td>
+
+<td>
+    
+```python
+from feloopy import *
+m = model('constraint', 'simple_problem', 'cplex_cp')
+x = m.ivar('x')
+y = m.ivar('y')
+m.obj(2*x+5*y)
+m.con(5*x+3*y <= 10)
+m.con(2*x+7*y <= 9)
+m.sol(['max'], 'cplex')
+m.report()
+m.dis(x,y)
+```
+</td>
+</tr>
+</table>
+
+
+
+
 ### **Installation**
 
 FelooPy and its dependencies should work on Linux-based distributions, Windows, or macOS. To install this Python library, you might follow one of the following methods. Note that the installed Python compiler version should be greater than or equal to 3.10.
