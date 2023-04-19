@@ -6,17 +6,14 @@
 
 ### **Features**
 
-* The simplest universal optimization programming language based on Python for exact, heuristic, and constraint optimization.
+* Simplest universal optimization programming language based on Python for exact, heuristic, and constraint optimization.
 
 <table>
 <tr>
-<td> Exact </td> <td> Heuristic </td> <td> Constraint </td>
+<td> Exact optimization </td> <td> Heuristic optimization </td> <td> Constraint optimization </td>
 </tr>
 <tr>
 <td>
-
-*
-
 
 ```python
 from feloopy import *
@@ -71,6 +68,7 @@ m.dis(x,y)
 </tr>
 </table>
 
+* Supporting 17 exact, constraint, and heuristic optimization interfaces and solvers, just by changing two parameters, `<interface>` and `<solver>`, in the above examples.
 
 ### **Installation**
 
