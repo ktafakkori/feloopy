@@ -56,6 +56,8 @@ setup(
 
         'pymprog',
 
+        'plotly',
+
         'picos',
 
         'cplex',

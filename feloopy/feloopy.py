@@ -21,6 +21,7 @@ class Model:
 
     def __init__(self, solution_method, model_name, interface_name, agent=None, key=None):
 
+
         """
         Environment Definition
         ~~~~~~~~~~~~~~~~~~~~~~
@@ -39,6 +40,7 @@ class Model:
             def instance(X): m = Model('heuristic', 'tsp', 'feloopy', X)
             def instance(X): m = Model('heuristic', 'tsp', 'feloopy', X, 0)
         """
+
 
         if solution_method == 'constraint': solution_method = 'exact'
 
@@ -124,6 +126,25 @@ class Model:
                         'objective_being_optimized': 0,
                     }
 
+                elif self.agent[0] == 'feasibility_check':
+
+                    self.features = {
+                        'agent_status': 'feasibility_check',
+                        'solution_method': 'heuristic',
+                        'constraints': [],
+                        'objectives': [],
+                        'objective_counter': [0, 0],
+                        'interface_name': interface_name,
+                        'variable_spread': self.agent[2],
+                        'pop_size': len(self.agent[1]),
+                        'penalty_coefficient': self.agent[3],
+                        'vectorized': None,
+                        'objective_being_optimized': 0,
+                        'directions': []
+                    }
+
+                    self.agent = self.agent[1].copy()
+
                 else:
 
                     self.features = {
@@ -146,6 +167,7 @@ class Model:
                 match self.features['interface_name']:
 
                     case 'mealpy': self.features['vectorized'] = False
+                    case 'pymultiobjective': self.features['vectorized'] = False
                     case 'feloopy': self.features['vectorized'] = True
 
     def __getitem__(self, agent):
@@ -162,10 +184,30 @@ class Model:
 
         if self.features['agent_status'] == 'idle':
             return self
-        else:
-            if self.features['vectorized']:
-                return self.agent
+        
+        elif self.features['agent_status'] == 'feasibility_check':
+
+            if self.features['penalty_coefficient']==0:
+
+                return 'feasible (unconstrained)'
+
             else:
+
+                if self.penalty>0:
+
+                    return 'infeasible (constrained)' 
+                
+                else:
+
+                    return 'feasible (constrained)'
+        else:
+
+            if self.features['vectorized']:
+
+                return self.agent
+            
+            else:
+
                 return self.response
 
     def btvar(self, name, variable_dim=0, variable_bound=[0, 1]):
@@ -989,6 +1031,7 @@ class Model:
                         self.features['constraints'].append(expression)
 
     def sol(self, directions=None, solver_name=None, solver_options=dict(), objective_id=0, email=None, debug=False, time_limit=None, cpu_threads=None, absolute_gap=None, relative_gap=None, show_log=False, save_log=False, save_model=False, max_iterations=None):
+
         """
         Solve Command Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1022,15 +1065,30 @@ class Model:
         self.features['max_iterations'] = max_iterations
 
         if type(objective_id) != str and directions != None:
+
             if self.features['directions'][objective_id] == None:
+
                 self.features['directions'][objective_id] = directions[objective_id]
+
             for i in range(len(self.features['objectives'])):
+
                 if i != objective_id:
+
                     del self.features['directions'][i]
+
                     del directions[i]
+
                     del self.features['objectives'][i]
+
             objective_id = 0
+
             self.features['objective_counter'] = [1, 1]
+
+        else:
+
+            for i in range(len(self.features['directions'])):
+
+                self.features['directions'][i] = directions[i]
 
         match self.features['solution_method']:
 
@@ -1039,8 +1097,7 @@ class Model:
                 self.features['model_object_before_solve'] = self.model
 
                 from .generators import solution_generator
-                self.solution = solution_generator.generate_solution(
-                    self.features)
+                self.solution = solution_generator.generate_solution(self.features)
 
                 try:
                     self.obj_val = self.get_objective()
@@ -1097,24 +1154,54 @@ class Model:
                                 self.agent[:, -1] = np.reshape(self.features['objectives'][objective_id], [self.agent.shape[0],]) + np.reshape(
                                     self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
 
+                        else:
+
+                            self.agent[:, -1] = 0
+
+                            total_obj = self.features['objective_counter'][0]
+
+                            self.features['objectives'] = np.array(self.features['objectives']).T[0]
+
+                            for i in range(self.features['objective_counter'][0]):
+                                
+                                if directions[i] == 'max':
+                                    self.agent[:, -2-total_obj+i] = self.features['objectives'][:,i] - self.features['penalty_coefficient'] * (self.penalty)**2
+                                
+                                if directions[i] == 'min':
+                                    self.agent[:, -2-total_obj+i] = self.features['objectives'][:,i] + self.features['penalty_coefficient'] * (self.penalty)**2
+
                     else:
 
                         self.penalty = 0
 
                         if len(self.features['constraints']) >= 1:
-                            self.penalty = np.amax(
-                                np.array([0]+self.features['constraints'], dtype=object))
 
-                        if directions[objective_id] == 'max':
-                            self.response = self.features['objectives'][objective_id] - \
-                                self.features['penalty_coefficient'] * \
-                                (self.penalty-0)**2
+                            self.penalty = np.amax(np.array([0]+self.features['constraints'], dtype=object))
+                        
+                        if type(objective_id) != str:
 
-                        if directions[objective_id] == 'min':
-                            self.response = self.features['objectives'][objective_id] + \
-                                self.features['penalty_coefficient'] * \
-                                (self.penalty-0)**2
+                            if directions[objective_id] == 'max':
+                                self.response = self.features['objectives'][objective_id] - self.features['penalty_coefficient'] * (self.penalty-0)**2
 
+                            if directions[objective_id] == 'min':
+                                self.response = self.features['objectives'][objective_id] + self.features['penalty_coefficient'] * (self.penalty-0)**2
+
+                        else:
+
+                            total_obj = self.features['objective_counter'][0]
+
+                            self.response = [None for i in range(total_obj)]
+
+                            for i in range(total_obj):
+                                
+                                if directions[i] == 'max':
+
+                                    self.response[i] = self.features['objectives'][i] - self.features['penalty_coefficient'] * (self.penalty)**2
+                                
+                                if directions[i] == 'min':
+
+                                    self.response[i] = self.features['objectives'][i] + self.features['penalty_coefficient'] * (self.penalty)**2
+                                
     def get_variable(self, variable_with_index):
         from .generators import result_generator
         return result_generator.get(self.features, self.model, self.solution, 'variable', variable_with_index)
@@ -1186,7 +1273,7 @@ class Model:
 
         return A
 
-    def report(self):
+    def report(self,show_model=False):
 
         print("\n~~~~~~~~~~~~~~\nFELOOPY v0.2.4\n~~~~~~~~~~~~~~")
 
@@ -1209,7 +1296,10 @@ class Model:
             self.dis_time()
             print("~~~~~~~~~~~\n")
 
-            self.dis_model()
+            if show_model:
+
+                self.dis_model()
+
         except:
             self.inf()
             self.dis_status()
@@ -1637,7 +1727,7 @@ class Model:
 
 # Alternatives for defining this class:
 
-model = add_model = create_environment = env = feloopy = representor_model = leaner_model = target_model = op = Model
+model = add_model = create_environment = env = feloopy = representor_model = learner_model = target_model = op = Model
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -1688,14 +1778,21 @@ class Implement:
             case 'mealpy':
 
                 from .generators.model import mealpy_model_generator
-                self.ModelObject = mealpy_model_generator.generate_model(
-                    self.SolverName, self.AlgOptions)
+                self.ModelObject = mealpy_model_generator.generate_model(self.SolverName, self.AlgOptions)
+
+            case 'pymultiobjective':
+
+                self.ModelObject = None
 
             case 'feloopy':
 
                 from .generators.model import feloopy_model_generator
-                self.ModelObject = feloopy_model_generator.generate_model(
-                    self.ToTalVariableCounter[1], self.ObjectivesDirections, self.SolverName, self.AlgOptions)
+                self.ModelObject = feloopy_model_generator.generate_model(self.ToTalVariableCounter[1], self.ObjectivesDirections, self.SolverName, self.AlgOptions)
+
+    def remove_infeasible_solutions(self):
+
+        self.BestAgent = np.delete(self.BestAgent, self.remove,axis=0)
+        self.BestReward = np.delete(self.BestReward, self.remove,axis=0)
 
     def sol(self, penalty_coefficient=0, number_of_times=1, show_plots=False, save_plots=False):
 
@@ -1706,27 +1803,62 @@ class Implement:
             case 'mealpy':
 
                 from .generators.solution import mealpy_solution_generator
-                self.BestAgent, self.BestReward, self.start, self.end = mealpy_solution_generator.generate_solution(
-                    self.ModelObject, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
+                self.BestAgent, self.BestReward, self.start, self.end = mealpy_solution_generator.generate_solution(self.ModelObject, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
+
+            case 'pymultiobjective':
+
+                from .generators.solution import pymultiobjective_solution_generator
+                self.BestAgent, self.BestReward, self.start, self.end = pymultiobjective_solution_generator.generate_solution(self.SolverName, self.AlgOptions, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
+                self.remove =[]
+                for i in range(np.shape(self.BestReward)[0]):
+
+                    if 'infeasible' in self.Check_Fitness(self.BestAgent[i]):
+
+                        self.remove.append(i)
+                
+                if len(self.remove)!=0:
+                    print("Warning: Some solutions might be infeasible. You can remove infeasible solutions using m.remove_infeasible_solutions() method.")
 
             case 'feloopy':
 
                 from .generators.solution import feloopy_solution_generator
-                self.BestAgent, self.BestReward, self.start, self.end, self.status = feloopy_solution_generator.generate_solution(
-                    self.ModelObject, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots)
+                self.BestAgent, self.BestReward, self.start, self.end, self.status = feloopy_solution_generator.generate_solution(self.ModelObject, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots)
 
     def dis_status(self):
         print('status:', self.get_status())
 
     def get_status(self):
 
-        if self.status[0] == 1:
-            return 'feasible (constrained)'
-        elif self.status[0] == 2:
-            return 'feasible (unconstrained)'
-        elif self.status[0] == -1:
-            return 'infeasible'
+        if self.InterfaceName in ['mealpy', 'pymultiobjective']:
 
+            if self.InterfaceName =='mealpy':
+
+                return self.Check_Fitness(self.BestAgent)
+            
+            else:
+                status = []
+                for i in range(np.shape(self.BestReward)[0]):
+                    status.append(self.Check_Fitness(self.BestAgent[i]))
+
+                return status
+
+        else:
+            if self.status[0] == 1:
+                return 'feasible (constrained)'
+            elif self.status[0] == 2:
+                return 'feasible (unconstrained)'
+            elif self.status[0] == -1:
+                return 'infeasible'
+
+    def Check_Fitness(self, X):
+
+        self.AgentProperties[0] = 'feasibility_check'
+        self.AgentProperties[1] = X
+        self.AgentProperties[2] = self.VariablesSpread
+        self.AgentProperties[3] = self.penalty_coefficient
+
+        return self.ModelFunction(self.AgentProperties)
+    
     def Fitness(self, X):
 
         self.AgentProperties[0] = 'active'
@@ -1892,7 +2024,7 @@ class Implement:
 
                         case 'bvar':
                             if self.VariablesDim[i[0]] == 0:
-                                return np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
 
                             else:
                                 def var(*args):
@@ -1903,10 +2035,10 @@ class Implement:
                                 return var(*i[1])
                         case 'ivar':
                             if self.VariablesDim[i[0]] == 0:
-                                return np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                             else:
                                 def var(*args):
-                                    self.NewAgentProperties = np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                    self.NewAgentProperties = np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
                                         self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                                     return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
                                 return var(*i[1])
@@ -1925,10 +2057,82 @@ class Implement:
                         case 'bvar':
                             return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                         case 'ivar':
-                            return np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                            return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                         case 'svar':
                             return np.argsort(self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])
 
+    def dis_indicators(self,step=0.1,pareto_dir='min',custom_pf=[],ref_point=[]):
+
+        print(self.get_indicators(step,pareto_dir,custom_pf,ref_point))
+
+    def get_indicators(self,step=0.1,pareto_dir='min',custom_pf=[],ref_point=[]):
+
+        from pyMultiobjective.util import indicators
+
+        list_of_functions = []
+        list_of_directions = []
+
+        for i in range(len(self.ObjectivesDirections)):
+
+            if self.ObjectivesDirections[1]=='max':
+
+                list_of_directions.append(-1)
+
+                def res(X): 
+                
+                    return -1*self.Fitness(np.array(X))[i]
+            
+            else:
+
+                list_of_directions.append(1)
+
+                def res(X): 
+                
+                    return self.Fitness(np.array(X))[i]
+                
+            list_of_functions.append(res)
+            
+        parameters = {
+            'min_values': (0,)*self.ToTalVariableCounter[1], 
+            'max_values': (1,)*self.ToTalVariableCounter[1], 
+            'step': (step,)*self.ToTalVariableCounter[1], 
+            'solution': np.concatenate((self.BestAgent,self.BestReward),axis=1), 
+            'pf_min': True if pareto_dir=='min' else False,
+            'custom_pf': custom_pf
+        }
+
+        self.calculated_indicators = dict()
+    
+        gd   = indicators.gd_indicator(list_of_functions = list_of_functions, **parameters)
+        gdp  = indicators.gd_plus_indicator(list_of_functions = list_of_functions, **parameters)
+        igd  = indicators.igd_indicator(list_of_functions = list_of_functions, **parameters)
+        igdp = indicators.igd_plus_indicator(list_of_functions = list_of_functions, **parameters)
+        ms   = indicators.ms_indicator(list_of_functions = list_of_functions, **parameters)
+        sp   = indicators.sp_indicator(list_of_functions = list_of_functions, **parameters)
+
+        self.calculated_indicators['gd'] = gd
+        self.calculated_indicators['gdp'] = gdp
+        self.calculated_indicators['igd'] = igd
+        self.calculated_indicators['igdp'] = igdp
+        self.calculated_indicators['ms'] = ms
+        self.calculated_indicators['sp'] = sp
+
+        parameters = {
+            'solution': np.concatenate((self.BestAgent,self.BestReward),axis=1), 
+            'n_objs': self.ToTalVariableCounter[1],
+            'ref_point': ref_point,
+        }
+
+        try:
+            hypervolume = indicators.hv_indicator(**parameters)
+
+            self.calculated_indicators['hv'] = hypervolume
+
+        except:
+            None
+
+        return self.calculated_indicators
+    
     def dis_time(self):
 
         hour = round(((self.end-self.start)), 3) % (24 * 3600) // 3600
@@ -2002,6 +2206,7 @@ class Implement:
         self.inf()
 
         print("~~~~~~~~~~\nSOLVE INFO\n~~~~~~~~~~")
+        self.dis_status()
         self.dis_obj()
         self.dis_time()
         print("~~~~~~~~~\n")
