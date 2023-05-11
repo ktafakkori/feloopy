@@ -1,5 +1,15 @@
-from .helpers.empty import *
+'''
+ # @ Author: Keivan
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-11
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
 
+
+from .helpers.empty import *
 from .operators.set_operators import *
 from .operators.math_operators import *
 from .operators.count_operators import *
@@ -17,32 +27,23 @@ import sys
 
 warnings.filterwarnings("ignore")
 
+
 class Model:
 
     def __init__(self, solution_method, model_name, interface_name, agent=None, key=None):
-
-
         """
-        Environment Definition
-        ~~~~~~~~~~~~~~~~~~~~~~
-        This class is used to define the modeling environment.
+        Creates and returns the modeling environment.
 
         Args:
-            solution_method (str): The desired solution (optimization) method.
-            model_name (str): The name of this model.
-            interface_name (str): The interface name.
-            agent (X, optional): If you are using a heuristic optimization method, provide the input of the function here. Defaults to None.
-            key (number, optional): The desired key for random number generator. Defaults to None.
-
-        Examples:
-            m = Model('exact', 'tsp', 'ortools', None, None)
-            m = Model('exact', 'tsp', 'ortools', key=0)
-            def instance(X): m = Model('heuristic', 'tsp', 'feloopy', X)
-            def instance(X): m = Model('heuristic', 'tsp', 'feloopy', X, 0)
+            solution_method (str): Desired solution (optimization) method.
+            model_name (str): Name of this model.
+            interface_name (str): Desired interface name.
+            agent (X, optional): Input of the representor model. Default: None. 
+            key (number, optional): Key for random number generator. Default: None.
         """
 
-
-        if solution_method == 'constraint': solution_method = 'exact'
+        if solution_method == 'constraint':
+            solution_method = 'exact'
 
         self.binary_variable = self.add_binary_variable = self.boolean_variable = self.add_boolean_variable = self.bvar
         self.positive_variable = self.add_positive_variable = self.pvar
@@ -171,279 +172,106 @@ class Model:
                     case 'feloopy': self.features['vectorized'] = True
 
     def __getitem__(self, agent):
-
         """
-        Returns the required model data.
+        Returns the required features of the model object.
 
         Args:
-            agent (X): If you are using a heuristic optimization method, provide the input of the function here.
-
-        Examples:
-            * def instance(X): return m[X]
+            agent (X): Input of the representor model
         """
 
         if self.features['agent_status'] == 'idle':
             return self
-        
+
         elif self.features['agent_status'] == 'feasibility_check':
-
-            if self.features['penalty_coefficient']==0:
-
+            if self.features['penalty_coefficient'] == 0:
                 return 'feasible (unconstrained)'
-
             else:
-
-                if self.penalty>0:
-
-                    return 'infeasible (constrained)' 
-                
+                if self.penalty > 0:
+                    return 'infeasible (constrained)'
                 else:
-
                     return 'feasible (constrained)'
         else:
-
             if self.features['vectorized']:
-
                 return self.agent
-            
             else:
-
                 return self.response
 
     def btvar(self, name, variable_dim=0, variable_bound=[0, 1]):
-
         """
-        Binary Tensor Variable Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        To define a binary tensor (N*M) variable.
+        Creates and returns a tensor-like binary variable.
 
         Args:
-            name (str): What is the name of this variable?
-            variable_dim (list, optional): What are the dimensions of this variable? Defaults to 0.
-            variable_bound (list, optional): What are the bounds on this variable? Defaults to [0, 1].
-
-        Examples:
-            * x = btvar('x')
-            * x = btvar('x',[I,J])
-            * x = btvar('x',[I,J], [0, 1])
+            name (str): Name of this variable.
+            variable_dim (list, optional): Dimensions of this variable. Default: 0.
+            variable_bound (list, optional): Bounds of this variable. Default: [0, 1].
         """
 
         variable_dim = fix_dims(variable_dim)
-
-        self.features = update_variable_features(name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
+        self.features = update_variable_features(
+            name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
 
         match self.features['solution_method']:
 
             case 'exact':
 
                 from .generators import variable_generator
-
                 return variable_generator.generate_variable(self.features['interface_name'], self.model, 'btvar', name, variable_bound, variable_dim)
 
-        return self.vars[name]
-
     def ptvar(self, name, variable_dim=0, variable_bound=[0, None]):
-
         """
-        Positive Tensor Variable Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        To define a positive tensor (N*M) variable.
+        Creates and returns a tensor-like positive variable.
 
         Args:
-            name (str): What is the name of this variable?
-            variable_dim (list, optional): What are the dimensions of this variable? Defaults to 0.
-            variable_bound (list, optional): What are the bounds on this variable? Defaults to [0, None].
-
-        Examples:
-            * x = ptvar('x')
-            * x = ptvar('x',[I,J])
-            * x = ptvar('x',[I,J], [0, 100])
+            name (str): Name of this variable.
+            variable_dim (list, optional): Dimensions of this variable. Default: 0.
+            variable_bound (list, optional): Bounds of this variable. Default: [0, None].
         """
 
         variable_dim = fix_dims(variable_dim)
-
-        self.features = update_variable_features(name, variable_dim, variable_bound, 'positive_variable_counter', self.features)
-
-        match self.features['solution_method']:
-
-            case 'exact':
-
-                from .generators import variable_generator
-
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'ptvar', name, variable_bound, variable_dim)
-
-        return self.vars[name]
-
-    def itvar(self, name, variable_dim=0, variable_bound=[0, None]):
-
-        """
-        Integer Tensor Variable Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        To define an integer tensor (N*M) variable.
-
-        Args:
-            name (str): What is the name of this variable?
-            variable_dim (list, optional): What are the dimensions of this variable? Defaults to 0.
-            variable_bound (list, optional): What are the bounds on this variable? Defaults to [0, None].
-
-        Examples:
-            * x = itvar('x')
-            * x = itvar('x',[I,J])
-            * x = itvar('x',[I,J], [0, 100])
-        """
-
-        variable_dim = fix_dims(variable_dim)
-
-        self.features = update_variable_features(name, variable_dim, variable_bound, 'integer_variable_counter', self.features)
-
-        match self.features['solution_method']:
-
-            case 'exact':
-
-                from .generators import variable_generator
-
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'itvar', name, variable_bound, variable_dim)
-
-
-        return self.vars[name]
-
-    def ftvar(self, name, variable_dim=0, variable_bound=[None, None]):
-
-        """
-        Free Tensor Variable Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        To define a free tensor (N*M) variable.
-
-        Args:
-            name (str): What is the name of this variable?
-            variable_dim (list, optional): What are the dimensions of this variable? Defaults to 0.
-            variable_bound (list, optional): What are the bounds on this variable? Defaults to [None, None].
-
-        Examples:
-            * x = ftvar('x')
-            * x = ftvar('x',[I,J])
-            * x = ftvar('x',[I,J], [-100, 100])
-        """
-
-        variable_dim = fix_dims(variable_dim)
-
-        self.features = update_variable_features(name, variable_dim, variable_bound, 'free_variable_counter', self.features)
-
-        match self.features['solution_method']:
-
-            case 'exact':
-
-                from .generators import variable_generator
-
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'ftvar', name, variable_bound, variable_dim)
-
-        return self.vars[name]
-
-    def bvar(self, name, variable_dim=0, variable_bound=[0, 1]):
-
-        """
-        Binary Variable Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
-        To define a binary variable.
-
-        Args:
-            name (str): What is the name of this variable?
-            variable_dim (list, optional): What are the dimensions of this variable? Defaults to 0.
-            variable_bound (list, optional): What are the bounds on this variable? Defaults to [0, 1].
-
-        Examples:
-            * x = bvar('x')
-            * x = bvar('x',[I,J])
-            * x = bvar('x', [I,J], [0, 1])
-        """
-
-        variable_dim = fix_dims(variable_dim)
-
-        self.features = update_variable_features(name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
-
-        match self.features['solution_method']:
-            case 'exact':
-                from .generators.variable_generator import generate_variable
-                return generate_variable(self.features['interface_name'], self.model, 'bvar', name, variable_bound, variable_dim)
-            case 'heuristic':
-                return generate_heuristic_variable(self.features, 'bvar', name, variable_dim, variable_bound, self.agent)
-
-    def pvar(self, name, variable_dim=0, variable_bound=[0, None]):
-
-        """
-        Positive Variable Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        To define a positive variable.
-
-        Args:
-            name (str): what is the name of this variable?
-            variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
-            variable_bound (list, optional): what are bounds on this variable?. Defaults to [0, None].
-
-        Examples:
-            * x = pvar('x')
-            * x = pvar('x',[I,J])
-            * x = pvar('x', [I,J], [0, 100])
-        """
-
-        variable_dim = fix_dims(variable_dim)
-
         self.features = update_variable_features(
             name, variable_dim, variable_bound, 'positive_variable_counter', self.features)
 
         match self.features['solution_method']:
+
             case 'exact':
+
                 from .generators import variable_generator
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'pvar', name, variable_bound, variable_dim)
-            case 'heuristic':
-                return generate_heuristic_variable(self.features, 'pvar', name, variable_dim, variable_bound, self.agent)
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'ptvar', name, variable_bound, variable_dim)
 
-    def ivar(self, name, variable_dim=0, variable_bound=[0, None]):
-
+    def itvar(self, name, variable_dim=0, variable_bound=[0, None]):
         """
-        Integer Variable Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        To define an integer variable.
+        Creates and returns a tensor-like integer variable.
 
         Args:
-            name (str): what is the name of this variable?
-            variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
-            variable_bound (list, optional): what are bounds on this variable?. Defaults to [0, None].
-
-        Examples:
-            * x = ivar('x')
-            * x = ivar('x',[I,J])
-            * x = ivar('x', [I,J], [0, 100])
+            name (str): Name of this variable.
+            variable_dim (list, optional): Dimensions of this variable. Default: 0.
+            variable_bound (list, optional): Bounds of this variable. Default: [0, None].
         """
 
+        variable_dim = fix_dims(variable_dim)
         self.features = update_variable_features(
             name, variable_dim, variable_bound, 'integer_variable_counter', self.features)
 
         match self.features['solution_method']:
+
             case 'exact':
+
                 from .generators import variable_generator
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'ivar', name, variable_bound, variable_dim)
-            case 'heuristic':
-                return generate_heuristic_variable(self.features, 'ivar', name, variable_dim, variable_bound, self.agent)
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'itvar', name, variable_bound, variable_dim)
 
-    def fvar(self, name, variable_dim=0, variable_bound=[None, None]):
+        return self.vars[name]
 
+    def ftvar(self, name, variable_dim=0, variable_bound=[None, None]):
         """
-        Free Variable Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        To define a free variable.
+        Creates and returns a tensor-like free variable.
 
         Args:
-            name (str): what is the name of this variable?
-            variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
-            variable_bound (list, optional): what are bounds on this variable?. Defaults to [None, None].
-
-        Examples:
-            * x = fvar('x')
-            * x = fvar('x',[I,J])
-            * x = fvar('x', [I,J], [0, 100])
+            name (str): Name of this variable.
+            variable_dim (list, optional): Dimensions of this variable. Default: 0.
+            variable_bound (list, optional): Bounds of this variable. Default: [None, None].
         """
 
+        variable_dim = fix_dims(variable_dim)
         self.features = update_variable_features(
             name, variable_dim, variable_bound, 'free_variable_counter', self.features)
 
@@ -452,7 +280,102 @@ class Model:
             case 'exact':
 
                 from .generators import variable_generator
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'ftvar', name, variable_bound, variable_dim)
 
+    def bvar(self, name, variable_dim=0, variable_bound=[0, 1]):
+        """
+        Creates and returns a binary variable.
+
+        Args:
+            name (str): Name of this variable.
+            variable_dim (list, optional): Dimensions of this variable. Default: 0.
+            variable_bound (list, optional): Bounds of this variable. Default: [0, 1].
+        """
+
+        variable_dim = fix_dims(variable_dim)
+        self.features = update_variable_features(
+            name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
+
+        match self.features['solution_method']:
+
+            case 'exact':
+
+                from .generators import variable_generator
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'bvar', name, variable_bound, variable_dim)
+
+            case 'heuristic':
+
+                return generate_heuristic_variable(self.features, 'bvar', name, variable_dim, variable_bound, self.agent)
+
+    def pvar(self, name, variable_dim=0, variable_bound=[0, None]):
+        """
+        Creates and returns a positive variable.
+
+        Args:
+            name (str): Name of this variable.
+            variable_dim (list, optional): Dimensions of this variable. Default: 0.
+            variable_bound (list, optional): Bounds of this variable. Default: [0, None].
+        """
+
+        variable_dim = fix_dims(variable_dim)
+        self.features = update_variable_features(
+            name, variable_dim, variable_bound, 'positive_variable_counter', self.features)
+
+        match self.features['solution_method']:
+
+            case 'exact':
+
+                from .generators import variable_generator
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'pvar', name, variable_bound, variable_dim)
+
+            case 'heuristic':
+
+                return generate_heuristic_variable(self.features, 'pvar', name, variable_dim, variable_bound, self.agent)
+
+    def ivar(self, name, variable_dim=0, variable_bound=[0, None]):
+        """
+        Creates and returns an integer variable.
+
+        Args:
+            name (str): Name of this variable.
+            variable_dim (list, optional): Dimensions of this variable. Default: 0.
+            variable_bound (list, optional): Bounds of this variable. Default: [0, None].
+        """
+
+        variable_dim = fix_dims(variable_dim)
+        self.features = update_variable_features(
+            name, variable_dim, variable_bound, 'integer_variable_counter', self.features)
+
+        match self.features['solution_method']:
+
+            case 'exact':
+
+                from .generators import variable_generator
+                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'ivar', name, variable_bound, variable_dim)
+
+            case 'heuristic':
+
+                return generate_heuristic_variable(self.features, 'ivar', name, variable_dim, variable_bound, self.agent)
+
+    def fvar(self, name, variable_dim=0, variable_bound=[None, None]):
+        """
+        Creates and returns a free variable.
+
+        Args:
+            name (str): Name of this variable.
+            variable_dim (list, optional): Dimensions of this variable. Default: 0.
+            variable_bound (list, optional): Bounds of this variable. Default: [None, None].
+        """
+
+        variable_dim = fix_dims(variable_dim)
+        self.features = update_variable_features(
+            name, variable_dim, variable_bound, 'free_variable_counter', self.features)
+
+        match self.features['solution_method']:
+
+            case 'exact':
+
+                from .generators import variable_generator
                 return variable_generator.generate_variable(self.features['interface_name'], self.model, 'fvar', name, variable_bound, variable_dim)
 
             case 'heuristic':
@@ -460,20 +383,15 @@ class Model:
                 return generate_heuristic_variable(self.features, 'fvar', name, variable_dim, variable_bound, self.agent)
 
     def dvar(self, name, variable_dim=0):
-
         """
-        Dependent Variable Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        To define a dependent variable.
+        Creates and returns a dependent variable.
 
         Args:
-            name (str): what is the name of this variable?
-            variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
-
-        Examples:
-            * x = dvar('x')
-            * x = dvar('x',[I,J])
+            name (str): Name of this variable.
+            variable_dim (list, optional): Dimensions of this variable. Default: 0.
         """
+
+        variable_dim = fix_dims(variable_dim)
 
         if self.features['agent_status'] == 'idle':
             if self.features['vectorized']:
@@ -486,7 +404,6 @@ class Model:
                     return 0
                 else:
                     return np.zeros([len(dims) for dims in variable_dim])
-
         else:
             if self.features['vectorized']:
                 if variable_dim == 0:
@@ -500,33 +417,23 @@ class Model:
                     return np.zeros([len(dims) for dims in variable_dim])
 
     def svar(self, name, variable_dim=0):
-
         """
-        Sequential Variable Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        To define a sequential variable.
+        Creates and returns a sequential variable.
 
         Args:
-            name (str): what is the name of this variable?
-            variable_dim (list, optional): what are dimensions of this variable?. Defaults to 0.
-
-        Examples:
-            * x = svar('x',[I])
-
+            name (str): Name of this variable.
+            variable_dim (list, optional): Dimensions of this variable. Default: 0.
         """
 
         self.features = update_variable_features(
             name, variable_dim, [0, 1], 'integer_variable_counter', self.features)
         self.features['variable_type'][name] = 'svar'
-        return generate_heuristic_variable(self.features, 'fvar', name, variable_dim, [0, 1], self.agent)
+
+        return generate_heuristic_variable(self.features, 'svar', name, variable_dim, [0, 1], self.agent)
 
     def invar(self, name, variable_dim=0, variable_bound=[None, None, None]):
-
         """        
-        Interval Variable Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        
-        To define an interval variable (which is a constraint) for constraint programming. Can be used inside other constraints.
+        Defines an interval variable. Can be used inside other constraints.
 
         Notably: start + size == end.
 
@@ -534,7 +441,7 @@ class Model:
             name: The name of the interval variable.
             variable_dim: The dimension of the interval variable (is ignored).
             variable_bound: [start, size, end] for interval definiton. 
-       
+
         """
 
         if self.features['interface_name'] == 'cplex_cp':
@@ -546,7 +453,6 @@ class Model:
             return self.model.NewIntervalVar(start=variable_bound[0], size=variable_bound[1], end=variable_bound[2], name=name)
 
     def start_of(self, interval, absentValue=None):
-
         """
 
         To get the start of an interval variable. If it is absent, then the value of the expression is absentValue (zero by default).
@@ -562,7 +468,6 @@ class Model:
             ""
 
     def end_of(self, interval, absentValue=None):
-
         """
 
         To get the end of an interval variable. If it is absent, then the value of the expression is absentValue (zero by default).
@@ -578,7 +483,6 @@ class Model:
             ""
 
     def length_of(self, interval, absentValue=None):
-
         """
 
         To get the length (end - start) of an interval variable. If it is absent, then the value of the expression is absentValue (zero by default).
@@ -594,7 +498,6 @@ class Model:
             ""
 
     def size_of(self, interval, absentValue=None):
-
         """
 
         To get the size of an interval variable. If it is absent, then the value of the expression is absentValue (zero by default).
@@ -610,7 +513,6 @@ class Model:
             ""
 
     def presence_of(self, interval):
-
         """
 
         To get the presence status of an interval variable. If interval is present then the value of the expression is 1; if interval is absent then the value is 0.
@@ -625,12 +527,11 @@ class Model:
             ""
 
     def start_at_start(self, interval1, interval2, delay=None):
-
         """
         To constrain the delay between the starts of two interval variables.
 
         If interval1 and interval2 are present, then interval interval2 must start exactly at start_of(interval1) + delay. 
-        
+
         If interval1 or interval2 is absent, then the constraint is automatically satisfied.
 
         """
@@ -644,12 +545,11 @@ class Model:
             ""
 
     def start_at_end(self, interval1, interval2, delay=None):
-
         """
         To constrain the delay between the start of one interval variable and end of another one.
 
         If interval1 and interval2 are present then interval2 must end exactly at start_of(interval1) + delay. 
-        
+
         If interval1 or interval2 is absent then the constraint is automatically satisfied.
 
         """
@@ -663,7 +563,6 @@ class Model:
             ""
 
     def start_before_start(self, interval1, interval2, delay=None):
-
         """
 
         To constrain the minimum delay between starts of two interval variables.
@@ -679,13 +578,11 @@ class Model:
             ""
 
     def start_before_end(self, interval1, interval2, delay=None):
-
         """
 
         To constrain minimum delay between the start of one interval variable and end of another one.
 
         """
-
 
         if self.features['interface_name'] == 'cplex_cp':
 
@@ -696,7 +593,6 @@ class Model:
             ""
 
     def end_at_start(self, interval1, interval2, delay=None):
-
         """
         To constrain the delay between the end of one interval variable and start of another one.
 
@@ -711,7 +607,6 @@ class Model:
             ""
 
     def end_at_end(self, interval1, interval2, delay=None):
-
         """
 
         To constrain the delay between the ends of two interval variables
@@ -727,7 +622,6 @@ class Model:
             ""
 
     def end_before_start(self, interval1, interval2, delay=None):
-
         """
 
         To constrain minimum delay between the end of one interval variable and start of another one.
@@ -743,13 +637,11 @@ class Model:
             ""
 
     def end_before_end(self, interval1, interval2, delay=None):
-
         """
 
         To constrain the minimum delay between the ends of two interval variables.
 
         """
-
 
         if self.features['interface_name'] == 'cplex_cp':
 
@@ -760,7 +652,6 @@ class Model:
             ""
 
     def forbid_start(self, interval, function):
-
         """
 
         To forbid an interval variable to start during specified regions.
@@ -776,7 +667,6 @@ class Model:
             ""
 
     def forbid_end(self, interval, function):
-
         """
 
         To forbid an interval variable to end during specified regions.
@@ -792,7 +682,6 @@ class Model:
             ""
 
     def forbid_extent(self, interval, function):
-
         """
 
         To forbid an interval variable to overlap with specified regions.
@@ -808,91 +697,84 @@ class Model:
             ""
 
     def overlap_length(self, interval1, interval2, absentValue=None):
-
         """
         To get the length of the overlap of two interval variables.
         """
-        
+
         if self.features['interface_name'] == 'cplex_cp':
 
             return self.model.overlap_length(interval1, interval2, absentValue)
 
         if self.features['interface_name'] == 'ortools_cp':
 
-            ""   
+            ""
 
     def start_eval(self, interval, function, absentValue=None):
-
         """
         To evaluate a segmented function at the start of an interval variable
         """
-        
+
         if self.features['interface_name'] == 'cplex_cp':
 
             return self.model.start_eval(interval, function, absentValue)
 
         if self.features['interface_name'] == 'ortools_cp':
 
-            ""   
+            ""
 
     def end_eval(self, interval, function, absentValue=None):
-
         """
         To evaluate a segmented function at the end of an interval variable
         """
-        
+
         if self.features['interface_name'] == 'cplex_cp':
 
             return self.model.end_eval(interval, function, absentValue)
 
         if self.features['interface_name'] == 'ortools_cp':
 
-            ""   
+            ""
 
     def size_eval(self, interval, function, absentValue=None):
-
         """
         To evaluate a segmented function on the size of an interval variable
         """
-        
+
         if self.features['interface_name'] == 'cplex_cp':
 
             return self.model.size_eval(interval, function, absentValue)
 
         if self.features['interface_name'] == 'ortools_cp':
 
-            ""    
+            ""
 
     def length_eval(self, interval, function, absentValue=None):
-
         """
         To evaluate a segmented function on the length of an interval variable
         """
-        
+
         if self.features['interface_name'] == 'cplex_cp':
 
             return self.model.length_eval(interval, function, absentValue)
 
         if self.features['interface_name'] == 'ortools_cp':
 
-            ""    
+            ""
 
     def span(self, interval, function, absentValue=None):
-
         """
         To create a span constraint between interval variables.
         """
-        
+
         if self.features['interface_name'] == 'cplex_cp':
 
             return self.model.span(interval, function, absentValue)
 
         if self.features['interface_name'] == 'ortools_cp':
 
-            ""    
+            ""
 
     def alternative(self, interval, array, cardinality=None):
-
         """
         To create an alternative constraint between interval variables.
         """
@@ -903,10 +785,9 @@ class Model:
 
         if self.features['interface_name'] == 'ortools_cp':
 
-            ""       
-      
-    def set(self, *size):
+            ""
 
+    def set(self, *size):
         """
         Set Definition
         ~~~~~~~~~~~~~~
@@ -1031,7 +912,6 @@ class Model:
                         self.features['constraints'].append(expression)
 
     def sol(self, directions=None, solver_name=None, solver_options=dict(), objective_id=0, email=None, debug=False, time_limit=None, cpu_threads=None, absolute_gap=None, relative_gap=None, show_log=False, save_log=False, save_model=False, max_iterations=None):
-
         """
         Solve Command Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1097,7 +977,8 @@ class Model:
                 self.features['model_object_before_solve'] = self.model
 
                 from .generators import solution_generator
-                self.solution = solution_generator.generate_solution(self.features)
+                self.solution = solution_generator.generate_solution(
+                    self.features)
 
                 try:
                     self.obj_val = self.get_objective()
@@ -1160,15 +1041,18 @@ class Model:
 
                             total_obj = self.features['objective_counter'][0]
 
-                            self.features['objectives'] = np.array(self.features['objectives']).T[0]
+                            self.features['objectives'] = np.array(
+                                self.features['objectives']).T[0]
 
                             for i in range(self.features['objective_counter'][0]):
-                                
+
                                 if directions[i] == 'max':
-                                    self.agent[:, -2-total_obj+i] = self.features['objectives'][:,i] - self.features['penalty_coefficient'] * (self.penalty)**2
-                                
+                                    self.agent[:, -2-total_obj+i] = self.features['objectives'][:,
+                                                                                                i] - self.features['penalty_coefficient'] * (self.penalty)**2
+
                                 if directions[i] == 'min':
-                                    self.agent[:, -2-total_obj+i] = self.features['objectives'][:,i] + self.features['penalty_coefficient'] * (self.penalty)**2
+                                    self.agent[:, -2-total_obj+i] = self.features['objectives'][:,
+                                                                                                i] + self.features['penalty_coefficient'] * (self.penalty)**2
 
                     else:
 
@@ -1176,15 +1060,20 @@ class Model:
 
                         if len(self.features['constraints']) >= 1:
 
-                            self.penalty = np.amax(np.array([0]+self.features['constraints'], dtype=object))
-                        
+                            self.penalty = np.amax(
+                                np.array([0]+self.features['constraints'], dtype=object))
+
                         if type(objective_id) != str:
 
                             if directions[objective_id] == 'max':
-                                self.response = self.features['objectives'][objective_id] - self.features['penalty_coefficient'] * (self.penalty-0)**2
+                                self.response = self.features['objectives'][objective_id] - \
+                                    self.features['penalty_coefficient'] * \
+                                    (self.penalty-0)**2
 
                             if directions[objective_id] == 'min':
-                                self.response = self.features['objectives'][objective_id] + self.features['penalty_coefficient'] * (self.penalty-0)**2
+                                self.response = self.features['objectives'][objective_id] + \
+                                    self.features['penalty_coefficient'] * \
+                                    (self.penalty-0)**2
 
                         else:
 
@@ -1193,15 +1082,19 @@ class Model:
                             self.response = [None for i in range(total_obj)]
 
                             for i in range(total_obj):
-                                
+
                                 if directions[i] == 'max':
 
-                                    self.response[i] = self.features['objectives'][i] - self.features['penalty_coefficient'] * (self.penalty)**2
-                                
+                                    self.response[i] = self.features['objectives'][i] - \
+                                        self.features['penalty_coefficient'] * \
+                                        (self.penalty)**2
+
                                 if directions[i] == 'min':
 
-                                    self.response[i] = self.features['objectives'][i] + self.features['penalty_coefficient'] * (self.penalty)**2
-                                
+                                    self.response[i] = self.features['objectives'][i] + \
+                                        self.features['penalty_coefficient'] * \
+                                        (self.penalty)**2
+
     def get_variable(self, variable_with_index):
         from .generators import result_generator
         return result_generator.get(self.features, self.model, self.solution, 'variable', variable_with_index)
@@ -1273,7 +1166,7 @@ class Model:
 
         return A
 
-    def report(self,show_model=False):
+    def report(self, show_model=False):
 
         print("\n~~~~~~~~~~~~~~\nFELOOPY v0.2.4\n~~~~~~~~~~~~~~")
 
@@ -1727,9 +1620,11 @@ class Model:
 
 # Alternatives for defining this class:
 
+
 model = add_model = create_environment = env = feloopy = representor_model = learner_model = target_model = op = Model
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
+
 
 class Implement:
 
@@ -1778,7 +1673,8 @@ class Implement:
             case 'mealpy':
 
                 from .generators.model import mealpy_model_generator
-                self.ModelObject = mealpy_model_generator.generate_model(self.SolverName, self.AlgOptions)
+                self.ModelObject = mealpy_model_generator.generate_model(
+                    self.SolverName, self.AlgOptions)
 
             case 'pymultiobjective':
 
@@ -1787,12 +1683,13 @@ class Implement:
             case 'feloopy':
 
                 from .generators.model import feloopy_model_generator
-                self.ModelObject = feloopy_model_generator.generate_model(self.ToTalVariableCounter[1], self.ObjectivesDirections, self.SolverName, self.AlgOptions)
+                self.ModelObject = feloopy_model_generator.generate_model(
+                    self.ToTalVariableCounter[1], self.ObjectivesDirections, self.SolverName, self.AlgOptions)
 
     def remove_infeasible_solutions(self):
 
-        self.BestAgent = np.delete(self.BestAgent, self.remove,axis=0)
-        self.BestReward = np.delete(self.BestReward, self.remove,axis=0)
+        self.BestAgent = np.delete(self.BestAgent, self.remove, axis=0)
+        self.BestReward = np.delete(self.BestReward, self.remove, axis=0)
 
     def sol(self, penalty_coefficient=0, number_of_times=1, show_plots=False, save_plots=False):
 
@@ -1803,26 +1700,30 @@ class Implement:
             case 'mealpy':
 
                 from .generators.solution import mealpy_solution_generator
-                self.BestAgent, self.BestReward, self.start, self.end = mealpy_solution_generator.generate_solution(self.ModelObject, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
+                self.BestAgent, self.BestReward, self.start, self.end = mealpy_solution_generator.generate_solution(
+                    self.ModelObject, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
 
             case 'pymultiobjective':
 
                 from .generators.solution import pymultiobjective_solution_generator
-                self.BestAgent, self.BestReward, self.start, self.end = pymultiobjective_solution_generator.generate_solution(self.SolverName, self.AlgOptions, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
-                self.remove =[]
+                self.BestAgent, self.BestReward, self.start, self.end = pymultiobjective_solution_generator.generate_solution(
+                    self.SolverName, self.AlgOptions, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
+                self.remove = []
                 for i in range(np.shape(self.BestReward)[0]):
 
                     if 'infeasible' in self.Check_Fitness(self.BestAgent[i]):
 
                         self.remove.append(i)
-                
-                if len(self.remove)!=0:
-                    print("Warning: Some solutions might be infeasible. You can remove infeasible solutions using m.remove_infeasible_solutions() method.")
+
+                if len(self.remove) != 0:
+                    print(
+                        "Warning: Some solutions might be infeasible. You can remove infeasible solutions using m.remove_infeasible_solutions() method.")
 
             case 'feloopy':
 
                 from .generators.solution import feloopy_solution_generator
-                self.BestAgent, self.BestReward, self.start, self.end, self.status = feloopy_solution_generator.generate_solution(self.ModelObject, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots)
+                self.BestAgent, self.BestReward, self.start, self.end, self.status = feloopy_solution_generator.generate_solution(
+                    self.ModelObject, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots)
 
     def dis_status(self):
         print('status:', self.get_status())
@@ -1831,10 +1732,10 @@ class Implement:
 
         if self.InterfaceName in ['mealpy', 'pymultiobjective']:
 
-            if self.InterfaceName =='mealpy':
+            if self.InterfaceName == 'mealpy':
 
                 return self.Check_Fitness(self.BestAgent)
-            
+
             else:
                 status = []
                 for i in range(np.shape(self.BestReward)[0]):
@@ -1858,7 +1759,7 @@ class Implement:
         self.AgentProperties[3] = self.penalty_coefficient
 
         return self.ModelFunction(self.AgentProperties)
-    
+
     def Fitness(self, X):
 
         self.AgentProperties[0] = 'active'
@@ -2061,11 +1962,11 @@ class Implement:
                         case 'svar':
                             return np.argsort(self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])
 
-    def dis_indicators(self,step=0.1,pareto_dir='min',custom_pf=[],ref_point=[]):
+    def dis_indicators(self, step=0.1, pareto_dir='min', custom_pf=[], ref_point=[]):
 
-        print(self.get_indicators(step,pareto_dir,custom_pf,ref_point))
+        print(self.get_indicators(step, pareto_dir, custom_pf, ref_point))
 
-    def get_indicators(self,step=0.1,pareto_dir='min',custom_pf=[],ref_point=[]):
+    def get_indicators(self, step=0.1, pareto_dir='min', custom_pf=[], ref_point=[]):
 
         from pyMultiobjective.util import indicators
 
@@ -2074,41 +1975,47 @@ class Implement:
 
         for i in range(len(self.ObjectivesDirections)):
 
-            if self.ObjectivesDirections[1]=='max':
+            if self.ObjectivesDirections[1] == 'max':
 
                 list_of_directions.append(-1)
 
-                def res(X): 
-                
+                def res(X):
+
                     return -1*self.Fitness(np.array(X))[i]
-            
+
             else:
 
                 list_of_directions.append(1)
 
-                def res(X): 
-                
+                def res(X):
+
                     return self.Fitness(np.array(X))[i]
-                
+
             list_of_functions.append(res)
-            
+
         parameters = {
-            'min_values': (0,)*self.ToTalVariableCounter[1], 
-            'max_values': (1,)*self.ToTalVariableCounter[1], 
-            'step': (step,)*self.ToTalVariableCounter[1], 
-            'solution': np.concatenate((self.BestAgent,self.BestReward),axis=1), 
-            'pf_min': True if pareto_dir=='min' else False,
+            'min_values': (0,)*self.ToTalVariableCounter[1],
+            'max_values': (1,)*self.ToTalVariableCounter[1],
+            'step': (step,)*self.ToTalVariableCounter[1],
+            'solution': np.concatenate((self.BestAgent, self.BestReward), axis=1),
+            'pf_min': True if pareto_dir == 'min' else False,
             'custom_pf': custom_pf
         }
 
         self.calculated_indicators = dict()
-    
-        gd   = indicators.gd_indicator(list_of_functions = list_of_functions, **parameters)
-        gdp  = indicators.gd_plus_indicator(list_of_functions = list_of_functions, **parameters)
-        igd  = indicators.igd_indicator(list_of_functions = list_of_functions, **parameters)
-        igdp = indicators.igd_plus_indicator(list_of_functions = list_of_functions, **parameters)
-        ms   = indicators.ms_indicator(list_of_functions = list_of_functions, **parameters)
-        sp   = indicators.sp_indicator(list_of_functions = list_of_functions, **parameters)
+
+        gd = indicators.gd_indicator(
+            list_of_functions=list_of_functions, **parameters)
+        gdp = indicators.gd_plus_indicator(
+            list_of_functions=list_of_functions, **parameters)
+        igd = indicators.igd_indicator(
+            list_of_functions=list_of_functions, **parameters)
+        igdp = indicators.igd_plus_indicator(
+            list_of_functions=list_of_functions, **parameters)
+        ms = indicators.ms_indicator(
+            list_of_functions=list_of_functions, **parameters)
+        sp = indicators.sp_indicator(
+            list_of_functions=list_of_functions, **parameters)
 
         self.calculated_indicators['gd'] = gd
         self.calculated_indicators['gdp'] = gdp
@@ -2118,7 +2025,7 @@ class Implement:
         self.calculated_indicators['sp'] = sp
 
         parameters = {
-            'solution': np.concatenate((self.BestAgent,self.BestReward),axis=1), 
+            'solution': np.concatenate((self.BestAgent, self.BestReward), axis=1),
             'n_objs': self.ToTalVariableCounter[1],
             'ref_point': ref_point,
         }
@@ -2132,7 +2039,7 @@ class Implement:
             None
 
         return self.calculated_indicators
-    
+
     def dis_time(self):
 
         hour = round(((self.end-self.start)), 3) % (24 * 3600) // 3600
@@ -2212,5 +2119,6 @@ class Implement:
         print("~~~~~~~~~\n")
 
 # Alternatives for defining this class:
+
 
 construct = make_model = implementor = implement = Implement

@@ -705,5 +705,4 @@ def generate_model(solver_name,solver_options):
                 from mealpy.music_based import HS
                 model_object = HS.BaseHS(**solver_options)
 
-        
         return model_object

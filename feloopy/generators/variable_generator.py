@@ -1,10 +1,21 @@
+'''
+ # @ Author: Keivan
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-11
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
+
 def generate_variable(interface_name, model_object, variable_type, variable_name, variable_bound, variable_dim):
 
-    inputs = {'model_object': model_object, 
-              'variable_type': variable_type, 
-              'variable_name': variable_name, 
-              'variable_bound': variable_bound, 
-              'variable_dim': variable_dim }
+    inputs = {'model_object': model_object,
+              'variable_type': variable_type,
+              'variable_name': variable_name,
+              'variable_bound': variable_bound,
+              'variable_dim': variable_dim}
 
     match interface_name:
 
