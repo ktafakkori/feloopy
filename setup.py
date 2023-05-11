@@ -1,81 +1,28 @@
 from setuptools import setup, find_packages
 
+common = ['tabulate','numpy','matplotlib','infix','pandas','openpyxl']
+interfaces = ['gekko','ortools','pulp','pyomo','pymprog','plotly','picos','linopy','cvxpy','cylp','mip','mealpy']
+solvers = ['cplex', 'docplex','xpress','gurobipy']
+
 setup(
-
     name='feloopy',
-    
-    version='0.2.4',
-
-    description='FelooPy: An Integrated Optimization Environment (IOE) for Automated operations research (AutoOR) in Python.',
-
-    long_description=open('README.md', encoding="utf8").read(),
-
-    long_description_content_type='text/markdown',
-
-    keywords=['Optimization', 'Machine_Learning', 'Simulation', 'Operations_Research', 'Computer_Science', 'Data_Science'],
-
-    author='Keivan Tafakkori',
-
-    author_email='k.tafakkori@gmail.com',
-
-    maintainer='Keivan Tafakkori',
-
-    maintainer_email='k.tafakkori@gmail.com',
-
-    url='https://github.com/ktafakkori/feloopy',
-
-    download_url='https://github.com/ktafakkori/feloopy/releases',
-
+    version='0.2.5',
+    description='FelooPy: An integrated optimization environment for automated operations research in Python.',
     packages=find_packages(include=['feloopy', 'feloopy.*']),
-
+    long_description=open('README.md', encoding="utf8").read(),
+    long_description_content_type='text/markdown',
+    keywords=['optimization', 'machine learning', 'simulation', 'operations research', 'computer science', 'data science', 'management science', 'industrial engineering', 'supply chain', 'operations management'],
+    author='Keivan Tafakkori',
+    author_email='k.tafakkori@gmail.com',
+    maintainer='Keivan Tafakkori',
+    maintainer_email='k.tafakkori@gmail.com',
+    url='https://github.com/ktafakkori/feloopy',
+    download_url='https://github.com/ktafakkori/feloopy/releases',
     license='MIT',
-
     python_requires='>=3.10',
-
-    install_requires=[
-    
-        'tabulate',
-
-        'numpy',
-
-        'matplotlib',
-
-        'infix',
-
-        'pandas',
-
-        'openpyxl',
-
-        'gekko',
-
-        'ortools',
-
-        'pulp',
-
-        'pyomo',
-
-        'pymprog',
-
-        'plotly',
-
-        'picos',
-
-        'cplex',
-
-        'docplex',
-
-        'gurobipy',
-
-        'xpress',
-
-        'linopy',
-
-        'cvxpy',
-
-        'cylp',
-
-        'mip',
-
-        'mealpy',
-    ],
+    extras_require = {'all_solvers': solvers,
+                      'gurobi': [solvers[3]],
+                      'cplex': [solvers[0],solvers[1]],
+                      'xpress': [solvers[2]]},
+    install_requires=[common+interfaces],
 )
