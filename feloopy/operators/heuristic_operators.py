@@ -1,4 +1,4 @@
-from ..classes.empty import *
+from ..helpers.empty import *
 import numpy as np
 
 def generate_heuristic_variable(features, type, name, variable_dim, variable_bound, agent):

@@ -1,12 +1,12 @@
-from .classes.empty import *
+from .helpers.empty import *
 
-from .functions.set_operators import *
-from .functions.math_operators import *
-from .functions.count_operators import *
-from .functions.update_operators import *
-from .functions.random_operators import *
-from .functions.heuristic_operators import *
-from .functions.fix_operators import *
+from .operators.set_operators import *
+from .operators.math_operators import *
+from .operators.count_operators import *
+from .operators.update_operators import *
+from .operators.random_operators import *
+from .operators.heuristic_operators import *
+from .operators.fix_operators import *
 
 import warnings
 import itertools as it
