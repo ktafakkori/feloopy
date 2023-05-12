@@ -1,7 +1,7 @@
 '''
- # @ Author: Keivan
+ # @ Author: Keivan Tafakkori
  # @ Created: 2023-05-11
- # @ Modified: 2023-05-11
+ # @ Modified: 2023-05-12
  # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
  # @ Github: https://github.com/ktafakkori
  # @ Website: https://ktafakkori.github.io/
@@ -29,6 +29,8 @@ warnings.filterwarnings("ignore")
 
 
 class Model:
+
+    # Method for the modeling envrionemnt.
 
     def __init__(self, solution_method, model_name, interface_name, agent=None, key=None):
         """
@@ -176,7 +178,7 @@ class Model:
         Returns the required features of the model object.
 
         Args:
-            agent (X): Input of the representor model
+            agent (X): Input of the representor model/instance.
         """
 
         if self.features['agent_status'] == 'idle':
@@ -195,6 +197,16 @@ class Model:
                 return self.agent
             else:
                 return self.response
+
+    # Methods for variables definitions.
+
+    def coll(variable_dim):
+        """
+        Creates and returns an empty collection (dictionary) of variables.
+
+        """
+        from collections import defaultdict
+        return defaultdict()
 
     def btvar(self, name, variable_dim=0, variable_bound=[0, 1]):
         """
@@ -431,230 +443,240 @@ class Model:
 
         return generate_heuristic_variable(self.features, 'svar', name, variable_dim, [0, 1], self.agent)
 
-    def invar(self, name, variable_dim=0, variable_bound=[None, None, None]):
+    def pinvar(self, name, interval=[None, None, None], variable_dim=0):
         """        
-        Defines an interval variable. Can be used inside other constraints.
-
-        Notably: start + size == end.
+        Creates and returns a present interval variable (parameter).
 
         Args:
-            name: The name of the interval variable.
-            variable_dim: The dimension of the interval variable (is ignored).
-            variable_bound: [start, size, end] for interval definiton. 
+            name: Name of this variable.
+            interval: [start, size, end]. 
+
+        """
+        if variable_dim == 0:
+
+            if self.features['interface_name'] == 'cplex_cp':
+
+                return self.model.interval_var(start=interval[0], size=interval[1], end=interval[2], name=name)
+
+            if self.features['interface_name'] == 'ortools_cp':
+
+                return self.model.NewIntervalVar(start=interval[0], size=interval[1], end=interval[2], name=name)
+
+        else:
+
+            if self.features['interface_name'] == 'cplex_cp':
+
+                if len(variable_dim) == 1:
+
+                    return {key: self.model.interval_var(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}") for key in variable_dim[0]}
+
+                else:
+
+                    return {key: self.model.interval_var(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}") for key in sets(*variable_dim)}
+
+            if self.features['interface_name'] == 'ortools_cp':
+
+                if len(variable_dim) == 1:
+
+                    return {key: self.model.NewIntervalVar(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}") for key in variable_dim[0]}
+
+                else:
+
+                    return {key: self.model.NewIntervalVar(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}") for key in sets(*variable_dim)}
+
+    def oinvar(self, name, interval=[None, None, None], variable_dim=0, is_present=True):
+        """        
+        Creates and returns an optional interval variable.
+
+        Args:
+            name: Name of this variable.
+            interval: [start, size, end]. 
+
+        """
+
+        if variable_dim == 0:
+
+            if self.features['interface_name'] == 'cplex_cp':
+
+                return self.model.interval_var(start=interval[0], size=interval[1], end=interval[2], name=name, optional=is_present)
+
+            if self.features['interface_name'] == 'ortools_cp':
+
+                return self.model.NewOptionalIntervalVar(start=interval[0], size=interval[1], end=interval[2], name=name, is_present=is_present)
+
+        else:
+
+            if self.features['interface_name'] == 'cplex_cp':
+
+                if len(variable_dim) == 1:
+
+                    return {key: self.model.interval_var(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}", optional=is_present) for key in variable_dim[0]}
+
+                else:
+
+                    return {key: self.model.interval_var(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}", optional=is_present) for key in sets(*variable_dim)}
+
+            if self.features['interface_name'] == 'ortools_cp':
+
+                if len(variable_dim) == 1:
+
+                    return {key: self.model.NewOptionalIntervalVar(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}", is_present=is_present) for key in variable_dim[0]}
+
+                else:
+
+                    return {key: self.model.NewOptionalIntervalVar(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}", is_present=is_present) for key in sets(*variable_dim)}
+
+    # Methods for constraint programming.
+
+    def start_of(self, interval_variable, absent_value=None):
+        """
+
+        Returns the start of an interval_variable. 
+        If it was absent, the absent_value is returned, which is by default equal to 0.
 
         """
 
         if self.features['interface_name'] == 'cplex_cp':
-
-            return self.model.interval_var(start=variable_bound[0], size=variable_bound[1], end=variable_bound[2], name=name)
-
+            return self.model.start_of(interval_variable, absent_value)
         if self.features['interface_name'] == 'ortools_cp':
+            return interval_variable.StartExpr()
 
-            return self.model.NewIntervalVar(start=variable_bound[0], size=variable_bound[1], end=variable_bound[2], name=name)
-
-    def start_of(self, interval, absentValue=None):
+    def end_of(self, interval_variable, absent_value=None):
+        """
+        Returns the end of an interval_variable. 
+        If it was absent, the absent_value is returned, which is by default equal to 0.
         """
 
-        To get the start of an interval variable. If it is absent, then the value of the expression is absentValue (zero by default).
+        if self.features['interface_name'] == 'cplex_cp':
+            return self.model.end_of(interval_variable, absent_value)
+        if self.features['interface_name'] == 'ortools_cp':
+            return interval_variable.EndExpr()
+
+    def length_of(self, interval_variable, absent_value=None):
+        """
+
+        Returns the length of an interval_variable. 
+        If it was absent, the absent_value is returned, which is by default equal to 0.
 
         """
 
         if self.features['interface_name'] == 'cplex_cp':
-
-            return self.model.start_of(interval, absentValue)
-
+            return self.model.length_of(interval_variable, absent_value)
         if self.features['interface_name'] == 'ortools_cp':
+            return interval_variable.EndExpr() - interval_variable.StartExpr()
 
-            ""
-
-    def end_of(self, interval, absentValue=None):
+    def size_of(self, interval_variable, absent_value=None):
         """
 
-        To get the end of an interval variable. If it is absent, then the value of the expression is absentValue (zero by default).
+        Returns the size of an interval_variable. 
+        If it was absent, the absent_value is returned, which is by default equal to 0.
 
         """
 
         if self.features['interface_name'] == 'cplex_cp':
-
-            return self.model.end_of(interval, absentValue)
-
+            return self.model.size_of(interval_variable, absent_value)
         if self.features['interface_name'] == 'ortools_cp':
+            return interval_variable.SizeExpr()
 
-            ""
-
-    def length_of(self, interval, absentValue=None):
+    def presence_of(self, interval_variable):
         """
 
-        To get the length (end - start) of an interval variable. If it is absent, then the value of the expression is absentValue (zero by default).
-
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-
-            return self.model.length_of(interval, absentValue)
-
-        if self.features['interface_name'] == 'ortools_cp':
-
-            ""
-
-    def size_of(self, interval, absentValue=None):
-        """
-
-        To get the size of an interval variable. If it is absent, then the value of the expression is absentValue (zero by default).
-
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-
-            return self.model.size_of(interval, absentValue)
-
-        if self.features['interface_name'] == 'ortools_cp':
-
-            ""
-
-    def presence_of(self, interval):
-        """
-
-        To get the presence status of an interval variable. If interval is present then the value of the expression is 1; if interval is absent then the value is 0.
+        Returns the presence (1) or absence (0) of an interval_variable. 
+        Can be used for assignments.
 
         """
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.presence_of(interval)
+            return self.model.presence_of(interval_variable)
 
         if self.features['interface_name'] == 'ortools_cp':
 
-            ""
+            return 1
 
-    def start_at_start(self, interval1, interval2, delay=None):
+    def prec_start_at_start(self, one, two, delay=None):
         """
-        To constrain the delay between the starts of two interval variables.
-
-        If interval1 and interval2 are present, then interval interval2 must start exactly at start_of(interval1) + delay. 
-
-        If interval1 or interval2 is absent, then the constraint is automatically satisfied.
-
+        start(one) + delay == start(two)
         """
 
         if self.features['interface_name'] == 'cplex_cp':
-
-            return self.model.start_at_start(interval1, interval2, delay)
-
+            return self.model.start_at_start(one, two, delay)
         if self.features['interface_name'] == 'ortools_cp':
+            return one.StartExpr() + delay == two.StartExpr()
 
-            ""
-
-    def start_at_end(self, interval1, interval2, delay=None):
+    def prec_start_at_end(self, one, two, delay=None):
         """
-        To constrain the delay between the start of one interval variable and end of another one.
-
-        If interval1 and interval2 are present then interval2 must end exactly at start_of(interval1) + delay. 
-
-        If interval1 or interval2 is absent then the constraint is automatically satisfied.
-
+        start(one) + delay == end(two)
         """
 
         if self.features['interface_name'] == 'cplex_cp':
-
-            return self.model.start_at_end(interval1, interval2, delay)
-
+            return self.model.start_at_end(one, two, delay)
         if self.features['interface_name'] == 'ortools_cp':
+            return one.StartExpr() + delay == two.EndExpr()
 
-            ""
-
-    def start_before_start(self, interval1, interval2, delay=None):
+    def prec_start_before_start(self, one, two, delay=None):
         """
-
-        To constrain the minimum delay between starts of two interval variables.
-
+        start(one) + delay <= start(two)
         """
 
         if self.features['interface_name'] == 'cplex_cp':
-
-            return self.model.start_before_start(interval1, interval2, delay)
-
+            return self.model.start_before_start(one, two, delay)
         if self.features['interface_name'] == 'ortools_cp':
+            return one.StartExpr() + delay <= two.StartExpr()
 
-            ""
-
-    def start_before_end(self, interval1, interval2, delay=None):
+    def prec_start_before_end(self, one, two, delay=None):
         """
-
-        To constrain minimum delay between the start of one interval variable and end of another one.
-
+        start(one) + delay <= end(two)
         """
 
         if self.features['interface_name'] == 'cplex_cp':
-
-            return self.model.start_before_end(interval1, interval2, delay)
-
+            return self.model.start_before_end(one, two, delay)
         if self.features['interface_name'] == 'ortools_cp':
+            return one.StartExpr() + delay <= two.EndExpr()
 
-            ""
-
-    def end_at_start(self, interval1, interval2, delay=None):
+    def prec_end_at_start(self, one, two, delay=None):
         """
-        To constrain the delay between the end of one interval variable and start of another one.
-
+        end(one) + delay == start(two)
         """
 
         if self.features['interface_name'] == 'cplex_cp':
-
-            return self.model.end_at_start(interval1, interval2, delay)
-
+            return self.model.end_at_start(one, two, delay)
         if self.features['interface_name'] == 'ortools_cp':
+            return one.EndExpr() + delay == two.StartExpr()
 
-            ""
-
-    def end_at_end(self, interval1, interval2, delay=None):
+    def prec_end_at_end(self, one, two, delay=None):
         """
-
-        To constrain the delay between the ends of two interval variables
-
+        end(one) + delay == end(two)
         """
 
         if self.features['interface_name'] == 'cplex_cp':
-
-            return self.model.end_at_end(interval1, interval2, delay)
-
+            return self.model.end_at_end(one, two, delay)
         if self.features['interface_name'] == 'ortools_cp':
+            return one.EndExpr() + delay == two.EndExpr()
 
-            ""
-
-    def end_before_start(self, interval1, interval2, delay=None):
+    def prec_end_before_start(self, one, two, delay=None):
         """
-
-        To constrain minimum delay between the end of one interval variable and start of another one.
-
+        end(one) + delay <= start(two)
         """
 
         if self.features['interface_name'] == 'cplex_cp':
-
-            return self.model.end_before_start(interval1, interval2, delay)
-
+            return self.model.end_before_start(one, two, delay)
         if self.features['interface_name'] == 'ortools_cp':
+            return one.EndExpr() + delay <= two.StartExpr()
 
-            ""
-
-    def end_before_end(self, interval1, interval2, delay=None):
+    def prec_end_before_end(self, one, two, delay=None):
         """
-
-        To constrain the minimum delay between the ends of two interval variables.
-
+        end(one) + delay <= end(two)
         """
 
         if self.features['interface_name'] == 'cplex_cp':
-
-            return self.model.end_before_end(interval1, interval2, delay)
-
+            return self.model.end_before_end(one, two, delay)
         if self.features['interface_name'] == 'ortools_cp':
-
-            ""
+            return one.EndExpr() + delay <= two.EndExpr()
 
     def forbid_start(self, interval, function):
         """
 
-        To forbid an interval variable to start during specified regions.
+        Forbids an interval variable to start during specified regions.
 
         """
 
@@ -669,7 +691,7 @@ class Model:
     def forbid_end(self, interval, function):
         """
 
-        To forbid an interval variable to end during specified regions.
+        Forbids an interval variable to end during specified regions.
 
         """
 
@@ -681,10 +703,31 @@ class Model:
 
             ""
 
+    def forbid_overlap(self, interval_variables, transition_matrix=None):
+        """
+
+        Forbids overlapping of interval variables.
+
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            if transition_matrix == None:
+
+                return self.model.no_overlap(interval_variables)
+
+            else:
+
+                return self.model.no_overlap(interval_variables, transition_matrix)
+
+        if self.features['interface_name'] == 'ortools_cp':
+
+            return self.model.AddNoOverlap(interval_variables)
+
     def forbid_extent(self, interval, function):
         """
 
-        To forbid an interval variable to overlap with specified regions.
+        Forbid an interval variable to overlap with specified regions.
 
         """
 
@@ -696,79 +739,92 @@ class Model:
 
             ""
 
-    def overlap_length(self, interval1, interval2, absentValue=None):
+    def overlap_length(self, interval_variable1, interval_variable2, absent_value=None):
         """
         To get the length of the overlap of two interval variables.
         """
 
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.overlap_length(interval1, interval2, absentValue)
+            return self.model.overlap_length(interval_variable1, interval_variable2, absent_value)
 
         if self.features['interface_name'] == 'ortools_cp':
 
             ""
 
-    def start_eval(self, interval, function, absentValue=None):
+    def start_eval(self, interval, function, absent_value=None):
         """
         To evaluate a segmented function at the start of an interval variable
         """
 
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.start_eval(interval, function, absentValue)
+            return self.model.start_eval(interval, function, absent_value)
 
         if self.features['interface_name'] == 'ortools_cp':
 
             ""
 
-    def end_eval(self, interval, function, absentValue=None):
+    def end_eval(self, interval, function, absent_value=None):
         """
         To evaluate a segmented function at the end of an interval variable
         """
 
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.end_eval(interval, function, absentValue)
+            return self.model.end_eval(interval, function, absent_value)
 
         if self.features['interface_name'] == 'ortools_cp':
 
             ""
 
-    def size_eval(self, interval, function, absentValue=None):
+    def size_eval(self, interval, function, absent_value=None):
         """
         To evaluate a segmented function on the size of an interval variable
         """
 
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.size_eval(interval, function, absentValue)
+            return self.model.size_eval(interval, function, absent_value)
 
         if self.features['interface_name'] == 'ortools_cp':
 
             ""
 
-    def length_eval(self, interval, function, absentValue=None):
+    def length_eval(self, interval, function, absent_value=None):
         """
         To evaluate a segmented function on the length of an interval variable
         """
 
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.length_eval(interval, function, absentValue)
+            return self.model.length_eval(interval, function, absent_value)
 
         if self.features['interface_name'] == 'ortools_cp':
 
             ""
 
-    def span(self, interval, function, absentValue=None):
+    def span(self, interval, function, absent_value=None):
         """
-        To create a span constraint between interval variables.
+        Forces that one interval variable must exactly cover a set of interval variables.
+        """
+
+        if self.features['interface_name'] == 'cplex_cp':
+            return self.model.span(interval, function, absent_value)
+        if self.features['interface_name'] == 'ortools_cp':
+
+            ""
+
+    def always_equal(self, state_fucntion, input1, input2):
+        """
+
+        Creates an equality constraint between two expressions.
+
         """
 
         if self.features['interface_name'] == 'cplex_cp':
 
-            return self.model.span(interval, function, absentValue)
+            return self.model.always_equal(state_fucntion, input1, input2)
 
         if self.features['interface_name'] == 'ortools_cp':
 
@@ -776,7 +832,7 @@ class Model:
 
     def alternative(self, interval, array, cardinality=None):
         """
-        To create an alternative constraint between interval variables.
+        Create an alternative constraint between interval variables.
         """
 
         if self.features['interface_name'] == 'cplex_cp':
@@ -787,47 +843,50 @@ class Model:
 
             ""
 
-    def set(self, *size):
-        """
-        Set Definition
-        ~~~~~~~~~~~~~~
-        To define a set.
-        """
+    def all_dist_above(self, exprs, value):
 
-        return range(*size)
+        if self.features['interface_name'] == 'cplex_cp':
 
-    def card(self, set):
-        """
-        Card Definition
-        ~~~~~~~~~~~~~~~~
-        To measure size of the set, etc.
-        """
+            return self.model.all_min_distance(exprs, value)
 
-        return len(set)
-
-    def uniform(self, lb, ub, variable_dim=0):
-        """
-        Uniform Parameter Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        To generate a real-valued parameter using uniform distribution inside a range.
-        """
-
-        if variable_dim == 0:
-            return self.random.uniform(low=lb, high=ub)
         else:
-            return self.random.uniform(low=lb, high=ub, size=([len(i) for i in variable_dim]))
 
-    def uniformint(self, lb, ub, variable_dim=0):
-        """
-        Uniform Integer Parameter Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        To generate an integer parameter using uniform distribution inside a range.
-        """
+            return abs(exprs) >= value
 
-        if variable_dim == 0:
-            return self.random.integers(low=lb, high=ub)
+    def if_then(self, input1, input2):
+
+        if self.features['interface_name'] == 'cplex_cp':
+
+            return self.model.if_then(input1, input2)
+
         else:
-            return self.random.integers(low=lb, high=ub+1, size=([len(i) for i in variable_dim]))
+
+            if input1:
+
+                return input2
+
+    def control_resource(self, *args, function='pulse'):
+        """
+        Creates and returns a dynamic resource usage control function.
+
+        A cumulative function expression can be modified with the atomic demand functions:
+
+        function = 'step', change resource level by a given amount at a given time.
+        function = 'pulse', change resource level by a given amount based on the length of a given interval variable or fixed interval.
+        function = 'start', change resource level by a given amount based on the start of a given interval variable.
+        function = 'end', change resource level by by a given amount at the end of a given interval variable.
+        """
+
+        if function == 'pulse':
+            return self.model.pulse(*args)
+        if function == 'step':
+            return self.model.step(*args)
+        if function == 'start':
+            return self.model.step_at_start(*args)
+        if function == 'end':
+            return self.model.step_at_end(*args)
+
+    # Methods for modeling and solving.
 
     def obj(self, expression, direction=None, label=None):
         """
@@ -1111,6 +1170,27 @@ class Model:
         from .generators import result_generator
         return result_generator.get(self.features, self.model, self.solution, 'time', None)
 
+    def get_start(self, invterval_variable):
+
+        if self.features['interface_name'] == 'cplex_cp':
+            self.solution[0].get_var_solution(invterval_variable).get_start()
+        if self.features['interface_name'] == 'ortools_cp':
+            ""
+
+    def get_interval(self, invterval_variable):
+
+        if self.features['interface_name'] == 'cplex_cp':
+            self.solution[0].get_var_solution(invterval_variable)
+        if self.features['interface_name'] == 'ortools_cp':
+            ""
+
+    def get_end(self, invterval_variable):
+
+        if self.features['interface_name'] == 'cplex_cp':
+            self.solution[0].get_var_solution(invterval_variable).get_end()
+        if self.features['interface_name'] == 'ortools_cp':
+            ""
+
     def dis_variable(self, *variables_with_index):
         for i in variables_with_index:
             print(str(i)+'*:', self.get_variable(i))
@@ -1166,6 +1246,15 @@ class Model:
 
         return A
 
+    def state_function(self):
+        """
+
+        Creates and returns a state function.
+
+        """
+
+        return self.model.state_function()
+
     def report(self, show_model=False):
 
         print("\n~~~~~~~~~~~~~~\nFELOOPY v0.2.4\n~~~~~~~~~~~~~~")
@@ -1198,6 +1287,66 @@ class Model:
             self.dis_status()
             self.dis_obj()
             self.dis_time()
+
+        print()
+        if self.features['interface_name'] == 'cplex_cp':
+
+            print("~~~~~~~~~~\nSOLUTION INFO\n~~~~~~~~~~")
+        try:
+
+            self.solution[0].print_solution()
+
+        except:
+            ""
+
+    # Methods to work with input and output data.
+
+    def max(self, *args):
+
+        if self.features['interface_name'] == 'cplex_cp':
+            return self.model.max(*args)
+
+    def set(self, *size):
+        """
+        Set Definition
+        ~~~~~~~~~~~~~~
+        To define a set.
+        """
+
+        return range(*size)
+
+    def card(self, set):
+        """
+        Card Definition
+        ~~~~~~~~~~~~~~~~
+        To measure size of the set, etc.
+        """
+
+        return len(set)
+
+    def uniform(self, lb, ub, variable_dim=0):
+        """
+        Uniform Parameter Definition
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        To generate a real-valued parameter using uniform distribution inside a range.
+        """
+
+        if variable_dim == 0:
+            return self.random.uniform(low=lb, high=ub)
+        else:
+            return self.random.uniform(low=lb, high=ub, size=([len(i) for i in variable_dim]))
+
+    def uniformint(self, lb, ub, variable_dim=0):
+        """
+        Uniform Integer Parameter Definition
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        To generate an integer parameter using uniform distribution inside a range.
+        """
+
+        if variable_dim == 0:
+            return self.random.integers(low=lb, high=ub)
+        else:
+            return self.random.integers(low=lb, high=ub+1, size=([len(i) for i in variable_dim]))
 
     def abs(self, input):
 
@@ -1596,32 +1745,23 @@ class Model:
 
             return np.round(x)
 
-    def all_dist_above(self, exprs, value):
+    # Methods to visualize data.
 
-        if self.features['interface_name'] == 'cplex_cp':
+    def show_gantt(interval_variables, names, colors='lightblue'):
 
-            return self.model.all_min_distance(exprs, value)
+        import docplex.cp.utils_visu as visu
+        import matplotlib.pyplot as plt
 
-        else:
-
-            return abs(exprs) >= value
-
-    def if_then(self, input1, input2):
-
-        if self.features['interface_name'] == 'cplex_cp':
-
-            return self.model.if_then(input1, input2)
-
-        else:
-
-            if input1:
-
-                return input2
+        counter = 0
+        for i in interval_variables:
+            visu.interval(i, colors[counter], names[counter])
+            counter += 1
+        visu.show()
 
 # Alternatives for defining this class:
 
 
-model = add_model = create_environment = env = feloopy = representor_model = learner_model = target_model = op = Model
+model = mdl = add_model = create_environment = env = feloopy = representor_model = learner_model = target_model = optimizer = Model
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -1630,15 +1770,12 @@ class Implement:
 
     def __init__(self, ModelFunction):
         '''
-        * ModelFunction (Function): The function that contains the model, its corresponding solve command, and returns its objective, fitness or hypothesis value.
+        Creates and returns an implementor for the representor model.
         '''
 
         self.ModelInfo = ModelFunction(['idle'])
-
         self.ModelFunction = ModelFunction
-
         self.InterfaceName = self.ModelInfo.features['interface_name']
-
         self.SolutionMethod = self.ModelInfo.features['solution_method']
         self.ModelName = self.ModelInfo.features['model_name']
         self.SolverName = self.ModelInfo.features['solver_name']
@@ -1658,12 +1795,9 @@ class Implement:
         self.ObjectiveBeingOptimized = self.ModelInfo.features['objective_being_optimized']
         self.VariablesBound = self.ModelInfo.features['variable_bound']
         self.VariablesDim = self.ModelInfo.features['variable_dim']
-
         self.status = 'Not solved'
         self.response = None
-
         self.AgentProperties = [None, None, None, None]
-
         self.get_objective = self.get_obj
         self.get_var = self.get_variable = self.get
         self.search = self.solve = self.optimize = self.run = self.sol
