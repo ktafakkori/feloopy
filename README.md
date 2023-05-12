@@ -123,7 +123,7 @@ def install(package):
 if hasattr(pip, 'main'):
 pip.main(['install','-U', package])
 else:
-pip.\_internal.main(['install','-U', package])
+pip._internal.main(['install','-U', package])
 
 install('feloopy')
 
