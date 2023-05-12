@@ -81,6 +81,14 @@ def generate_model(solver_name, solver_options):
             from mealpy.evolutionary_based import CRO
             model_object = CRO.OCRO(**solver_options)
 
+        case 'cma-es':
+            from mealpy.evolutionary_based import ES
+            model_object = ES.CMA_ES(**solver_options)
+
+        case 'simp-cma-es':
+            from mealpy.evolutionary_based import ES
+            model_object = ES.Simple_CMA_ES(**solver_options)
+
         # Swarm-Inspired Heuristic Optimization Algorithms
 
         case 'orig-pso':
@@ -347,6 +355,50 @@ def generate_model(solver_name, solver_options):
             from mealpy.swarm_based import ARO
             model_object = ARO.OriginalARO(**solver_options)
 
+        case 'levy-aro':
+            from mealpy.swarm_based import ARO
+            model_object = ARO.LARO(**solver_options)
+
+        case 'selec-aro':
+            from mealpy.swarm_based import ARO
+            model_object = ARO.IARO(**solver_options)
+
+        case 'wmqi-mrfo':
+            from mealpy.swarm_based import MRFO
+            model_object = MRFO.WMQIMRFO(**solver_options)
+
+        case 'orig-esoa':
+            from mealpy.swarm_based import ESOA
+            model_object = ESOA.OriginalESOA(**solver_options)
+
+        case 'sea-ho':
+            from mealpy.swarm_based import SeaHO
+            model_object = SeaHO.OriginalSeaHO(**solver_options)
+
+        case 'orig-mgo':
+            from mealpy.swarm_based import MGO
+            model_object = MGO.OriginalMGO(**solver_options)
+
+        case 'orig-gjo':
+            from mealpy.swarm_based import GJO
+            model_object = GJO.OriginalGJO(**solver_options)
+
+        case 'orig-fox':
+            from mealpy.swarm_based import FOX
+            model_object = FOX.OriginalFOX(**solver_options)
+
+        case 'orig-gto':
+            from mealpy.swarm_based import GTO
+            model_object = GTO.OriginalGTO(**solver_options)
+
+        case 'modi101-gto':
+            from mealpy.swarm_based import GTO
+            model_object = GTO.Matlab101GTO(**solver_options)
+
+        case 'modi102-gto':
+            from mealpy.swarm_based import GTO
+            model_object = GTO.Matlab102GTO(**solver_options)
+
         # Physics-Inspired Heuristic Optimization Algorithms
 
         case 'orig-sa':
@@ -416,6 +468,22 @@ def generate_model(solver_name, solver_options):
         case 'orig-archoa':
             from mealpy.physics_based import ArchOA
             model_object = ArchOA.OriginalArchOA(**solver_options)
+
+        case 'orig-rime':
+            from mealpy.physics_based import RIME
+            model_object = RIME.OriginalRIME(**solver_options)
+
+        case 'orig-evo':
+            from mealpy.physics_based import EVO
+            model_object = EVO.OriginalEVO(**solver_options)
+
+        case 'orig-cdo':
+            from mealpy.physics_based import CDO
+            model_object = CDO.OriginalCDO
+
+        case 'orig-fla':
+            from mealpy.physics_based import FLA
+            model_object = FLA.OriginalFLA
 
         # Human-Inspired Heuristic Optimization Algorithms
 
@@ -544,6 +612,18 @@ def generate_model(solver_name, solver_options):
             # model_object = DMOA.DevDMOA(**solver_options)
             from mealpy.human_based import SPBO
             model_object = SPBO.DevSPBO(**solver_options)
+
+        case 'orig-huco':
+            from mealpy.human_based import HCO
+            model_object = HCO.OriginalHCO(**solver_options)
+
+        case 'orig-warso':
+            from mealpy.human_based import WarSO
+            model_object = WarSO.OriginalWarSO(**solver_options)
+
+        case 'orig-hbo':
+            from mealpy.human_based import HBO
+            model_object = HBO.OriginalHBO(**solver_options)
 
         # Bio-Inspired Heuristic Optimization Algorithms
 
@@ -694,6 +774,14 @@ def generate_model(solver_name, solver_options):
         case 'orig-circle-sa':
             from mealpy.math_based import CircleSA
             model_object = CircleSA.OriginalCircleSA(**solver_options)
+
+        case 'ql-sca':
+            from mealpy.math_based import SCA
+            model_object = SCA.QleSCA(**solver_options)
+
+        case 'orig-shio':
+            from mealpy.math_based import SHIO
+            model_object = SHIO.OriginalSHIO(**solver_options)
 
         # Music-Inspired Heuristic Optimization Algorithms
 
