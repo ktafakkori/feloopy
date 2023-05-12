@@ -1037,7 +1037,8 @@ class Model:
                 self.features['model_object_before_solve'] = self.model
 
                 from .generators import solution_generator
-                self.solution = solution_generator.generate_solution(self.features)
+                self.solution = solution_generator.generate_solution(
+                    self.features)
 
                 try:
                     self.obj_val = self.get_objective()
@@ -2530,28 +2531,28 @@ class Implement:
 
         from pyMultiobjective.util import indicators
 
+        ObjectivesDirections = [-1 if direction ==
+                                'max' else 1 for direction in self.ObjectivesDirections]
+
+        def f1(X): return ObjectivesDirections[0]*self.Fitness(np.array(X))[0]
+        def f2(X): return ObjectivesDirections[1]*self.Fitness(np.array(X))[1]
+        def f3(X): return ObjectivesDirections[2]*self.Fitness(np.array(X))[2]
+        def f4(X): return ObjectivesDirections[3]*self.Fitness(np.array(X))[3]
+        def f5(X): return ObjectivesDirections[4]*self.Fitness(np.array(X))[4]
+        def f6(X): return ObjectivesDirections[5]*self.Fitness(np.array(X))[5]
+
+        my_list_of_functions = [f1, f2, f3, f4, f5, f6]
+
+        parameters = dict()
+
         list_of_functions = []
-        list_of_directions = []
+        list_of_directions = ObjectivesDirections
 
-        for i in range(len(self.ObjectivesDirections)):
+        for i in range(len(ObjectivesDirections)):
 
-            if self.ObjectivesDirections[1] == 'max':
+            list_of_functions.append(my_list_of_functions[i])
 
-                list_of_directions.append(-1)
-
-                def res(X):
-
-                    return -1*self.Fitness(np.array(X))[i]
-
-            else:
-
-                list_of_directions.append(1)
-
-                def res(X):
-
-                    return self.Fitness(np.array(X))[i]
-
-            list_of_functions.append(res)
+        print(np.concatenate((self.BestAgent, self.BestReward), axis=1))
 
         parameters = {
             'min_values': (0,)*self.ToTalVariableCounter[1],
@@ -2564,8 +2565,7 @@ class Implement:
 
         self.calculated_indicators = dict()
 
-        gd = indicators.gd_indicator(
-            list_of_functions=list_of_functions, **parameters)
+        #gd = indicators.gd_indicator(list_of_functions=list_of_functions, **parameters)
         gdp = indicators.gd_plus_indicator(
             list_of_functions=list_of_functions, **parameters)
         igd = indicators.igd_indicator(
