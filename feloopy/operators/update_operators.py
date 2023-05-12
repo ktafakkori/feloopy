@@ -1,5 +1,16 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-12
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 
 from .count_operators import *
+
 
 def update_variable_features(name, variable_dim, variable_bound, variable_counter_type, features):
     """ For hierarchical updating the features of the problem.

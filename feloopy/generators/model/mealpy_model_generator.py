@@ -1,3 +1,13 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-12
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 
 def generate_model(solver_name, solver_options):
 
@@ -63,11 +73,11 @@ def generate_model(solver_name, solver_options):
 
         case 'l-sha-de':
             from mealpy.evolutionary_based import DE
-            model_object = DE.L-SHADE(**solver_options)
+            model_object = DE.L_SHADE(**solver_options)
 
         case 'sap-de':
             from mealpy.evolutionary_based import DE
-            model_object = DE.SAP-DE(**solver_options)
+            model_object = DE.SAP_DE(**solver_options)
 
         case 'orig-fpa':
             from mealpy.evolutionary_based import FPA
@@ -721,9 +731,9 @@ def generate_model(solver_name, solver_options):
             from mealpy.system_based import AEO
             model_object = AEO.ImprovedAEO(**solver_options)
 
-        case 'adap-aeo':
+        case 'augm-aeo':
             from mealpy.system_based import AEO
-            model_object = AEO.AdaptiveAEO(**solver_options)
+            model_object = AEO.AugmentedAEO(**solver_options)
 
         # Math-Inspired Heuristic Optimization Algorithms
 

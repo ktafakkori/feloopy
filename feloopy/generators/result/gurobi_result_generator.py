@@ -1,3 +1,13 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-12
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 import gurobipy as gurobi_interface
 
 gurobi_status_dict = {
@@ -17,24 +27,25 @@ gurobi_status_dict = {
     gurobi_interface.GRB.INPROGRESS: 'inprogress'
 }
 
+
 def Get(model_object, result, input1, input2=None):
-   
-   input1 = input1[0]
 
-   match input1:
+    input1 = input1[0]
 
-    case 'variable':
+    match input1:
 
-        return input2.X
-    
-    case 'status':
+        case 'variable':
 
-        return  gurobi_status_dict[model_object.status]
-         
-    case 'objective':
+            return input2.X
 
-        return  model_object.ObjVal
+        case 'status':
 
-    case 'time':
-        
-        return (result[1][1]-result[1][0])
+            return gurobi_status_dict[model_object.status]
+
+        case 'objective':
+
+            return model_object.ObjVal
+
+        case 'time':
+
+            return (result[1][1]-result[1][0])

@@ -1,7 +1,19 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-12
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
+
 import numpy as np
 import warnings as wn
 
 wn.filterwarnings("ignore")
+
 
 class GA:
 
@@ -46,18 +58,27 @@ class GA:
         self.pie = self.evaluate(self.pie)
         if self.r == 0:
             self.pie = self.pie[np.argsort(self.pie[:, self.reward_col[0]])]
-            if self.d[0]*self.pie[self.best_index][self.reward_col[0]] > self.d[0]*self.best[self.reward_col[0]]: self.best = self.pie[self.best_index].copy()
-            cut = int(np.random.uniform(self.survival_of_the_fittest_lb, self.survival_of_the_fittest_ub)*self.t)
-            if self.d[0] == 1: self.pie[:cut] = self.pie[np.random.choice(self.t, cut)]
-            else: self.pie[cut:] = self.pie[np.random.choice(self.t, self.t-cut)]
+            if self.d[0]*self.pie[self.best_index][self.reward_col[0]] > self.d[0]*self.best[self.reward_col[0]]:
+                self.best = self.pie[self.best_index].copy()
+            cut = int(np.random.uniform(self.survival_of_the_fittest_lb,
+                      self.survival_of_the_fittest_ub)*self.t)
+            if self.d[0] == 1:
+                self.pie[:cut] = self.pie[np.random.choice(self.t, cut)]
+            else:
+                self.pie[cut:] = self.pie[np.random.choice(self.t, self.t-cut)]
 
     def vary(self):
-        
-        pool = np.asarray([np.array([t, np.random.randint(0, self.t)]) if np.random.rand() < self.cr else np.array([t, t]) for t in range(0, self.t)], dtype=np.int64)
-        self.pie[:, self.features_cols[0]:self.features_cols[1]] = np.where(np.random.randint(0,2,size=(self.t,self.f))==1, self.pie[pool.T[1], self.features_cols[0]:self.features_cols[1]] + np.random.uniform(-1,1, size=(self.t,self.f))*(self.pie[pool.T[1], self.features_cols[0]:self.features_cols[1]]-self.pie[pool.T[0], self.features_cols[0]:self.features_cols[1]]),self.pie[pool.T[0], self.features_cols[0]:self.features_cols[1]])
-        self.pie[:, self.features_cols[0]:self.features_cols[1]] = np.where((np.random.rand(self.t, self.f) < self.mu), 1-self.pie[:, self.features_cols[0]:self.features_cols[1]], self.pie[:, self.features_cols[0]:self.features_cols[1]])
-        self.pie[:, self.features_cols[0]:self.features_cols[1]] = np.clip(self.pie[:, self.features_cols[0]:self.features_cols[1]], 0, 1)
+
+        pool = np.asarray([np.array([t, np.random.randint(0, self.t)]) if np.random.rand(
+        ) < self.cr else np.array([t, t]) for t in range(0, self.t)], dtype=np.int64)
+        self.pie[:, self.features_cols[0]:self.features_cols[1]] = np.where(np.random.randint(0, 2, size=(self.t, self.f)) == 1, self.pie[pool.T[1], self.features_cols[0]:self.features_cols[1]] + np.random.uniform(-1, 1, size=(
+            self.t, self.f))*(self.pie[pool.T[1], self.features_cols[0]:self.features_cols[1]]-self.pie[pool.T[0], self.features_cols[0]:self.features_cols[1]]), self.pie[pool.T[0], self.features_cols[0]:self.features_cols[1]])
+        self.pie[:, self.features_cols[0]:self.features_cols[1]] = np.where((np.random.rand(
+            self.t, self.f) < self.mu), 1-self.pie[:, self.features_cols[0]:self.features_cols[1]], self.pie[:, self.features_cols[0]:self.features_cols[1]])
+        self.pie[:, self.features_cols[0]:self.features_cols[1]] = np.clip(
+            self.pie[:, self.features_cols[0]:self.features_cols[1]], 0, 1)
 
     def report(self):
 
-        if self.r == 0: return self.best[self.features_cols[0]:self.features_cols[1]], self.best[self.reward_col[0]], self.best[self.status_col]
+        if self.r == 0:
+            return self.best[self.features_cols[0]:self.features_cols[1]], self.best[self.reward_col[0]], self.best[self.status_col]

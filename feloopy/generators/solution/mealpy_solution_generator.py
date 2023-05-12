@@ -1,7 +1,18 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-12
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 import numpy as np
 import timeit
 from tabulate import tabulate as tb
 from mealpy.utils.visualize import *
+
 
 def generate_solution(model_object, fitness_function, total_features, objectives_directions, objective_number, number_of_times, show_plots, save_plots):
 
@@ -21,19 +32,28 @@ def generate_solution(model_object, fitness_function, total_features, objectives
         time_solve_end = timeit.default_timer()
 
         if show_plots:
-            export_convergence_chart(model_object.history.list_global_best_fit, title='Global Best fitness_function')          
-            export_convergence_chart(model_object.history.list_current_best_fit, title='Local Best fitness_function')          
-            export_convergence_chart(model_object.history.list_epoch_time, title='Runtime chart', y_label="Second")      
-            export_explore_exploit_chart([model_object.history.list_exploration, model_object.history.list_exploitation])  
-            export_diversity_chart([model_object.history.list_diversity],list_legends=[''])
+            export_convergence_chart(
+                model_object.history.list_global_best_fit, title='Global Best fitness_function')
+            export_convergence_chart(
+                model_object.history.list_current_best_fit, title='Local Best fitness_function')
+            export_convergence_chart(
+                model_object.history.list_epoch_time, title='Runtime chart', y_label="Second")
+            export_explore_exploit_chart(
+                [model_object.history.list_exploration, model_object.history.list_exploitation])
+            export_diversity_chart(
+                [model_object.history.list_diversity], list_legends=[''])
 
             if save_plots:
-                
-                model_object.history.save_global_best_fitness_chart(filename="results/gbfc")
-                model_object.history.save_local_best_fitness_chart(filename="results/lbfc")
+
+                model_object.history.save_global_best_fitness_chart(
+                    filename="results/gbfc")
+                model_object.history.save_local_best_fitness_chart(
+                    filename="results/lbfc")
                 model_object.history.save_runtime_chart(filename="results/rtc")
-                model_object.history.save_exploration_exploitation_chart(filename="results/eec")
-                model_object.history.save_diversity_chart(filename="results/dc")
+                model_object.history.save_exploration_exploitation_chart(
+                    filename="results/eec")
+                model_object.history.save_diversity_chart(
+                    filename="results/dc")
 
     else:
 

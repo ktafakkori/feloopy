@@ -1,3 +1,13 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-12
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 import pulp as pulp_interface
 
 import timeit
@@ -9,7 +19,7 @@ def generate_solution(features):
     model_objectives = features['objectives']
     model_constraints = features['constraints']
     directions = features['directions']
-    constraint_labels= features['constraint_labels']
+    constraint_labels = features['constraint_labels']
     debug = features['debug_mode']
     time_limit = features['time_limit']
     absolute_gap = features['absolute_gap']
@@ -21,9 +31,9 @@ def generate_solution(features):
     save = features['save_solver_log']
     save_model = features['write_model_file']
     email = features['email_address']
-    max_iterations= features['max_iterations']
-    solver_options= features['solver_options']
-    
+    max_iterations = features['max_iterations']
+    solver_options = features['solver_options']
+
     if time_limit != None:
         solver_options['timeLimit'] = time_limit
 
@@ -64,7 +74,8 @@ def generate_solution(features):
     }
 
     if solver_name not in pulp_solver_selector.keys():
-        raise RuntimeError("Using solver '%s' is not supported by 'pulp'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
+        raise RuntimeError(
+            "Using solver '%s' is not supported by 'pulp'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
 
     match debug:
 
@@ -82,7 +93,8 @@ def generate_solution(features):
                 model_object += constraint
 
             time_solve_begin = timeit.default_timer()
-            result = model_object.solve(solver=pulp_solver_selector[solver_name])
+            result = model_object.solve(
+                solver=pulp_solver_selector[solver_name])
             time_solve_end = timeit.default_timer()
             generated_solution = [result, [time_solve_begin, time_solve_end]]
 

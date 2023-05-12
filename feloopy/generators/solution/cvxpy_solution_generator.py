@@ -1,3 +1,13 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-12
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 import cvxpy as cvxpy_interface
 import timeit
 import warnings
@@ -25,13 +35,14 @@ cvxpy_solver_selector = {
     'scip': cvxpy_interface.SCIP,
     'xpress': cvxpy_interface.XPRESS}
 
+
 def generate_solution(features):
 
     model_object = features['model_object_before_solve']
     model_objectives = features['objectives']
     model_constraints = features['constraints']
     directions = features['directions']
-    constraint_labels= features['constraint_labels']
+    constraint_labels = features['constraint_labels']
     debug = features['debug_mode']
     time_limit = features['time_limit']
     absolute_gap = features['absolute_gap']
@@ -43,10 +54,11 @@ def generate_solution(features):
     save = features['save_solver_log']
     save_model = features['write_model_file']
     email = features['email_address']
-    max_iterations= features['max_iterations']
-    solver_options= features['solver_options']
+    max_iterations = features['max_iterations']
+    solver_options = features['solver_options']
 
-    options = {'solver': cvxpy_solver_selector[solver_name], 'verbose': log, 'scipy_options': solver_options.get('scipy_options', None)}
+    options = {'solver': cvxpy_solver_selector[solver_name], 'verbose': log,
+               'scipy_options': solver_options.get('scipy_options', None)}
 
     for key in solver_options:
 
@@ -55,7 +67,8 @@ def generate_solution(features):
             options[key] = solver_options[key]
 
     if solver_name not in cvxpy_solver_selector.keys():
-        raise RuntimeError("Using solver '%s' is not supported by 'cvxpy'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
+        raise RuntimeError(
+            "Using solver '%s' is not supported by 'cvxpy'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
 
     match debug:
 
@@ -64,10 +77,12 @@ def generate_solution(features):
             match directions[objective_id]:
 
                 case 'min':
-                    obj = cvxpy_interface.Minimize(model_objectives[objective_id])
+                    obj = cvxpy_interface.Minimize(
+                        model_objectives[objective_id])
 
                 case 'max':
-                    obj = cvxpy_interface.Maximize(model_objectives[objective_id])
+                    obj = cvxpy_interface.Maximize(
+                        model_objectives[objective_id])
 
             print(options)
 
@@ -76,6 +91,7 @@ def generate_solution(features):
             result = prob.solve(**options)
             time_solve_end = timeit.default_timer()
             newresult = [prob, result]
-            generated_solution = [newresult, [time_solve_begin, time_solve_end]]
+            generated_solution = [newresult, [
+                time_solve_begin, time_solve_end]]
 
     return generated_solution

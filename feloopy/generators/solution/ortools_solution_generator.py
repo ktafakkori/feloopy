@@ -1,5 +1,15 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-12
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 from ortools.linear_solver import pywraplp as ortools_interface
-import timeit 
+import timeit
 
 ortools_solver_selector = {
     'clp': 'CLP_LINEAR_PROGRAMMING',
@@ -18,13 +28,14 @@ ortools_solver_selector = {
     'glpk': 'GLPK_MIXED_INTEGER_PROGRAMMING'
 }
 
+
 def generate_solution(features):
 
     model_object = features['model_object_before_solve']
     model_objectives = features['objectives']
     model_constraints = features['constraints']
     directions = features['directions']
-    constraint_labels= features['constraint_labels']
+    constraint_labels = features['constraint_labels']
     debug = features['debug_mode']
     time_limit = features['time_limit']
     absolute_gap = features['absolute_gap']
@@ -36,12 +47,13 @@ def generate_solution(features):
     save = features['save_solver_log']
     save_model = features['write_model_file']
     email = features['email_address']
-    max_iterations= features['max_iterations']
-    solver_options= features['solver_options']
-    
+    max_iterations = features['max_iterations']
+    solver_options = features['solver_options']
+
     if solver_name not in ortools_solver_selector.keys():
-        raise RuntimeError("Using solver '%s' is not supported by 'ortools'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
-    
+        raise RuntimeError(
+            "Using solver '%s' is not supported by 'ortools'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
+
     match debug:
 
         case False:
@@ -66,12 +78,13 @@ def generate_solution(features):
             if thread_count != None:
                 model_object.SetNumThreads(thread_count)
 
-            if relative_gap !=None:
-                solverParams.SetDoubleParam(solverParams.RELATIVE_MIP_GAP, relative_gap)
+            if relative_gap != None:
+                solverParams.SetDoubleParam(
+                    solverParams.RELATIVE_MIP_GAP, relative_gap)
 
             if absolute_gap != None:
                 "None"
-                
+
             if log:
 
                 "None"
@@ -80,5 +93,5 @@ def generate_solution(features):
             result = model_object.Solve()
             time_solve_end = timeit.default_timer()
             generated_solution = [result, [time_solve_begin, time_solve_end]]
-    
+
     return generated_solution

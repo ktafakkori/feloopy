@@ -1,3 +1,13 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-12
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 import pyomo.environ as pyomo_interface
 import timeit
 import os
@@ -63,13 +73,14 @@ pyomo_online_solver_selector = {
     'snopt_online': 'snopt'
 }
 
+
 def generate_solution(features):
 
     model_object = features['model_object_before_solve']
     model_objectives = features['objectives']
     model_constraints = features['constraints']
     directions = features['directions']
-    constraint_labels= features['constraint_labels']
+    constraint_labels = features['constraint_labels']
     debug = features['debug_mode']
     time_limit = features['time_limit']
     absolute_gap = features['absolute_gap']
@@ -81,9 +92,9 @@ def generate_solution(features):
     save = features['save_solver_log']
     save_model = features['write_model_file']
     email = features['email_address']
-    max_iterations= features['max_iterations']
-    solver_options= features['solver_options']
-    
+    max_iterations = features['max_iterations']
+    solver_options = features['solver_options']
+
     if log:
         tee = True
     else:
@@ -99,10 +110,12 @@ def generate_solution(features):
             match directions[objective_id]:
 
                 case "min":
-                    model_object.OBJ = pyomo_interface.Objective(expr=model_objectives[objective_id], sense=pyomo_interface.minimize)
-                
+                    model_object.OBJ = pyomo_interface.Objective(
+                        expr=model_objectives[objective_id], sense=pyomo_interface.minimize)
+
                 case "max":
-                    model_object.OBJ = pyomo_interface.Objective(expr=model_objectives[objective_id], sense=pyomo_interface.maximize)
+                    model_object.OBJ = pyomo_interface.Objective(
+                        expr=model_objectives[objective_id], sense=pyomo_interface.maximize)
 
             model_object.constraint = pyomo_interface.ConstraintList()
 
@@ -111,27 +124,29 @@ def generate_solution(features):
                 model_object.constraint.add(expr=element)
 
             if 'online' not in solver_name:
-                
+
                 if solver_name not in pyomo_offline_solver_selector.keys():
 
-                     raise RuntimeError("Using solver '%s' is not supported by 'pyomo'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
-                
-                solver_manager = pyomo_interface.SolverFactory(pyomo_offline_solver_selector[solver_name])
+                    raise RuntimeError(
+                        "Using solver '%s' is not supported by 'pyomo'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
+
+                solver_manager = pyomo_interface.SolverFactory(
+                    pyomo_offline_solver_selector[solver_name])
 
                 if thread_count != None:
-                
+
                     solver_manager.options['threads'] = thread_count
 
                 if time_limit != None:
 
-                    solver_manager.options['timelimit'] = time_limit 
+                    solver_manager.options['timelimit'] = time_limit
 
                 if relative_gap != None:
 
                     solver_manager.options['mipgap'] = relative_gap
-                
+
                 if len(solver_options) == 0:
-                    
+
                     time_solve_begin = timeit.default_timer()
                     result = solver_manager.solve(model_object, tee=tee)
                     time_solve_end = timeit.default_timer()
@@ -139,21 +154,24 @@ def generate_solution(features):
                 else:
 
                     time_solve_begin = timeit.default_timer()
-                    result = solver_manager.solve(model_object, tee=tee, options=solver_options)
-                    time_solve_end = timeit.default_timer()     
+                    result = solver_manager.solve(
+                        model_object, tee=tee, options=solver_options)
+                    time_solve_end = timeit.default_timer()
 
             else:
-                
+
                 if solver_name not in pyomo_online_solver_selector.keys():
 
-                    raise RuntimeError("Using solver '%s' is not supported by 'pyomo'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
-                
+                    raise RuntimeError(
+                        "Using solver '%s' is not supported by 'pyomo'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
+
                 os.environ['NEOS_EMAIL'] = email
                 solver_manager = pyomo_interface.SolverManagerFactory('neos')
                 time_solve_begin = timeit.default_timer()
-                result = solver_manager.solve(model_object, solver=pyomo_online_solver_selector[solver_name], tee=tee)
+                result = solver_manager.solve(
+                    model_object, solver=pyomo_online_solver_selector[solver_name], tee=tee)
                 time_solve_end = timeit.default_timer()
 
             generated_solution = result, [time_solve_begin, time_solve_end]
-        
+
     return generated_solution

@@ -1,3 +1,13 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-12
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 import mip as mip_interface
 import itertools as it
 
@@ -7,6 +17,7 @@ BINARY = mip_interface.BINARY
 POSITIVE = mip_interface.CONTINUOUS
 INTEGER = mip_interface.INTEGER
 FREE = mip_interface.CONTINUOUS
+
 
 def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
@@ -22,13 +33,15 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
             '''
 
             if variable_dim == 0:
-                GeneratedVariable =  model_object.add_var(var_type=POSITIVE)
+                GeneratedVariable = model_object.add_var(var_type=POSITIVE)
             else:
                 if len(variable_dim) == 1:
-                    GeneratedVariable =  {key: model_object.add_var(var_type=POSITIVE) for key in variable_dim[0]}
+                    GeneratedVariable = {key: model_object.add_var(
+                        var_type=POSITIVE) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: model_object.add_var(var_type=POSITIVE) for key in it.product(*variable_dim)}
-                            
+                    GeneratedVariable = {key: model_object.add_var(
+                        var_type=POSITIVE) for key in it.product(*variable_dim)}
+
         case 'bvar':
 
             '''
@@ -39,14 +52,15 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
             '''
 
             if variable_dim == 0:
-                GeneratedVariable =  model_object.add_var(var_type=BINARY)
+                GeneratedVariable = model_object.add_var(var_type=BINARY)
             else:
                 if len(variable_dim) == 1:
-                    GeneratedVariable =  {key: model_object.add_var(var_type=BINARY) for key in variable_dim[0]}
+                    GeneratedVariable = {key: model_object.add_var(
+                        var_type=BINARY) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: model_object.add_var(var_type=BINARY) for key in it.product(*variable_dim)}
-      
-                    
+                    GeneratedVariable = {key: model_object.add_var(
+                        var_type=BINARY) for key in it.product(*variable_dim)}
+
         case 'ivar':
 
             '''
@@ -57,14 +71,15 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
             '''
 
             if variable_dim == 0:
-                GeneratedVariable =  model_object.add_var(var_type=INTEGER)
+                GeneratedVariable = model_object.add_var(var_type=INTEGER)
             else:
                 if len(variable_dim) == 1:
-                    GeneratedVariable =  {key: model_object.add_var(var_type=INTEGER) for key in variable_dim[0]}
+                    GeneratedVariable = {key: model_object.add_var(
+                        var_type=INTEGER) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: model_object.add_var(var_type=INTEGER) for key in it.product(*variable_dim)}
+                    GeneratedVariable = {key: model_object.add_var(
+                        var_type=INTEGER) for key in it.product(*variable_dim)}
 
-                            
         case 'fvar':
 
             '''
@@ -74,15 +89,13 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
             '''
             if variable_dim == 0:
-                GeneratedVariable =  model_object.add_var(var_type=POSITIVE)
+                GeneratedVariable = model_object.add_var(var_type=POSITIVE)
             else:
                 if len(variable_dim) == 1:
-                    GeneratedVariable =  {key: model_object.add_var(var_type=POSITIVE) for key in variable_dim[0]}
+                    GeneratedVariable = {key: model_object.add_var(
+                        var_type=POSITIVE) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable =  {key: model_object.add_var(var_type=POSITIVE) for key in it.product(*variable_dim)}
+                    GeneratedVariable = {key: model_object.add_var(
+                        var_type=POSITIVE) for key in it.product(*variable_dim)}
 
-
-
-    
-    return  GeneratedVariable
-    
+    return GeneratedVariable

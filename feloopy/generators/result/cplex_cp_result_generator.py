@@ -1,21 +1,32 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-12
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
+
 def Get(model_object, result, input1, input2=None):
-   
-   input1 = input1[0]
 
-   match input1:
+    input1 = input1[0]
 
-    case 'variable':
-        
-        return result[0][input2]
-    
-    case 'status':
+    match input1:
 
-        return result[0].get_solve_status()
+        case 'variable':
 
-    case 'objective':
+            return result[0][input2]
 
-        return result[0].get_objective_values()[0]
+        case 'status':
 
-    case 'time':
+            return result[0].get_solve_status()
 
-        return (result[1][1]-result[1][0])
+        case 'objective':
+
+            return result[0].get_objective_values()[0]
+
+        case 'time':
+
+            return (result[1][1]-result[1][0])

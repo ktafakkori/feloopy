@@ -1,7 +1,18 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-12
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 import gurobipy as gurobi_interface
 import timeit
 
 gurobi_solver_selector = {'gurobi': 'gurobi'}
+
 
 def generate_solution(features):
 
@@ -9,7 +20,7 @@ def generate_solution(features):
     model_objectives = features['objectives']
     model_constraints = features['constraints']
     directions = features['directions']
-    constraint_labels= features['constraint_labels']
+    constraint_labels = features['constraint_labels']
     debug = features['debug_mode']
     time_limit = features['time_limit']
     absolute_gap = features['absolute_gap']
@@ -21,18 +32,19 @@ def generate_solution(features):
     save = features['save_solver_log']
     save_model = features['write_model_file']
     email = features['email_address']
-    max_iterations= features['max_iterations']
-    solver_options= features['solver_options']
-    
+    max_iterations = features['max_iterations']
+    solver_options = features['solver_options']
+
     if solver_name not in gurobi_solver_selector.keys():
 
-        raise RuntimeError("Using solver '%s' is not supported by 'gurobi'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
+        raise RuntimeError(
+            "Using solver '%s' is not supported by 'gurobi'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
 
     if time_limit != None:
         model_object.setParam('TimeLimit', time_limit)
 
     if thread_count != None:
-        model_object.setParam('Threads', thread_count) 
+        model_object.setParam('Threads', thread_count)
 
     if relative_gap != None:
         model_object.setParam('MIPGap', relative_gap)
@@ -45,10 +57,10 @@ def generate_solution(features):
     else:
         model_object.setParam('OutputFlag', 0)
 
-    if save!=False:
+    if save != False:
         model_object.setParam('LogFile', f'{save}.log')
 
-    if len(solver_options) !=0:
+    if len(solver_options) != 0:
 
         for key in solver_options:
             model_object.setParam(key, solver_options[key])
@@ -59,19 +71,19 @@ def generate_solution(features):
 
             match directions[objective_id]:
                 case "min":
-                    model_object.setObjective(model_objectives[objective_id], gurobi_interface.GRB.MINIMIZE)
+                    model_object.setObjective(
+                        model_objectives[objective_id], gurobi_interface.GRB.MINIMIZE)
                 case "max":
-                    model_object.setObjective(model_objectives[objective_id], gurobi_interface.GRB.MAXIMIZE)
-                
+                    model_object.setObjective(
+                        model_objectives[objective_id], gurobi_interface.GRB.MAXIMIZE)
+
             for constraint in model_constraints:
                 model_object.addConstr(constraint)
 
-            if save_model !=False:
+            if save_model != False:
 
                 model_object.write(save_model)
-    
 
-    
             time_solve_begin = timeit.default_timer()
             result = model_object.optimize()
             time_solve_end = timeit.default_timer()

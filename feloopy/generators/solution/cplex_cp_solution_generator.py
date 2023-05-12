@@ -1,3 +1,13 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-12
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 from docplex.cp.config import context
 import cplex
 from docplex.mp.model import Model as CPLEXMODEL
@@ -37,7 +47,7 @@ def generate_solution(features):
     if solver_name not in cplex_solver_selector.keys():
         raise RuntimeError(
             "Using solver '%s' is not supported by 'cplex'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
-    
+
     match debug:
 
         case False:

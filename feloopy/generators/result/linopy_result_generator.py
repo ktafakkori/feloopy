@@ -1,25 +1,36 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-11
+ # @ Modified: 2023-05-12
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 from linopy import Model as LINOPYMODEL
 
+
 def Get(model_object, result, input1, input2=None):
-   
-   directions = +1 if input1[1][input1[2]]=='min' else -1
 
-   input1 = input1[0]
+    directions = +1 if input1[1][input1[2]] == 'min' else -1
 
-   match input1:
+    input1 = input1[0]
 
-    case 'variable':
+    match input1:
 
-        return input2.solution
-    
-    case 'status':
+        case 'variable':
 
-        return result[0][1]
-         
-    case 'objective':
+            return input2.solution
 
-        return  "None"
+        case 'status':
 
-    case 'time':
-        
-        return (result[1][1]-result[1][0])
+            return result[0][1]
+
+        case 'objective':
+
+            return "None"
+
+        case 'time':
+
+            return (result[1][1]-result[1][0])
