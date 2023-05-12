@@ -2,12 +2,12 @@
 
 | FelooPy                                            | [![version code](https://img.shields.io/badge/version-0.2.4-darkgreen.svg)](https://github.com/ktafakkori/feloopy/releases) [![number of users](https://static.pepy.tech/personalized-badge/feloopy?period=total&units=international_system&left_color=grey&right_color=darkgreen&left_text=users)](https://pepy.tech/project/feloopy) ![release date](https://img.shields.io/github/release-date/ktafakkori/feloopy?color=blue) [![monthly Downloads](https://static.pepy.tech/personalized-badge/feloopy?period=month&units=international_system&left_color=grey&right_color=blue&left_text=monthly%20downloads%20)](https://pepy.tech/project/feloopy) [![license type](https://img.shields.io/badge/license-MIT-darkred.svg)](https://opensource.org/licenses/MIT) |
 | :------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![Image description](miscellaneous/logo/logo1.png) | FelooPy (pronounced /fɛlupaɪ/) is a free and open-source Python library for automated operations research. It serves as both a hyper-optimization interface and an integrated optimization environment. The name comes from the idea of suggesting practical and applicable solutions for systems, industries, and supply chains. It also references the importance of loops in programming and algorithm development, and draws similarities to the name "Floppy" to highlight memory efficiency. FelooPy helps operations research scientists achieve their goals using various target, representor, and learner models, shifting their focus from coding to modeling and analytics.   |
-|News | 🎉 _Version 0.2.4 is out: Added new functionalities!_ 🎉 |
+| ![Image description](miscellaneous/logo/logo1.png) | FelooPy (pronounced /fɛlupaɪ/) is a free and open-source Python library for automated operations research. It serves as both a hyper-optimization interface and an integrated optimization environment. The name comes from the idea of suggesting practical and applicable solutions for systems, industries, and supply chains. It also references the importance of loops in programming and algorithm development, and draws similarities to the name "Floppy" to highlight memory efficiency. FelooPy helps operations research scientists achieve their goals using various target, representor, and learner models, shifting their focus from coding to modeling and analytics.                                                                                 |
+| News                                               | 🎉 _Version 0.2.4 is out: Added new functionalities!_ 🎉                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 ### **Features**
 
-* Simplest universal optimization programming language based on Python for exact, heuristic, and constraint optimization.
+- Simplest universal optimization programming language based on Python for exact, heuristic, and constraint optimization.
 
 <table>
 <tr>
@@ -69,10 +69,10 @@ m.dis(x,y)
 </tr>
 </table>
 
-* Supporting 17 exact, constraint, and heuristic optimization interfaces and solvers, just by changing two parameters, `<interface>` and `<solver>`, in the above examples. Please see the [appendix](#appendix).
-* Supporting benchmarking with verios interfaces and solvers. 
-* Supporting multi-parameter sensitivity analysis on a single objective.
-* Supporting solve options such as logs, number of threads, time limit, absolute gap or releative gap.
+- Supporting 17 exact, constraint, and heuristic optimization interfaces and solvers, just by changing two parameters, `<interface>` and `<solver>`, in the above examples. Please see the [appendix](#appendix).
+- Supporting benchmarking with various interfaces and solvers.
+- Supporting multi-parameter sensitivity analysis on a single objective.
+- Supporting solve options such as logs, number of threads, time limit, absolute gap or releative gap.
 
 ### **Installation**
 
@@ -93,7 +93,6 @@ FelooPy and its dependencies should work on Linux-based distributions, Windows, 
 </td>
 <td> Python >= 3.10 </td>
 </tr>
-
 
 <tr>
 <td> PyPI </td>
@@ -121,13 +120,14 @@ FelooPy and its dependencies should work on Linux-based distributions, Windows, 
 import pip
 
 def install(package):
-    if hasattr(pip, 'main'):
-        pip.main(['install','-U', package])
-    else:
-        pip._internal.main(['install','-U', package])
+if hasattr(pip, 'main'):
+pip.main(['install','-U', package])
+else:
+pip.\_internal.main(['install','-U', package])
 
 install('feloopy')
-```
+
+````
 </td>
 <td> Python >= 3.10 </td>
 </tr>
@@ -135,7 +135,7 @@ install('feloopy')
 <tr>
 <td> Local </td>
 <td>
-    
+
 1. Download the [feloopy-0.2.4.zip][c] file.
 2. Extract it into a specific directory.
 3. Open a terminal in that directory.
@@ -157,7 +157,7 @@ install('feloopy')
 !wget https://github.com/korakot/kora/releases/download/v0.10/py310.sh
 !bash ./py310.sh -b -f -p /usr/local
 !python -m ipykernel install --name "py310" --user
-```
+````
 
 2. Run this cell and reload (CTRL + R):
 
@@ -234,15 +234,15 @@ FelooPy is completely free and open-source and licensed under the [MIT][08] lice
 
 [08]: https://github.com/ktafakkori/feloopy/blob/main/LICENSE
 
-
 ### **Appendix**
-______
+
+---
 
 ### **Exact optimization solvers**
 
 <div align="center">
 
-| `<solver>`                                                                                              | `<interface>`                                           | embedded      |
+| `<solver>`                                                                                          | `<interface>`                                       | embedded      |
 | --------------------------------------------------------------------------------------------------- | --------------------------------------------------- | ------------- |
 | [apopt](https://apopt.com/download.php)                                                             | gekko                                               | gekko         |
 | [asl](https://github.com/ampl/asl)                                                                  | pyomo                                               | -             |
@@ -252,7 +252,7 @@ ______
 | [clp](https://www.coin-or.org/download/binary/Clp/)                                                 | ortools                                             | -             |
 | [coin](https://www.coin-or.org/download/binary/CoinAll/)                                            | pulp                                                | -             |
 | [conopt](http://www.conopt.com/)                                                                    | pyomo                                               | -             |
-| [copt](https://www.shanshu.ai/copt)                                                                                                | cvxpy                                               | -             |
+| [copt](https://www.shanshu.ai/copt)                                                                 | cvxpy                                               | -             |
 | [cplex](https://www.ibm.com/products/ilog-cplex-optimization-studio/cplex-optimizer)                | cplex, cvxpy, linopy, ortools, picos, pulp, pyomo   | -             |
 | [ecos](https://github.com/embotech/ecos)                                                            | cvxpy, picos                                        | -             |
 | [glpk](https://www.gnu.org/software/glpk/)                                                          | cvxpy, linopy, ortools, picos, pulp, pymprog, pyomo | pymprog       |
@@ -335,7 +335,6 @@ ______
 
 Source: The author.
 
-
 ### **Heuristic optimization solvers**
 
 `<interface>` = `feloopy`
@@ -343,12 +342,12 @@ Source: The author.
 <div align="center">
 
 | FelooPy Algorithms     | Class | `<solver>` |
-| ---------------------- | ----- | ------ |
-| Genetic Algorithm      | GA    | GA     |
-| Simulated Annealing    | SA    | SA     |
-| Tabu Search            | TS    | TS     |
-| Differential Evolution | DE    | DE     |
-| Grey Wolf Optimizer    | GWO   | GWO    |
+| ---------------------- | ----- | ---------- |
+| Genetic Algorithm      | GA    | GA         |
+| Simulated Annealing    | SA    | SA         |
+| Tabu Search            | TS    | TS         |
+| Differential Evolution | DE    | DE         |
+| Grey Wolf Optimizer    | GWO   | GWO        |
 
 </div>
 
@@ -358,7 +357,7 @@ Source: The author.
 
 <div align="center">
 
-| MealPy Algorithms                               | Class    | `<solver>`           |
+| MealPy Algorithms                               | Class    | `<solver>`       |
 | ----------------------------------------------- | -------- | ---------------- |
 | Evolutionary Programming                        | EP       | OriginalEP       |
 | \-                                              | \-       | LevyEP           |
@@ -530,6 +529,7 @@ Source: The author.
 | Circle Search Algorithm                         | CircleSA | OriginalCircleSA |
 | Harmony Search                                  | HS       | OriginalHS       |
 | \-                                              | \-       | BaseHS           |
+
 </div>
 
 Source: <https://github.com/thieu1995/mealpy>
