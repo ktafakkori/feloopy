@@ -332,3 +332,73 @@ def sensitivity(model_function, params_list, range_of_change=[-10, 10], step_of_
         plt.show()
 
     return pd.DataFrame(data)
+
+
+def compare(results, show_fig=True, save_fig=False, file_name=None, dpi=800, fig_size=(15, 3), alpha=0.8, line_width=5):
+
+    # [obj, time, accuracy, prob_per_epoch]
+
+    fig, axs = plt.subplots(1, 4, figsize=fig_size)
+
+    names = list(results.keys())
+
+    obj_dict = dict()
+
+    time_dict = dict()
+
+    min_acc = np.inf
+    max_acc = -np.inf
+
+    min_prob = np.inf
+    max_prob = -np.inf
+    for keys in results.keys():
+
+        x = np.arange(len(results[keys][3]))
+        axs[3].plot(x, results[keys][3], alpha=alpha, lw=line_width)
+
+        if np.min(results[keys][3]) <= min_prob:
+            min_prob = np.min(results[keys][3])
+        if np.max(results[keys][3]) >= max_prob:
+            max_prob = np.max(results[keys][3])
+
+        # axs[3].set_ylim(min_prob-0.5,max_prob+0.5)
+        axs[3].set_xlim(0-0.5, len(results[keys][3])-1+0.5)
+        axs[3].legend(names, loc=(1.04, 0))
+
+        x = np.arange(len(results[keys][2]))
+        axs[2].plot(x, results[keys][2], alpha=alpha, lw=line_width)
+
+        if np.min(results[keys][2]) <= min_acc:
+            min_acc = np.min(results[keys][2])
+        if np.max(results[keys][2]) >= min_acc:
+            max_acc = np.max(results[keys][2])
+
+        # axs[2].set_ylim(min_acc-0.5,max_acc+0.5)
+        axs[2].set_xlim(0-0.5, len(results[keys][2])-1+0.5)
+
+        obj_dict[keys] = results[keys][0]
+        time_dict[keys] = results[keys][1]
+
+    axs[0].boxplot(obj_dict.values(), showfliers=False)
+    axs[1].boxplot(time_dict.values(), showfliers=False)
+    axs[0].set_xticklabels(obj_dict.keys())
+    axs[1].set_xticklabels(time_dict.keys())
+
+    axs[0].set_ylabel('Reward')
+    axs[1].set_ylabel('Time (second)')
+    axs[2].set_ylabel('Accuracy (%)')
+    axs[2].set_xlabel('Epoch')
+    axs[3].set_ylabel('Probability')
+    axs[3].set_xlabel('Epoch')
+
+    plt.subplots_adjust(left=0.071, bottom=0.217, right=0.943,
+                        top=0.886, wspace=0.34, hspace=0.207)
+
+    if save_fig:
+        if file_name == None:
+            plt.savefig('comparision_results.png', dpi=dpi)
+        else:
+            plt.savefig(file_name, dpi=dpi)
+
+    if show_fig:
+        plt.show()

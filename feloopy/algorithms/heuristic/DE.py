@@ -17,7 +17,7 @@ wn.filterwarnings("ignore")
 
 class DE:
 
-    def __init__(self, f: int, d: list, s: int, t: int, cr: float, mu: float):
+    def __init__(self, f: int, d: list, s: int, t: int, cr: float, mu: float, **kwargs):
 
         self.d = np.asarray([1 if item == 'max' else -1 for item in d])
         self.r = 0 if len(d) == 1 else len(d)

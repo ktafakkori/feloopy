@@ -17,6 +17,7 @@ from .operators.update_operators import *
 from .operators.random_operators import *
 from .operators.heuristic_operators import *
 from .operators.fix_operators import *
+from .operators.epsilon import *
 
 import warnings
 import itertools as it
@@ -1036,8 +1037,7 @@ class Model:
                 self.features['model_object_before_solve'] = self.model
 
                 from .generators import solution_generator
-                self.solution = solution_generator.generate_solution(
-                    self.features)
+                self.solution = solution_generator.generate_solution(self.features)
 
                 try:
                     self.obj_val = self.get_objective()
@@ -1902,6 +1902,432 @@ class Implement:
         self.AgentProperties[3] = self.penalty_coefficient
 
         return self.ModelFunction(self.AgentProperties)
+
+    def evaluate(self, show_fig=True, save_fig=False, file_name=None, dpi=800, fig_size=(18, 4), opt=None, opt_features=None, pareto=None, abs_tol=0.001, rel_tol=0.001):
+
+        import matplotlib.pyplot as plt
+
+        fig = plt.figure(figsize=fig_size)
+
+        m = self.ModelObject.epsiode
+
+        no_epochs = self.AlgOptions['epoch']
+        no_episodes = self.AlgOptions['episode']
+
+        max_epoch_time = []
+        for epoch in range(0, no_epochs):
+            episode_time = []
+            for episode in range(0, no_episodes):
+                episode_time.append(m[episode]['epoch_time'][epoch])
+            max_epoch_time.append(np.max(episode_time))
+        max_epoch_time = np.array(max_epoch_time)
+
+        min_epoch_time = []
+        for epoch in range(0, no_epochs):
+            episode_time = []
+            for episode in range(0, no_episodes):
+                episode_time.append(m[episode]['epoch_time'][epoch])
+            min_epoch_time.append(np.min(episode_time))
+        min_epoch_time = np.array(min_epoch_time)
+
+        ave_epoch_time = []
+        for epoch in range(0, no_epochs):
+            episode_time = []
+            for episode in range(0, no_episodes):
+                episode_time.append(m[episode]['epoch_time'][epoch])
+            ave_epoch_time.append(np.average(episode_time))
+        ave_epoch_time = np.array(ave_epoch_time)
+
+        std_epoch_time = []
+        for epoch in range(0, no_epochs):
+            episode_time = []
+            for episode in range(0, no_episodes):
+                episode_time.append(m[episode]['epoch_time'][epoch])
+            std_epoch_time.append(np.std(episode_time))
+        std_epoch_time = np.array(std_epoch_time)
+
+        axs = fig.add_subplot(1, 5, 5)
+        x = np.arange(no_epochs)
+        axs.plot(x, max_epoch_time, 'blue', alpha=0.4)
+        axs.plot(x, ave_epoch_time, 'blue', alpha=0.8)
+        axs.plot(x, min_epoch_time, 'blue', alpha=0.4)
+        axs.fill_between(x, ave_epoch_time - std_epoch_time,
+                         ave_epoch_time + std_epoch_time, color='blue', alpha=0.3)
+        axs.set_xlabel('Epoch')
+        axs.set_ylabel('Time (second)')
+        axs.set_xlim(-0.5, no_epochs-1+0.5)
+
+        max_epoch_obj = []
+        for epoch in range(0, no_epochs):
+            max_episode_obj = []
+            for episode in range(0, no_episodes):
+                max_episode_obj.append(
+                    np.max(m[episode]['epoch_solutions'][epoch][:, -1]))
+            max_epoch_obj.append(np.max(max_episode_obj))
+        max_epoch_obj = np.array(max_epoch_obj)
+
+        min_epoch_obj = []
+        for epoch in range(0, no_epochs):
+            max_episode_obj = []
+            for episode in range(0, no_episodes):
+                max_episode_obj.append(
+                    np.max(m[episode]['epoch_solutions'][epoch][:, -1]))
+            min_epoch_obj.append(np.min(max_episode_obj))
+        min_epoch_obj = np.array(min_epoch_obj)
+
+        ave_epoch_obj = []
+        for epoch in range(0, no_epochs):
+            max_episode_obj = []
+            for episode in range(0, no_episodes):
+                max_episode_obj.append(
+                    np.max(m[episode]['epoch_solutions'][epoch][:, -1]))
+            ave_epoch_obj.append(np.average(max_episode_obj))
+        ave_epoch_obj = np.array(ave_epoch_obj)
+
+        std_epoch_obj = []
+        for epoch in range(0, no_epochs):
+            max_episode_obj = []
+            for episode in range(0, no_episodes):
+                max_episode_obj.append(
+                    np.max(m[episode]['epoch_solutions'][epoch][:, -1]))
+            std_epoch_obj.append(np.std(max_episode_obj))
+        std_epoch_obj = np.array(std_epoch_obj)
+
+        axs = fig.add_subplot(1, 5, 4)
+        x = np.arange(no_epochs)
+        if self.ObjectivesDirections[self.ObjectiveBeingOptimized] == 'max':
+            axs.plot(x, max_epoch_obj, 'green', alpha=0.4)
+            axs.plot(x, ave_epoch_obj, 'green', alpha=0.8)
+            axs.plot(x, min_epoch_obj, 'green', alpha=0.4)
+            axs.fill_between(x, ave_epoch_obj - std_epoch_obj,
+                             ave_epoch_obj + std_epoch_obj, color='green', alpha=0.3)
+        else:
+            axs.plot(x, max_epoch_obj, 'red', alpha=0.4)
+            axs.plot(x, ave_epoch_obj, 'red', alpha=0.8)
+            axs.plot(x, min_epoch_obj, 'red', alpha=0.4)
+
+            axs.fill_between(x, ave_epoch_obj - std_epoch_obj,
+                             ave_epoch_obj + std_epoch_obj, color='red', alpha=0.3)
+        axs.set_xlabel('Epoch')
+        if self.ObjectivesDirections[self.ObjectiveBeingOptimized] == 'max':
+            axs.set_ylabel('Maximum reward')
+        else:
+            axs.set_ylabel('Maximum loss')
+        axs.set_xlim(-0.5, no_epochs-1+0.5)
+
+        max_epoch_obj = []
+        for epoch in range(0, no_epochs):
+            max_episode_obj = []
+            for episode in range(0, no_episodes):
+                max_episode_obj.append(np.average(
+                    m[episode]['epoch_solutions'][epoch][:, -1]))
+            max_epoch_obj.append(np.max(max_episode_obj))
+        max_epoch_obj = np.array(max_epoch_obj)
+
+        min_epoch_obj = []
+        for epoch in range(0, no_epochs):
+            max_episode_obj = []
+            for episode in range(0, no_episodes):
+                max_episode_obj.append(np.average(
+                    m[episode]['epoch_solutions'][epoch][:, -1]))
+            min_epoch_obj.append(np.min(max_episode_obj))
+        min_epoch_obj = np.array(min_epoch_obj)
+
+        ave_epoch_obj = []
+        for epoch in range(0, no_epochs):
+            max_episode_obj = []
+            for episode in range(0, no_episodes):
+                max_episode_obj.append(np.average(
+                    m[episode]['epoch_solutions'][epoch][:, -1]))
+            ave_epoch_obj.append(np.average(max_episode_obj))
+        ave_epoch_obj = np.array(ave_epoch_obj)
+
+        std_epoch_obj = []
+        for epoch in range(0, no_epochs):
+            max_episode_obj = []
+            for episode in range(0, no_episodes):
+                max_episode_obj.append(np.average(
+                    m[episode]['epoch_solutions'][epoch][:, -1]))
+            std_epoch_obj.append(np.std(max_episode_obj))
+        std_epoch_obj = np.array(std_epoch_obj)
+
+        axs = fig.add_subplot(1, 5, 3)
+        x = np.arange(no_epochs)
+        axs.plot(x, max_epoch_obj, 'orange', alpha=0.4)
+        axs.plot(x, ave_epoch_obj, 'orange', alpha=0.8)
+        axs.plot(x, min_epoch_obj, 'orange', alpha=0.4)
+        axs.fill_between(x, ave_epoch_obj - std_epoch_obj,
+                         ave_epoch_obj + std_epoch_obj, color='orange', alpha=0.3)
+        axs.set_xlabel('Epoch')
+        if self.ObjectivesDirections[self.ObjectiveBeingOptimized] == 'max':
+            axs.set_ylabel('Average reward')
+        else:
+            axs.set_ylabel('Average loss')
+        axs.set_xlim(-0.5, no_epochs-1+0.5)
+
+        max_epoch_obj = []
+        for epoch in range(0, no_epochs):
+            max_episode_obj = []
+            for episode in range(0, no_episodes):
+                max_episode_obj.append(
+                    np.min(m[episode]['epoch_solutions'][epoch][:, -1]))
+            max_epoch_obj.append(np.max(max_episode_obj))
+        max_epoch_obj = np.array(max_epoch_obj)
+
+        min_epoch_obj = []
+        for epoch in range(0, no_epochs):
+            max_episode_obj = []
+            for episode in range(0, no_episodes):
+                max_episode_obj.append(
+                    np.min(m[episode]['epoch_solutions'][epoch][:, -1]))
+            min_epoch_obj.append(np.min(max_episode_obj))
+        min_epoch_obj = np.array(min_epoch_obj)
+
+        ave_epoch_obj = []
+        for epoch in range(0, no_epochs):
+            max_episode_obj = []
+            for episode in range(0, no_episodes):
+                max_episode_obj.append(
+                    np.min(m[episode]['epoch_solutions'][epoch][:, -1]))
+            ave_epoch_obj.append(np.average(max_episode_obj))
+        ave_epoch_obj = np.array(ave_epoch_obj)
+
+        std_epoch_obj = []
+        for epoch in range(0, no_epochs):
+            max_episode_obj = []
+            for episode in range(0, no_episodes):
+                max_episode_obj.append(
+                    np.min(m[episode]['epoch_solutions'][epoch][:, -1]))
+            std_epoch_obj.append(np.std(max_episode_obj))
+        std_epoch_obj = np.array(std_epoch_obj)
+
+        axs = fig.add_subplot(1, 5, 2)
+        x = np.arange(no_epochs)
+        if self.ObjectivesDirections[self.ObjectiveBeingOptimized] == 'max':
+            axs.plot(x, max_epoch_obj, 'red', alpha=0.4)
+            axs.plot(x, ave_epoch_obj, 'red', alpha=0.8)
+            axs.plot(x, min_epoch_obj, 'red', alpha=0.4)
+            axs.fill_between(x, ave_epoch_obj - std_epoch_obj,
+                             ave_epoch_obj + std_epoch_obj, color='red', alpha=0.3)
+        else:
+            axs.plot(x, max_epoch_obj, 'green', alpha=0.4)
+            axs.plot(x, ave_epoch_obj, 'green', alpha=0.8)
+            axs.plot(x, min_epoch_obj, 'green', alpha=0.4)
+            axs.fill_between(x, ave_epoch_obj - std_epoch_obj,
+                             ave_epoch_obj + std_epoch_obj, color='green', alpha=0.3)
+        axs.set_xlabel('Epoch')
+        axs.set_xlim(-0.5, no_epochs-1+0.5)
+        if self.ObjectivesDirections[self.ObjectiveBeingOptimized] == 'max':
+            axs.set_ylabel('Minimum reward')
+        else:
+            axs.set_ylabel('Minimum loss')
+
+        if self.ObjectivesDirections[self.ObjectiveBeingOptimized] == 'min':
+            best_min_min = np.inf
+            best_min_min_t = []
+            best_sol_t = []
+            best_per_episode = []
+            no_features = self.ToTalVariableCounter[1]
+            for epoch in range(0, no_epochs):
+                best_min = []
+                best_sol = []
+                for episode in range(0, no_episodes):
+                    best_min.append(
+                        np.min(m[episode]['epoch_solutions'][epoch][:, -1]))
+                    best_sol.append(m[episode]['epoch_solutions'][epoch][np.argmin(
+                        m[episode]['epoch_solutions'][epoch][:, -1]), :])
+                    best_track = np.min(best_min)
+                    for x in best_sol:
+                        if x[-1] == best_track:
+                            best_sol_found = x[:no_features]
+                if best_track <= best_min_min:
+                    best_min_min = best_track
+                    best_min_min_t.append(best_track)
+                    if no_features == 1:
+                        best_sol_t.append(best_sol_found[0])
+                    if no_features == 2:
+                        best_sol_t.append(
+                            [best_sol_found[0], best_sol_found[1]])
+                    else:
+                        best_sol_t.append(
+                            [best_sol_found[0], best_sol_found[1], best_sol_found[2]])
+                else:
+                    best_min_min_t.append(best_min_min)
+                    best_sol_t.append(best_sol_t[-1])
+
+                    if epoch == no_epochs-1:
+                        best_per_episode.append(best_track)
+
+            best_min_min_t = np.array(best_min_min_t)
+        else:
+            best_min_min = -np.inf
+            best_min_min_t = []
+            best_sol_t = []
+            best_per_episode = []
+            no_features = self.ToTalVariableCounter[1]
+            for epoch in range(0, no_epochs):
+                best_min = []
+                best_sol = []
+                for episode in range(0, no_episodes):
+                    best_min.append(
+                        np.max(m[episode]['epoch_solutions'][epoch][:, -1]))
+                    best_sol.append(m[episode]['epoch_solutions'][epoch][np.argmax(
+                        m[episode]['epoch_solutions'][epoch][:, -1]), :])
+                    best_track = np.max(best_min)
+                    for x in best_sol:
+                        if x[-1] == best_track:
+                            best_sol_found = x[:no_features]
+                if best_track >= best_min_min:
+                    best_min_min = best_track
+                    best_min_min_t.append(best_track)
+                    if no_features == 1:
+                        best_sol_t.append(best_sol_found[0])
+                    if no_features == 2:
+                        best_sol_t.append(
+                            [best_sol_found[0], best_sol_found[1]])
+                    else:
+                        best_sol_t.append(
+                            [best_sol_found[0], best_sol_found[1], best_sol_found[2]])
+                else:
+                    best_min_min_t.append(best_min_min)
+                    best_sol_t.append(best_sol_t[-1])
+
+                    if epoch == no_epochs-1:
+                        best_per_episode.append(best_track)
+
+            best_min_min_t = np.array(best_min_min_t)
+
+        if no_features == 1:
+            axs = fig.add_subplot(1, 5, 1)
+            axs.plot(np.arange(no_epochs), best_sol_t, c='black', lw=1)
+            if opt_features != None:
+                axs.scatter(np.arange(no_epochs),
+                            opt_features[0], c='black', marker='*', lw=1)
+
+            axs.set_ylim(-0.5, 1.5)
+            axs.set_xlim(-0.5, no_epochs-1+0.5)
+            axs.set_xlabel('Epoch')
+            axs.set_ylabel('Feature')
+
+        if no_features == 2:
+            axs = fig.add_subplot(1, 5, 1)
+            from matplotlib.patches import Rectangle
+            for i in range(0, no_epochs):
+                hg = 0.1+i/(no_epochs)
+                axs.scatter(best_sol_t[i][0], best_sol_t[i]
+                            [1], c='black', lw=1, alpha=hg)
+            if opt_features != None:
+                axs.scatter(opt_features[0], opt_features[1],
+                            c='black', marker='*', lw=1)
+
+            axs.add_patch(Rectangle((0, 0), 1, 1, fill=None, alpha=1))
+
+            axs.set_ylim(-0.5, 1.5)
+            axs.set_xlim(-0.5, 1.5)
+            axs.set_xlabel('Feature 1')
+            axs.set_ylabel('Feature 2')
+
+        if no_features == 3:
+            axs = fig.add_subplot(1, 5, 1, projection='3d')
+            for i in range(0, no_epochs):
+                hg = 0.1+i/(no_epochs)
+                axs.scatter(best_sol_t[i][0], best_sol_t[i][1],
+                            best_sol_t[i][2], lw=1, alpha=hg, color='black')
+            if opt_features != None:
+                axs.scatter(opt_features[0], opt_features[1],
+                            opt_features[2], c='red', marker='*', lw=1)
+            axs.set_xlabel('Feature 1')
+            axs.set_ylabel('Feature 2')
+            axs.set_zlabel('Feature 3')
+            axs.set_ylim(-0.5, 1.5)
+            axs.set_xlim(-0.5, 1.5)
+            axs.set_zlim(-0.5, 1.5)
+
+            axs.view_init(azim=30)
+
+        if no_features <= 2:
+            plt.subplots_adjust(left=0.071, bottom=0.217,
+                                right=0.943, top=0.886, wspace=0.35, hspace=0.207)
+        else:
+            plt.subplots_adjust(left=0.03, bottom=0.252,
+                                right=0.945, top=0.886, wspace=0.421, hspace=0.22)
+
+        if save_fig:
+            if file_name == None:
+                plt.savefig('evaluation_results.png', dpi=dpi)
+            else:
+                plt.savefig(file_name, dpi=dpi)
+
+        if show_fig:
+            plt.show()
+
+        obj = []
+        time = []
+        for episode in range(0, no_episodes):
+            obj.append(m[episode]['best_single'][0][-1])
+            time.append(m[episode]['episode_time'][0])
+
+        opt = np.array([opt])
+        if opt != 0:
+            accuracy = (1-np.abs(opt-best_min_min_t)/opt)*100
+        else:
+            opt = opt + 1
+            best_min_min_t = best_min_min_t+1
+            accuracy = (1-np.abs(opt-best_min_min_t)/opt)*100
+            accuracy[np.where(accuracy < 0)] = 0
+
+        from math import isclose
+
+        opt = np.array([opt])
+        prob_per_epoch = []
+
+        findbest = np.zeros(shape=(no_episodes, no_epochs))
+
+        if self.ObjectivesDirections[self.ObjectiveBeingOptimized] == 'min':
+            for episode in range(0, no_episodes):
+                episode_tracker = []
+                best = np.inf
+                for epoch in range(0, no_epochs):
+                    if np.min(m[episode]['epoch_solutions'][epoch][:, -1]) <= best:
+                        best = np.min(
+                            m[episode]['epoch_solutions'][epoch][:, -1])
+                        episode_tracker.append(
+                            np.min(m[episode]['epoch_solutions'][epoch][:, -1]))
+                    else:
+                        episode_tracker.append(best)
+                for epoch in range(0, no_epochs):
+                    if opt == 0:
+                        if isclose(episode_tracker[epoch], opt, abs_tol=abs_tol):
+                            findbest[episode, epoch] = 1
+                    else:
+                        if isclose(episode_tracker[epoch], opt, rel_tol=rel_tol):
+                            findbest[episode, epoch] = 1
+        else:
+            for episode in range(0, no_episodes):
+                episode_tracker = []
+                best = -np.inf
+                for epoch in range(0, no_epochs):
+                    if np.max(m[episode]['epoch_solutions'][epoch][:, -1]) >= best:
+                        best = np.max(
+                            m[episode]['epoch_solutions'][epoch][:, -1])
+                        episode_tracker.append(
+                            np.max(m[episode]['epoch_solutions'][epoch][:, -1]))
+                    else:
+                        episode_tracker.append(best)
+                for epoch in range(0, no_epochs):
+                    if opt == 0:
+                        if isclose(episode_tracker[epoch], opt, abs_tol=abs_tol, rel_tol=rel_tol):
+                            findbest[episode, epoch] = 1
+                    else:
+                        if isclose(episode_tracker[epoch], opt, abs_tol=abs_tol, rel_tol=rel_tol):
+                            findbest[episode, epoch] = 1
+
+        # abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
+
+        prob_per_epoch = [sum(findbest[episode, epoch] for episode in range(
+            0, no_episodes))/no_episodes for epoch in range(0, no_epochs)]
+
+        return [obj, time, accuracy, prob_per_epoch]
 
     def get(self, *args):
         if self.ObjectivesCounter[0] == 1:
