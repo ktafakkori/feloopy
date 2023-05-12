@@ -14,7 +14,21 @@ import timeit
 
 def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, ObjectivesDirections, ObjectiveBeingOptimized, number_of_times, show_plots, save_plots):
 
+    ObjectivesDirections = [-1 if direction ==
+                            'max' else 1 for direction in ObjectivesDirections]
+
+    def f1(X): return ObjectivesDirections[0]*Fitness(np.array(X))[0]
+    def f2(X): return ObjectivesDirections[1]*Fitness(np.array(X))[1]
+    def f3(X): return ObjectivesDirections[2]*Fitness(np.array(X))[2]
+    def f4(X): return ObjectivesDirections[3]*Fitness(np.array(X))[3]
+    def f5(X): return ObjectivesDirections[4]*Fitness(np.array(X))[4]
+    def f6(X): return ObjectivesDirections[5]*Fitness(np.array(X))[5]
+
+    my_list_of_functions = [f1, f2, f3, f4, f5, f6]
+
     parameters = dict()
+
+    parameters['verbose'] = False
 
     for key in AlgOptions:
 
@@ -32,27 +46,11 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
     parameters['max_values'] = (1,)*ToTalVariableCounter[1]
 
     list_of_functions = []
-    list_of_directions = []
+    list_of_directions = ObjectivesDirections
 
     for i in range(len(ObjectivesDirections)):
 
-        if ObjectivesDirections[1] == 'max':
-
-            list_of_directions.append(-1)
-
-            def res(X):
-
-                return -1*Fitness(np.array(X))[i]
-
-        else:
-
-            list_of_directions.append(1)
-
-            def res(X):
-
-                return Fitness(np.array(X))[i]
-
-        list_of_functions.append(res)
+        list_of_functions.append(my_list_of_functions[i])
 
     match solver_name:
 

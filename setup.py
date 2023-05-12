@@ -37,6 +37,7 @@ setup(
     extras_require={'all_solvers': solvers,
                      'gurobi': [solvers[3]],
                     'cplex': [solvers[0], solvers[1]],
-                    'xpress': [solvers[2]]},
+                    'xpress': [solvers[2]]
+                    'linux': ['pymultiobjective']},
     install_requires=[common+interfaces],
 )
