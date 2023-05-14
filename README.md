@@ -123,7 +123,7 @@ def install(package):
 if hasattr(pip, 'main'):
 pip.main(['install','-U', package])
 else:
-pip._internal.main(['install','-U', package])
+pip.\_internal.main(['install','-U', package])
 
 install('feloopy')
 
@@ -533,3 +533,44 @@ Source: The author.
 </div>
 
 Source: <https://github.com/thieu1995/mealpy>
+
+Supported heuristic optimization algorithms:
+
+Bio:
+
+2006: Invasive Weed Optimization [IWO](https://pdfs.semanticscholar.org/734c/66e3757620d3d4016410057ee92f72a9853d.pdf
+) [`orig-iwo`]
+
+```
+seed_min (int): Number of Seeds (min) | 
+seed_max (int): Number of seeds (max) |
+exponent (int): Variance Reduction Exponent |
+sigma_start (float): Initial value of standard deviation |
+sigma_end (float): Final value of standard deviation |
+```
+
+2008 : Biogeography-Based Optimization [BBO](https://ieeexplore.ieee.org/abstract/document/4475427) [`orig-bbo`, `base-bbo`]
+
+```
+p_m (float): Mutation probability, default | 0.01
+elites (int): Number of elites for next generation | default=2
+```
+
+2018: Earthworm Optimisation Algorithm [EOA](https://www.inderscience.com/info/inarticle.php?artid=93328) [`orig-eoa`]
+
+```
+p_c (float): Crossover probability | default = 0.9
+p_m (float): Initial mutation probability | default = 0.01
+n_best (int): Number of elites for next generation | default=2
+alpha (float): Similarity factor | default = 0.98
+beta (float): Initial proportional factor | default = 0.9
+gamma (float): Constant similar to cooling factor in simulated annealing | default = 0.9
+```
+
+2020 - Barnacles Mating Optimizer [BMO](https://www.sciencedirect.com/science/article/abs/pii/S0952197619302775) [`orig-bmo`]
+
+```
+pl (int): [1, pop_size - 1], barnacle’s threshold
+```
+
+2023 : Brown-Bear Optimization Algorithm [BBOA](https://www.taylorfrancis.com/chapters/edit/10.1201/9781003337003-6/novel-brown-bear-optimization-algorithm-solving-economic-dispatch-problem-tapan-prakash-praveen-prakash-singh-vinay-pratap-singh-sri-niwas-singh) [`orig-bboa`]
