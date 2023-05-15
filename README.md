@@ -538,15 +538,14 @@ Supported heuristic optimization algorithms:
 
 Bio:
 
-2006: Invasive Weed Optimization [IWO](https://pdfs.semanticscholar.org/734c/66e3757620d3d4016410057ee92f72a9853d.pdf
-) [`orig-iwo`]
+2006: Invasive Weed Optimization [IWO](https://pdfs.semanticscholar.org/734c/66e3757620d3d4016410057ee92f72a9853d.pdf) [`orig-iwo`]
 
 ```
-seed_min (int): Number of Seeds (min) | 
-seed_max (int): Number of seeds (max) |
-exponent (int): Variance Reduction Exponent |
-sigma_start (float): Initial value of standard deviation |
-sigma_end (float): Final value of standard deviation |
+seed_min (int): Minimum number of seeds |
+seed_max (int): Maximum number of seeds |
+exponent (int): Variance reduction exponent |
+sigma_start (float): Initial standard deviation |
+sigma_end (float): Final standard deviation |
 ```
 
 2008 : Biogeography-Based Optimization [BBO](https://ieeexplore.ieee.org/abstract/document/4475427) [`orig-bbo`, `base-bbo`]
