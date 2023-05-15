@@ -11,7 +11,7 @@
 import numpy as np
 
 
-def rank_multimoora(dataset, criterion_type, verbose=False):
+def mcdm_multimoora(dataset, criterion_type, verbose=False):
     """
     Rank alternatives using the MULTIMOORA method.
 
@@ -34,7 +34,7 @@ def rank_multimoora(dataset, criterion_type, verbose=False):
     ...     [37.80, 8.55, 7.97, 2.35, 9.25, 134.83, 11.935]
     ... ])
     >>> criterion_type = ['min', 'min', 'min', 'min', 'max', 'min', 'max']
-    >>> result = rank_multimoora(dataset, criterion_type, verbose=True)
+    >>> result = mcdm_multimoora(dataset, criterion_type, verbose=True)
     """
 
     # Required Libraries

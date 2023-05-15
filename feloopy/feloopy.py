@@ -95,6 +95,7 @@ class Model:
 
                 from .generators import model_generator
                 self.model = model_generator.generate_model(self.features)
+                self.sm = self.model
 
             case 'heuristic':
 

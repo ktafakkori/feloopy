@@ -10,11 +10,13 @@
 
 from typing import Dict, Union
 import numpy as np
-from pyDecision.algorithm import codas_method
 
 
-def rank_codas_method(dataset: np.ndarray, weights: np.ndarray, criterion_type: list, lmbd: float, show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
+def mcdm_codas(dataset: np.ndarray, weights: np.ndarray, criterion_type: list, lmbd: float, show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
     """
+
+    Combinative Distance-Based Assessment
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     This function takes the dataset, weights and criterion type as input for the CODAS method of multi-criteria decision making.
     It returns the output of the main function (which is imported from Pydecision) in the form of a dictionary with keys
     representing the name of the output and values the value of the outputs.
@@ -32,7 +34,7 @@ def rank_codas_method(dataset: np.ndarray, weights: np.ndarray, criterion_type: 
 
     Returns:
         A dictionary containing the following keys:
-        - 'rank': A numpy array representing the calculated rank for each alternative.
+        - 'score': A numpy array representing the calculated score for each alternative.
         - 'graph': If show_graph is True, a matplotlib figure object representing the visualization of the ranking graph.
                    Otherwise, None.
     """
@@ -45,7 +47,7 @@ def rank_codas_method(dataset: np.ndarray, weights: np.ndarray, criterion_type: 
                         lmbd=lmbd, graph=show_graph)
 
     # Create the output dictionary
-    output_dict = {'rank': rank}
+    output_dict = {'score': rank}
 
     # If show_output is True, print the calculated rank
     if show_output:

@@ -10,10 +10,9 @@
 
 from typing import Dict, List, Tuple
 import numpy as np
-from pyDecision.algorithm import fuzzy_edas_method
 
 
-def rank_fuzzy_edas(dataset: List[np.ndarray], criterion_type: List[str], weights: List[Tuple[Tuple[float, float, float]]], verbose: bool = False) -> Dict[str, np.ndarray]:
+def mcdm_fuzzy_edas(dataset: List[np.ndarray], criterion_type: List[str], weights: List[Tuple[Tuple[float, float, float]]], verbose: bool = False) -> Dict[str, np.ndarray]:
     """
     This function applies the fuzzy EDAS method to rank alternatives in a dataset based on multiple criteria.
 
@@ -27,6 +26,8 @@ def rank_fuzzy_edas(dataset: List[np.ndarray], criterion_type: List[str], weight
     - A dictionary with the following keys:
         - 'rank': the rank of each alternative.
     """
+    from pyDecision.algorithm import fuzzy_edas_method
+
     rank = fuzzy_edas_method(dataset, criterion_type, weights, graph=verbose)
     result = {
         'rank': np.round(rank, 4)

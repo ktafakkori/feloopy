@@ -11,7 +11,7 @@
 import numpy as np
 
 
-def rank_electre_iv(dataset, P, Q, V, graph=False, verbose=False):
+def mcdm_electre_iv(dataset, P, Q, V, graph=False, verbose=False):
     """
     Ranks alternatives using the ELECTRE IV method.
 
@@ -35,31 +35,31 @@ def rank_electre_iv(dataset, P, Q, V, graph=False, verbose=False):
     dict
         A dictionary containing the following keys:
         - 'credibility': the credibility matrix.
-        - 'rank_D': the descending ranking of alternatives.
-        - 'rank_A': the ascending ranking of alternatives.
-        - 'rank_P': the partial ranking of alternatives.
+        - 'mcdm_D': the descending ranking of alternatives.
+        - 'mcdm_A': the ascending ranking of alternatives.
+        - 'mcdm_P': the partial ranking of alternatives.
     """
     from pyDecision.algorithm import electre_iv
 
-    credibility, rank_D, rank_A, rank_N, rank_P = electre_iv(
+    credibility, mcdm_D, mcdm_A, mcdm_N, mcdm_P = electre_iv(
         dataset, P=P, Q=Q, V=V, graph=graph)
 
     if verbose:
         print("Credibility matrix:")
         print(np.round(credibility, decimals=4))
         print("Descending ranking of alternatives:")
-        for i, alt in enumerate(rank_D):
+        for i, alt in enumerate(mcdm_D):
             print(f"{i+1}. {alt}")
         print("Ascending ranking of alternatives:")
-        for i, alt in enumerate(rank_A):
+        for i, alt in enumerate(mcdm_A):
             print(f"{i+1}. {alt}")
         print("Partial ranking of alternatives:")
-        for i, alt in enumerate(rank_P):
+        for i, alt in enumerate(mcdm_P):
             print(f"a{i+1}. {alt}")
 
     return {
         'credibility': np.round(credibility, decimals=4),
-        'rank_D': rank_D,
-        'rank_A': rank_A,
-        'rank_P': rank_P
+        'mcdm_D': mcdm_D,
+        'mcdm_A': mcdm_A,
+        'mcdm_P': mcdm_P
     }

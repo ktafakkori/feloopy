@@ -11,7 +11,7 @@
 import numpy as np
 
 
-def score_waspas(dataset, criterion_type, weights, lambda_value, verbose=False):
+def mcdm_waspas(dataset, criterion_type, weights, lambda_value, verbose=False):
     """
     Calculate the weighted sum model (WSM), weighted product model (WPM), and WASPAS values of alternatives.
 

@@ -10,10 +10,9 @@
 
 from typing import Dict, List, Union
 import numpy as np
-from pyDecision.algorithm import topsis_method
 
 
-def score_topsis_method(dataset: np.ndarray, weights: np.ndarray, criterion_type: List[str], graph: bool = False) -> Dict[str, Union[float, np.ndarray]]:
+def mcdm_topsis(dataset: np.ndarray, weights: np.ndarray, criterion_type: List[str], graph: bool = False) -> Dict[str, Union[float, np.ndarray]]:
     """
     Score the alternatives using the Technique for Order of Preference by Similarity to Ideal Solution (TOPSIS) method.
 
@@ -26,6 +25,7 @@ def score_topsis_method(dataset: np.ndarray, weights: np.ndarray, criterion_type
     Returns:
         Dict[str, Union[float, np.ndarray]]: A dictionary containing the score of the alternatives.
     """
+    from pyDecision.algorithm import topsis_method
 
     score = topsis_method(dataset, weights=weights,
                           criterion_type=criterion_type, graph=graph)

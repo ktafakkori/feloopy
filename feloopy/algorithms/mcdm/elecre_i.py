@@ -12,7 +12,7 @@ from typing import Dict
 import numpy as np
 
 
-def score_electre_i(dataset: np.ndarray, W: list, remove_cycles: bool = True, c_hat: float = 1.0,
+def mcdm_electre_i(dataset: np.ndarray, W: list, remove_cycles: bool = True, c_hat: float = 1.0,
                     d_hat: float = 0.4, graph: bool = False, verbose: bool = False) -> Dict[str, any]:
     """
     This function performs the Electre I algorithm on a given dataset and returns the concordance, discordance, dominance,

@@ -10,13 +10,12 @@
 
 from typing import Dict, Union
 import numpy as np
-from pyDecision.algorithm import fuzzy_dematel_method
 
 
-def weight_fuzzy_dematel_method(dataset: list,
-                                size_x: int = 15,
-                                size_y: int = 10,
-                                show_output: bool = True) -> Dict[str, Union[np.ndarray, None]]:
+def mcdm_fuzzy_dematel(dataset: list,
+                       size_x: int = 15,
+                       size_y: int = 10,
+                       show_output: bool = True) -> Dict[str, Union[np.ndarray, None]]:
     """
     This function takes the dataset as input for the Fuzzy DEMATEL method of multi-criteria decision making. It returns
     the output of the main function (which is imported from Pydecision) in the form of a dictionary with keys

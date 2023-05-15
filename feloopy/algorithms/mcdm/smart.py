@@ -10,10 +10,9 @@
 
 from typing import Dict, List, Union
 import numpy as np
-from pyDecision.algorithm import smart_method
 
 
-def score_smart_method(dataset: np.ndarray, grades: np.ndarray, lower: np.ndarray, upper: np.ndarray, criterion_type: List[str], graph: bool = False) -> Dict[str, Union[float, np.ndarray]]:
+def mcdm_smart(dataset: np.ndarray, grades: np.ndarray, lower: np.ndarray, upper: np.ndarray, criterion_type: List[str], graph: bool = False) -> Dict[str, Union[float, np.ndarray]]:
     """
     Score the alternatives using the Simple Multi-Attribute Rating Technique (SMART) method.
 
@@ -28,6 +27,8 @@ def score_smart_method(dataset: np.ndarray, grades: np.ndarray, lower: np.ndarra
     Returns:
         Dict[str, Union[float, np.ndarray]]: A dictionary containing the score of the alternatives.
     """
+
+    from pyDecision.algorithm import smart_method
 
     score = smart_method(dataset, grades=grades, lower=lower,
                          upper=upper, criterion_type=criterion_type, graph=graph)

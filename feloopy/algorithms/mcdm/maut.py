@@ -10,10 +10,9 @@
 
 from typing import Dict
 import numpy as np
-from pyDecision.algorithm import maut_method
 
 
-def rank_maut(dataset: np.ndarray, weights: np.ndarray, criterion_type: list, utility_functions: list, step_size: int = None, verbose: bool = False) -> Dict[str, float]:
+def mcdm_maut(dataset: np.ndarray, weights: np.ndarray, criterion_type: list, utility_functions: list, step_size: int = None, verbose: bool = False) -> Dict[str, float]:
     """
     This function applies the MAUT method to rank a dataset based on given criteria.
 
@@ -30,6 +29,7 @@ def rank_maut(dataset: np.ndarray, weights: np.ndarray, criterion_type: list, ut
         - 'rank': the rank of each alternative in the dataset, starting from 1.
         - 'score': the score of each alternative.
     """
+    from pyDecision.algorithm import maut_method
     rank = maut_method(dataset, weights, criterion_type,
                        utility_functions, step_size, graph=verbose)
     score = np.round(rank / np.max(rank), 4)

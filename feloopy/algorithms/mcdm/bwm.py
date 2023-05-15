@@ -10,10 +10,9 @@
 
 from typing import Dict, Union
 import numpy as np
-from pyDecision.algorithm import bw_method
 
 
-def weight_bw_method(dataset: np.ndarray, mic: np.ndarray, lic: np.ndarray, size: int, iterations: int, show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
+def mcdm_bwm(dataset: np.ndarray, mic: np.ndarray, lic: np.ndarray, size: int, iterations: int, show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
     """
     This function takes the dataset, most important criteria (mic) and least important criteria (lic) as input for the
     BWM method of multi-criteria decision making. It returns the output of the main function (which is imported from
@@ -37,7 +36,6 @@ def weight_bw_method(dataset: np.ndarray, mic: np.ndarray, lic: np.ndarray, size
     """
 
     from pyDecision.algorithm import bw_method
-    import matplotlib.pyplot as plt
 
     # Call BWM Function
     weights = bw_method(dataset, mic, lic, size=size, iterations=iterations)

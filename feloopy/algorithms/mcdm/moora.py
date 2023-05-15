@@ -9,7 +9,7 @@
  '''
 
 
-def rank_moora_method(dataset, weights, criterion_type, graph=False):
+def mcdm_moora(dataset, weights, criterion_type, graph=False):
     """
     Calculates the rank using the MOORA method.
 
@@ -31,7 +31,7 @@ def rank_moora_method(dataset, weights, criterion_type, graph=False):
 
     Example:
     --------
-    >>> res = rank_moora_method(dataset, weights, criterion_type, graph=True)
+    >>> res = mcdm_moora_method(dataset, weights, criterion_type, graph=True)
     >>> print(res)
     {'Rank': array([3., 5., 1., 7., 6., 4., 2.]), 'Score': array([0.2435, 0.1919, 0.2679, 0.1222, 0.1483, 0.2142, 0.3915]), 'Weighted Sum': array([0.8396, 0.4116, 1.0367, 0.2767, 0.4462, 0.6516, 0.5838]), 'Normalized Weighted Sum': array([0.6644, 0.3253, 0.8195, 0.219 , 0.353 , 0.5144, 0.4605])}
     """

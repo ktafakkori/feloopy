@@ -12,7 +12,7 @@ from typing import Dict
 import numpy as np
 
 
-def score_gra(dataset: np.ndarray, criterion_type: list, weights: np.ndarray, epsilon: float = 0.5, verbose: bool = False) -> Dict[str, np.ndarray]:
+def mcdm_gra(dataset: np.ndarray, criterion_type: list, weights: np.ndarray, epsilon: float = 0.5, verbose: bool = False) -> Dict[str, np.ndarray]:
     """
     This function applies the GRA method to score alternatives in a dataset based on multiple criteria.
 

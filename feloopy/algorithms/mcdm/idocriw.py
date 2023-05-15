@@ -10,10 +10,9 @@
 
 from typing import Dict
 import numpy as np
-from pyDecision.algorithm import idocriw_method
 
 
-def rank_idocriw(dataset: np.ndarray, criterion_type: list, size: int = 20, gen: int = 12000, verbose: bool = False) -> Dict[str, np.ndarray]:
+def mcdm_idocriw(dataset: np.ndarray, criterion_type: list, size: int = 20, gen: int = 12000, verbose: bool = False) -> Dict[str, np.ndarray]:
     """
     This function applies the IDOCRIW method to rank alternatives in a dataset based on multiple criteria.
 
@@ -31,6 +30,8 @@ def rank_idocriw(dataset: np.ndarray, criterion_type: list, size: int = 20, gen:
         - 'population': the final population.
         - 'best_score': the best score obtained.
     """
+
+    from pyDecision.algorithm import idocriw_method
     rank = idocriw_method(
         dataset, criterion_type, size=size, gen=gen, graph=verbose)
     result = {

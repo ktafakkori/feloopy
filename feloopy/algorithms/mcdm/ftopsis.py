@@ -9,7 +9,7 @@
  '''
 
 
-def rank_fuzzy_topsis(weights, criterion_type, dataset, graph=False):
+def mcdm_fuzzy_topsis(weights, criterion_type, dataset, graph=False):
     """
     Ranks alternatives based on Fuzzy TOPSIS method.
 

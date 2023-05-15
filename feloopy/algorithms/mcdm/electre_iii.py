@@ -12,10 +12,10 @@ from typing import Dict
 import numpy as np
 
 
-def rank_electre_iii(dataset: np.ndarray, P: list, Q: list, V: list, W: list, graph: bool = False, verbose: bool = False) -> Dict[str, any]:
+def mcdm_electre_iii(dataset: np.ndarray, P: list, Q: list, V: list, W: list, graph: bool = False, verbose: bool = False) -> Dict[str, any]:
     """
-    This function performs the Electre III algorithm on a given dataset and returns the global concordance, credibility, rank_D,
-    rank_A, and rank_P matrices as a dictionary.
+    This function performs the Electre III algorithm on a given dataset and returns the global concordance, credibility, mcdm_D,
+    mcdm_A, and mcdm_P matrices as a dictionary.
 
     Args:
     - dataset (np.ndarray): The decision matrix with shape (alternatives, criteria).
@@ -30,9 +30,9 @@ def rank_electre_iii(dataset: np.ndarray, P: list, Q: list, V: list, W: list, gr
     - A dictionary containing the following keys:
         - 'global_concordance': The global concordance matrix.
         - 'credibility': The credibility matrix.
-        - 'rank_D': The descending ranking of the alternatives.
-        - 'rank_A': The ascending ranking of the alternatives.
-        - 'rank_P': The partial ranking of the alternatives.
+        - 'mcdm_D': The descending ranking of the alternatives.
+        - 'mcdm_A': The ascending ranking of the alternatives.
+        - 'mcdm_P': The partial ranking of the alternatives.
 
     Example Usage:
     ```
@@ -56,34 +56,34 @@ def rank_electre_iii(dataset: np.ndarray, P: list, Q: list, V: list, W: list, gr
     W = [9.00, 8.24, 5.98, 8.48]
 
     # Call Electre III Function
-    results = rank_electre_iii(dataset, P=P, Q=Q, V=V, W=W, graph=True, verbose=True)
+    results = mcdm_electre_iii(dataset, P=P, Q=Q, V=V, W=W, graph=True, verbose=True)
     ```
     """
 
     from pyDecision.algorithm import electre_iii
-    global_concordance, credibility, rank_D, rank_A, rank_N, rank_P = electre_iii(
+    global_concordance, credibility, mcdm_D, mcdm_A, mcdm_N, mcdm_P = electre_iii(
         dataset, P=P, Q=Q, V=V, W=W, graph=graph)
 
     results = {
         'global_concordance': np.round(global_concordance, decimals=4),
         'credibility': np.round(credibility, decimals=4),
-        'rank_D': rank_D,
-        'rank_A': rank_A,
-        'rank_N': rank_N,
-        'rank_P': rank_P
+        'mcdm_D': mcdm_D,
+        'mcdm_A': mcdm_A,
+        'mcdm_N': mcdm_N,
+        'mcdm_P': mcdm_P
     }
 
     if verbose:
         print(f"Global Concordance Matrix:\n{results['global_concordance']}\n")
         print(f"Credibility Matrix:\n{results['credibility']}\n")
         print("Rank - Descending")
-        for i, alt in enumerate(results['rank_D']):
+        for i, alt in enumerate(results['mcdm_D']):
             print(f"{i+1}. {alt}")
         print("\nRank - Ascending")
-        for i, alt in enumerate(results['rank_A']):
+        for i, alt in enumerate(results['mcdm_A']):
             print(f"{i+1}. {alt}")
         print("\nRank - Partial")
-        for i, alt in enumerate(results['rank_P']):
+        for i, alt in enumerate(results['mcdm_P']):
             print(f"a{i+1}: {alt}")
 
     return results

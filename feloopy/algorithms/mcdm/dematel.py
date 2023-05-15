@@ -10,10 +10,9 @@
 
 from typing import Dict, Union
 import numpy as np
-from pyDecision.algorithm import dematel_method
 
 
-def weight_dematel_method(dataset: np.ndarray,
+def mcdm_dematel(dataset: np.ndarray,
                           size_x: int = 15,
                           size_y: int = 10,
                           show_output: bool = True) -> Dict[str, Union[np.ndarray, None]]:

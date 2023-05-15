@@ -9,7 +9,7 @@
  '''
 
 
-def score_fuzzy_vikor(dataset, weights, criterion_type, strategy_coefficient=0.5, show_graph=False):
+def mcdm_fuzzy_vikor(dataset, weights, criterion_type, strategy_coefficient=0.5, show_graph=False):
     """
     Calculate the scores of alternatives using Fuzzy VIKOR method.
 
@@ -70,17 +70,3 @@ def score_fuzzy_vikor(dataset, weights, criterion_type, strategy_coefficient=0.5
         'q': q,
         'c_solution': c_solution
     }
-
-
-dataset = [
-    [(3, 6, 9), (5, 8, 9), (5, 7, 9)],
-    [(5, 7, 9), (3, 7, 9), (3, 5, 7)],
-    [(5, 8, 9), (3, 5, 7), (1, 2, 3)],
-    [(1, 2, 4), (1, 4, 7), (1, 2, 5)]
-]
-weights = [
-    [(0.1, 0.2, 0.3), (0.7, 0.8, 0.9), (0.3, 0.5, 0.8)]
-]
-criterion_type = ['max', 'max', 'min']
-result = score_fuzzy_vikor(
-    dataset, weights, criterion_type, strategy_coefficient=0.5, show_graph=True)

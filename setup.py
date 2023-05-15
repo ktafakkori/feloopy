@@ -14,7 +14,7 @@ from setuptools import setup, find_packages
 common = ['tabulate', 'numpy', 'matplotlib',
           'infix', 'pandas', 'openpyxl', 'numba', 'plotly']
 interfaces = ['gekko', 'ortools', 'pulp', 'pyomo', 'pymprog',
-              'picos', 'linopy', 'cvxpy', 'cylp', 'mip', 'mealpy']
+              'picos', 'linopy', 'cvxpy', 'cylp', 'mip', 'mealpy', 'pyDecision']
 solvers = ['cplex', 'docplex', 'xpress', 'gurobipy']
 
 setup(
@@ -37,7 +37,7 @@ setup(
     extras_require={'all_solvers': solvers,
                      'gurobi': [solvers[3]],
                     'cplex': [solvers[0], solvers[1]],
-                    'xpress': [solvers[2]]
+                    'xpress': [solvers[2]],
                     'linux': ['pymultiobjective']},
     install_requires=[common+interfaces],
 )

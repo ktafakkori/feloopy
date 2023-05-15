@@ -13,7 +13,7 @@ import numpy as np
 from pyDecision.algorithm import fuzzy_ahp_method
 
 
-def weight_fuzzy_ahp(dataset: list, verbose: bool = False) -> Dict[str, np.ndarray]:
+def mcdm_fuzzy_ahp(dataset: list, verbose: bool = False) -> Dict[str, np.ndarray]:
     """
     This function applies the Fuzzy AHP method to compute weights for a set of criteria.
 

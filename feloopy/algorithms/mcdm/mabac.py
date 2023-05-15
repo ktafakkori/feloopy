@@ -10,10 +10,9 @@
 
 from typing import Dict
 import numpy as np
-from pyDecision.algorithm import mabac_method
 
 
-def score_mabac(dataset: np.ndarray, criterion_type: list, verbose: bool = False) -> Dict[str, float]:
+def mcdm_mabac(dataset: np.ndarray, criterion_type: list, verbose: bool = False) -> Dict[str, float]:
     """
     This function applies the MABAC method to score alternatives in a dataset based on multiple criteria.
 
@@ -26,6 +25,7 @@ def score_mabac(dataset: np.ndarray, criterion_type: list, verbose: bool = False
     - A dictionary with the following keys:
         - 'score': the score of each alternative, ranging from 0 to 1.
     """
+    from pyDecision.algorithm import mabac_method
     # Set weights to 1 for equal weighting
     weights = np.ones(len(criterion_type)) / len(criterion_type)
 

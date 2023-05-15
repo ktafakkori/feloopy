@@ -10,10 +10,9 @@
 
 from typing import Dict, List, Union
 import numpy as np
-from pyDecision.algorithm import saw_method
 
 
-def rank_saw_method(dataset: np.ndarray, criterion_type: List[str], weights: np.ndarray, graph: bool = False) -> Dict[str, Union[float, np.ndarray]]:
+def mcdm_saw(dataset: np.ndarray, criterion_type: List[str], weights: np.ndarray, graph: bool = False) -> Dict[str, Union[float, np.ndarray]]:
     """
     Rank the alternatives using the Simple Additive Weighting (SAW) method.
 
@@ -26,6 +25,7 @@ def rank_saw_method(dataset: np.ndarray, criterion_type: List[str], weights: np.
     Returns:
         Dict[str, Union[float, np.ndarray]]: A dictionary containing the ranking of the alternatives.
     """
+    from pyDecision.algorithm import saw_method
 
     ranking = saw_method(
         dataset, criterion_type=criterion_type, weights=weights, graph=graph)

@@ -12,7 +12,7 @@ from typing import Dict, Optional
 import numpy as np
 
 
-def score_electre_ii(dataset: np.ndarray, W: np.ndarray, c_minus: float, c_zero: float, c_plus: float,
+def mcdm_electre_ii(dataset: np.ndarray, W: np.ndarray, c_minus: float, c_zero: float, c_plus: float,
                      d_minus: float, d_plus: float, graph: Optional[bool] = False,
                      verbose: Optional[bool] = False) -> Dict[str, np.ndarray]:
     """

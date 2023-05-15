@@ -10,11 +10,11 @@
 
 from typing import Dict, Union
 import numpy as np
-from pyDecision.algorithm import borda_method
 
 
-def rank_borda_method(dataset: np.ndarray, criterion_type: list, show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
+def mcdm_borda(dataset: np.ndarray, criterion_type: list, show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
     """
+
     This function takes the dataset and criterion type as input for the Borda method of multi-criteria decision making.
     It returns the output of the main function (which is imported from Pydecision) in the form of a dictionary with keys
     representing the name of the output and values the value of the outputs.

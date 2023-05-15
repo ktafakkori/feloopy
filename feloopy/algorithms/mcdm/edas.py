@@ -10,10 +10,9 @@
 
 from typing import Dict
 import numpy as np
-from pyDecision.algorithm import edas_method
 
 
-def rank_edas(dataset: np.ndarray, criterion_type: list, weights: np.ndarray, verbose: bool = False) -> Dict[str, np.ndarray]:
+def mcdm_edas(dataset: np.ndarray, criterion_type: list, weights: np.ndarray, verbose: bool = False) -> Dict[str, np.ndarray]:
     """
     This function applies the EDAS method to rank alternatives in a dataset based on multiple criteria.
 
@@ -27,6 +26,9 @@ def rank_edas(dataset: np.ndarray, criterion_type: list, weights: np.ndarray, ve
     - A dictionary with the following keys:
         - 'rank': the rank of each alternative.
     """
+
+    from pyDecision.algorithm import edas_method
+
     rank = edas_method(dataset, criterion_type, weights, graph=verbose)
     result = {
         'rank': np.round(rank, 4)

@@ -11,7 +11,7 @@
 import numpy as np
 
 
-def score_wings(dataset, size_x=15, size_y=10, verbose=False):
+def mcdm_wings(dataset, size_x=15, size_y=10, verbose=False):
     """
     Calculate the weights and ranks of alternatives using WINGS method.
 

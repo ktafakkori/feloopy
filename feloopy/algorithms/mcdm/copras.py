@@ -10,11 +10,12 @@
 
 from typing import Dict, Union
 import numpy as np
-from pyDecision.algorithm import copras_method
 
 
-def rank_copras_method(dataset: np.ndarray, weights: np.ndarray, criterion_type: list, show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
+def mcdm_copras(dataset: np.ndarray, weights: np.ndarray, criterion_type: list, show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
     """
+    Complex Proportional Assessment
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     This function takes the dataset, weights and criterion type as input for the COPRAS method of multi-criteria decision making. It
     returns the output of the main function (which is imported from Pydecision) in the form of a dictionary with keys
     representing the name of the output and values the value of the outputs.

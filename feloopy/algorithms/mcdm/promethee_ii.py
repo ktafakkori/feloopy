@@ -11,7 +11,7 @@
 import numpy as np
 
 
-def rank_promethee_ii(dataset, W, Q, S, P, F, sort=True, topn=10, graph=False, verbose=False):
+def mcdm_promethee_ii(dataset, W, Q, S, P, F, sort=True, topn=10, graph=False, verbose=False):
     """
     Ranks alternatives using the Promethee II algorithm.
 
@@ -45,7 +45,7 @@ def rank_promethee_ii(dataset, W, Q, S, P, F, sort=True, topn=10, graph=False, v
     >>> S = [0.4, 0.4, 0.4, 0.4]
     >>> P = [0.5, 0.5, 0.5, 0.5]
     >>> F = ['t5', 't5', 't5', 't5']
-    >>> results = rank_promethee_ii(dataset, W, Q, S, P, F, sort=True, topn=10, graph=False, verbose=True)
+    >>> results = mcdm_promethee_ii(dataset, W, Q, S, P, F, sort=True, topn=10, graph=False, verbose=True)
     a5: 0.421
     a1: 0.26
     a2: 0.189

@@ -11,7 +11,7 @@
 import numpy as np
 
 
-def score_moosra(dataset, weights, criterion_type, verbose=False):
+def mcdm_moosra(dataset, weights, criterion_type, verbose=False):
     """
     Score alternatives using the MOOSRA method.
 

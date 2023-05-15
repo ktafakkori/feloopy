@@ -10,10 +10,9 @@
 
 from typing import Dict, List, Union
 import numpy as np
-from pyDecision.algorithm import promethee_v
 
 
-def score_promethee_v(dataset: np.ndarray, W: List[float], Q: List[float], S: List[float], P: List[float], F: List[str], sort: bool = True, criteria: int = None, cost: List[float] = None, budget: float = None, forbidden: List[List[str]] = None, iterations: int = None, verbose: bool = False, show_plot: bool = False) -> Dict[str, Union[float, np.ndarray]]:
+def mcdm_promethee_v(dataset: np.ndarray, W: List[float], Q: List[float], S: List[float], P: List[float], F: List[str], sort: bool = True, criteria: int = None, cost: List[float] = None, budget: float = None, forbidden: List[List[str]] = None, iterations: int = None, verbose: bool = False, show_plot: bool = False) -> Dict[str, Union[float, np.ndarray]]:
     """
     Calculate the scores of the alternatives using the Promethee V algorithm.
 

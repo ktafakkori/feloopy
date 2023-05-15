@@ -10,10 +10,9 @@
 
 from typing import Dict, List, Union
 import numpy as np
-from pyDecision.algorithm import promethee_vi
 
 
-def rank_promethee_vi(dataset: np.ndarray, W_lower: np.ndarray, W_upper: np.ndarray, Q: List[float], S: List[float], P: List[float], F: List[str], sort: bool = True, topn: int = None, iterations: int = None, graph: bool = False) -> Dict[str, Union[float, np.ndarray]]:
+def mcdm_promethee_vi(dataset: np.ndarray, W_lower: np.ndarray, W_upper: np.ndarray, Q: List[float], S: List[float], P: List[float], F: List[str], sort: bool = True, topn: int = None, iterations: int = None, graph: bool = False) -> Dict[str, Union[float, np.ndarray]]:
     """
     Calculate the rankings of the alternatives using the Promethee VI algorithm.
 
@@ -33,6 +32,8 @@ def rank_promethee_vi(dataset: np.ndarray, W_lower: np.ndarray, W_upper: np.ndar
     Returns:
         Dict[str, Union[float, np.ndarray]]: A dictionary containing the rankings of the alternatives.
     """
+
+    from pyDecision.algorithm import promethee_vi
 
     p6_minus, p6, p6_plus = promethee_vi(dataset, W_lower=W_lower, W_upper=W_upper,
                                          Q=Q, S=S, P=P, F=F, sort=sort, topn=topn, iterations=iterations, graph=graph)

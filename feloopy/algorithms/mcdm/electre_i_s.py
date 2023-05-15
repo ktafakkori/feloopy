@@ -11,7 +11,7 @@
 import numpy as np
 
 
-def score_electre_i_s(dataset, Q, P, V, W, lambda_value=0.7, graph=False, verbose=False):
+def mcdm_electre_i_s(dataset, Q, P, V, W, lambda_value=0.7, graph=False, verbose=False):
     """
     This function calculates the global concordance, discordance, kernel, credibility, and dominated
     matrices using the Electre I_s algorithm and returns them as a dictionary.

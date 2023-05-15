@@ -8,11 +8,11 @@
  # @ Copyright: 2023. MIT License. All Rights Reserved.
  '''
 
-from pyDecision.algorithm import vikor_method, ranking
+
 import numpy as np
 
 
-def rank_vikor(weights, criterion_type, dataset, strategy_coefficient=0.5, graph=False, verbose=False):
+def mcdm_vikor(weights, criterion_type, dataset, strategy_coefficient=0.5, graph=False, verbose=False):
     """
     This function takes in the weights, criterion_type, and dataset and returns the results of the VIKOR algorithm as a dictionary.
 

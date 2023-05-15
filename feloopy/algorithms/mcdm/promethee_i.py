@@ -11,7 +11,7 @@
 import numpy as np
 
 
-def rank_promethee_i(Q, S, P, W, F, dataset, show_plot=False):
+def mcdm_promethee_i(Q, S, P, W, F, dataset, show_plot=False):
     """
     Calculates the partial ranking for a given dataset using the Promethee I method.
 

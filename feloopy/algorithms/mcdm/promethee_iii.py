@@ -11,7 +11,7 @@
 import numpy as np
 
 
-def rank_promethee_iii(dataset, W, Q, S, P, F, lmbd, graph=False, verbose=False):
+def mcdm_promethee_iii(dataset, W, Q, S, P, F, lmbd, graph=False, verbose=False):
     """
     Ranks alternatives using the Promethee III algorithm.
 
@@ -45,7 +45,7 @@ def rank_promethee_iii(dataset, W, Q, S, P, F, lmbd, graph=False, verbose=False)
     >>> P = [0.5, 0.5, 0.5, 0.5]
     >>> F = ['t5', 't5', 't5', 't5']
     >>> lmbd = 0.15
-    >>> results = rank_promethee_iii(dataset, W, Q, S, P, F, lmbd, graph=False, verbose=True)
+    >>> results = mcdm_promethee_iii(dataset, W, Q, S, P, F, lmbd, graph=False, verbose=True)
     a5: 0.302
     a1: 0.237
     a2: 0.168

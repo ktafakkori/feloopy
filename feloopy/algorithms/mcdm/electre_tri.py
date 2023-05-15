@@ -12,7 +12,7 @@ from typing import Dict
 import numpy as np
 
 
-def rank_electre_tri_b(dataset: np.ndarray, W: list, Q: list, P: list, V: list, B: list, cut_level: float = 0.75,
+def mcdm_electre_tri_b(dataset: np.ndarray, W: list, Q: list, P: list, V: list, B: list, cut_level: float = 0.75,
                        verbose: bool = False, rule: str = 'oc', graph: bool = False) -> Dict[str, any]:
     """
     This function performs the Electre Tri-B algorithm on a given dataset and returns the classification as a dictionary.
@@ -54,7 +54,7 @@ def rank_electre_tri_b(dataset: np.ndarray, W: list, Q: list, P: list, V: list, 
     B = [[50, 48, 55, 55, 60], [70, 75, 80, 75, 85]]
 
     # Call Electre Tri-B Function
-    results = rank_electre_tri_b(dataset, W=W, Q=Q, P=P, V=V, B=B, cut_level=0.75, verbose=True, rule='oc', graph=True)
+    results = mcdm_electre_tri_b(dataset, W=W, Q=Q, P=P, V=V, B=B, cut_level=0.75, verbose=True, rule='oc', graph=True)
 
     # Print Results
     print("Classification:")

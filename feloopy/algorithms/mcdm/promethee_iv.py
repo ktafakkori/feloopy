@@ -11,7 +11,7 @@
 import numpy as np
 
 
-def rank_promethee_iv(dataset, W, Q, S, P, F, sort=True, steps=0.001, topn=10, graph=False, verbose=False):
+def mcdm_promethee_iv(dataset, W, Q, S, P, F, sort=True, steps=0.001, topn=10, graph=False, verbose=False):
     """
     Ranks alternatives using the Promethee IV algorithm.
 
@@ -43,7 +43,7 @@ def rank_promethee_iv(dataset, W, Q, S, P, F, sort=True, steps=0.001, topn=10, g
     >>> S = [0.4, 0.4, 0.4, 0.4]
     >>> P = [0.5, 0.5, 0.5, 0.5]
     >>> F = ['t5', 't5', 't5', 't5']
-    >>> results = rank_promethee_iv(dataset, W, Q, S, P, F, sort=True, steps=0.001, topn=10, graph=False, verbose=True)
+    >>> results = mcdm_promethee_iv(dataset, W, Q, S, P, F, sort=True, steps=0.001, topn=10, graph=False, verbose=True)
     Ranking Results:
     a5: 1.0
     a1: 0.9926
@@ -71,35 +71,3 @@ def rank_promethee_iv(dataset, W, Q, S, P, F, sort=True, steps=0.001, topn=10, g
             print(f"{key}: {value}")
 
     return {'ranks': p4[:, :2], 'preference_degree': p4[:, 2:]}
-
-
-def example():
-    # Required Libraries
-    from pyDecision.algorithm import promethee_iv
-
-    # Parameters
-    Q = [0.3, 0.3, 0.3, 0.3]
-    S = [0.4, 0.4, 0.4, 0.4]
-    P = [0.5, 0.5, 0.5, 0.5]
-    W = [9.00, 8.24, 5.98, 8.48]
-    # 't1' = Usual; 't2' = U-Shape; 't3' = V-Shape; 't4' = Level; 't5' = V-Shape with Indifference; 't6' = Gaussian; 't7' = C-Form
-    F = ['t5', 't5', 't5', 't5']
-
-    # Dataset
-    dataset = np.array([
-        [8.840, 8.790, 6.430, 6.950],  # a1
-        [8.570, 8.510, 5.470, 6.910],  # a2
-        [7.760, 7.750, 5.340, 8.760],  # a3
-        [7.970, 9.120, 5.930, 8.090],  # a4
-        [9.030, 8.970, 8.190, 8.100],  # a5
-        [7.410, 7.870, 6.770, 7.230]  # a6
-    ])
-
-    # Call Promethee IV
-    results = rank_promethee_iv(dataset, W=W, Q=Q, S=S, P=P, F=F,
-                                sort=True, steps=0.001, topn=10, graph=True, verbose=True)
-
-    return results
-
-
-example()
