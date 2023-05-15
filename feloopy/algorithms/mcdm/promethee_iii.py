@@ -1,3 +1,13 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-15
+ # @ Modified: 2023-05-15
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 import numpy as np
 
 
@@ -62,26 +72,3 @@ def rank_promethee_iii(dataset, W, Q, S, P, F, lmbd, graph=False, verbose=False)
 
     return {'ranks': p3, 'net_flow': p3[:, -1], 'positive_flow': p3[:, :-1], 'negative_flow': -p3[:, :-1],
             'preference_degree': p3[:, :-1] - p3[:, 1:]}
-
-
-# Dataset
-dataset = np.array([
-    [8.840, 8.790, 6.430, 6.950],  # a1
-    [8.570, 8.510, 5.470, 6.910],  # a2
-    [7.760, 7.750, 5.340, 8.760],  # a3
-    [7.970, 9.120, 5.930, 8.090],  # a4
-    [9.030, 8.970, 8.190, 8.100],  # a5
-    [7.410, 7.870, 6.770, 7.230]  # a6
-])
-
-# Parameters
-Q = [0.3, 0.3, 0.3, 0.3]
-S = [0.4, 0.4, 0.4, 0.4]
-P = [0.5, 0.5, 0.5, 0.5]
-W = [9.00, 8.24, 5.98, 8.48]
-# 't1' = Usual; 't2' = U-Shape; 't3' = V-Shape; 't4' = Level; 't5' = V-Shape with Indifference; 't6' = Gaussian; 't7' = C-Form
-F = ['t5', 't5', 't5', 't5']
-
-# Call Promethee III
-results = rank_promethee_iii(
-    dataset, W=W, Q=Q, S=S, P=P, F=F, lmbd=0.15, graph=True)

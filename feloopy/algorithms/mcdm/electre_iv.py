@@ -1,3 +1,13 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-15
+ # @ Modified: 2023-05-15
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 import numpy as np
 
 
@@ -53,20 +63,3 @@ def rank_electre_iv(dataset, P, Q, V, graph=False, verbose=False):
         'rank_A': rank_A,
         'rank_P': rank_P
     }
-
-
-dataset = np.array([
-    [15, 80, 60, 30, 60, 50, 60, 70],  # a1
-    [25,  0, 40, 30, 40, 40, 50, 140],  # a2
-    [25,  0, 50, 30, 40, 40, 50, 140],  # a3
-    [25,  0, 50, 30, 50, 40, 70, 140],  # a4
-    [25,  0, 50, 30, 50, 40, 50, 140],  # a5
-    [15, 20, 50, 30, 50, 60, 60, 100],  # a6
-    [15, 80, 50, 50, 40, 90, 60, 100],  # a7
-])
-P = [20, 20, 20, 20, 20, 20, 20, 20]
-Q = [10, 10, 10, 10, 10, 10, 10, 10]
-V = [100, 100, 100, 100, 100, 100, 100, 100]
-
-result = rank_electre_iv(dataset, P, Q, V, graph=True, verbose=True)
-print(result)

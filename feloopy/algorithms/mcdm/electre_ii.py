@@ -1,3 +1,13 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-15
+ # @ Modified: 2023-05-15
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 from typing import Dict, Optional
 import numpy as np
 
@@ -43,24 +53,3 @@ def score_electre_ii(dataset: np.ndarray, W: np.ndarray, c_minus: float, c_zero:
         print('Weak Dominance Matrix:\n', output_dict['dominance_w'])
 
     return output_dict
-
-
-# Parameters
-c_minus = 0.65
-c_zero = 0.75
-c_plus = 0.85
-d_minus = 0.25
-d_plus = 0.5
-W = np.array([0.0780, 0.1180, 0.1570, 0.3140, 0.2350, 0.0390, 0.0590])
-
-# Dataset
-dataset = np.array([
-    [1, 2, 1, 5, 2, 2, 4],  # a1
-    [3, 5, 3, 5, 3, 3, 3],  # a2
-    [3, 5, 3, 5, 3, 2, 2],  # a3
-    [1, 2, 2, 5, 1, 1, 1],  # a4
-    [1, 1, 3, 5, 4, 1, 5]  # a6
-])
-
-results_dict = score_electre_ii(dataset=dataset, W=W, c_minus=c_minus, c_zero=c_zero, c_plus=c_plus, d_minus=d_minus,
-                                d_plus=d_plus, graph=True, verbose=True)

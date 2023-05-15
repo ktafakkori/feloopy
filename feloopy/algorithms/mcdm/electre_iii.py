@@ -1,3 +1,13 @@
+'''
+ # @ Author: Keivan Tafakkori
+ # @ Created: 2023-05-15
+ # @ Modified: 2023-05-15
+ # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
+ # @ Github: https://github.com/ktafakkori
+ # @ Website: https://ktafakkori.github.io/
+ # @ Copyright: 2023. MIT License. All Rights Reserved.
+ '''
+
 from typing import Dict
 import numpy as np
 
@@ -77,24 +87,3 @@ def rank_electre_iii(dataset: np.ndarray, P: list, Q: list, V: list, W: list, gr
             print(f"a{i+1}: {alt}")
 
     return results
-
-
-# Dataset
-dataset = np.array([
-    [8.84, 8.79, 6.43, 6.95],  # a1
-    [8.57, 8.51, 5.47, 6.91],  # a2
-    [7.76, 7.75, 5.34, 8.76],  # a3
-    [7.97, 9.12, 5.93, 8.09],  # a4
-    [9.03, 8.97, 8.19, 8.10],  # a5
-    [7.41, 7.87, 6.77, 7.23]  # a6
-])
-
-# Parameters
-Q = [0.30, 0.30, 0.30, 0.30]
-P = [0.50, 0.50, 0.50, 0.50]
-V = [0.70, 0.70, 0.70, 0.70]
-W = [9.00, 8.24, 5.98, 8.48]
-
-# Call Electre III Function
-results = rank_electre_iii(dataset, P=P, Q=Q, V=V,
-                           W=W, graph=True, verbose=True)
