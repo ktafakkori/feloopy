@@ -13,7 +13,7 @@ import numpy as np
 from pyDecision.algorithm import aras_method
 
 
-def score_aras_method(dataset: np.ndarray, weights: np.ndarray, criterion_type: list, show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
+def rank_aras(dataset: np.ndarray, weights: np.ndarray, criterion_type: list, show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
     """
     This function takes the dataset, weights, and criterion type as input for the ARAS method of multi-criteria decision making.
     It returns the output of the main function (which is imported from Pydecision) in the form of a dictionary with keys

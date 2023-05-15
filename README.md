@@ -533,43 +533,7 @@ Source: The author.
 </div>
 
 Source: <https://github.com/thieu1995/mealpy>
+Note: For details on parameters of each algorithm, the interested users might refer to the documentation of mealpy at [this link](mealpy_doc) or its github repository at [this link](mealpy_git).
 
-Supported heuristic optimization algorithms:
-
-Bio:
-
-2006: Invasive Weed Optimization [IWO](https://pdfs.semanticscholar.org/734c/66e3757620d3d4016410057ee92f72a9853d.pdf) [`orig-iwo`]
-
-```
-seed_min (int): Minimum number of seeds |
-seed_max (int): Maximum number of seeds |
-exponent (int): Variance reduction exponent |
-sigma_start (float): Initial standard deviation |
-sigma_end (float): Final standard deviation |
-```
-
-2008 : Biogeography-Based Optimization [BBO](https://ieeexplore.ieee.org/abstract/document/4475427) [`orig-bbo`, `base-bbo`]
-
-```
-p_m (float): Mutation probability, default | 0.01
-elites (int): Number of elites for next generation | default=2
-```
-
-2018: Earthworm Optimisation Algorithm [EOA](https://www.inderscience.com/info/inarticle.php?artid=93328) [`orig-eoa`]
-
-```
-p_c (float): Crossover probability | default = 0.9
-p_m (float): Initial mutation probability | default = 0.01
-n_best (int): Number of elites for next generation | default=2
-alpha (float): Similarity factor | default = 0.98
-beta (float): Initial proportional factor | default = 0.9
-gamma (float): Constant similar to cooling factor in simulated annealing | default = 0.9
-```
-
-2020 - Barnacles Mating Optimizer [BMO](https://www.sciencedirect.com/science/article/abs/pii/S0952197619302775) [`orig-bmo`]
-
-```
-pl (int): [1, pop_size - 1], barnacle’s threshold
-```
-
-2023 : Brown-Bear Optimization Algorithm [BBOA](https://www.taylorfrancis.com/chapters/edit/10.1201/9781003337003-6/novel-brown-bear-optimization-algorithm-solving-economic-dispatch-problem-tapan-prakash-praveen-prakash-singh-vinay-pratap-singh-sri-niwas-singh) [`orig-bboa`]
+[mealpy_doc]: https://mealpy.readthedocs.io/en/latest/pages/models/mealpy.html
+[mealpy_git]: https://github.com/thieu1995/mealpy/tree/master/mealpy
