@@ -445,24 +445,28 @@ class Model:
 
         return generate_heuristic_variable(self.features, 'svar', name, variable_dim, [0, 1], self.agent)
 
-    def pinvar(self, name, interval=[None, None, None], variable_dim=0):
+    def evar(self, name, interval=[None, None, None], variable_dim=0, is_present=False):
         """        
-        Creates and returns a present interval variable (parameter).
+        Creates and returns an event (interval) variable.
 
         Args:
             name: Name of this variable.
-            interval: [start, size, end]. 
+            interval: [size, start, end]. 
 
         """
+
+        if len(interval) == 1:
+            interval = [interval[0], None, None]
+
         if variable_dim == 0:
 
             if self.features['interface_name'] == 'cplex_cp':
 
-                return self.model.interval_var(start=interval[0], size=interval[1], end=interval[2], name=name)
+                return self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=name, optional=is_present)
 
             if self.features['interface_name'] == 'ortools_cp':
 
-                return self.model.NewIntervalVar(start=interval[0], size=interval[1], end=interval[2], name=name)
+                return self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=name, is_present=is_present)
 
         else:
 
@@ -470,63 +474,21 @@ class Model:
 
                 if len(variable_dim) == 1:
 
-                    return {key: self.model.interval_var(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}") for key in variable_dim[0]}
+                    return {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=is_present) for key in variable_dim[0]}
 
                 else:
 
-                    return {key: self.model.interval_var(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}") for key in sets(*variable_dim)}
+                    return {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=is_present) for key in sets(*variable_dim)}
 
             if self.features['interface_name'] == 'ortools_cp':
 
                 if len(variable_dim) == 1:
 
-                    return {key: self.model.NewIntervalVar(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}") for key in variable_dim[0]}
+                    return {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=is_present) for key in variable_dim[0]}
 
                 else:
 
-                    return {key: self.model.NewIntervalVar(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}") for key in sets(*variable_dim)}
-
-    def oinvar(self, name, interval=[None, None, None], variable_dim=0, is_present=True):
-        """        
-        Creates and returns an optional interval variable.
-
-        Args:
-            name: Name of this variable.
-            interval: [start, size, end]. 
-
-        """
-
-        if variable_dim == 0:
-
-            if self.features['interface_name'] == 'cplex_cp':
-
-                return self.model.interval_var(start=interval[0], size=interval[1], end=interval[2], name=name, optional=is_present)
-
-            if self.features['interface_name'] == 'ortools_cp':
-
-                return self.model.NewOptionalIntervalVar(start=interval[0], size=interval[1], end=interval[2], name=name, is_present=is_present)
-
-        else:
-
-            if self.features['interface_name'] == 'cplex_cp':
-
-                if len(variable_dim) == 1:
-
-                    return {key: self.model.interval_var(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}", optional=is_present) for key in variable_dim[0]}
-
-                else:
-
-                    return {key: self.model.interval_var(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}", optional=is_present) for key in sets(*variable_dim)}
-
-            if self.features['interface_name'] == 'ortools_cp':
-
-                if len(variable_dim) == 1:
-
-                    return {key: self.model.NewOptionalIntervalVar(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}", is_present=is_present) for key in variable_dim[0]}
-
-                else:
-
-                    return {key: self.model.NewOptionalIntervalVar(start=interval[0], size=interval[1], end=interval[2], name=f"{name}{key}", is_present=is_present) for key in sets(*variable_dim)}
+                    return {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=is_present) for key in sets(*variable_dim)}
 
     # Methods for constraint programming.
 
@@ -855,6 +817,10 @@ class Model:
 
             return abs(exprs) >= value
 
+    def sum(self, input):
+
+        return self.model.sum(input)
+
     def if_then(self, input1, input2):
 
         if self.features['interface_name'] == 'cplex_cp':
@@ -1175,21 +1141,21 @@ class Model:
     def get_start(self, invterval_variable):
 
         if self.features['interface_name'] == 'cplex_cp':
-            self.solution[0].get_var_solution(invterval_variable).get_start()
+            return self.solution[0].get_var_solution(invterval_variable).get_start()
         if self.features['interface_name'] == 'ortools_cp':
             ""
 
     def get_interval(self, invterval_variable):
 
         if self.features['interface_name'] == 'cplex_cp':
-            self.solution[0].get_var_solution(invterval_variable)
+            return self.solution[0].get_var_solution(invterval_variable)
         if self.features['interface_name'] == 'ortools_cp':
             ""
 
     def get_end(self, invterval_variable):
 
         if self.features['interface_name'] == 'cplex_cp':
-            self.solution[0].get_var_solution(invterval_variable).get_end()
+            return self.solution[0].get_var_solution(invterval_variable).get_end()
         if self.features['interface_name'] == 'ortools_cp':
             ""
 
@@ -1326,24 +1292,28 @@ class Model:
 
         return len(set)
 
-    def uniform(self, lb, ub, variable_dim=0):
+    def uniform(self, lb, ub, parameter_dim=0):
         """
         Uniform Parameter Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         To generate a real-valued parameter using uniform distribution inside a range.
         """
 
+        variable_dim = fix_dims(parameter_dim)
+
         if variable_dim == 0:
             return self.random.uniform(low=lb, high=ub)
         else:
             return self.random.uniform(low=lb, high=ub, size=([len(i) for i in variable_dim]))
 
-    def uniformint(self, lb, ub, variable_dim=0):
+    def uniformint(self, lb, ub, parameter_dim=0):
         """
         Uniform Integer Parameter Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         To generate an integer parameter using uniform distribution inside a range.
         """
+
+        variable_dim = fix_dims(parameter_dim)
 
         if variable_dim == 0:
             return self.random.integers(low=lb, high=ub)
@@ -2566,7 +2536,7 @@ class Implement:
 
         self.calculated_indicators = dict()
 
-        #gd = indicators.gd_indicator(list_of_functions=list_of_functions, **parameters)
+        # gd = indicators.gd_indicator(list_of_functions=list_of_functions, **parameters)
         gdp = indicators.gd_plus_indicator(
             list_of_functions=list_of_functions, **parameters)
         igd = indicators.igd_indicator(

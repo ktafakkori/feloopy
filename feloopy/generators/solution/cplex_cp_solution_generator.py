@@ -9,13 +9,10 @@
  '''
 
 from docplex.cp.config import context
-import cplex
-from docplex.mp.model import Model as CPLEXMODEL
-import docplex as cplex_interface
+from docplex.cp.model import *
 import timeit
 from docplex.util.environment import get_environment
 env = get_environment()
-
 
 cplex_solver_selector = {'cplex': 'cplex'}
 
@@ -46,7 +43,7 @@ def generate_solution(features):
 
     if solver_name not in cplex_solver_selector.keys():
         raise RuntimeError(
-            "Using solver '%s' is not supported by 'cplex'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
+            "Using solver '%s' is not supported by 'cplex_cp'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
 
     match debug:
 
@@ -57,13 +54,15 @@ def generate_solution(features):
                 match directions[objective_id]:
 
                     case 'min':
-                        model_object.minimize(model_objectives[objective_id])
+                        model_object.add(model_object.minimize(
+                            model_objectives[objective_id]))
 
                     case 'max':
-                        model_object.maximize(model_objectives[objective_id])
+                        model_object.add(model_object.maximize(
+                            model_objectives[objective_id]))
 
             for constraint in model_constraints:
-                model_object.add_constraint(constraint)
+                model_object.add(constraint)
 
             time_solve_begin = timeit.default_timer()
             result = model_object.solve(TimeLimit=time_limit, log_output=log)
