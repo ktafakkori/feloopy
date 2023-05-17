@@ -355,6 +355,3 @@ feloopy_heuristic_algorithms = [
     'de',
     'gwo'
 ]
-
-
-print(len(heuristic_algorithms))
