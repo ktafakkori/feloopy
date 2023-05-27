@@ -8,7 +8,6 @@
  # @ Copyright: 2023. MIT License. All Rights Reserved.
  '''
 
-import cplex
 import itertools as it
 
 sets = it.product
