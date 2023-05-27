@@ -48,6 +48,7 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
 
         list_of_functions.append(my_list_of_functions[i])
 
+
     match solver_name:
 
         case "c-ns-ga-ii":

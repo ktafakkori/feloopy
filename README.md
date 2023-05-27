@@ -138,39 +138,36 @@ For multi-objective optimization, you should use the linux command for installat
 
 ### **Features**
 
-* **Simplest optimization programming language**: FelooPy is designed to be easy to use, even for those with little or no programming experience.
-* **Modeling, solving and analyzing optimization problems**: FelooPy provides a complete suite of tools for modeling, solving and analyzing a wide range of optimization problems.
-* **Exact optimization algorithms**: FelooPy includes a range of exact optimization algorithms that guarantee the best possible solution to your problem.
-* **Heuristic optimization algorithms**: FelooPy includes a variety of heuristic optimization algorithms that can quickly find good solutions to complex problems.
-* **Convex optimization algorithms**: FelooPy includes a range of convex optimization algorithms that provide fast and efficient solutions to convex problems.
-* **Constraint optimization algorithms**: FelooPy includes a variety of constraint optimization algorithms that can handle a wide range of constraints.
-* **Single- and multi-objective optimization algorithms**: FelooPy includes both single- and multi-objective optimization algorithms, so you can choose the best  one for your problem.
-* **Multi-critera decision making methods**: FelooPy can solve decision problems with expert-based inputs without mathematical modeling.
-* **Solver configurations**: FelooPy lets you configure the solver to meet your specific needs and requirements.
-* **Auto-encoders for general purpose programming**: FelooPy includes auto-encoders to simplify general-purpose programming tasks.
-* **Auto-linearizers for linear programming conversions**: FelooPy includes auto-linearizers that can handle mixed-integer non-linear programming problems.
-* **Auto-logic for modeling special constraints**: FelooPy includes auto-logic to help you model and solve problems with special constraints.
-* **Auto-sensitivity analysis for analyzing the impact of key parameters**: FelooPy includes auto-sensitivity analysis to help you analyze the impact of key parameters on your optimization problem.
-
-### **Supporters**
-
-If you find this project useful, please consider giving it a star on GitHub (https://github.com/ktafakkori/feloopy) and introducing it to your colleagues to show your appreciation and help us continue its development! Starring a project makes it easier for you to find it again later, and also helps other people discover it. For more ways to support this project, please visit [this page][support].
-
-- Stars:
-
-[![Stars](https://reporoster.com/stars/notext/ktafakkori/feloopy)](https://github.com/ktafakkori/feloopy/stargazers)
-
-- Forks:
-
-[![Forks](https://reporoster.com/forks/notext/ktafakkori/feloopy)](https://github.com/ktafakkori/feloopy/network/members)
+* **Simplest optimization programming language**: Designed to be easy to use, even for those with little or no programming experience.
+* **Modeling, solving and analyzing optimization problems**: Provides a complete suite of tools for modeling, solving and analyzing a wide range of optimization problems.
+* **Exact optimization algorithms**: Supports *107* exact optimization algorithms that guarantee the optimal solution to your problem.
+* **Heuristic optimization algorithms**: Supports *197* heuristic optimization algorithms that can find best possible solutions to complex problems.
+* **Convex optimization algorithms**: Supports *20* convex optimization algorithms that ease tensor- and matrix-form modeling, primarily for convex problems.
+* **Constraint optimization algorithms**: Supports a *2* constraint optimization algorithms that can handle a wide range of constraints.
+* **Multi-objective optimization algorithms**: Supports *17* multi-objective optimization algorithms, in which objectives might be contradicting of of different numerical units.
+* **Multi-critera decision making methods**: Supports *41* MCDM algorithms to solve decision problems with expert-based inputs without mathematical modeling.
+* **Solver configurations**: Lets you configure the solver to meet specific requirements.
+* **Auto-encoders for general purpose programming**: Provides auto-encoders to simplify general-purpose programming tasks.
+* **Auto-linearizers for linear programming conversions**: Provides auto-linearizers that can handle mixed-integer non-linear programming problems.
+* **Auto-logic for modeling special constraints**: Provides auto-logic to help you model and solve problems with special constraints.
+* **Auto-sensitivity for analyzing the impact of key parameters**: Provides auto-sensitivity tools to help you analyze the impact of key parameters on your optimization problem.
 
 ### **Contributions**
 
-We welcome your contributions to this project, such as reporting bugs, submitting pull requests, testing changes, providing examples, and so on. We will acknowledge your contributions in the contributors section.
+We welcome your contributions to this project, such as reporting bugs, submitting pull requests, testing changes, providing examples, and so on.
+### **Support FelooPy**
+
+We are committed to continuing the development of FelooPy and would greatly appreciate your support. You can help us by:
+
+* Starring the project on GitHub: Your stars motivate us to keep improving FelooPy. You can star the project here: https://github.com/ktafakkori/feloopy/stargazers
+
+* Forking the project on GitHub: You can also contribute to FelooPy by forking the project here: https://github.com/ktafakkori/feloopy/network/members
+
+* Making a donation: Your donations help to sustain and maintain the project and add new features. If you would like to support us, please visit our website at https://ktafakkori.github.io/support/.
 
 ### **Citation**
 
-It is recommended to cite this GitHub repository or the Python library if you use its facilities in your work, as it helps others reproduce the results of your research. You may also provide the specific version of this Python library that you used in your research or project.
+If you use the facilities of this GitHub repository or the Python library in your work, we recommend citing it to help others reproduce the results of your research. You may also provide the specific version of the Python library used in your research or project for accuracy and reproducibility. Thank you for your consideration.
 
 - APA 7:
 
