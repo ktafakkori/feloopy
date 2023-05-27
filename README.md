@@ -2,7 +2,7 @@
 
 | FelooPy                                            | [![version code](https://img.shields.io/badge/version-0.2.5-darkgreen.svg)](https://github.com/ktafakkori/feloopy/releases) [![number of users](https://static.pepy.tech/personalized-badge/feloopy?period=total&units=international_system&left_color=grey&right_color=darkgreen&left_text=users)](https://pepy.tech/project/feloopy) ![release date](https://img.shields.io/github/release-date/ktafakkori/feloopy?color=blue) [![monthly Downloads](https://static.pepy.tech/personalized-badge/feloopy?period=month&units=international_system&left_color=grey&right_color=blue&left_text=monthly%20downloads%20)](https://pepy.tech/project/feloopy) [![license type](https://img.shields.io/badge/license-MIT-darkred.svg)](https://opensource.org/licenses/MIT) |
 | :------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![Image description](miscellaneous/logo/logo1.png) | FelooPy (pronounced /fɛlupaɪ/) is a free and open-source Python library for automated operations research. It serves as both a hyper-optimization interface and an integrated optimization environment. The name comes from the idea of suggesting practical and applicable solutions for systems, industries, and supply chains. It also references the importance of loops in programming and algorithm development, and draws similarities to the name "Floppy" to highlight memory efficiency. FelooPy helps operations research scientists achieve their goals using various target, representor, and learner models, shifting their focus from coding to modeling and analytics.                                                                                 |
+| ![Image description](miscellaneous/logo/logo1.png) | FelooPy (pronounced /fɛlupaɪ/) is a free and open-source Python library for automated operations research. It serves as both a hyper-optimization interface and an integrated optimization environment. The name comes from the idea of suggesting practical and applicable solutions for systems, industries, and supply chains. It also references the importance of loops in programming and algorithm development, and draws similarities to the name "Floppy" to highlight memory efficiency. FelooPy helps operations research scientists achieve their goals using various target, representor, and learner models, shifting their focus from coding to modeling and analytics. In simple words, FlooPy is a unified framework for optimization algorithms, decision-making methods, and modeling and analytical tools. |
 | News                                               | 🎉 _Version 0.2.5 is Out: New Feature Release!_ 🎉                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 ### **Installation**
@@ -138,12 +138,19 @@ For multi-objective optimization, you should use the linux command for installat
 
 ### **Features**
 
-- Simplest universal optimization programming language based on Python for exact, heuristic, and constraint optimization.
-- Supporting 17 exact, constraint, and heuristic optimization interfaces and solvers, just by changing two parameters, `<interface>` and `<solver>`, in the above examples. Please see the [appendix](#appendix).
-- Supporting benchmarking with various interfaces and solvers.
-- Supporting multi-parameter sensitivity analysis on a single objective.
-- Supporting solve options such as logs, number of threads, time limit, absolute gap or releative gap.
-
+* **Simplest optimization programming language**: FelooPy is designed to be easy to use, even for those with little or no programming experience.
+* **Modeling, solving and analyzing optimization problems**: FelooPy provides a complete suite of tools for modeling, solving and analyzing a wide range of optimization problems.
+* **Exact optimization algorithms**: FelooPy includes a range of exact optimization algorithms that guarantee the best possible solution to your problem.
+* **Heuristic optimization algorithms**: FelooPy includes a variety of heuristic optimization algorithms that can quickly find good solutions to complex problems.
+* **Convex optimization algorithms**: FelooPy includes a range of convex optimization algorithms that provide fast and efficient solutions to convex problems.
+* **Constraint optimization algorithms**: FelooPy includes a variety of constraint optimization algorithms that can handle a wide range of constraints.
+* **Single- and multi-objective optimization algorithms**: FelooPy includes both single- and multi-objective optimization algorithms, so you can choose the best  one for your problem.
+* **Multi-critera decision making methods**: FelooPy can solve decision problems with expert-based inputs without mathematical modeling.
+* **Solver configurations**: FelooPy lets you configure the solver to meet your specific needs and requirements.
+* **Auto-encoders for general purpose programming**: FelooPy includes auto-encoders to simplify general-purpose programming tasks.
+* **Auto-linearizers for linear programming conversions**: FelooPy includes auto-linearizers that can handle mixed-integer non-linear programming problems.
+* **Auto-logic for modeling special constraints**: FelooPy includes auto-logic to help you model and solve problems with special constraints.
+* **Auto-sensitivity analysis for analyzing the impact of key parameters**: FelooPy includes auto-sensitivity analysis to help you analyze the impact of key parameters on your optimization problem.
 
 ### **Supporters**
 
