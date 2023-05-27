@@ -14,36 +14,43 @@ import numpy as np
 
 def mcdm_bwm(dataset: np.ndarray, mic: np.ndarray, lic: np.ndarray, size: int, iterations: int, show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
     """
-    This function takes the dataset, most important criteria (mic) and least important criteria (lic) as input for the
-    BWM method of multi-criteria decision making. It returns the output of the main function (which is imported from
-    Pydecision) in the form of a dictionary with keys representing the name of the output and values the value of the outputs.
+    Computes the weights of criteria using the Best Worst Method (BWM) of multi-criteria decision making.
 
     Args:
-        dataset: A numpy array containing the performance values of each alternative on each criterion. Each row
-                 represents an alternative, and each column represents a criterion.
-        mic: A numpy array containing the indices of the most important criteria.
-        lic: A numpy array containing the indices of the least important criteria.
-        size: An integer representing the size of the population in the genetic algorithm.
-        iterations: An integer representing the number of iterations for the genetic algorithm.
-        show_output: A boolean value indicating whether to show the calculated weights or not.
-        show_graph: A boolean value indicating whether to show the visualization of the convergence graph or not.
+        dataset (np.ndarray): A numpy array containing the performance values of each alternative on each criterion.
+                              Each row represents an alternative, and each column represents a criterion.
+        mic (np.ndarray): A numpy array containing the index of the most important criterion.
+        lic (np.ndarray): A numpy array containing the index of the least important criterion.
+        size (int): An integer representing the size of the population in the genetic algorithm.
+        iterations (int): An integer representing the number of iterations for the genetic algorithm.
+        show_output (bool, optional): A boolean value indicating whether to show the calculated weights or not.
+                                      Defaults to True.
+        show_graph (bool, optional): A boolean value indicating whether to show the visualization of the convergence graph
+                                     or not. Defaults to False.
 
     Returns:
-        A dictionary containing the following keys:
-        - 'weights': A numpy array representing the calculated weights for each criterion.
-        - 'graph': If show_graph is True, a matplotlib figure object representing the visualization of the convergence graph.
-                   Otherwise, None.
+        A dictionary with the following keys:
+        - 'weights' (np.ndarray): An array of the calculated weights for each criterion.
+        - 'graph' (Optional[matplotlib.figure.Figure]): If show_graph is True, a matplotlib figure object representing
+                                                        the visualization of the convergence graph. Otherwise, None.
+
+    Example usage:
+    ```
+    dataset = np.array([[2, 3, 4], [5, 6, 7]])
+    mic = np.array([1])
+    lic = np.array([2])
+    size = 50
+    iterations = 100
+    result = mcdm_bwm(dataset, mic, lic, size, iterations, show_graph=True)
+    ```
     """
 
     from pyDecision.algorithm import bw_method
 
-    # Call BWM Function
     weights = bw_method(dataset, mic, lic, size=size, iterations=iterations)
 
-    # Create the output dictionary
     output_dict = {'weights': weights}
 
-    # If show_output is True, print the calculated weights
     if show_output:
         print('Weights:')
         for i in range(weights.shape[0]):

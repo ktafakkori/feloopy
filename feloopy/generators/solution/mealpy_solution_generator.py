@@ -112,4 +112,4 @@ def generate_solution(model_object, fitness_function, total_features, objectives
         best_agent = best_agent_found
         best_reward = best_reward_found
 
-    return best_agent, best_reward, np.average(time_solve_begin)*10**6, np.average(time_solve_end)*10**6
+    return best_agent, best_reward, time_solve_begin, time_solve_end

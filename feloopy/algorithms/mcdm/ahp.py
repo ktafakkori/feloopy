@@ -14,20 +14,18 @@ import numpy as np
 
 def mcdm_ahp(dataset: np.ndarray, weight_derivation: str, verbose: bool = False) -> Dict[str, np.ndarray]:
     """
-    Analytic Hierarchy Process
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Computes weights for a set of criteria.
+    Computes weights for a set of criteria using the Analytic Hierarchy Process (AHP).
 
     Args:
-    - dataset (np.ndarray): Pairwise comparison matrix of criteria.
-    - weight_derivation (str): Method for deriving the weights, either 'mean' or 'geometric'.
-    - verbose (bool, optional): If True, prints the weights and consistency ratio. Defaults to False.
+        dataset (np.ndarray): A pairwise comparison matrix of criteria.
+        weight_derivation (str): The method for deriving the weights, either 'mean' or 'geometric'.
+        verbose (bool, optional): If True, prints the weights and consistency ratio. Defaults to False.
 
     Returns:
-    - A dictionary with the following keys:
-        - 'weights': Weights of each criterion.
-        - 'consistency_ratio': Consistency ratio of the pairwise comparison matrix.
-        - 'consistent': Boolean indicating whether the pairwise comparison matrix is consistent or not.
+        A dictionary with the following keys:
+        - 'weights': An array of weights for each criterion.
+        - 'consistency_ratio': The consistency ratio of the pairwise comparison matrix.
+        - 'consistent': A boolean indicating whether the pairwise comparison matrix is consistent.
     """
 
     from pyDecision.algorithm import ahp_method

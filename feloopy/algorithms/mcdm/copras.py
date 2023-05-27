@@ -14,43 +14,51 @@ import numpy as np
 
 def mcdm_copras(dataset: np.ndarray, weights: np.ndarray, criterion_type: list, show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
     """
-    Complex Proportional Assessment
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    This function takes the dataset, weights and criterion type as input for the COPRAS method of multi-criteria decision making. It
-    returns the output of the main function (which is imported from Pydecision) in the form of a dictionary with keys
-    representing the name of the output and values the value of the outputs.
+    Computes the rank of each alternative using the Complex Proportional Assessment (COPRAS) method of multi-criteria
+    decision making.
 
     Args:
-        dataset: A numpy array containing the performance values of each alternative on each criterion. Each row
-                 represents an alternative, and each column represents a criterion.
-        weights: A numpy array containing the weight values for each criterion.
-        criterion_type: A list of strings representing the type of each criterion. Each element of the list should be
-                        either 'max' or 'min', indicating whether the criterion should be maximized or minimized,
-                        respectively.
-        show_output: A boolean value indicating whether to show the calculated rank or not.
-        show_graph: A boolean value indicating whether to show the visualization of the ranking graph or not.
+        dataset (np.ndarray): A numpy array containing the performance values of each alternative on each criterion.
+                              Each row represents an alternative, and each column represents a criterion.
+        weights (np.ndarray): A numpy array containing the weight values for each criterion.
+        criterion_type (list): A list of strings representing the type of each criterion. Each element of the list
+                               should be either 'max' or 'min', indicating whether the criterion should be maximized
+                               or minimized, respectively.
+        show_output (bool, optional): A boolean value indicating whether to show the calculated rank or not.
+                                      Defaults to True.
+        show_graph (bool, optional): A boolean value indicating whether to show the visualization of the ranking graph
+                                     or not. Defaults to False.
 
     Returns:
-        A dictionary containing the following keys:
-        - 'rank': A numpy array representing the calculated rank for each alternative.
-        - 'graph': If show_graph is True, a matplotlib figure object representing the visualization of the ranking graph.
-                   Otherwise, None.
+        A dictionary with the following keys:
+        - 'rank' (np.ndarray): An array of the calculated rank for each alternative.
+        - 'graph' (Optional[matplotlib.pyplot]): If show_graph is True, a matplotlib figure object representing the
+                                                  visualization of the ranking graph. Otherwise, None.
+
+    Example usage:
+    ```
+    dataset = np.array([[2, 3, 4], [5, 6, 7]])
+    weights = np.array([0.3, 0.4, 0.3])
+    criterion_type = ['max', 'max', 'max']
+    result = mcdm_copras(dataset, weights, criterion_type, show_graph=True)
+    ```
     """
 
     from pyDecision.algorithm import copras_method
     import matplotlib.pyplot as plt
 
-    # Call COPRAS Function
     rank = copras_method(dataset, weights, criterion_type, graph=show_graph)
 
-    # Create the output dictionary
     output_dict = {'rank': rank}
 
-    # If show_output is True, print the calculated rank
     if show_output:
         print('Ranking:')
         for i in range(rank.shape[0]):
             print(rank[i])
         print()
+
+    if show_graph:
+        plt.show()
+        output_dict['graph'] = plt
 
     return output_dict

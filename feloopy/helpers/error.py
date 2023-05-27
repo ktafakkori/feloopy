@@ -1,0 +1,2 @@
+class MultiObjectivityError(Exception):
+    pass

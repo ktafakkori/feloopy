@@ -14,36 +14,36 @@ import numpy as np
 
 def mcdm_critic(dataset: np.ndarray, criterion_type: list, show_output: bool = True) -> Dict[str, np.ndarray]:
     """
-
-    Criteria Importance Through Inter-criteria Correlation
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    This function takes the dataset and criterion type as input for the CRITIC method of multi-criteria decision making. It
-    returns the output of the main function (which is imported from Pydecision) in the form of a dictionary with keys
-    representing the name of the output and values the value of the outputs.
+    Computes the weights of each criterion using the Criteria Importance Through Intercriteria Correlation (CRITIC)
+    method of multi-criteria decision making.
 
     Args:
-        dataset: A numpy array containing the performance values of each alternative on each criterion. Each row
-                 represents an alternative, and each column represents a criterion.
-        criterion_type: A list of strings representing the type of each criterion. Each element of the list should be
-                        either 'max' or 'min', indicating whether the criterion should be maximized or minimized,
-                        respectively.
-        show_output: A boolean value indicating whether to show the calculated weights or not.
+        dataset (np.ndarray): A numpy array containing the performance values of each alternative on each criterion.
+                              Each row represents an alternative, and each column represents a criterion.
+        criterion_type (list): A list of strings representing the type of each criterion. Each element of the list
+                               should be either 'max' or 'min', indicating whether the criterion should be maximized
+                               or minimized, respectively.
+        show_output (bool, optional): A boolean value indicating whether to show the calculated weights or not.
+                                      Defaults to True.
 
     Returns:
-        A dictionary containing the following keys:
-        - 'weights': A numpy array representing the calculated weights for each criterion.
+        A dictionary with the following keys:
+        - 'weights' (np.ndarray): An array of the calculated weights for each criterion.
+
+    Example usage:
+    ```
+    dataset = np.array([[2, 3, 4], [5, 6, 7]])
+    criterion_type = ['max', 'max', 'max']
+    result = mcdm_critic(dataset, criterion_type)
+    ```
     """
 
     from pyDecision.algorithm import critic_method
 
-    # Call CRITIC Function
     weights = critic_method(dataset, criterion_type)
 
-    # Create the output dictionary
     output_dict = {'weights': weights}
 
-    # If show_output is True, print the calculated weights
     if show_output:
         print('Weights:')
         for i in range(weights.shape[0]):

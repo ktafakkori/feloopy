@@ -218,6 +218,8 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
                 if len(variable_dim) == 1:
 
+                    print('i am here', len(variable_dim[0]))
+
                     generated_variable = VariableGenerator(
                         len(variable_dim[0]), integer=True,  nonneg=True, name=variable_name)
 

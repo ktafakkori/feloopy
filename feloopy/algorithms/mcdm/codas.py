@@ -14,49 +14,51 @@ import numpy as np
 
 def mcdm_codas(dataset: np.ndarray, weights: np.ndarray, criterion_type: list, lmbd: float, show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
     """
-
-    Combinative Distance-Based Assessment
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    This function takes the dataset, weights and criterion type as input for the CODAS method of multi-criteria decision making.
-    It returns the output of the main function (which is imported from Pydecision) in the form of a dictionary with keys
-    representing the name of the output and values the value of the outputs.
+    Computes the score of each alternative using the Combinative Distance-Based Assessment (CODAS) method of
+    multi-criteria decision making.
 
     Args:
-        dataset: A numpy array containing the performance values of each alternative on each criterion. Each row
-                 represents an alternative, and each column represents a criterion.
-        weights: A numpy array containing the weight values for each criterion.
-        criterion_type: A list of strings representing the type of each criterion. Each element of the list should be
-                        either 'max' or 'min', indicating whether the criterion should be maximized or minimized,
-                        respectively.
-        lmbd: A float value representing the importance level of the criterion weights.
-        show_output: A boolean value indicating whether to show the calculated rank or not.
-        show_graph: A boolean value indicating whether to show the visualization of the ranking graph or not.
+        dataset (np.ndarray): A numpy array containing the performance values of each alternative on each criterion.
+                              Each row represents an alternative, and each column represents a criterion.
+        weights (np.ndarray): A numpy array containing the weight values for each criterion.
+        criterion_type (list): A list of strings representing the type of each criterion. Each element of the list
+                               should be either 'max' or 'min', indicating whether the criterion should be maximized
+                               or minimized, respectively.
+        lmbd (float): A float value representing the importance level of the criterion weights.
+        show_output (bool, optional): A boolean value indicating whether to show the calculated rank or not.
+                                      Defaults to True.
+        show_graph (bool, optional): A boolean value indicating whether to show the visualization of the ranking graph
+                                     or not. Defaults to False.
 
     Returns:
-        A dictionary containing the following keys:
-        - 'score': A numpy array representing the calculated score for each alternative.
-        - 'graph': If show_graph is True, a matplotlib figure object representing the visualization of the ranking graph.
-                   Otherwise, None.
+        A dictionary with the following keys:
+        - 'score' (np.ndarray): An array of the calculated score for each alternative.
+        - 'graph' (Optional[matplotlib.pyplot]): If show_graph is True, a matplotlib figure object representing the
+                                                  visualization of the ranking graph. Otherwise, None.
+
+    Example usage:
+    ```
+    dataset = np.array([[2, 3, 4], [5, 6, 7]])
+    weights = np.array([0.3, 0.4, 0.3])
+    criterion_type = ['max', 'max', 'max']
+    lmbd = 0.5
+    result = mcdm_codas(dataset, weights, criterion_type, lmbd, show_graph=True)
+    ```
     """
 
     from pyDecision.algorithm import codas_method
     import matplotlib.pyplot as plt
 
-    # Call CODAS Function
-    rank = codas_method(dataset, weights, criterion_type,
-                        lmbd=lmbd, graph=show_graph)
+    score = codas_method(dataset, weights, criterion_type, lmbd=lmbd, graph=show_graph)
 
-    # Create the output dictionary
-    output_dict = {'score': rank}
+    output_dict = {'score': score}
 
-    # If show_output is True, print the calculated rank
     if show_output:
         print('Ranking:')
-        for i in range(rank.shape[0]):
-            print(rank[i])
+        for i in range(score.shape[0]):
+            print(score[i])
         print()
 
-    # If show_graph is True, plot the ranking graph
     if show_graph:
         plt.show()
         output_dict['graph'] = plt

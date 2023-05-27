@@ -1,15 +1,16 @@
 '''
  # @ Author: Keivan Tafakkori
  # @ Created: 2023-05-11
- # @ Modified: 2023-05-12
+ # @ Modified: 2023-05-25
  # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
  # @ Github: https://github.com/ktafakkori
  # @ Website: https://ktafakkori.github.io/
  # @ Copyright: 2023. MIT License. All Rights Reserved.
  '''
 
-
 from .helpers.empty import *
+from .helpers.error import *
+from .helpers.formatter import *
 from .operators.set_operators import *
 from .operators.math_operators import *
 from .operators.count_operators import *
@@ -18,20 +19,25 @@ from .operators.random_operators import *
 from .operators.heuristic_operators import *
 from .operators.fix_operators import *
 from .operators.epsilon import *
+from .operators.metric_operators import *
+from collections import defaultdict
+        
 
 import warnings
 import itertools as it
 import math as mt
 import numpy as np
 from tabulate import tabulate as tb
+from typing import List, Tuple, Optional
 import sys
 
 warnings.filterwarnings("ignore")
 
+avar = defaultdict()
 
 class Model:
 
-    # Method for the modeling envrionemnt.
+    # Method for the modeling envrionment.
 
     def __init__(self, solution_method, model_name, interface_name, agent=None, key=None):
         """
@@ -42,12 +48,10 @@ class Model:
             model_name (str): Name of this model.
             interface_name (str): Desired interface name.
             agent (X, optional): Input of the representor model. Default: None. 
-            key (number, optional): Key for random number generator. Default: None.
+            key (number, optional): Key for the random number generator. Default: None.
         """
 
-        if solution_method == 'constraint':
-            solution_method = 'exact'
-
+        if solution_method == 'constraint': solution_method = 'exact'
         self.binary_variable = self.add_binary_variable = self.boolean_variable = self.add_boolean_variable = self.bvar
         self.positive_variable = self.add_positive_variable = self.pvar
         self.integer_variable = self.add_integer_variable = self.ivar
@@ -68,11 +72,10 @@ class Model:
         self.status = self.show_status = self.dis_status
         self.objective_value = self.show_objective = self.display_objective = self.dis_obj
         self.random = create_random_number_generator(key)
+        self.avar= self.coll()
 
         match solution_method:
-
             case 'exact':
-
                 self.features = {
                     'solution_method': 'exact',
                     'model_name': model_name,
@@ -92,17 +95,14 @@ class Model:
                     'constraint_counter': [0, 0],
                     'objective_being_optimized': 0,
                 }
-
+                self.mainvars = self.coll()
+                self.maindims = self.coll()
                 from .generators import model_generator
                 self.model = model_generator.generate_model(self.features)
                 self.sm = self.model
-
             case 'heuristic':
-
                 self.agent = agent
-
                 if self.agent[0] == 'idle':
-
                     self.features = {
                         'agent_status': 'idle',
                         'solution_method': 'heuristic',
@@ -130,9 +130,7 @@ class Model:
                         'vectorized': None,
                         'objective_being_optimized': 0,
                     }
-
                 elif self.agent[0] == 'feasibility_check':
-
                     self.features = {
                         'agent_status': 'feasibility_check',
                         'solution_method': 'heuristic',
@@ -147,11 +145,8 @@ class Model:
                         'objective_being_optimized': 0,
                         'directions': []
                     }
-
                     self.agent = self.agent[1].copy()
-
                 else:
-
                     self.features = {
                         'agent_status': 'active',
                         'solution_method': 'heuristic',
@@ -166,11 +161,8 @@ class Model:
                         'objective_being_optimized': 0,
                         'directions': []
                     }
-
                     self.agent = self.agent[1].copy()
-
                 match self.features['interface_name']:
-
                     case 'mealpy': self.features['vectorized'] = False
                     case 'pymultiobjective': self.features['vectorized'] = False
                     case 'feloopy': self.features['vectorized'] = True
@@ -185,7 +177,6 @@ class Model:
 
         if self.features['agent_status'] == 'idle':
             return self
-
         elif self.features['agent_status'] == 'feasibility_check':
             if self.features['penalty_coefficient'] == 0:
                 return 'feasible (unconstrained)'
@@ -202,295 +193,752 @@ class Model:
 
     # Methods for variables definitions.
 
-    def coll(variable_dim):
+    def coll(dim):
         """
         Creates and returns an empty collection (dictionary) of variables.
-
         """
         from collections import defaultdict
         return defaultdict()
 
-    def btvar(self, name, variable_dim=0, variable_bound=[0, 1]):
+    def btvar(self, name, dim=0, bound=[0, 1]):
         """
         Creates and returns a tensor-like binary variable.
 
         Args:
             name (str): Name of this variable.
-            variable_dim (list, optional): Dimensions of this variable. Default: 0.
-            variable_bound (list, optional): Bounds of this variable. Default: [0, 1].
+            dim (list, optional): Dimensions of this variable. Default: 0.
+            bound (list, optional): Bounds of this variable. Default: [0, 1].
         """
-
-        variable_dim = fix_dims(variable_dim)
+        
+        dim = fix_dims(dim)
         self.features = update_variable_features(
-            name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
+            name, dim, bound, 'binary_variable_counter', self.features)
 
         match self.features['solution_method']:
 
             case 'exact':
 
                 from .generators import variable_generator
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'btvar', name, variable_bound, variable_dim)
+                self.mainvars[("btvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'btvar', name, bound, dim)
+                self.maindims[name] = dim
+                return self.mainvars[("btvar",name)]
 
-    def ptvar(self, name, variable_dim=0, variable_bound=[0, None]):
+    def ptvar(self, name, dim=0, bound=[0, None]):
         """
         Creates and returns a tensor-like positive variable.
 
         Args:
             name (str): Name of this variable.
-            variable_dim (list, optional): Dimensions of this variable. Default: 0.
-            variable_bound (list, optional): Bounds of this variable. Default: [0, None].
+            dim (list, optional): Dimensions of this variable. Default: 0.
+            bound (list, optional): Bounds of this variable. Default: [0, None].
         """
 
-        variable_dim = fix_dims(variable_dim)
+        dim = fix_dims(dim)
         self.features = update_variable_features(
-            name, variable_dim, variable_bound, 'positive_variable_counter', self.features)
+            name, dim, bound, 'positive_variable_counter', self.features)
 
         match self.features['solution_method']:
 
             case 'exact':
 
                 from .generators import variable_generator
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'ptvar', name, variable_bound, variable_dim)
+                self.mainvars[("ptvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'ptvar', name, bound, dim)
+                self.maindims[name] = dim
+                return self.mainvars[("ptvar",name)]
 
-    def itvar(self, name, variable_dim=0, variable_bound=[0, None]):
+    def itvar(self, name, dim=0, bound=[0, None]):
         """
         Creates and returns a tensor-like integer variable.
 
         Args:
             name (str): Name of this variable.
-            variable_dim (list, optional): Dimensions of this variable. Default: 0.
-            variable_bound (list, optional): Bounds of this variable. Default: [0, None].
+            dim (list, optional): Dimensions of this variable. Default: 0.
+            bound (list, optional): Bounds of this variable. Default: [0, None].
         """
 
-        variable_dim = fix_dims(variable_dim)
+        dim = fix_dims(dim)
         self.features = update_variable_features(
-            name, variable_dim, variable_bound, 'integer_variable_counter', self.features)
+            name, dim, bound, 'integer_variable_counter', self.features)
 
         match self.features['solution_method']:
 
             case 'exact':
 
                 from .generators import variable_generator
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'itvar', name, variable_bound, variable_dim)
+                self.mainvars[("ptvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'itvar', name, bound, dim)
+                self.maindims[name] = dim
+                return self.mainvars[("ptvar",name)]
 
         return self.vars[name]
 
-    def ftvar(self, name, variable_dim=0, variable_bound=[None, None]):
+    def ftvar(self, name, dim=0, bound=[None, None]):
         """
         Creates and returns a tensor-like free variable.
 
         Args:
             name (str): Name of this variable.
-            variable_dim (list, optional): Dimensions of this variable. Default: 0.
-            variable_bound (list, optional): Bounds of this variable. Default: [None, None].
+            dim (list, optional): Dimensions of this variable. Default: 0.
+            bound (list, optional): Bounds of this variable. Default: [None, None].
         """
 
-        variable_dim = fix_dims(variable_dim)
+        dim = fix_dims(dim)
         self.features = update_variable_features(
-            name, variable_dim, variable_bound, 'free_variable_counter', self.features)
+            name, dim, bound, 'free_variable_counter', self.features)
 
         match self.features['solution_method']:
 
             case 'exact':
 
                 from .generators import variable_generator
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'ftvar', name, variable_bound, variable_dim)
+                self.mainvars[("ftvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'ftvar', name, bound, dim)
+                self.maindims[name] = dim
+                return self.mainvars[("ftvar",name)]
 
-    def bvar(self, name, variable_dim=0, variable_bound=[0, 1]):
+    def bvar(self, name, dim=0, bound=[0, 1]):
         """
         Creates and returns a binary variable.
 
         Args:
             name (str): Name of this variable.
-            variable_dim (list, optional): Dimensions of this variable. Default: 0.
-            variable_bound (list, optional): Bounds of this variable. Default: [0, 1].
+            dim (list, optional): Dimensions of this variable. Default: 0.
+            bound (list, optional): Bounds of this variable. Default: [0, 1].
         """
 
-        variable_dim = fix_dims(variable_dim)
+        dim = fix_dims(dim)
         self.features = update_variable_features(
-            name, variable_dim, variable_bound, 'binary_variable_counter', self.features)
+            name, dim, bound, 'binary_variable_counter', self.features)
 
         match self.features['solution_method']:
 
             case 'exact':
 
                 from .generators import variable_generator
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'bvar', name, variable_bound, variable_dim)
+                self.mainvars[("bvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'bvar', name, bound, dim)
+                self.maindims[name] = dim
+                return self.mainvars[("bvar",name)]
 
             case 'heuristic':
 
-                return generate_heuristic_variable(self.features, 'bvar', name, variable_dim, variable_bound, self.agent)
+                return generate_heuristic_variable(self.features, 'bvar', name, dim, bound, self.agent)
 
-    def pvar(self, name, variable_dim=0, variable_bound=[0, None]):
+    def pvar(self, name, dim=0, bound=[0, None]):
         """
         Creates and returns a positive variable.
 
         Args:
             name (str): Name of this variable.
-            variable_dim (list, optional): Dimensions of this variable. Default: 0.
-            variable_bound (list, optional): Bounds of this variable. Default: [0, None].
+            dim (list, optional): Dimensions of this variable. Default: 0.
+            bound (list, optional): Bounds of this variable. Default: [0, None].
         """
 
-        variable_dim = fix_dims(variable_dim)
+        dim = fix_dims(dim)
         self.features = update_variable_features(
-            name, variable_dim, variable_bound, 'positive_variable_counter', self.features)
+            name, dim, bound, 'positive_variable_counter', self.features)
 
         match self.features['solution_method']:
 
             case 'exact':
 
                 from .generators import variable_generator
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'pvar', name, variable_bound, variable_dim)
+                self.mainvars[("pvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'pvar', name, bound, dim)
+                self.maindims[name] = dim
+                return self.mainvars[("pvar",name)]
 
             case 'heuristic':
 
-                return generate_heuristic_variable(self.features, 'pvar', name, variable_dim, variable_bound, self.agent)
+                return generate_heuristic_variable(self.features, 'pvar', name, dim, bound, self.agent)
 
-    def ivar(self, name, variable_dim=0, variable_bound=[0, None]):
+    def ivar(self, name, dim=0, bound=[0, None]):
         """
         Creates and returns an integer variable.
 
         Args:
             name (str): Name of this variable.
-            variable_dim (list, optional): Dimensions of this variable. Default: 0.
-            variable_bound (list, optional): Bounds of this variable. Default: [0, None].
+            dim (list, optional): Dimensions of this variable. Default: 0.
+            bound (list, optional): Bounds of this variable. Default: [0, None].
         """
 
-        variable_dim = fix_dims(variable_dim)
-        self.features = update_variable_features(
-            name, variable_dim, variable_bound, 'integer_variable_counter', self.features)
+        dim = fix_dims(dim)
+        self.features = update_variable_features(name, dim, bound, 'integer_variable_counter', self.features)
 
         match self.features['solution_method']:
 
             case 'exact':
 
                 from .generators import variable_generator
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'ivar', name, variable_bound, variable_dim)
+                self.mainvars[("ivar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'ivar', name, bound, dim)
+                self.maindims[name] = dim
+                return self.mainvars[("ivar",name)]
 
             case 'heuristic':
 
-                return generate_heuristic_variable(self.features, 'ivar', name, variable_dim, variable_bound, self.agent)
+                return generate_heuristic_variable(self.features, 'ivar', name, dim, bound, self.agent)
 
-    def fvar(self, name, variable_dim=0, variable_bound=[None, None]):
+    def fvar(self, name, dim=0, bound=[None, None]):
         """
         Creates and returns a free variable.
 
         Args:
             name (str): Name of this variable.
-            variable_dim (list, optional): Dimensions of this variable. Default: 0.
-            variable_bound (list, optional): Bounds of this variable. Default: [None, None].
+            dim (list, optional): Dimensions of this variable. Default: 0.
+            bound (list, optional): Bounds of this variable. Default: [None, None].
         """
 
-        variable_dim = fix_dims(variable_dim)
+        dim = fix_dims(dim)
         self.features = update_variable_features(
-            name, variable_dim, variable_bound, 'free_variable_counter', self.features)
+            name, dim, bound, 'free_variable_counter', self.features)
 
         match self.features['solution_method']:
 
             case 'exact':
 
                 from .generators import variable_generator
-                return variable_generator.generate_variable(self.features['interface_name'], self.model, 'fvar', name, variable_bound, variable_dim)
+                self.mainvars[("fvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'fvar', name, bound, dim)
+                self.maindims[name] = dim
+                return self.mainvars[("fvar",name)]
 
             case 'heuristic':
 
-                return generate_heuristic_variable(self.features, 'fvar', name, variable_dim, variable_bound, self.agent)
+                return generate_heuristic_variable(self.features, 'fvar', name, dim, bound, self.agent)
 
-    def dvar(self, name, variable_dim=0):
+    def dvar(self, name, dim=0):
         """
         Creates and returns a dependent variable.
 
         Args:
             name (str): Name of this variable.
-            variable_dim (list, optional): Dimensions of this variable. Default: 0.
+            dim (list, optional): Dimensions of this variable. Default: 0.
         """
 
-        variable_dim = fix_dims(variable_dim)
+        dim = fix_dims(dim)
 
         if self.features['agent_status'] == 'idle':
             if self.features['vectorized']:
-                if variable_dim == 0:
+                if dim == 0:
                     return 0
                 else:
-                    return np.random.rand(*tuple([50]+[len(dims) for dims in variable_dim]))
+                    return np.random.rand(*tuple([50]+[len(dims) for dims in dim]))
             else:
-                if variable_dim == 0:
+                if dim == 0:
                     return 0
                 else:
-                    return np.zeros([len(dims) for dims in variable_dim])
+                    return np.zeros([len(dims) for dims in dim])
         else:
             if self.features['vectorized']:
-                if variable_dim == 0:
+                if dim == 0:
                     return np.zeros(self.features['pop_size'])
                 else:
-                    return np.zeros([self.features['pop_size']]+[len(dims) for dims in variable_dim])
+                    return np.zeros([self.features['pop_size']]+[len(dims) for dims in dim])
             else:
-                if variable_dim == 0:
+                if dim == 0:
                     return 0
                 else:
-                    return np.zeros([len(dims) for dims in variable_dim])
+                    return np.zeros([len(dims) for dims in dim])
 
-    def svar(self, name, variable_dim=0):
+    def svar(self, name, dim=0):
         """
         Creates and returns a sequential variable.
 
         Args:
             name (str): Name of this variable.
-            variable_dim (list, optional): Dimensions of this variable. Default: 0.
+            dim (list, optional): Dimensions of this variable. Default: 0.
         """
 
         self.features = update_variable_features(
-            name, variable_dim, [0, 1], 'integer_variable_counter', self.features)
+            name, dim, [0, 1], 'integer_variable_counter', self.features)
         self.features['variable_type'][name] = 'svar'
 
-        return generate_heuristic_variable(self.features, 'svar', name, variable_dim, [0, 1], self.agent)
+        return generate_heuristic_variable(self.features, 'svar', name, dim, [0, 1], self.agent)
 
-    def evar(self, name, interval=[None, None, None], variable_dim=0, is_present=False):
+    def evar(self, name, interval=[None, None, None], dim=0, is_present=False):
         """        
         Creates and returns an event (interval) variable.
 
         Args:
             name: Name of this variable.
             interval: [size, start, end]. 
-
+            dim (list, optional): Dimensions of this variable. Default: 0.
         """
 
         if len(interval) == 1:
             interval = [interval[0], None, None]
 
-        if variable_dim == 0:
+        if dim == 0:
 
             if self.features['interface_name'] == 'cplex_cp':
-
                 return self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=name, optional=is_present)
-
             if self.features['interface_name'] == 'ortools_cp':
-
                 return self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=name, is_present=is_present)
-
         else:
-
             if self.features['interface_name'] == 'cplex_cp':
-
-                if len(variable_dim) == 1:
-
-                    return {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=is_present) for key in variable_dim[0]}
-
+                if len(dim) == 1:
+                    return {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=is_present) for key in dim[0]}
                 else:
-
-                    return {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=is_present) for key in sets(*variable_dim)}
+                    return {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=is_present) for key in sets(*dim)}
 
             if self.features['interface_name'] == 'ortools_cp':
 
-                if len(variable_dim) == 1:
-
-                    return {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=is_present) for key in variable_dim[0]}
-
+                if len(dim) == 1:
+                    return {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=is_present) for key in dim[0]}
                 else:
+                    return {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=is_present) for key in sets(*dim)}
 
-                    return {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=is_present) for key in sets(*variable_dim)}
+    # Methods for handling special automation operations
+    def scon_exactly_one_one(self, list_of_binary_variables):
+        self.con(sum(list_of_binary_variables[i] for i in range(len(list_of_binary_variables)))==1)
 
-    # Methods for constraint programming.
+    def scon_max_one_one(self, list_of_binary_variables):
+        self.con(sum(list_of_binary_variables[i] for i in range(len(list_of_binary_variables)))<=1)
+
+    def scon_min_one_one(self, list_of_binary_variables):
+        self.con(sum(list_of_binary_variables[i] for i in range(len(list_of_binary_variables)))>=1)
+
+    def scon_exactly_m_one(self, list_of_binary_variables, m):
+        self.con(sum(list_of_binary_variables[i] for i in range(len(list_of_binary_variables)))==m)
+
+    def scon_max_m_one(self, list_of_binary_variables, m):
+        self.con(sum(list_of_binary_variables[i] for i in range(len(list_of_binary_variables)))<=m)
+
+    def scon_min_m_one(self, list_of_binary_variables, m):
+        self.con(sum(list_of_binary_variables[i] for i in range(len(list_of_binary_variables)))>=m)
+
+    def scon_only_one_of_the_values(self, variable, list_of_values):
+        try:
+            for i in range(len(list_of_values)):
+                self.features['indicators'].append(self.features['indicators'][-1]+1)
+        except:
+            self.features['indicators'] = []
+            for i in range(len(list_of_values)):
+                self.features['indicators'].append(i)
+        z = self.bvar(f"indicator{self.features['indicators'][-1]}",[range(len(list_of_values))])
+        self.con(variable==sum(list_of_values[i]*z[i] for i in range(len(list_of_values))))
+        self.con(sum(z[i] for i in range(len(list_of_values)))==1)
+
+    def scon_only_one_of_the_values_or_zero(self, variable, list_of_values):
+        try:
+            for i in range(len(list_of_values)):
+                self.features['indicators'].append(self.features['indicators'][-1]+1)
+        except:
+            self.features['indicators'] = []
+            for i in range(len(list_of_values)):
+                self.features['indicators'].append(i)
+        z = self.bvar(f"indicator{self.features['indicators'][-1]}",[range(len(list_of_values))])
+        self.con(variable==sum(list_of_values[i]*z[i] for i in range(len(list_of_values))))
+        self.con(sum(z[i] for i in range(len(list_of_values)))<=1)
+
+    def scon_this_depends_on_that(self, this, that):
+        self.con(this<=that)
+
+    def scon_this_indeed_that(self, this, that):
+        self.con(this<=that)
+
+    def scon_strict_indicator_leq(self,indicator, expr, rhs, big_m=10e9, epsilon=10e-9):
+        """
+        Either expr<=rhs or expr>rhs should be true (1), using the user-provided indicator (0,1).
+        """
+        self.con(expr<=rhs+(1-indicator)*big_m)
+        self.con(expr>=rhs-indicator*big_m+epsilon)
+
+    def scon_strict_indicator_geq(self,indicator, expr, rhs, big_m=10e9, epsilon=10e-9):
+        """
+        Either expr>=rhs or expr<rhs should be true (1), using the user-provided indicator (0,1).
+        """
+        self.con(expr>=rhs-(1-indicator)*big_m)
+        self.con(expr<=rhs+indicator*big_m-epsilon)
+
+    def scon_soft_indicator_leq(self,indicator, expr, rhs, big_m=10e9):
+        """
+        expr<=rhs might be true (1) or not (0).
+        """
+        self.con(expr<=rhs+(1-indicator)*big_m)
+
+    def scon_soft_indicator_geq(self,indicator, expr, rhs, big_m=10e9):
+        """
+        expr>=rhs might be true (1) or not (0).
+        """
+        self.con(expr>=rhs-(1-indicator)*big_m)
+
+    def scon_this_or_that(self,this,rhs_this,that,rhs_that,big_m=10e9):
+        """
+        Adds two constraints and one indicator variable, to find if this<=rhs_this or that<=rhs_that.
+        """
+        try:
+            self.features['indicators'].append(
+                self.features['indicators'][-1]+1)
+        except:
+
+            self.features['indicators'] = [0]
+
+        z = self.bvar(f"indicator{self.features['indicators'][-1]}")
+        self.con(this<=rhs_this+z*big_m)
+        self.con(that<=rhs_that+(1-z)*big_m)
+
+    def scon_if_then(self, this, rhs_this, that, rhs_that, big_m=10e9, epsilon=10e-9):
+        """
+        Adds two constraints and one indicator variable, to find if this<=rhs_this then that<=rhs_that.
+        """
+
+        try:
+            self.features['indicators'].append(
+                self.features['indicators'][-1]+1)
+        except:
+
+            self.features['indicators'] = [0]
+
+        z = self.bvar(f"indicator{self.features['indicators'][-1]}")
+
+        self.con(this >= rhs_this + epsilon - z*big_m)
+        self.con(that <= rhs_that + (1-z)*big_m)
+
+    def scon_viol_leq(self,expr,rhs=0):
+        """
+        
+        Returns the amount of violation for soft constraints of type less than or equal (<=).
+        
+        """
+        try:
+            self.features['indicators'].append(
+                self.features['indicators'][-1]+1)
+        except:
+
+            self.features['indicators'] = [0]
+        
+        z = self.pvar(f"indicator{self.features['indicators'][-1]}")
+        self.con(expr<=rhs+z)
+        return z
+    
+    def scon_viol_geq(self,expr,rhs=0):
+        """
+        Returns the amount of violation for soft constraints of type greater than or equal (>=).
+        
+        """
+        try:
+            self.features['indicators'].append(
+                self.features['indicators'][-1]+1)
+        except:
+
+            self.features['indicators'] = [0]
+        
+        z = self.pvar(f"indicator{self.features['indicators'][-1]}")
+        self.con(expr>=rhs-z)
+        return z 
+    
+    def scon_slack_leq(self,expr,rhs=0):
+        try:
+            self.features['indicators'].append(
+                self.features['indicators'][-1]+1)
+        except:
+
+            self.features['indicators'] = [0]
+        
+        z = self.pvar(f"indicator{self.features['indicators'][-1]}")
+        self.con(expr+z==rhs)
+        return z 
+
+    def scon_surplus_leq(self,expr,rhs=0):
+        try:
+            self.features['indicators'].append(
+                self.features['indicators'][-1]+1)
+        except:
+
+            self.features['indicators'] = [0]
+        
+        z = self.pvar(f"indicator{self.features['indicators'][-1]}")
+        self.con(expr-z==rhs)
+        return z
+
+    def lin_piecewise(self, slopes, intercepts, breakpoints):
+
+        try:
+            for i in range(len(breakpoints)):
+                self.features['indicators'].append(self.features['indicators'][-1]+1)
+        except:
+            self.features['indicators'] = []
+            for i in range(len(breakpoints)):
+                self.features['indicators'].append(0)
+
+        x = self.pvar(f"indicatorr{self.features['indicators'][-1]}",[range(len(breakpoints))])
+        y = self.bvar(f"indicatorr{self.features['indicators'][-1]}",[range(len(breakpoints))])
+        for i in range(len(breakpoints)):
+            if i!=len(breakpoints)-1:
+                self.scon_in_bound(x[i], lb= (breakpoints[i+1]-breakpoints[i])*y[i], ub=(breakpoints[i+1]-breakpoints[i])*y[i])
+
+        return sum(slopes[i]*x[i]+intercepts[i] for i in range(len(breakpoints)-1))
+
+    def scon_in_bound(self, expr, lb=None, ub=None, label=None):
+        """
+        Creates upper and/or lower bounds on the given variable in the optimization model.
+        """
+        if lb is not None:
+            self.con(expr >= lb, label=label)
+        if ub is not None:
+            self.con(expr <= ub, label=label)
+
+    def scon_abs_leq(self, expr, rhs):
+        """
+        Linearizes a constraint like |a| <= b.
+        """
+
+        self.con(expr >= -1*rhs)
+        self.con(expr <= rhs)
+
+    def scon_lin_abs_geq(self, expr, rhs, big_m=10e9):
+        """
+        Linearizes a constraint like |a| >= b.
+        """
+
+        try:
+            self.features['abs_geq_linearizers'].append(
+                self.features['abs_geq_linearizers'][-1]+1)
+        except:
+            self.features['abs_geq_linearizers'] = [0]
+
+        z = self.bvar(
+            f"abs_geq_linearizer{self.features['abs_geq_linearizers'][-1]}")
+        
+        self.scon_this_or_that()
+
+        self.con(expr >= rhs-z*big_m)
+        self.con(expr <= -1*rhs+(1-z)*big_m)
+
+    def lin_abs_in_obj(self, expr, method=0, dir_obj=None):
+        """
+        Linearizes an |a| expression inside the objective function.
+
+        * method 0: +2 pvars and +1 constraint (for min and max)
+        * method 1: +1 pvar and + 2 constraints (+1 bvar for max) (for min or max, requires user input)
+        * method 2: +1 pvar and +1 constraint (only for min, does not require user input)
+        """
+
+        if method == 0:
+            try:
+                self.features['abs_obj_linearizers'].append(
+                    self.features['abs_obj_linearizers'][-1]+1)
+                self.features['abs_obj_linearizers'].append(
+                    self.features['abs_obj_linearizers'][-1]+1)
+            except:
+                self.features['abs_obj_linearizers'] = [0, 1]
+            z1 = self.pvar(
+                f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-1]}")
+            z2 = self.pvar(
+                f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-2]}")
+            self.con(expr == z1-z2)
+            return z1+z2
+
+        if method == 1:
+            if dir_obj == 'min':
+                try:
+                    self.features['abs_obj_linearizers'].append(
+                        self.features['abs_obj_linearizers'][-1]+1)
+                except:
+                    self.features['abs_obj_linearizers'] = [0]
+                z = self.pvar(
+                    f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-1]}")
+                self.scon_abs_leq(expr, z)
+                return z
+            if dir_obj == 'max':
+                try:
+                    self.features['abs_obj_linearizers'].append(
+                        self.features['abs_obj_linearizers'][-1]+1)
+                except:
+                    self.features['abs_obj_linearizers'] = [0]
+                z = self.pvar(
+                    f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-1]}")
+                self.scon_abs_geq(expr, z)
+                return z
+
+        if method == 2:
+            try:
+                self.features['abs_obj_linearizers'].append(
+                    self.features['abs_obj_linearizers'][-1]+1)
+            except:
+                self.features['abs_obj_linearizers'] = [0]
+            z = self.pvar(
+                f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-1]}")
+            self.con(expr+z >= 0)
+            return expr + 2*z
+
+    def lin_max(self, input_list, type_max, ub_max):
+        """
+        Linearizes the max function.
+        """
+        if self.features['solution_method'] == 'exact':
+
+            try:
+                self.features['max_linearizers'].append(
+                    self.features['max_linearizers'][-1]+1)
+            except:
+                self.features['max_linearizers'] = [0]
+
+            if type_max == 'bvar':
+                z = self.bvar(
+                    f"max_linearizer{self.features['max_linearizers'][-1]}")
+            if type_max == 'ivar':
+                z = self.ivar(
+                    f"max_linearizer{self.features['max_linearizers'][-1]}")
+            if type_max == 'pvar':
+                z = self.pvar(
+                    f"max_linearizer{self.features['max_linearizers'][-1]}")
+            if type_max == 'fvar':
+                z = self.fvar(
+                    f"max_linearizer{self.features['max_linearizers'][-1]}")
+
+            for item in input_list:
+                self.con(z >= item)
+            if ub_max != None:
+                self.con(z <= ub_max)
+            return z
+
+    def lin_min(self, input_list, type_min, lb_min=None):
+        """
+        Linearizes the min function.
+        """
+        try:
+            self.features['min_linearizers'].append(
+                self.features['min_linearizers'][-1]+1)
+        except:
+            self.features['min_linearizers'] = [0]
+
+        if type_min == 'bvar':
+            z = self.bvar(
+                f"min_linearizer{self.features['min_linearizers'][-1]}")
+        elif type_min == 'ivar':
+            z = self.ivar(
+                f"min_linearizer{self.features['min_linearizers'][-1]}")
+        elif type_min == 'pvar':
+            z = self.pvar(
+                f"min_linearizer{self.features['min_linearizers'][-1]}")
+        elif type_min == 'fvar':
+            z = self.fvar(
+                f"min_linearizer{self.features['min_linearizers'][-1]}")
+
+        for item in input_list:
+            self.con(z <= item)
+        if lb_min != None:
+            self.con(z >= lb_min)
+        return z
+
+    def lin_prod_bb(self, binary1, binary2):
+        """
+        Linearizes a Binary * Binary product.
+
+        constraints: +3
+        positive variables: +1
+        """
+
+        try:
+            self.features['bb_linearizers'].append(
+                self.features['bb_linearizers'][-1]+1)
+        except:
+
+            self.features['bb_linearizers'] = [0]
+
+        z = self.pvar(f"bb_linearizer{self.features['bb_linearizers'][-1]}")
+        self.con(z <= binary1)
+        self.con(z <= binary2)
+        self.con(z >= binary1 + binary2 - 1)
+        return z
+
+    def lin_prod_bp(self, binary, positive, ub_positive=10e9):
+        """
+        Linearizes a Binary * Positive product.
+
+        constraints: +3
+        positive variables: +1
+        """
+        try:
+            self.features['bp_linearizers'].append(
+                self.features['bp_linearizers'][-1]+1)
+        except:
+            self.features['bp_linearizers'] = [0]
+
+        z = self.pvar(f"bp_linearizer{self.features['bp_linearizers'][-1]}")
+        self.con(z <= positive)
+        self.con(z <= binary*ub_positive)
+        self.con(z >= positive - ub_positive*(1-binary))
+        return z
+
+    def lin_prod_bi(self, binary, integer, ub_integer=10e9):
+        """
+        Linearizes a Binary * Integer product.
+
+        constraints: +3
+        positive variables: +1
+        """
+        try:
+            self.features['bi_linearizers'].append(
+                self.features['bi_linearizers'][-1]+1)
+        except:
+            self.features['bi_linearizers'] = [0]
+
+        z = self.pvar(f"bi_linearizer{self.features['bi_linearizers'][-1]}")
+        self.con(z <= integer)
+        self.con(z <= binary*ub_integer)
+        self.con(z >= integer - ub_integer*(1-binary))
+        return z
+
+    def lin_prod_ip(self, integer, positive, ub_integer, ub_positive):
+        """
+        Linearizes a Integer * Positive product.
+
+        constraints: +1+3*(mt.ceil(mt.log2(ub_integer + 1)))
+        positive variables: +(mt.ceil(mt.log2(ub_integer + 1)))
+        binary variables: +(mt.ceil(mt.log2(ub_integer + 1)))
+        """
+
+        try:
+            self.features['ip_linearizers'].append(
+                self.features['ip_linearizers'][-1]+1)
+        except:
+            self.features['ip_linearizers'] = [0]
+
+        z = self.pvar(f"ip_linearizer{self.features['ip_linearizers'][-1]}", [
+                      range(mt.ceil(mt.log2(ub_integer + 1)))])
+        x = self.bvar(f"ip_binary_convert{self.features['ip_linearizers'][-1]}", [
+                      range(mt.ceil(mt.log2(ub_integer + 1)))])
+
+        self.con(integer == sum(
+            2**i * x[i] for i in range(mt.ceil(mt.log2(ub_integer + 1)))))
+
+        for i in range(mt.ceil(mt.log2(ub_integer + 1))):
+
+            self.con(z[i] <= positive)
+            self.con(z[i] <= x[i]*ub_positive)
+            self.con(z[i] >= positive - ub_positive*(1-x[i]))
+
+        return sum(2**i * z[i] for i in range(mt.ceil(mt.log2(ub_integer + 1))))
+
+    def lin_prod_ii(self, integer1, integer2, ub_integer1, ub_integer2):
+        """
+        Linearizes a Integer * Integer product.
+
+        constraints: +1+3*(mt.ceil(mt.log2(ub_integer + 1)))
+        positive variables: +(mt.ceil(mt.log2(ub_integer + 1)))
+        binary variables: +(mt.ceil(mt.log2(ub_integer + 1)))
+        """
+        try:
+            self.features['ii_linearizers'].append(
+                self.features['ii_linearizers'][-1]+1)
+        except:
+            self.features['ii_linearizers'] = [0]
+
+        z = self.pvar(f"ii_linearizer{self.features['ii_linearizers'][-1]}", [
+                      range(mt.ceil(mt.log2(ub_integer1 + 1)))])
+        x = self.bvar(f"ii_binary_convert{self.features['ii_linearizers'][-1]}", [
+                      range(mt.ceil(mt.log2(ub_integer1 + 1)))])
+
+        self.con(integer1 == sum(
+            2**i * x[i] for i in range(mt.ceil(mt.log2(ub_integer1 + 1)))))
+
+        for i in range(mt.ceil(mt.log2(ub_integer1 + 1))):
+
+            self.con(z[i] <= integer2)
+            self.con(z[i] <= x[i]*ub_integer2)
+            self.con(z[i] >= integer2 - ub_integer2*(1-x[i]))
+
+        return sum(2**i * z[i] for i in range(mt.ceil(mt.log2(ub_integer1 + 1))))
+
+    # Methods for constraint programming
 
     def start_of(self, interval_variable, absent_value=None):
         """
@@ -957,6 +1405,9 @@ class Model:
             relative_gap (%, optional): please state a releative gap (%) to find the optimal objective value. Defaults to None.
         """
 
+        if len(directions)<len(self.features['objectives']):
+            raise MultiObjectivityError("The number of directions and the provided objectives do not match.")
+
         self.features['objective_being_optimized'] = objective_id
         self.features['solver_name'] = solver_name
         self.features['solver_options'] = solver_options
@@ -1223,49 +1674,161 @@ class Model:
 
         return self.model.state_function()
 
-    def report(self, show_model=False):
+    def report(self):
+        print()
 
-        print("\n~~~~~~~~~~~~~~\nFELOOPY v0.2.4\n~~~~~~~~~~~~~~")
+        self.InterfaceName = self.features['interface_name']
+        self.SolutionMethod = self.features['solution_method']
+        self.ModelName = self.features['model_name']
+        self.SolverName = self.features['solver_name']
+        self.ModelConstraints = self.features['constraints']
+        self.ModelObjectives = self.features['objectives']
+        self.ObjectivesDirections = self.features['directions']
+        self.PositiveVariableCounter = self.features['positive_variable_counter']
+        self.BinaryVariableCounter = self.features['binary_variable_counter']
+        self.IntegerVariableCounter = self.features['integer_variable_counter']
+        self.FreeVariableCounter = self.features['free_variable_counter']
+        self.ToTalVariableCounter = self.features['total_variable_counter']
+        self.ConstraintsCounter = self.features['constraint_counter']
+        self.ObjectivesCounter = self.features['objective_counter']
+
 
         import datetime
+        now = datetime.datetime.now()
+        date_str = now.strftime("Date: %Y-%m-%d")
+        time_str = now.strftime("Time: %H:%M:%S")
 
-        e = datetime.datetime.now()
+        box_width = 80
+        padding = box_width - len(date_str) - len(time_str) - 2
 
-        print("\n~~~~~~~~~~~\nDATE & TIME\n~~~~~~~~~~~")
-        print(e.strftime("%Y-%m-%d %H:%M:%S"))
-        print(e.strftime("%a, %b %d, %Y"))
+        print("+" + "-"*box_width + "+")
+        print("|" + " " + "FelooPy v0.2.5".center(box_width-2) + " " + "|")
+        print("+" + "-"*box_width + "+")
+        print("| " + date_str + " "*padding + time_str + " |")
+        padding = box_width - len("Solver: "+ self.SolverName) - len("Interface: "+ self.InterfaceName) - 2
+        print("| " + "Interface: " + self.InterfaceName + " "*padding + "Solver: "+ self.SolverName + " |")
+        print("+" + "-"*box_width + "+")
+        print("|" + " " + "Model Information".center(box_width-2) + " " + "|")
+        print("+" + "-"*box_width + "+")
 
-        try:
-            print()
-            self.inf()
+        self.ModelName, self.InterfaceName, self.SolverName, self.ObjectivesDirections, self.SolutionMethod
+        # determine the maximum length of variables
+        ModelName = "The '" + self.ModelName + "' model has:"
+        print("|" + " " + ModelName.center(box_width-2) + " " + "|")
+        if self.PositiveVariableCounter[0]>0:
+            P_report = str(self.PositiveVariableCounter[1]) + " positive variable(s) in " + str(self.PositiveVariableCounter[0]) + " class(es)."
+            print("|" + " " + P_report.center(box_width-2) + " " + "|")
+        if self.BinaryVariableCounter[0]>0:
+            P_report = str(self.BinaryVariableCounter[1]) + " binary variable(s) in " + str(self.BinaryVariableCounter[0]) + " class(es)."
+            print("|" + " " + P_report.center(box_width-2) + " " + "|")
+        if self.IntegerVariableCounter[0]>0:
+            P_report = str(self.IntegerVariableCounter[1]) + " integer variable(s) in " + str(self.IntegerVariableCounter[0]) + " class(es)."
+            print("|" + " " + P_report.center(box_width-2) + " " + "|")
+        if self.FreeVariableCounter[0]>0:
+            P_report = str(self.FreeVariableCounter[1]) + " free variable(s) in " + str(self.FreeVariableCounter[0]) + " class(es)."
+            print("|" + " " + P_report.center(box_width-2) + " " + "|")
+        if self.ObjectivesCounter[0]>0:
+            P_report = str(self.ObjectivesCounter[1]) + " objective(s)."
+            print("|" + " " + P_report.center(box_width-2) + " " + "|")
+        if self.ConstraintsCounter[0]>0:
+            P_report = str(self.ConstraintsCounter[1]) + " constraint(s) in " + str(self.ConstraintsCounter[0]) + " class(es)."
+            print("|" + " " + P_report.center(box_width-2) + " " + "|")
+        P_report =  "Total number of variables is " + str(self.ToTalVariableCounter[1]) + f" in {self.ToTalVariableCounter[1]} class(es)."
+        print("|" + " " + P_report.center(box_width-2) + " " + "|")
 
-            print("~~~~~~~~~~\nSOLVE INFO\n~~~~~~~~~~")
 
-            self.dis_status()
-            self.dis_obj()
-            self.dis_time()
-            print("~~~~~~~~~~~\n")
+        print("+" + "-"*box_width + "+")
+        print("|" + " " + "Solve Information".center(box_width-2) + " " + "|")
+        print("+" + "-"*box_width + "+")
+        padding = box_width - len("Method: "+ self.SolutionMethod) - len("Objective Value(s)") - 2
+        print("| " + "Method: "+ self.SolutionMethod + " "*padding + "Objective Value(s)" + " |")
+        status= self.get_status()
+        if len(self.ObjectivesDirections)!=1:
+            row = "| " + "Status: " + " "*(len(status[0]) - len("Status: ")) + " " * (box_width-9*len(self.ObjectivesDirections) +1 - len(str(status[0])) - 3)
+            for j in range(len(self.ObjectivesDirections)):
+                obj_row = self.ObjectivesDirections[j]
+                row += " " * (8 - len(obj_row)) + obj_row
+            print(row + " |")
+            for i in range(len(status)): 
+                row = "| " + str(status[i]) + " " * (box_width-9*len(self.ObjectivesDirections) +1 - len(str(status[i])) - 3)
+                obj_row = self.get_obj()[i]
+                for j in range(len(obj_row)):
+                    num_str = format_string(obj_row[j])
+                    row += " " * (9 - len(num_str)) + num_str
+                print(row + " |")
+        else:
+            row = "| " + "Status: " + " "*(len(status) - len("Status: ")) + " " * (box_width-9*len(self.ObjectivesDirections) +1 - len(str(status)) - 3)
+            for j in range(len(self.ObjectivesDirections)):
+                obj_row = self.ObjectivesDirections[j]
+                row += " " * (8 - len(obj_row)) + obj_row
+            print(row + " |")
+            row = "| " + str(status) + " " * (box_width-9*len(self.ObjectivesDirections) +1 - len(str(status)) - 3)
+            obj_row = self.get_obj()
+            num_str = format_string(obj_row)
+            row += " " * (9 - len(num_str)) + num_str
+            print(row + " |")
+        print("+" + "-"*box_width + "+")
+        print("|" + " " + "Metric Information".center(box_width-2) + " " + "|")
+        print("+" + "-"*box_width + "+")
+        hour = round((self.get_time()), 3) % (24 * 3600) // 3600
+        min = round((self.get_time()), 3) % (24 * 3600) % 3600 // 60
+        sec = round((self.get_time()), 3) % (24 * 3600) % 3600 % 60
 
-            if show_model:
+    
+        if len(self.ObjectivesDirections)!=1:
+            try:
+                try:
+                    self.get_indicators()
+                    print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
+                    print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec)+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| GD    (min):          ", format_string(self.calculated_indicators['gd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| IGD   (min):          ", format_string(self.calculated_indicators['igd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| HV    (max):          ", format_string(self.calculated_indicators['hv']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                except:
+                    print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
+                    print("| GD    (min):          ", format_string(self.calculated_indicators['gd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| IGD   (min):          ", format_string(self.calculated_indicators['igd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+            except:
+                print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
+                print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+        else:
+            print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
+            print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")     
+        print("+" + "-"*box_width + "+")
+        print("|" + " " + "Decision Information".center(box_width-2) + " " + "|")
+        print("+" + "-"*box_width + "+")
+        for i,j in self.mainvars.keys():
+            if self.maindims[j] == 0:
+                if self.get(self.mainvars[(i,j)]) not in [0, None]:
+                    print(f"| {j} =", self.get(self.mainvars[(i,j)]), " "* (box_width-(len(f"| {j} =") + len(str(self.get(self.mainvars[(i,j)]))))-1) + "|")
+            elif len(self.maindims[j])==1:
+                try:
+                    for k in fix_dims(self.maindims[j])[0]:
+                        if self.get(self.mainvars[(i,j)][k]) not in [0, None]:
+                            print(f"| {j}[{k}] =", self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"| {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "|")
+                except:
+                    for k in fix_dims(self.maindims[j])[0]:
+                        if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
+                            print(f"| {j}[{k}] =", self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"| {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "|")
+            else:
+                try:
+                    for k in it.product(*tuple(fix_dims(self.maindims[j]))):
+                        if self.get(self.mainvars[(i,j)][k]) not in [0, None]:
+                            print(f"| {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"| {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "|")
+                except:
+                    for k in it.product(*tuple(fix_dims(self.maindims[j]))):
+                        if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
+                            print(f"| {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"| {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "|")
 
-                self.dis_model()
-
-        except:
-            self.inf()
-            self.dis_status()
-            self.dis_obj()
-            self.dis_time()
-
-        print()
-        if self.features['interface_name'] == 'cplex_cp':
-
-            print("~~~~~~~~~~\nSOLUTION INFO\n~~~~~~~~~~")
-        try:
-
-            self.solution[0].print_solution()
-
-        except:
-            ""
+        print("+" + "-"*box_width + "+")
 
     # Methods to work with input and output data.
 
@@ -1299,12 +1862,12 @@ class Model:
         To generate a real-valued parameter using uniform distribution inside a range.
         """
 
-        variable_dim = fix_dims(parameter_dim)
+        dim = fix_dims(parameter_dim)
 
-        if variable_dim == 0:
+        if dim == 0:
             return self.random.uniform(low=lb, high=ub)
         else:
-            return self.random.uniform(low=lb, high=ub, size=([len(i) for i in variable_dim]))
+            return self.random.uniform(low=lb, high=ub, size=([len(i) for i in dim]))
 
     def uniformint(self, lb, ub, parameter_dim=0):
         """
@@ -1313,12 +1876,12 @@ class Model:
         To generate an integer parameter using uniform distribution inside a range.
         """
 
-        variable_dim = fix_dims(parameter_dim)
+        dim = fix_dims(parameter_dim)
 
-        if variable_dim == 0:
+        if dim == 0:
             return self.random.integers(low=lb, high=ub)
         else:
-            return self.random.integers(low=lb, high=ub+1, size=([len(i) for i in variable_dim]))
+            return self.random.integers(low=lb, high=ub+1, size=([len(i) for i in dim]))
 
     def abs(self, input):
 
@@ -1822,14 +2385,64 @@ class Implement:
                         self.remove.append(i)
 
                 if len(self.remove) != 0:
-                    print(
-                        "Warning: Some solutions might be infeasible. You can remove infeasible solutions using m.remove_infeasible_solutions() method.")
+                    self.remove_infeasible_solutions()
 
             case 'feloopy':
 
                 from .generators.solution import feloopy_solution_generator
                 self.BestAgent, self.BestReward, self.start, self.end, self.status = feloopy_solution_generator.generate_solution(
                     self.ModelObject, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots)
+
+    def dis_plots(self, ideal_pareto: Optional[np.ndarray] = [], step: Optional[tuple] = (0.1,)):
+
+        """
+        Calculates selected Pareto front metrics and displays the results in a tabulated format.
+
+        :param ideal_pareto: An array of shape (n_samples, n_objectives) containing the ideal Pareto front. Default is None.
+        """
+
+        obtained_pareto = self.BestReward
+
+        from pyMultiobjective.util import graphs
+        ObjectivesDirections = [-1 if direction =='max' else 1 for direction in self.ObjectivesDirections]
+        def f1(X): return ObjectivesDirections[0]*self.Fitness(np.array(X))[0]
+        def f2(X): return ObjectivesDirections[1]*self.Fitness(np.array(X))[1]
+        def f3(X): return ObjectivesDirections[2]*self.Fitness(np.array(X))[2]
+        def f4(X): return ObjectivesDirections[3]*self.Fitness(np.array(X))[3]
+        def f5(X): return ObjectivesDirections[4]*self.Fitness(np.array(X))[4]
+        def f6(X): return ObjectivesDirections[5]*self.Fitness(np.array(X))[5]
+        my_list_of_functions = [f1, f2, f3, f4, f5, f6]
+        parameters = dict()
+        list_of_functions = []
+        for i in range(len(ObjectivesDirections)): list_of_functions.append(my_list_of_functions[i])
+        
+        solution = np.concatenate((self.BestAgent, self.BestReward*ObjectivesDirections), axis=1)
+    
+        parameters = {
+        'min_values': (0,)*self.ToTalVariableCounter[1],
+        'max_values': (1,)*self.ToTalVariableCounter[1],
+        'step': step*self.ToTalVariableCounter[1],
+        'solution': solution, 
+        'show_pf': True,
+        'show_pts': True,
+        'show_sol': True,
+        'pf_min': True, 
+        'custom_pf': ideal_pareto*ObjectivesDirections if type(ideal_pareto) == np.ndarray else [],
+        'view': 'browser'
+        }
+        graphs.plot_mooa_function(list_of_functions = list_of_functions, **parameters)
+
+        parameters = {
+            'min_values': (0,)*self.ToTalVariableCounter[1],
+            'max_values': (1,)*self.ToTalVariableCounter[1],
+            'step': step*self.ToTalVariableCounter[1],
+            'solution': solution, 
+            'show_pf': True,
+            'pf_min': True,  
+            'custom_pf': ideal_pareto*ObjectivesDirections if type(ideal_pareto) == np.ndarray else [],
+            'view': 'browser'
+        }
+        graphs.parallel_plot(list_of_functions = list_of_functions, **parameters)
 
     def dis_status(self):
         print('status:', self.get_status())
@@ -2494,59 +3107,67 @@ class Implement:
                         case 'svar':
                             return np.argsort(self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])
 
-    def dis_indicators(self, step=0.1, pareto_dir='min', custom_pf=[], ref_point=[]):
 
-        print(self.get_indicators(step, pareto_dir, custom_pf, ref_point))
+    def dis_indicators(self, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], step: Optional[tuple] = (0.1,), epsilon: float = 0.01, p: float = 2.0, n_clusters: int = 5, save_path: Optional[str] = None, show_log: Optional[bool] = False):
 
-    def get_indicators(self, step=0.1, pareto_dir='min', custom_pf=[], ref_point=[]):
+        """
+        Calculates selected Pareto front metrics and displays the results in a tabulated format.
+
+        :param ideal_pareto: An array of shape (n_samples, n_objectives) containing the ideal Pareto front. Default is None.
+        :param epsilon: A float value for the epsilon value used in the epsilon metric. Default is 0.01.
+        :param p: A float value for the power parameter used in the weighted generational distance and weighted inverted generational distance metrics. Default is 2.0.
+        :param n_clusters: An integer value for the number of clusters used in the knee point distance metric. Default is 5.
+        :param save_path: A string value for the path where the results should be saved. Default is None.
+        """
+
+
+        self.get_indicators(ideal_pareto, ideal_point, step, epsilon, p, n_clusters, save_path, show_log = True)
+
+    def get_indicators(self, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], step: Optional[tuple] = (0.1,), epsilon: float = 0.01, p: float = 2.0, n_clusters: int = 5, save_path: Optional[str] = None, show_log: Optional[bool] = False):
+
+        """
+        Calculates selected Pareto front metrics and displays the results in a tabulated format.
+
+        :param ideal_pareto: An array of shape (n_samples, n_objectives) containing the ideal Pareto front. Default is None.
+        :param epsilon: A float value for the epsilon value used in the epsilon metric. Default is 0.01.
+        :param p: A float value for the power parameter used in the weighted generational distance and weighted inverted generational distance metrics. Default is 2.0.
+        :param n_clusters: An integer value for the number of clusters used in the knee point distance metric. Default is 5.
+        :param save_path: A string value for the path where the results should be saved. Default is None.
+        """
+
+        obtained_pareto = self.BestReward
 
         from pyMultiobjective.util import indicators
-
-        ObjectivesDirections = [-1 if direction ==
-                                'max' else 1 for direction in self.ObjectivesDirections]
-
+        ObjectivesDirections = [-1 if direction =='max' else 1 for direction in self.ObjectivesDirections]
         def f1(X): return ObjectivesDirections[0]*self.Fitness(np.array(X))[0]
         def f2(X): return ObjectivesDirections[1]*self.Fitness(np.array(X))[1]
         def f3(X): return ObjectivesDirections[2]*self.Fitness(np.array(X))[2]
         def f4(X): return ObjectivesDirections[3]*self.Fitness(np.array(X))[3]
         def f5(X): return ObjectivesDirections[4]*self.Fitness(np.array(X))[4]
         def f6(X): return ObjectivesDirections[5]*self.Fitness(np.array(X))[5]
-
         my_list_of_functions = [f1, f2, f3, f4, f5, f6]
-
         parameters = dict()
-
         list_of_functions = []
-        list_of_directions = ObjectivesDirections
-
-        for i in range(len(ObjectivesDirections)):
-
-            list_of_functions.append(my_list_of_functions[i])
-
-        print(np.concatenate((self.BestAgent, self.BestReward), axis=1))
-
+        for i in range(len(ObjectivesDirections)): list_of_functions.append(my_list_of_functions[i])
+        
+        solution = np.concatenate((self.BestAgent, self.BestReward*ObjectivesDirections), axis=1)
+    
         parameters = {
             'min_values': (0,)*self.ToTalVariableCounter[1],
             'max_values': (1,)*self.ToTalVariableCounter[1],
-            'step': (step,)*self.ToTalVariableCounter[1],
-            'solution': np.concatenate((self.BestAgent, self.BestReward), axis=1),
-            'pf_min': True if pareto_dir == 'min' else False,
-            'custom_pf': custom_pf
+            'step': step*self.ToTalVariableCounter[1],
+            'solution': solution,
+            'pf_min': True,
+            'custom_pf': ideal_pareto*ObjectivesDirections if type(ideal_pareto) == np.ndarray else []
         }
 
         self.calculated_indicators = dict()
-
-        # gd = indicators.gd_indicator(list_of_functions=list_of_functions, **parameters)
-        gdp = indicators.gd_plus_indicator(
-            list_of_functions=list_of_functions, **parameters)
-        igd = indicators.igd_indicator(
-            list_of_functions=list_of_functions, **parameters)
-        igdp = indicators.igd_plus_indicator(
-            list_of_functions=list_of_functions, **parameters)
-        ms = indicators.ms_indicator(
-            list_of_functions=list_of_functions, **parameters)
-        sp = indicators.sp_indicator(
-            list_of_functions=list_of_functions, **parameters)
+        gd = indicators.gd_indicator(list_of_functions=list_of_functions, **parameters)
+        gdp = indicators.gd_plus_indicator(list_of_functions=list_of_functions, **parameters)
+        igd = indicators.igd_indicator(list_of_functions=list_of_functions, **parameters)
+        igdp = indicators.igd_plus_indicator(list_of_functions=list_of_functions, **parameters)
+        ms = indicators.ms_indicator(list_of_functions=list_of_functions, **parameters)
+        sp = indicators.sp_indicator(list_of_functions=list_of_functions, **parameters)
 
         self.calculated_indicators['gd'] = gd
         self.calculated_indicators['gdp'] = gdp
@@ -2556,20 +3177,68 @@ class Implement:
         self.calculated_indicators['sp'] = sp
 
         parameters = {
-            'solution': np.concatenate((self.BestAgent, self.BestReward), axis=1),
-            'n_objs': self.ToTalVariableCounter[1],
-            'ref_point': ref_point,
+            'solution': solution,
+            'n_objs': len(ObjectivesDirections),
+            'ref_point': ideal_point,
         }
+        
+        hypervolume = indicators.hv_indicator(**parameters)
+        self.calculated_indicators['hv'] = hypervolume
+        metrics = []
 
-        try:
-            hypervolume = indicators.hv_indicator(**parameters)
+        if type(ideal_pareto) == np.ndarray:
+            metrics = [
+                ('Additive Epsilon Indicator Metric (min) [0, +inf)',metric_pareto_aem(ideal_pareto, obtained_pareto)),
+                ('Convergence Metric (min) [0,+inf)', metric_pareto_cvm(obtained_pareto, ideal_pareto)),
+                ('Coverage Ratio Metric (max) [0,1]', metric_pareto_crm(ideal_pareto, obtained_pareto)),
+                ('Epsilon Metric (max) [0 or 1]', metric_pareto_epm(obtained_pareto, ideal_pareto, epsilon)),
+                ('F-Ratio Metric (max) [0,1]', metric_pareto_frm(obtained_pareto, ideal_pareto)),
+                ('Generational Distance Metric (min) [0,+inf)', self.calculated_indicators['gd']),
+                ('Hyper Volume Metric (max) [0, +inf)', self.calculated_indicators['hv']),
+                ('Inverted Generational Distance (min) [0, +inf)', self.calculated_indicators['igd']),
+                ('Knee Point Distance Metric (min) [0, +inf)', metric_pareto_kdm(obtained_pareto, ideal_pareto, n_clusters)),
+                ('Maximum Pareto Front Error Metric (min) [0, +inf)',metric_pareto_mem(ideal_pareto, obtained_pareto)),
+                ('Maximum Spread Metric (max) [0, +inf)', self.calculated_indicators['ms']),
+                ('Quantity Metric (max) [0,1]', metric_pareto_qvm(obtained_pareto, ideal_pareto)),
+                ('R2 Metric (max) [0,1]', metric_pareto_r2m(obtained_pareto, ideal_pareto)),
+                ('Spacing Metric (max) [0,+inf)', self.calculated_indicators['sp']),
+                ('Spread Metric (max) [0, +inf)', metric_pareto_rsm(obtained_pareto, ideal_pareto)),
+                ('Generational Distance Metric Plus (min) [0, +inf)', self.calculated_indicators['gdp']),
+                ('Weighted Inverted Generational Distance Plus (min) [0, +inf)', self.calculated_indicators['igdp'])]
+        else:
 
-            self.calculated_indicators['hv'] = hypervolume
+            metrics = [
+                ('Generational Distance Metric (min) [0,+inf)', self.calculated_indicators['gd']),
+                ('Hyper Volume Metric (max) [0, +inf)', self.calculated_indicators['hv']),
+                ('Inverted Generational Distance (min) [0, +inf)', self.calculated_indicators['igd']),
+                ('Maximum Spread Metric (max) [0, +inf)', self.calculated_indicators['ms']),
+                ('Spacing Metric (max) [0,+inf)', self.calculated_indicators['sp']),
+                ('Generational Distance Metric Plus (min) [0, +inf)', self.calculated_indicators['gdp']),
+                ('Inverted Generational Distance Plus (min) [0, +inf)', self.calculated_indicators['igdp'])]
 
-        except:
-            None
+        headers = ['Metric', 'Value']
+        results = [[metric[0], metric[1]] for metric in metrics]
+        table = tb(results, headers=headers)
 
-        return self.calculated_indicators
+        if show_log:
+            print(table)
+
+            mean_values = np.mean(self.BestReward, axis=0)
+            std_values = np.std(self.BestReward, axis=0)
+            min_values = np.min(self.BestReward, axis=0)
+            max_values = np.max(self.BestReward, axis=0)
+
+            table_data = [['Objective']+['Mean', 'Standard Deviation', 'Min', 'Max']]
+            for i in range(len(ObjectivesDirections)):
+                table_data.append([f'Objective {i+1}', mean_values[i], std_values[i], min_values[i], max_values[i]])
+            print()
+            print(tabulate(table_data, headers='firstrow'))
+
+        if save_path is not None:
+            with open(save_path, 'w') as f:
+                f.write(table)
+
+        return metrics
 
     def dis_time(self):
 
@@ -2580,6 +3249,7 @@ class Implement:
         print(f"cpu time [{self.InterfaceName}]: ", (self.end-self.start)*10 **
               6, '(microseconds)', "%02d:%02d:%02d" % (hour, min, sec), '(h, m, s)')
 
+        
     def get_time(self):
         """
 
@@ -2594,13 +3264,9 @@ class Implement:
         return self.BestReward
 
     def dis(self, input):
-
         if len(input) >= 2:
-
             print(input[0]+str(input[1])+': ', self.get(input))
-
         else:
-
             print(str(input[0])+': ', self.get(input))
 
     def dis_obj(self):
@@ -2628,28 +3294,163 @@ class Implement:
 
         return A
 
+    def get_payoff(self):
+
+        payoff=[]
+        for i in range(len(self.ObjectivesDirections)):
+            if self.ObjectivesDirections[i]=='max':
+                ind =np.argmax(self.get_obj()[:, i])
+                val = self.get_obj()[ind, :]
+            elif self.ObjectivesDirections[i] =='min':
+                ind = np.argmin(self.get_obj()[:, i])
+                val = self.get_obj()[ind, :]
+            payoff.append(val)
+        return np.array(payoff)
+
     def report(self):
 
-        print("\n~~~~~~~~~~~~~~\nFELOOPY v0.2.4\n~~~~~~~~~~~~~~")
+        print()
 
         import datetime
+        now = datetime.datetime.now()
+        date_str = now.strftime("Date: %Y-%m-%d")
+        time_str = now.strftime("Time: %H:%M:%S")
 
-        e = datetime.datetime.now()
+        box_width = 80
+        padding = box_width - len(date_str) - len(time_str) - 2
 
-        print("\n~~~~~~~~~~~\nDATE & TIME\n~~~~~~~~~~~")
-        print(e.strftime("%Y-%m-%d %H:%M:%S"))
-        print(e.strftime("%a, %b %d, %Y"))
+        print("+" + "-"*box_width + "+")
+        print("|" + " " + "FelooPy v0.2.5".center(box_width-2) + " " + "|")
+        print("+" + "-"*box_width + "+")
+        print("| " + date_str + " "*padding + time_str + " |")
+        padding = box_width - len("Solver: "+ self.SolverName) - len("Interface: "+ self.InterfaceName) - 2
+        print("| " + "Interface: " + self.InterfaceName + " "*padding + "Solver: "+ self.SolverName + " |")
+        print("+" + "-"*box_width + "+")
+        print("|" + " " + "Model Information".center(box_width-2) + " " + "|")
+        print("+" + "-"*box_width + "+")
 
-        print()
-        self.inf()
+        self.ModelName, self.InterfaceName, self.SolverName, self.ObjectivesDirections, self.SolutionMethod
+        # determine the maximum length of variables
+        ModelName = "The '" + self.ModelName + "' model has:"
+        print("|" + " " + ModelName.center(box_width-2) + " " + "|")
+        if self.PositiveVariableCounter[0]>0:
+            P_report = str(self.PositiveVariableCounter[1]) + " positive variable(s) in " + str(self.PositiveVariableCounter[0]) + " class(es)."
+            print("|" + " " + P_report.center(box_width-2) + " " + "|")
+        if self.BinaryVariableCounter[0]>0:
+            P_report = str(self.BinaryVariableCounter[1]) + " binary variable(s) in " + str(self.BinaryVariableCounter[0]) + " class(es)."
+            print("|" + " " + P_report.center(box_width-2) + " " + "|")
+        if self.IntegerVariableCounter[0]>0:
+            P_report = str(self.IntegerVariableCounter[1]) + " integer variable(s) in " + str(self.IntegerVariableCounter[0]) + " class(es)."
+            print("|" + " " + P_report.center(box_width-2) + " " + "|")
+        if self.FreeVariableCounter[0]>0:
+            P_report = str(self.FreeVariableCounter[1]) + " free variable(s) in " + str(self.FreeVariableCounter[0]) + " class(es)."
+            print("|" + " " + P_report.center(box_width-2) + " " + "|")
+        if self.ObjectivesCounter[0]>0:
+            P_report = str(self.ObjectivesCounter[1]) + " objective(s)."
+            print("|" + " " + P_report.center(box_width-2) + " " + "|")
+        if self.ConstraintsCounter[0]>0:
+            P_report = str(self.ConstraintsCounter[1]) + " constraint(s) in " + str(self.ConstraintsCounter[0]) + " class(es)."
+            print("|" + " " + P_report.center(box_width-2) + " " + "|")
+        P_report =  "Total number of variables is " + str(self.ToTalVariableCounter[1]) + f" in {self.ToTalVariableCounter[1]} class(es)."
+        print("|" + " " + P_report.center(box_width-2) + " " + "|")
 
-        print("~~~~~~~~~~\nSOLVE INFO\n~~~~~~~~~~")
-        self.dis_status()
-        self.dis_obj()
-        self.dis_time()
-        print("~~~~~~~~~\n")
+        print("+" + "-"*box_width + "+")
+        print("|" + " " + "Solve Information".center(box_width-2) + " " + "|")
+        print("+" + "-"*box_width + "+")
+        padding = box_width - len("Method: "+ self.SolutionMethod) - len("Objective Value(s)") - 2
+        print("| " + "Method: "+ self.SolutionMethod + " "*padding + "Objective Value(s)" + " |")
+        status= self.get_status()
+        if len(self.ObjectivesDirections)!=1:
+            row = "| " + "Status: " + " "*(len(status[0]) - len("Status: ")) + " " * (box_width-10*len(self.ObjectivesDirections)+1  - len(str(status[0])) - 3)
+            for j in range(len(self.ObjectivesDirections)):
+                obj_row = self.ObjectivesDirections[j]
+                row += " " * (10 - len(obj_row)) + obj_row
+            print(row + " |")
+            for i in range(len(status)): 
+                row = "| " + str(status[i]) + " " * (box_width-10*len(self.ObjectivesDirections) +1 - len(str(status[i])) - 3)
+                obj_row = self.get_obj()[i]
+                for j in range(len(obj_row)):
+                    num_str = format_string(obj_row[j])
+                    row += " " * (10 - len(num_str)) + num_str
+                print(row + " |")
+            for j in range(len(self.ObjectivesDirections)):
+                row = "| " + str(f"payoff {j}") + " " * (box_width-10*len(self.ObjectivesDirections) +1 - len(str(f"payoff {j}")) - 3)
+                for k in range(len(self.ObjectivesDirections)):
+                    num_str = format_string(self.get_payoff()[j,k])
+                    row += " " * (10 - len(num_str)) + num_str
+                print(row + " |")
+        else:
+            row = "| " + "Status: " + " "*(len(status) - len("Status: ")) + " " * (box_width-9*len(self.ObjectivesDirections) +1 - len(str(status)) - 3)
+            for j in range(len(self.ObjectivesDirections)):
+                obj_row = self.ObjectivesDirections[j]
+                row += " " * (9 - len(obj_row)) + obj_row
+            print(row + " |")
+            row = "| " + str(status) + " " * (box_width-9*len(self.ObjectivesDirections) +1 - len(str(status)) - 3)
+            obj_row = self.get_obj()
+            num_str = format_string(obj_row)
+            row += " " * (9 - len(num_str)) + num_str
+            print(row + " |")
+        print("+" + "-"*box_width + "+")
+        print("|" + " " + "Metric Information".center(box_width-2) + " " + "|")
+        print("+" + "-"*box_width + "+")
+        hour = round(((self.end-self.start)), 3) % (24 * 3600) // 3600
+        min = round(((self.end-self.start)), 3) % (24 * 3600) % 3600 // 60
+        sec = round(((self.end-self.start)), 3) % (24 * 3600) % 3600 % 60
+        if len(self.ObjectivesDirections)!=1:
+            try:
+                try:
+                    self.get_indicators()
+                    print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec)+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| NP    (max):          ", format_string(len((self.get_obj())))+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| GD    (min):          ", format_string(self.calculated_indicators['gd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| IGD   (min):          ", format_string(self.calculated_indicators['igd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    if np.isnan(self.calculated_indicators['ms']):
+                        print("| MS    (max):               ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    else:
+                        print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| HV    (max):          ", format_string(self.calculated_indicators['hv']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                except:
+                    print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec)+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| NP    (max):          ", format_string(len((self.get_obj())))+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| GD    (min):          ", format_string(self.calculated_indicators['gd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| IGD   (min):          ", format_string(self.calculated_indicators['igd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    if np.isnan(self.calculated_indicators['ms']):
+                        print("| MS    (max):               ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    else:
+                        print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+            except:
+                print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+        else:
+            print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+            print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")     
+        print("+" + "-"*box_width + "+")
+        if type(status) == str:
+            print("|" + " " + "Decision Information".center(box_width-2) + " " + "|")
+            print("+" + "-"*box_width + "+")
+            for i in self.VariablesDim.keys():
+                if self.VariablesDim[i] == 0:
+                    if self.get([i,(0,)])!=0:
+                        print(f"| {i} =", self.get([i,(0,)]), " "* (box_width-(len(f"| {i} =") + len(str(self.get([i,(0,)])))) -1) + "|")
+                elif len(self.VariablesDim[i])==1:
+                    for k in fix_dims(self.VariablesDim[i])[0]:
+                        if self.get([i,(k,)])!=0:
+                            print(f"| {i}[{k}] =", self.get([i,(k,)]), " "* (box_width-(len(f"| {i}[{k}] =") + len(str(self.get([i,(k,)])))) - 1) + "|")
+                else:
+                    for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
+                        if self.get([i,(*k,)])!=0:
+                            print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get([i,(*k,)]), " "* (box_width-(len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get([i,(*k,)])))) - 1) + "|")
+            print("+" + "-"*box_width + "+")
 
+        
 # Alternatives for defining this class:
-
-
+            
 construct = make_model = implementor = implement = Implement

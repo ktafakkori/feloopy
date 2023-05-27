@@ -8,35 +8,37 @@
  # @ Copyright: 2023. MIT License. All Rights Reserved.
  '''
 
-from typing import Dict, Union
+from typing import Dict, List, Union
 import numpy as np
 
-
-def mcdm_aras(dataset: np.ndarray, weights: np.ndarray, criterion_type: list, show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
+def mcdm_aras(dataset: np.ndarray, weights: np.ndarray, criterion_type: List[str], show_output: bool = True, show_graph: bool = False) -> Dict[str, Union[np.ndarray, None]]:
     """
-    Additive Ratio Assessment System
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    This function takes the dataset, weights, and criterion type as input for the ARAS method of multi-criteria decision making.
-    It returns the output in the form of a dictionary with keys representing the name of the output and values the value of the outputs.
+    Computes the scores of alternatives using the Additive Ratio Assessment System (ARAS) method of multi-criteria decision making.
 
     Args:
-        dataset: A numpy array containing the performance values of each alternative on each criterion. Each row
-                 represents an alternative, and each column represents a criterion.
-        weights: A numpy array containing the weight values for each criterion.
-        criterion_type: A list containing the type of each criterion. 'max' indicates that the criterion is a benefit
-                        criterion, and 'min' indicates that the criterion is a cost criterion.
-        show_output: A boolean value indicating whether to show the calculated scores or not.
-        show_graph: A boolean value indicating whether to show the visualization of the convergence graph or not.
+        dataset (np.ndarray): A numpy array containing the performance values of each alternative on each criterion.
+                              Each row represents an alternative, and each column represents a criterion.
+        weights (np.ndarray): A numpy array containing the weight values for each criterion.
+        criterion_type (List[str]): A list containing the type of each criterion. 'max' indicates that the criterion
+                                    is a benefit criterion, and 'min' indicates that the criterion is a cost criterion.
+        show_output (bool, optional): A boolean value indicating whether to show the calculated scores or not.
+                                      Defaults to True.
+        show_graph (bool, optional): A boolean value indicating whether to show the visualization of the convergence graph
+                                     or not. Defaults to False.
 
     Returns:
-        A dictionary containing the following keys:
-        - 'score': A numpy array representing the calculated scores for each alternative.
-        - 'graph': If show_graph is True, a matplotlib figure object representing the visualization of the convergence
-                   graph. Otherwise, None.
+        A dictionary with the following keys:
+        - 'score' (np.ndarray): An array of the calculated scores for each alternative.
+        - 'graph' (Optional[matplotlib.figure.Figure]): If show_graph is True, a matplotlib figure object representing
+                                                        the visualization of the convergence graph. Otherwise, None.
+    Example usage:
+    ```
+    dataset = np.array([[2, 3, 4], [5, 6, 7]])
+    weights = np.array([0.5, 0.3, 0.2])
+    criterion_type = ['max', 'max', 'max']
+    result = mcdm_aras(dataset, weights, criterion_type, show_graph=True)
+    ```
     """
-
-    from pyDecision.algorithm import aras_method
 
     from pyDecision.algorithm import aras_method
     import matplotlib.pyplot as plt

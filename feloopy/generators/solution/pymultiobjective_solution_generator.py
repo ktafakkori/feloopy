@@ -27,22 +27,18 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
     my_list_of_functions = [f1, f2, f3, f4, f5, f6]
 
     parameters = dict()
-
     parameters['verbose'] = False
 
     for key in AlgOptions:
 
         if key == 'epoch':
             parameters['generations'] = AlgOptions[key]
-
         elif key == 'show_log':
             parameters['verbose'] = AlgOptions[key]
-
         else:
             parameters[key] = AlgOptions[key]
 
     parameters['min_values'] = (0,)*ToTalVariableCounter[1]
-
     parameters['max_values'] = (1,)*ToTalVariableCounter[1]
 
     list_of_functions = []
@@ -54,72 +50,87 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
 
     match solver_name:
 
-        case "nsga-iii":
-
-            from pyMultiobjective.algorithm import non_dominated_sorting_genetic_algorithm_III
-            solver = non_dominated_sorting_genetic_algorithm_III
-
-        case "nsga-ii":
-
-            from pyMultiobjective.algorithm import non_dominated_sorting_genetic_algorithm_II
-            solver = non_dominated_sorting_genetic_algorithm_II
-
-        case "c-nsga-ii":
+        case "c-ns-ga-ii":
 
             from pyMultiobjective.algorithm import clustered_non_dominated_sorting_genetic_algorithm_II
             solver = clustered_non_dominated_sorting_genetic_algorithm_II
 
-        case "ctaea":
+        case "cta-ea":
 
             from pyMultiobjective.algorithm import constrained_two_archive_evolutionary_algorithm
             solver = constrained_two_archive_evolutionary_algorithm
 
-        case "grea":
+        case "gr-ea":
 
             from pyMultiobjective.algorithm import grid_based_evolutionary_algorithm
             solver = grid_based_evolutionary_algorithm
 
-        case "ibea-fc":
+        case "est-hv":
+
+            from pyMultiobjective.algorithm import hypervolume_estimation_mooa
+            solver = hypervolume_estimation_mooa
+
+        case "ea-fc":
 
             from pyMultiobjective.algorithm import indicator_based_evolutionary_algorithm_fc
             solver = indicator_based_evolutionary_algorithm_fc
 
-        case "moead":
+        case "ea-hv":
+
+            from pyMultiobjective.algorithm import indicator_based_evolutionary_algorithm_hv
+            solver = indicator_based_evolutionary_algorithm_hv
+
+        case "ea-d":
 
             from pyMultiobjective.algorithm import multiobjective_evolutionary_algorithm_based_on_decomposition
             solver = multiobjective_evolutionary_algorithm_based_on_decomposition
 
-        case "naemo":
+        case "na-ea":
 
             from pyMultiobjective.algorithm import neighborhood_sensitive_archived_evolutionary_many_objective_optimization
             solver = neighborhood_sensitive_archived_evolutionary_many_objective_optimization
 
-        case "omopso":
+        case "ns-ga-ii":
+
+            from pyMultiobjective.algorithm import non_dominated_sorting_genetic_algorithm_II
+            solver = non_dominated_sorting_genetic_algorithm_II
+
+        case "ns-ga-iii":
+
+            from pyMultiobjective.algorithm import non_dominated_sorting_genetic_algorithm_III
+            solver = non_dominated_sorting_genetic_algorithm_III
+
+        case "modi-pso":
 
             from pyMultiobjective.algorithm import optimized_multiobjective_particle_swarm_optimization
             solver = optimized_multiobjective_particle_swarm_optimization
 
-        case "paes":
+        case "pa-es":
 
             from pyMultiobjective.algorithm import pareto_archived_evolution_strategy
             solver = pareto_archived_evolution_strategy
 
-        case  "rvea":
+        case  "rv-ea":
 
             from pyMultiobjective.algorithm import reference_vector_guided_evolutionary_algorithm
             solver = reference_vector_guided_evolutionary_algorithm
 
-        case "spea-ii":
-
-            from pyMultiobjective.algorithm import strength_pareto_evolutionary_algorithm_2
-            solver = strength_pareto_evolutionary_algorithm_2
-
-        case "smpso":
+        case "sm-pso":
 
             from pyMultiobjective.algorithm import speed_constrained_multiobjective_particle_swarm_optimization
             solver = speed_constrained_multiobjective_particle_swarm_optimization
 
-        case "u-nsga-iii":
+        case "sms-ea":
+
+            from pyMultiobjective.algorithm import s_metric_selection_evolutionary_multiobjective_optimization_algorithm
+            solver = s_metric_selection_evolutionary_multiobjective_optimization_algorithm
+
+        case "sp-ea-ii":
+
+            from pyMultiobjective.algorithm import strength_pareto_evolutionary_algorithm_2
+            solver = strength_pareto_evolutionary_algorithm_2
+
+        case "u-ns-ga-iii":
 
             from pyMultiobjective.algorithm import unified_non_dominated_sorting_genetic_algorithm_III
             solver = unified_non_dominated_sorting_genetic_algorithm_III
@@ -128,55 +139,5 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
     sol = solver(list_of_functions=list_of_functions, **parameters)
     time_solve_end = timeit.default_timer()
 
-    if show_plots:
-
-        from pyMultiobjective.util import graphs
-
-        # Plot Solution - Scatter Plot
-        parameters = {
-            'min_values': (0,)*ToTalVariableCounter[1],
-            'max_values': (1,)*ToTalVariableCounter[1],
-            'step': (AlgOptions.get('step', 0.1),)*ToTalVariableCounter[1],
-            'solution': sol,
-            'show_pf': True,
-            'show_pts': True,
-            'show_sol': True,
-            'pf_min': True if AlgOptions.get('pareto_dir', 'min') == 'min' else False,
-            # Input a custom Pareto Front(numpy array where each column is an Objective Function)
-            'custom_pf': [],
-            'view': 'browser'
-        }
-        graphs.plot_mooa_function(
-            list_of_functions=list_of_functions, **parameters)
-
-        # Plot Solution - Parallel Plot
-        parameters = {
-            'min_values': (0,)*ToTalVariableCounter[1],
-            'max_values': (1,)*ToTalVariableCounter[1],
-            'step': (AlgOptions.get('step', 0.1),)*ToTalVariableCounter[1],
-            'solution': sol,
-            'show_pf': True,
-            'pf_min': True if AlgOptions.get('pareto_dir', 'min') == 'min' else False,
-            # Input a custom Pareto Front(numpy array where each column is an Objective Function)
-            'custom_pf': [],
-            'view': 'browser'
-        }
-        graphs.parallel_plot(list_of_functions=list_of_functions, **parameters)
-
-        # Plot Solution - Andrews Plot
-        parameters = {
-            'min_values': (0,)*ToTalVariableCounter[1],
-            'max_values': (1,)*ToTalVariableCounter[1],
-            'step': (AlgOptions.get('step', 0.1),)*ToTalVariableCounter[1],
-            'solution': sol,
-            'normalize': True,
-            'size_x': 15,
-            'size_y': 15,
-            'show_pf': True,
-            'pf_min': True if AlgOptions.get('pareto_dir', 'min') == 'min' else False,
-            # Input a custom Pareto Front(numpy array where each column is an Objective Function)
-            'custom_pf': []
-        }
-        graphs.andrews_plot(list_of_functions=list_of_functions, **parameters)
-
-    return sol[:, :ToTalVariableCounter[1]], list_of_directions*sol[:, ToTalVariableCounter[1]:], np.average(time_solve_begin), np.average(time_solve_end)
+   
+    return sol[:, :ToTalVariableCounter[1]], list_of_directions*sol[:, ToTalVariableCounter[1]:], time_solve_begin, time_solve_end
