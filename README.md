@@ -143,8 +143,8 @@ For multi-objective optimization, you should use the linux command for installat
 * **Exact optimization algorithms**: Supports *107* exact optimization algorithms that guarantee the optimal solution to your problem.
 * **Heuristic optimization algorithms**: Supports *197* heuristic optimization algorithms that can find best possible solutions to complex problems.
 * **Convex optimization algorithms**: Supports *20* convex optimization algorithms that ease tensor- and matrix-form modeling, primarily for convex problems.
-* **Constraint optimization algorithms**: Supports a *2* constraint optimization algorithms that can handle a wide range of constraints.
-* **Multi-objective optimization algorithms**: Supports *17* multi-objective optimization algorithms, in which objectives might be contradicting of of different numerical units.
+* **Constraint optimization algorithms**: Supports *2* constraint optimization algorithms that can handle a wide range of complex constraints for operational and time-dependent decisions.
+* **Multi-objective optimization algorithms**: Supports *17* multi-objective optimization algorithms, in which objectives might be contradicting or with different numerical units.
 * **Multi-critera decision making methods**: Supports *41* MCDM algorithms to solve decision problems with expert-based inputs without mathematical modeling.
 * **Solver configurations**: Lets you configure the solver to meet specific requirements.
 * **Auto-encoders for general purpose programming**: Provides auto-encoders to simplify general-purpose programming tasks.
