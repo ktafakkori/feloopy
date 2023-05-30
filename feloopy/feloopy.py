@@ -3360,25 +3360,28 @@ class Implement:
         padding = box_width - len("Method: "+ self.SolutionMethod) - len("Objective Value(s)") - 2
         print("| " + "Method: "+ self.SolutionMethod + " "*padding + "Objective Value(s)" + " |")
         status= self.get_status()
+        if len(status)==0: 
+            status = ['infeasible (constrained)']
         if len(self.ObjectivesDirections)!=1:
             row = "| " + "Status: " + " "*(len(status[0]) - len("Status: ")) + " " * (box_width-10*len(self.ObjectivesDirections)+1  - len(str(status[0])) - 3)
             for j in range(len(self.ObjectivesDirections)):
                 obj_row = self.ObjectivesDirections[j]
                 row += " " * (10 - len(obj_row)) + obj_row
             print(row + " |")
-            for i in range(len(status)): 
-                row = "| " + str(status[i]) + " " * (box_width-10*len(self.ObjectivesDirections) +1 - len(str(status[i])) - 3)
-                obj_row = self.get_obj()[i]
-                for j in range(len(obj_row)):
-                    num_str = format_string(obj_row[j])
-                    row += " " * (10 - len(num_str)) + num_str
-                print(row + " |")
-            for j in range(len(self.ObjectivesDirections)):
-                row = "| " + str(f"payoff {j}") + " " * (box_width-10*len(self.ObjectivesDirections) +1 - len(str(f"payoff {j}")) - 3)
-                for k in range(len(self.ObjectivesDirections)):
-                    num_str = format_string(self.get_payoff()[j,k])
-                    row += " " * (10 - len(num_str)) + num_str
-                print(row + " |")
+            if status[0] != "infeasible (constrained)":
+                for i in range(len(status)): 
+                    row = "| " + str(status[i]) + " " * (box_width-10*len(self.ObjectivesDirections) +1 - len(str(status[i])) - 3)
+                    obj_row = self.get_obj()[i]
+                    for j in range(len(obj_row)):
+                        num_str = format_string(obj_row[j])
+                        row += " " * (10 - len(num_str)) + num_str
+                    print(row + " |")
+                for j in range(len(self.ObjectivesDirections)):
+                    row = "| " + str(f"payoff {j}") + " " * (box_width-10*len(self.ObjectivesDirections) +1 - len(str(f"payoff {j}")) - 3)
+                    for k in range(len(self.ObjectivesDirections)):
+                        num_str = format_string(self.get_payoff()[j,k])
+                        row += " " * (10 - len(num_str)) + num_str
+                    print(row + " |")
         else:
             row = "| " + "Status: " + " "*(len(status) - len("Status: ")) + " " * (box_width-9*len(self.ObjectivesDirections) +1 - len(str(status)) - 3)
             for j in range(len(self.ObjectivesDirections)):
