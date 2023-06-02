@@ -14,7 +14,7 @@ def Get(model_object, result, input1, input2=None):
 
             try:
                 model_object.get()
-                return 'optimal'
+                return 'optimal*'
             except:
                 return 'not optimal or nothing found'
 
