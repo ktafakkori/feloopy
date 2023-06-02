@@ -51,10 +51,10 @@ FelooPy can be installed on Linux-based distributions, Windows, or macOS. It has
 import pip
 
 def install(package):
-if hasattr(pip, 'main'):
-pip.main(['install','-U', package])
-else:
-pip._internal.main(['install','-U', package])
+  if hasattr(pip, 'main'):
+  pip.main(['install','-U', package])
+  else:
+  pip._internal.main(['install','-U', package])
 
 install('feloopy')
 
