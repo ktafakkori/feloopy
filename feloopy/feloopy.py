@@ -39,7 +39,7 @@ class Model:
 
     # Method for the modeling envrionment.
 
-    def __init__(self, solution_method, model_name, interface_name, agent=None, key=None):
+    def __init__(self, solution_method, model_name, interface_name, agent=None, scens=1, key=None):
         """
         Creates and returns the modeling environment.
 
@@ -48,6 +48,7 @@ class Model:
             model_name (str): Name of this model.
             interface_name (str): Desired interface name.
             agent (X, optional): Input of the representor model. Default: None. 
+            scens (int, optional): Number of uncertainty scenarios, which can also be an array containing scenario indices. Default: 1.
             key (number, optional): Key for the random number generator. Default: None.
         """
 
@@ -61,9 +62,11 @@ class Model:
         self.binary_tensor_variable = self.add_binary_tensor_variable = self.add_boolean_tensor_variable = self.boolean_tensor_variable = self.btvar
         self.integer_tensor_variable = self.add_integer_tensor_variable = self.itvar
         self.free_tensor_variable = self.add_free_tensor_variable = self.ftvar
+        self.random_variable = self.add_random_variable = self.rvar
+        self.random_tensor_variable = self.add_random_tensor_variable = self.rtvar
         self.dependent_variable = self.add_dependent_variable = self.dvar
         self.objective = self.reward = self.hypothesis = self.fitness = self.goal = self.add_objective = self.obj
-        self.constraint = self.equation = self.add_constraint = self.add_equation = self.con
+        self.constraint = self.equation = self.add_constraint = self.add_equation = self.st = self.subject_to = self.cb = self.computed_by = self.con
         self.solve = self.implement = self.run = self.optimize = self.sol
         self.get_obj = self.get_objective
         self.get_stat = self.get_status
@@ -94,6 +97,7 @@ class Model:
                     'objective_counter': [0, 0],
                     'constraint_counter': [0, 0],
                     'objective_being_optimized': 0,
+                    'scens': scens,
                 }
                 self.mainvars = self.coll()
                 self.maindims = self.coll()
@@ -244,6 +248,8 @@ class Model:
                 from .generators import variable_generator
                 self.mainvars[("ptvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'ptvar', name, bound, dim)
                 self.maindims[name] = dim
+                if self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
+                    self.con(self.mainvars[("ptvar",name)]>=0)
                 return self.mainvars[("ptvar",name)]
 
     def itvar(self, name, dim=0, bound=[0, None]):
@@ -315,6 +321,19 @@ class Model:
                 from .generators import variable_generator
                 self.mainvars[("bvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'bvar', name, bound, dim)
                 self.maindims[name] = dim
+
+                if self.features['interface_name'] in ['cvxpy']:
+                    if dim==0:
+                        self.con(self.mainvars[("bvar",name)]>=0)
+                        self.con(self.mainvars[("bvar",name)]<=1)
+                    elif len(dim)==1:
+                        for i in dim[0]:
+                            self.con(self.mainvars[("bvar",name)][i]>=0)
+                            self.con(self.mainvars[("bvar",name)][i]<=1)
+                    else:
+                        for i in it.product(*tuple(dim)):
+                            self.con(self.mainvars[("bvar",name)][i]>=0)
+                            self.con(self.mainvars[("bvar",name)][i]<=1)
                 return self.mainvars[("bvar",name)]
 
             case 'heuristic':
@@ -342,6 +361,24 @@ class Model:
                 from .generators import variable_generator
                 self.mainvars[("pvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'pvar', name, bound, dim)
                 self.maindims[name] = dim
+
+                if self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
+
+                    if dim==0:
+                        self.con(self.mainvars[("pvar",name)]>=0)
+                        self.con(self.mainvars[("pvar",name)]<=1)
+
+                    elif len(dim)==1:
+
+                        for i in dim[0]:
+                            self.con(self.mainvars[("pvar",name)][i]>=0)
+                            self.con(self.mainvars[("pvar",name)][i]<=1)
+                    else:
+
+                        for i in it.product(*tuple(dim)):
+                            self.con(self.mainvars[("pvar",name)][i]>=0)
+                            self.con(self.mainvars[("pvar",name)][i]<=1)
+
                 return self.mainvars[("pvar",name)]
 
             case 'heuristic':
@@ -435,6 +472,30 @@ class Model:
                 else:
                     return np.zeros([len(dims) for dims in dim])
 
+    def rvar(self, name, dim=0):
+        """
+        Creates and returns a random variable.
+
+        Args:
+            name (str): Name of this variable.
+            dim (list, optional): Dimensions of this variable. Default: 0.
+        """
+        dim = fix_dims(dim)
+        from .generators import variable_generator
+        return variable_generator.generate_variable(self.features['interface_name'], self.model, 'rvar', name, [None, None], dim)
+    
+    def rtvar(self, name, dim=0):
+        """
+        Creates and returns a tensor-like random variable.
+
+        Args:
+            name (str): Name of this variable.
+            dim (list, optional): Dimensions of this variable. Default: 0.
+        """
+        dim = fix_dims(dim)
+        from .generators import variable_generator
+        return variable_generator.generate_variable(self.features['interface_name'], self.model, 'rtvar', name, [None, None], dim)
+    
     def svar(self, name, dim=0):
         """
         Creates and returns a sequential variable.
@@ -1386,7 +1447,7 @@ class Model:
                     else:
                         self.features['constraints'].append(expression)
 
-    def sol(self, directions=None, solver_name=None, solver_options=dict(), objective_id=0, email=None, debug=False, time_limit=None, cpu_threads=None, absolute_gap=None, relative_gap=None, show_log=False, save_log=False, save_model=False, max_iterations=None):
+    def sol(self, directions=None, solver_name=None, solver_options=dict(), objective_id=0, email=None, debug=False, time_limit=None, cpu_threads=None, absolute_gap=None, relative_gap=None, show_log=False, save_log=False, save_model=False, max_iterations=None, obj_operators=[]):
         """
         Solve Command Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1421,6 +1482,7 @@ class Model:
         self.features['save_solver_log'] = save_log
         self.features['email_address'] = email
         self.features['max_iterations'] = max_iterations
+        self.features['obj_operators'] = obj_operators
 
         if type(objective_id) != str and directions != None:
 
@@ -1665,6 +1727,44 @@ class Model:
 
         return A
 
+    def scen_probs(self):
+        """
+        Returns an array of scenario probabilities
+        """
+        if self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
+            return self.model.p
+
+    def exval(self,expr):
+
+        """
+        Expected Value
+        --------------
+        1) Returns the expected value of random variables if the uncertainty set of expectations is being determined.
+        2) Returns the worst case expected values of an expression that has random variables inside.
+
+        """
+        if self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
+            from rsome import E
+            return E(expr)
+
+    def norm(self,expr_or_1D_array_of_variables, degree):
+        """
+        Returns the first, second, or infinity norm of a 1-D array.
+        """
+
+        if self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
+            from rsome import norm
+            return norm(expr_or_1D_array_of_variables, degree)
+    
+    def sumsqr(self,expr_or_1D_array_of_variables):
+
+
+        if self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
+        
+            from rsome import sumsqr
+            return sumsqr(expr_or_1D_array_of_variables)
+    
+
     def state_function(self):
         """
 
@@ -1845,6 +1945,12 @@ class Model:
         """
 
         return range(*size)
+
+    def ambiguity_set(self,*args,**kwds):
+        """
+        Ambiguity set defintion
+        """
+        return self.model.ambiguity(*args,**kwds)
 
     def card(self, set):
         """
@@ -2097,12 +2203,34 @@ class Model:
     def square(self, input):
 
         if self.features['interface_name'] == 'cplex_cp':
-
             return self.model.square(input)
-
+        
+        elif self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
+            from rsome import square
+            return square(input)
+        
         else:
-
             return input * input
+
+    def quad(self,expr_or_1D_array_of_variables, positive_or_negative_semidefinite_matrix):
+
+        if self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
+            from rsome import quad
+            return quad(expr_or_1D_array_of_variables,positive_or_negative_semidefinite_matrix)
+
+    def expcone(self,rhs,a,b):
+        """
+        Returns an exponential cone constraint in the form: b*exp(a/b) <= rhs.
+
+        Args
+        rhs : array of variables or affine expression
+        a : Scalar.
+        b : Scalar.
+        """
+
+        if self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
+            from rsome import expcone
+            return expcone(rhs,a,b)
 
     def power(self, input1, input2):
 
@@ -2113,6 +2241,34 @@ class Model:
         else:
 
             return input1 ** input2
+
+
+    def kldive(self, input, emprical_rpob, ambiguity_constant):
+
+        """
+        Returns KL divergence
+        
+        input: an 1D array of variables, an affine expression, or probabilities. 
+        emprical_rpob: an 1D array of emprical probabilities.
+        ambiguity_constant: Ambiguity constant.
+        """
+
+        if self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
+            from rsome import kldiv
+            return kldiv(input, emprical_rpob, ambiguity_constant)
+
+    def entropy(self, input):
+
+        """
+        Returns an entropy expression like sum(input*log(input))
+        """
+
+        if self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
+
+            from rsome import entropy
+            return entropy(input)
+    
+
 
     def log(self, input):
         """
@@ -2128,6 +2284,11 @@ class Model:
         elif self.features['interface_name'] in ['gekko']:
 
             return self.model.log(input)
+        
+        elif self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
+
+            from rsome import log
+            return log(input)
 
         else:
 
@@ -2215,7 +2376,12 @@ class Model:
         if self.features['interface_name'] in ['cplex_cp', 'gekko']:
 
             return self.model.exp(input)
+        
+        elif self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
 
+            from rsome import exp
+            return exp(input)
+    
         else:
 
             return np.exp(input)
@@ -3457,3 +3623,6 @@ class Implement:
 # Alternatives for defining this class:
             
 construct = make_model = implementor = implement = Implement
+
+
+

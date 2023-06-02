@@ -8,13 +8,12 @@
  # @ Copyright: 2023. MIT License. All Rights Reserved.
  '''
 
-
 from setuptools import setup, find_packages
 
 common = ['tabulate', 'numpy', 'matplotlib',
           'infix', 'pandas', 'openpyxl', 'numba', 'plotly']
 interfaces = ['gekko', 'ortools', 'pulp', 'pyomo', 'pymprog',
-              'picos', 'linopy', 'cvxpy', 'cylp', 'mip', 'mealpy', 'pyDecision']
+              'picos', 'linopy', 'cvxpy', 'cylp', 'mip', 'mealpy', 'pyDecision','rsome']
 solvers = ['cplex', 'docplex', 'xpress', 'gurobipy']
 
 setup(

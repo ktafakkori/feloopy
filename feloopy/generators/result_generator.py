@@ -96,6 +96,17 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
                 from .result import linopy_result_generator
                 return linopy_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
 
+
+            case 'rsome_ro':
+
+                from .result import rsome_ro_result_generator
+                return rsome_ro_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
+
+            case 'rsome_dro':
+
+                from .result import rsome_dro_result_generator
+                return rsome_dro_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
+
     elif indicator[0] == 'objective' or indicator[0] == 'status' or indicator[0] == 'time':
 
         match InterfaceName:
@@ -174,3 +185,14 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
 
                 from .result import linopy_result_generator
                 return linopy_result_generator.Get(model_object, model_solution, indicator)
+            
+            case 'rsome_ro':
+                    
+                from .result import rsome_ro_result_generator
+                return rsome_ro_result_generator.Get(model_object, model_solution, indicator)
+
+            case 'rsome_dro':
+
+                from .result import rsome_dro_result_generator
+                return rsome_dro_result_generator.Get(model_object, model_solution, indicator)
+

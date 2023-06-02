@@ -100,4 +100,16 @@ def generate_solution(features):
             ModelSolution = linopy_solution_generator.generate_solution(
                 features)
 
+        case 'rsome_ro':
+
+            from .solution import rsome_ro_solution_generator
+            ModelSolution = rsome_ro_solution_generator.generate_solution(
+                features)
+
+        case 'rsome_dro':
+
+            from .solution import rsome_dro_solution_generator
+            ModelSolution = rsome_dro_solution_generator.generate_solution(
+                features)
+                     
     return ModelSolution

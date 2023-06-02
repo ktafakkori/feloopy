@@ -88,4 +88,14 @@ def generate_model(features):
             from .model import linopy_model_generator
             model_object = linopy_model_generator.generate_model(features)
 
+        case 'rsome_ro':
+
+            from .model import rsome_ro_model_generator
+            model_object = rsome_ro_model_generator.generate_model(features)
+
+        case 'rsome_dro':
+
+            from .model import rsome_dro_model_generator
+            model_object = rsome_dro_model_generator.generate_model(features)    
+
     return model_object

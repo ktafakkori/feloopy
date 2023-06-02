@@ -8,7 +8,6 @@
  # @ Copyright: 2023. MIT License. All Rights Reserved.
  '''
 
-
 def generate_variable(interface_name, model_object, variable_type, variable_name, variable_bound, variable_dim):
 
     inputs = {'model_object': model_object,
@@ -93,3 +92,13 @@ def generate_variable(interface_name, model_object, variable_type, variable_name
 
             from .variable import linopy_variable_generator
             return linopy_variable_generator.generate_variable(**inputs)
+
+        case 'rsome_ro':
+
+            from .variable import rsome_ro_variable_generator
+            return rsome_ro_variable_generator.generate_variable(**inputs)
+        
+        case 'rsome_dro':
+
+            from .variable import rsome_dro_variable_generator
+            return rsome_dro_variable_generator.generate_variable(**inputs)
