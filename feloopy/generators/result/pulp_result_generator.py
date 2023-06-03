@@ -33,3 +33,13 @@ def Get(model_object, result, input1, input2=None):
         case 'time':
 
             return (result[1][1]-result[1][0])
+
+        case 'dual':
+
+            return dict(model_object.constraints).get(input2, None).pi
+
+        case 'slack':
+
+            return  abs(dict(model_object.constraints).get(input2, None).slack)
+        
+

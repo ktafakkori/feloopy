@@ -8,7 +8,6 @@
  # @ Copyright: 2023. MIT License. All Rights Reserved.
  '''
 
-
 def Get(model_object, result, input1, input2=None):
 
     input1 = input1[0]

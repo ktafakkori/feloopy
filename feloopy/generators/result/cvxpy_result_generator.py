@@ -26,12 +26,25 @@ def Get(model_object, result, input1, input2=None):
 
         case 'status':
 
-            return result[0][0].status
+            return result[0][0][0].status
 
         case 'objective':
 
-            return result[0][0].value
+            return result[0][0][0].value
 
         case 'time':
 
             return (result[1][1]-result[1][0])
+        
+        case 'dual':
+
+            if len(result[0][1][input2].dual_value)==1:
+
+                return result[0][1][input2].dual_value[0]
+            else:
+
+                return result[0][1][input2].dual_value
+
+        case 'slack':
+
+            print('Not supported in cvxpy.')

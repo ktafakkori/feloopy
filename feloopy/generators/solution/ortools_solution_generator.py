@@ -66,8 +66,10 @@ def generate_solution(features):
                 case "max":
                     model_object.Maximize(model_objectives[objective_id])
 
+            counter=0
             for constraint in model_constraints:
-                model_object.Add(constraint)
+                model_object.Add(constraint, name=constraint_labels[counter])
+                counter+=1
 
             model_object.CreateSolver(ortools_solver_selector[solver_name])
             solverParams = ortools_interface.MPSolverParameters()

@@ -32,3 +32,15 @@ def Get(model_object, result, input1, input2=None):
         case 'time':
 
             return (result[1][1]-result[1][0])
+        
+        case 'dual':
+
+            return model_object.dual[model_object.c[input2]]
+
+        case 'slack':
+
+            upper_slack = model_object.c[input2].uslack()
+            lower_slack = model_object.c[input2].lslack()
+
+            return min(upper_slack, lower_slack)
+    

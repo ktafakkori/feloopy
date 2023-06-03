@@ -17,7 +17,7 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
                  input['directions'],
                  input['objective_being_optimized']]
 
-    if indicator[0] == 'variable':
+    if indicator[0] == 'variable' or indicator[0] == 'dual' or indicator[0] == 'slack':
 
         match InterfaceName:
 

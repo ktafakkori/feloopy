@@ -35,3 +35,11 @@ def Get(model_object, result, input1, input2=None):
         case 'time':
 
             return (result[1][1]-result[1][0])
+        
+        case 'dual':
+
+            return model_object.LookupConstraint(input2).dual_value()
+        
+        case 'slack':
+
+            print('Not supported in ortools.')

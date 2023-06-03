@@ -60,6 +60,11 @@ def generate_solution(features):
     options = {'solver': cvxpy_solver_selector[solver_name], 'verbose': log,
                'scipy_options': solver_options.get('scipy_options', None)}
 
+    if constraint_labels[0]!=None:
+        constraint_dict = dict()
+        for i in range(len(model_constraints)):
+            constraint_dict[constraint_labels[i]] = model_constraints[i]
+
     for key in solver_options:
 
         if key != 'scipy_options':
@@ -67,8 +72,8 @@ def generate_solution(features):
             options[key] = solver_options[key]
 
     if solver_name not in cvxpy_solver_selector.keys():
-        raise RuntimeError(
-            "Using solver '%s' is not supported by 'cvxpy'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
+        
+        raise RuntimeError("Using solver '%s' is not supported by 'cvxpy'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
 
     match debug:
 
@@ -77,21 +82,23 @@ def generate_solution(features):
             match directions[objective_id]:
 
                 case 'min':
-                    obj = cvxpy_interface.Minimize(
-                        model_objectives[objective_id])
+
+                    obj = cvxpy_interface.Minimize(model_objectives[objective_id])
 
                 case 'max':
-                    obj = cvxpy_interface.Maximize(
-                        model_objectives[objective_id])
 
-            print(options)
+                    obj = cvxpy_interface.Maximize(model_objectives[objective_id])
 
             prob = cvxpy_interface.Problem(obj, model_constraints)
+            
             time_solve_begin = timeit.default_timer()
+            
             result = prob.solve(**options)
+            
             time_solve_end = timeit.default_timer()
+            
             newresult = [prob, result]
-            generated_solution = [newresult, [
-                time_solve_begin, time_solve_end]]
+
+            generated_solution = [[newresult,constraint_dict], [time_solve_begin, time_solve_end]]
 
     return generated_solution

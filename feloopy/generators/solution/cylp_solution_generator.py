@@ -12,7 +12,7 @@ import cylp as cylp_interface
 from cylp.cy import CyClpSimplex
 import timeit
 
-cylp_solver_selector = {'cbc': 'cbc'}
+cylp_solver_selector = {'cbc': 'cbc', 'clp':'clp', 'cgl':'cgl'}
 
 
 def generate_solution(features):

@@ -1639,6 +1639,14 @@ class Model:
         from .generators import result_generator
         return result_generator.get(self.features, self.model, self.solution, 'variable', variable_with_index)
 
+    def get_dual(self, constraint_label_with_index):
+        from .generators import result_generator
+        return result_generator.get(self.features, self.model, self.solution, 'dual', constraint_label_with_index)
+
+    def get_slack(self, constraint_label_with_index):
+        from .generators import result_generator
+        return result_generator.get(self.features, self.model, self.solution, 'slack', constraint_label_with_index)
+    
     def get_objective(self):
         from .generators import result_generator
         return result_generator.get(self.features, self.model, self.solution, 'objective', None)

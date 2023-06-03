@@ -94,8 +94,10 @@ def generate_solution(features):
                     model_object.set_objective(
                         'max', model_objectives[objective_id])
 
+            counter=0
             for constraint in model_constraints:
-                model_object.add_constraint(constraint)
+                model_object.add_constraint(constraint, name=constraint_labels[counter])
+                counter+=1
 
             if save_model != False:
 
