@@ -3528,7 +3528,7 @@ class Implement:
         if self.ConstraintsCounter[0]>0:
             P_report = str(self.ConstraintsCounter[1]) + " constraint(s) in " + str(self.ConstraintsCounter[0]) + " class(es)."
             print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        P_report =  "Total number of variables is " + str(self.ToTalVariableCounter[1]) + f" in {self.ToTalVariableCounter[1]} class(es)."
+        P_report =  "Total number of variables is " + str(self.ToTalVariableCounter[1]) + f" in {self.ToTalVariableCounter[0]} class(es)."
         print("|" + " " + P_report.center(box_width-2) + " " + "|")
 
         print("+" + "-"*box_width + "+")
