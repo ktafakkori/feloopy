@@ -1782,7 +1782,7 @@ class Model:
 
         return self.model.state_function()
 
-    def report(self):
+    def report(self, show_all_metrics=False):
         print()
 
         self.InterfaceName = self.features['interface_name']
@@ -1799,7 +1799,6 @@ class Model:
         self.ToTalVariableCounter = self.features['total_variable_counter']
         self.ConstraintsCounter = self.features['constraint_counter']
         self.ObjectivesCounter = self.features['objective_counter']
-
 
         import datetime
         now = datetime.datetime.now()
@@ -1884,31 +1883,35 @@ class Model:
 
     
         if len(self.ObjectivesDirections)!=1:
-            try:
+            if show_all_metrics:
                 try:
-                    self.get_indicators()
-                    print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
-                    print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec)+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| GD    (min):          ", format_string(self.calculated_indicators['gd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| IGD   (min):          ", format_string(self.calculated_indicators['igd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| HV    (max):          ", format_string(self.calculated_indicators['hv']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    try:
+                        self.get_indicators()
+                        print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
+                        print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec)+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| GD    (min):          ", format_string(self.calculated_indicators['gd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| IGD   (min):          ", format_string(self.calculated_indicators['igd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| HV    (max):          ", format_string(self.calculated_indicators['hv']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    except:
+                        print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
+                        print("| GD    (min):          ", format_string(self.calculated_indicators['gd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| IGD   (min):          ", format_string(self.calculated_indicators['igd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
                 except:
                     print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
-                    print("| GD    (min):          ", format_string(self.calculated_indicators['gd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| IGD   (min):          ", format_string(self.calculated_indicators['igd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-            except:
+                    print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+            else:
                 print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
-                print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")     
         else:
-            print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
+            print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
             print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")     
         print("+" + "-"*box_width + "+")
         print("|" + " " + "Decision Information".center(box_width-2) + " " + "|")
@@ -3481,7 +3484,7 @@ class Implement:
             payoff.append(val)
         return np.array(payoff)
 
-    def report(self):
+    def report(self, show_all_metrics=False):
 
         print()
 
@@ -3574,38 +3577,42 @@ class Implement:
         min = round(((self.end-self.start)), 3) % (24 * 3600) % 3600 // 60
         sec = round(((self.end-self.start)), 3) % (24 * 3600) % 3600 % 60
         if len(self.ObjectivesDirections)!=1:
-            try:
+            if show_all_metrics:
                 try:
-                    self.get_indicators()
-                    print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec)+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| NP    (max):          ", format_string(len((self.get_obj())))+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| GD    (min):          ", format_string(self.calculated_indicators['gd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| IGD   (min):          ", format_string(self.calculated_indicators['igd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    if np.isnan(self.calculated_indicators['ms']):
-                        print("| MS    (max):               ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    else:
-                        print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| HV    (max):          ", format_string(self.calculated_indicators['hv']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    try:
+                        self.get_indicators()
+                        print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec)+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| NP    (max):          ", format_string(len((self.get_obj())))+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| GD    (min):          ", format_string(self.calculated_indicators['gd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| IGD   (min):          ", format_string(self.calculated_indicators['igd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        if np.isnan(self.calculated_indicators['ms']):
+                            print("| MS    (max):               ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        else:
+                            print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| HV    (max):          ", format_string(self.calculated_indicators['hv']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    except:
+                        print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec)+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| NP    (max):          ", format_string(len((self.get_obj())))+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| GD    (min):          ", format_string(self.calculated_indicators['gd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| IGD   (min):          ", format_string(self.calculated_indicators['igd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        if np.isnan(self.calculated_indicators['ms']):
+                            print("| MS    (max):               ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        else:
+                            print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                        print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
                 except:
                     print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec)+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| NP    (max):          ", format_string(len((self.get_obj())))+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| GD    (min):          ", format_string(self.calculated_indicators['gd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| IGD   (min):          ", format_string(self.calculated_indicators['igd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    if np.isnan(self.calculated_indicators['ms']):
-                        print("| MS    (max):               ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    else:
-                        print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-            except:
+                    print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+            else:
                 print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")     
         else:
             print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
             print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")     
