@@ -11,6 +11,7 @@
 import pulp as pulp_interface
 
 
+
 def Get(model_object, result, input1, input2=None):
 
     directions = +1 if input1[1][input1[2]] == 'min' else -1
@@ -36,10 +37,30 @@ def Get(model_object, result, input1, input2=None):
 
         case 'dual':
 
-            return dict(model_object.constraints).get(input2, None).pi
+            from pulp import LpConstraintEQ, LpConstraintLE, LpConstraintGE
+
+            sense = dict(model_object.constraints).get(input2, None).sense
+
+            if sense == pulp_interface.LpConstraintEQ:
+                return dict(model_object.constraints).get(input2, None).pi
+
+            elif sense == pulp_interface.LpConstraintLE and directions==1:
+                return -1*abs(dict(model_object.constraints).get(input2).pi)
+            
+            elif sense == pulp_interface.LpConstraintLE and directions==-1:
+                return 1*abs(dict(model_object.constraints).get(input2).pi)
+        
+            elif sense == pulp_interface.LpConstraintGE and directions==1:
+                return abs(dict(model_object.constraints).get(input2).pi)
+            
+            elif sense == pulp_interface.LpConstraintGE and directions==-1:
+                return -1*abs(dict(model_object.constraints).get(input2).pi)
+            
+            else:
+                print("Unknown constraint sense")
 
         case 'slack':
 
-            return  abs(dict(model_object.constraints).get(input2, None).slack)
+            return  abs(dict(model_object.constraints).get(input2).slack)
         
 

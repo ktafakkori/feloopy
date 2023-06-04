@@ -449,28 +449,36 @@ class Model:
 
         dim = fix_dims(dim)
 
-        if self.features['agent_status'] == 'idle':
-            if self.features['vectorized']:
-                if dim == 0:
-                    return 0
+        match self.features['solution_method']:
+
+            case 'exact':
+
+                return np.zeros([len(dims) for dims in dim])
+            
+            case 'heuristic':
+
+                if self.features['agent_status'] == 'idle':
+                    if self.features['vectorized']:
+                        if dim == 0:
+                            return 0
+                        else:
+                            return np.random.rand(*tuple([50]+[len(dims) for dims in dim]))
+                    else:
+                        if dim == 0:
+                            return 0
+                        else:
+                            return np.zeros([len(dims) for dims in dim])
                 else:
-                    return np.random.rand(*tuple([50]+[len(dims) for dims in dim]))
-            else:
-                if dim == 0:
-                    return 0
-                else:
-                    return np.zeros([len(dims) for dims in dim])
-        else:
-            if self.features['vectorized']:
-                if dim == 0:
-                    return np.zeros(self.features['pop_size'])
-                else:
-                    return np.zeros([self.features['pop_size']]+[len(dims) for dims in dim])
-            else:
-                if dim == 0:
-                    return 0
-                else:
-                    return np.zeros([len(dims) for dims in dim])
+                    if self.features['vectorized']:
+                        if dim == 0:
+                            return np.zeros(self.features['pop_size'])
+                        else:
+                            return np.zeros([self.features['pop_size']]+[len(dims) for dims in dim])
+                    else:
+                        if dim == 0:
+                            return 0
+                        else:
+                            return np.zeros([len(dims) for dims in dim])
 
     def rvar(self, name, dim=0):
         """
