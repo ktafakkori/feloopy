@@ -1911,7 +1911,7 @@ class Model:
                 print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
                 print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")     
         else:
-            print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+            print("| CPT   (microseconds): ", format_string((self.get_time())*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
             print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")     
         print("+" + "-"*box_width + "+")
         print("|" + " " + "Decision Information".center(box_width-2) + " " + "|")
