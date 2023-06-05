@@ -117,17 +117,18 @@ def generate_solution(features):
                     model_object.OBJ = pyomo_interface.Objective(
                         expr=model_objectives[objective_id], sense=pyomo_interface.maximize)
 
-            if constraint_labels[0]==None:
-                model_object.constraint = pyomo_interface.ConstraintList()
-                for element in model_constraints:
-                    model_object.constraint.add(expr=element)
-            else:         
-                model_object.dual = pyomo_interface.Suffix(direction=pyomo_interface.Suffix.IMPORT)
-                model_object.c = pyomo_interface.Constraint(pyomo_interface.Any)
-                counter=0
-                for element in model_constraints:
-                    model_object.c[constraint_labels[counter]] = element
-                    counter+=1
+            if len(model_constraints)!=0:
+                if constraint_labels[0]==None:
+                    model_object.constraint = pyomo_interface.ConstraintList()
+                    for element in model_constraints:
+                        model_object.constraint.add(expr=element)
+                else:         
+                    model_object.dual = pyomo_interface.Suffix(direction=pyomo_interface.Suffix.IMPORT)
+                    model_object.c = pyomo_interface.Constraint(pyomo_interface.Any)
+                    counter=0
+                    for element in model_constraints:
+                        model_object.c[constraint_labels[counter]] = element
+                        counter+=1
 
             if 'online' not in solver_name:
 

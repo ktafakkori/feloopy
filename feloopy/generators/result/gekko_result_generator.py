@@ -23,7 +23,10 @@ def Get(model_object, result, input1, input2=None):
 
         case 'variable':
 
-            return input2.value[0]
+            try:
+                return input2.value[0]
+            except: 
+                return input2
 
         case 'status':
 

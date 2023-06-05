@@ -27,14 +27,14 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
             '''
 
             if variable_dim == 0:
-                GeneratedVariable = model_object.addVariable(
+                generated_variable = model_object.addVariable(
                     variable_name, 1, isInt=False)
             else:
                 if len(variable_dim) == 1:
-                    GeneratedVariable = {key: model_object.addVariable(
+                    generated_variable = {key: model_object.addVariable(
                         f"{variable_name}{key}", 1, isInt=False) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable = {key: model_object.addVariable(
+                    generated_variable = {key: model_object.addVariable(
                         f"{variable_name}{key}", 1, isInt=False) for key in it.product(*variable_dim)}
 
         case 'bvar':
@@ -47,14 +47,14 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
             '''
 
             if variable_dim == 0:
-                GeneratedVariable = model_object.addVariable(
+                generated_variable = model_object.addVariable(
                     variable_name, 0, isInt=False)
             else:
                 if len(variable_dim) == 1:
-                    GeneratedVariable = {key: model_object.addVariable(
+                    generated_variable = {key: model_object.addVariable(
                         f"{variable_name}{key}", 1, isInt=True) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable = {key: model_object.addVariable(
+                    generated_variable = {key: model_object.addVariable(
                         f"{variable_name}{key}", 1, isInt=True) for key in it.product(*variable_dim)}
 
         case 'ivar':
@@ -67,14 +67,14 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
             '''
 
             if variable_dim == 0:
-                GeneratedVariable = model_object.addVariable(
+                generated_variable = model_object.addVariable(
                     variable_name, 1, isInt=False)
             else:
                 if len(variable_dim) == 1:
-                    GeneratedVariable = {key: model_object.addVariable(
+                    generated_variable = {key: model_object.addVariable(
                         f"{variable_name}{key}", 1, isInt=True) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable = {key: model_object.addVariable(
+                    generated_variable = {key: model_object.addVariable(
                         f"{variable_name}{key}", 1, isInt=True) for key in it.product(*variable_dim)}
 
         case 'fvar':
@@ -87,14 +87,25 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
             '''
 
             if variable_dim == 0:
-                GeneratedVariable = model_object.addVariable(
+                generated_variable = model_object.addVariable(
                     variable_name, 1, isInt=False)
             else:
                 if len(variable_dim) == 1:
-                    GeneratedVariable = {key: model_object.addVariable(
+                    generated_variable = {key: model_object.addVariable(
                         f"{variable_name}{key}", 1, isInt=False) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable = {key: model_object.addVariable(
+                    generated_variable = {key: model_object.addVariable(
                         f"{variable_name}{key}", 1, isInt=False) for key in it.product(*variable_dim)}
 
-    return GeneratedVariable
+    
+    if variable_bound[0] is not None and variable_bound[1] is not None and len(variable_bound) == 2:
+        lb, ub = variable_bound
+        if isinstance(generated_variable, dict):
+            for key in generated_variable:
+                model_object.setLowerBounds(generated_variable[key], lb)
+                model_object.setUpperBounds(generated_variable[key], ub)
+        else:
+            model_object.setLowerBounds(generated_variable, lb)
+            model_object.setUpperBounds(generated_variable, ub)
+    
+    return generated_variable

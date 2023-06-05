@@ -15,7 +15,6 @@ gekko_solver_selector = {'apopt': 1,
                          'bpopt': 2,
                          'ipopt': 3}
 
-
 def generate_solution(features):
 
     model_object = features['model_object_before_solve']

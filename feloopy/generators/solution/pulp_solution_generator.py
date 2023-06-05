@@ -89,10 +89,11 @@ def generate_solution(features):
                 case "max":
                     model_object += -model_objectives[objective_id]
 
-            counter = 0
-            for constraint in model_constraints:
-                model_object += (constraint, constraint_labels[counter])
-                counter+=1
+            if len(model_constraints)!=0:
+                counter = 0
+                for constraint in model_constraints:
+                    model_object += (constraint, constraint_labels[counter])
+                    counter+=1
 
             time_solve_begin = timeit.default_timer()
             result = model_object.solve(

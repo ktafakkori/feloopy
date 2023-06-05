@@ -9,6 +9,7 @@
  '''
 
 from linopy import Model as LINOPYMODEL
+from linopy import LinearExpression
 import timeit
 
 linopy_solver_selector = {'cbc': 'cbc',
@@ -50,12 +51,15 @@ def generate_solution(features):
 
             match directions[objective_id]:
                 case "min":
+                    print(model_objectives[objective_id])
+                    print(type(model_objectives[objective_id]))
                     model_object.add_objective(model_objectives[objective_id])
+                    
                 case "max":
-                    model_object.add_objective(-model_objectives[objective_id])
+                    model_object.add_objective(-1*model_objectives[objective_id])
 
             for constraint in model_constraints:
-                model_object.add_constraints(constraint)
+                model_object.add_constraint(constraint)
 
             time_solve_begin = timeit.default_timer()
             result = model_object.solve(solver_name=solver_name)

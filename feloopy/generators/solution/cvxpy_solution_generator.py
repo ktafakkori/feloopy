@@ -60,10 +60,11 @@ def generate_solution(features):
     options = {'solver': cvxpy_solver_selector[solver_name], 'verbose': log,
                'scipy_options': solver_options.get('scipy_options', None)}
 
-    if constraint_labels[0]!=None:
-        constraint_dict = dict()
-        for i in range(len(model_constraints)):
-            constraint_dict[constraint_labels[i]] = model_constraints[i]
+    constraint_dict = dict()
+    if len(model_constraints)!=0:
+        if constraint_labels[0]!=None:
+            for i in range(len(model_constraints)):
+                constraint_dict[constraint_labels[i]] = model_constraints[i]
 
     for key in solver_options:
 

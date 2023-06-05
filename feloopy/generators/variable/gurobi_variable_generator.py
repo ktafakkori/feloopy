@@ -32,13 +32,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
         case 'pvar':
 
-            '''
-
-            Positive Variable Generator
-
-
-            '''
-
             if variable_dim == 0:
 
                 generated_variable = model_object.addVar(
@@ -57,13 +50,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
                         vtype=POSITIVE, lb=variable_bound[0], ub=variable_bound[1], name=f"{variable_name}{key}") for key in sets(*variable_dim)}
 
         case 'bvar':
-
-            '''
-
-            Binary Variable Generator
-
-
-            '''
 
             if variable_dim == 0:
 
@@ -84,13 +70,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
         case 'ivar':
 
-            '''
-
-            Integer Variable Generator
-
-
-            '''
-
             if variable_dim == 0:
 
                 generated_variable = model_object.addVar(
@@ -109,13 +88,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
                         vtype=INTEGER, lb=variable_bound[0], ub=variable_bound[1], name=f"{variable_name}{key}") for key in sets(*variable_dim)}
 
         case 'fvar':
-
-            '''
-
-            Free Variable Generator
-
-
-            '''
 
             if variable_dim == 0:
 
@@ -136,11 +108,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
         case 'ptvar':
 
-            '''
-
-            Positive Tensor Variable Generator
-
-            '''
 
             if variable_dim == 0:
 
@@ -166,11 +133,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
         case 'ftvar':
 
-            '''
-
-            Free Tensor Variable Generator
-
-            '''
 
             if variable_dim == 0:
                 generated_variable = model_object.addVar(
@@ -190,13 +152,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
         case 'btvar':
 
-            '''
-
-            Binary Tensor Variable Generator
-
-
-            '''
-
             if variable_dim == 0:
                 generated_variable = model_object.addVar(
                     vtype=BINARY, lb=variable_bound[0], ub=variable_bound[1], name=variable_name)
@@ -215,11 +170,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
         case 'itvar':
 
-            '''
-
-            Integer Tensor Variable Generator
-
-            '''
 
             if variable_dim == 0:
                 generated_variable = model_object.addVar(

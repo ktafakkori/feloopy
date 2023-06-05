@@ -1,7 +1,7 @@
 '''
  # @ Author: Keivan Tafakkori
  # @ Created: 2023-05-11
- # @ Modified: 2023-05-12
+ # @ Modified: 2023-06-05
  # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
  # @ Github: https://github.com/ktafakkori
  # @ Website: https://ktafakkori.github.io/
@@ -12,88 +12,72 @@ import itertools as it
 
 sets = it.product
 
-
 def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
     match variable_type:
-
         case 'pvar':
-
-            '''
-
-            Positive Variable Generator
-
-
-            '''
-
             if variable_dim == 0:
-                GeneratedVariable = model_object.Var(
-                    lb=variable_bound[0], ub=variable_bound[1], integer=False)
+                generated_variable = model_object.Var(lb=variable_bound[0], ub=variable_bound[1], integer=False, name=variable_name)
             else:
                 if len(variable_dim) == 1:
-                    GeneratedVariable = {key:  model_object.Var(
-                        lb=variable_bound[0], ub=variable_bound[1], integer=False) for key in variable_dim[0]}
+                    generated_variable = {key: model_object.Var(lb=variable_bound[0], ub=variable_bound[1], integer=False, name=f'{variable_name}_{key}') for key in variable_dim[0]}
                 else:
-                    GeneratedVariable = {key: model_object.Var(
-                        lb=variable_bound[0], ub=variable_bound[1], integer=False) for key in sets(*variable_dim)}
+                    generated_variable = {key: model_object.Var(lb=variable_bound[0], ub=variable_bound[1], integer=False, name=f'{variable_name}_{key}') for key in sets(*variable_dim)}
 
         case 'bvar':
-
-            '''
-
-            Binary Variable Generator
-
-
-            '''
-
             if variable_dim == 0:
-                GeneratedVariable = model_object.Var(
-                    lb=variable_bound[0], ub=variable_bound[1], integer=True)
+                generated_variable = model_object.Var(lb=variable_bound[0], ub=variable_bound[1], integer=True, name=variable_name)
             else:
                 if len(variable_dim) == 1:
-                    GeneratedVariable = {key:  model_object.Var(
-                        lb=0, ub=1, integer=True) for key in variable_dim[0]}
+                    generated_variable = {key: model_object.Var(lb=0, ub=1, integer=True, name=f'{variable_name}_{key}') for key in variable_dim[0]}
                 else:
-                    GeneratedVariable = {key: model_object.Var(
-                        lb=0, ub=1, integer=True) for key in sets(*variable_dim)}
+                    generated_variable = {key: model_object.Var(lb=0, ub=1, integer=True, name=f'{variable_name}_{key}') for key in sets(*variable_dim)}
 
         case 'ivar':
-
-            '''
-
-            Integer Variable Generator
-
-
-            '''
-
             if variable_dim == 0:
-                GeneratedVariable = model_object.Var(
-                    lb=variable_bound[0], ub=variable_bound[1], integer=True)
+                generated_variable = model_object.Var(lb=variable_bound[0], ub=variable_bound[1], integer=True, name=variable_name)
             else:
                 if len(variable_dim) == 1:
-                    GeneratedVariable = {key:  model_object.Var(
-                        lb=variable_bound[0], ub=variable_bound[1], integer=True) for key in variable_dim[0]}
+                    generated_variable = {key: model_object.Var(lb=variable_bound[0], ub=variable_bound[1], integer=True, name=f'{variable_name}_{key}') for key in variable_dim[0]}
                 else:
-                    GeneratedVariable = {key: model_object.Var(
-                        lb=variable_bound[0], ub=variable_bound[1], integer=True) for key in sets(*variable_dim)}
+                    generated_variable = {key: model_object.Var(lb=variable_bound[0], ub=variable_bound[1], integer=True, name=f'{variable_name}_{key}') for key in sets(*variable_dim)}
 
         case 'fvar':
-
-            '''
-
-            Free Variable Generator
-
-
-            '''
-
             if variable_dim == 0:
-                GeneratedVariable = model_object.Var()
+                generated_variable = model_object.Var(name=variable_name)
             else:
                 if len(variable_dim) == 1:
-                    GeneratedVariable = {key:  model_object.Var()
-                                         for key in variable_dim[0]}
+                    generated_variable = {key: model_object.Var(name=f'{variable_name}_{key}') for key in variable_dim[0]}
                 else:
-                    GeneratedVariable = {key: model_object.Var()
-                                         for key in sets(*variable_dim)}
+                    generated_variable = {key: model_object.Var(name=f'{variable_name}_{key}') for key in sets(*variable_dim)}
 
-    return GeneratedVariable
+        case 'ftvar':
+            if variable_dim==0:
+                generated_variable = model_object.Var(name=variable_name)
+            else:
+                dims = tuple(len(dim) for dim in variable_dim)
+                generated_variable = model_object.Array(model_object.Var, dims)
+
+        case 'ptvar':
+            if variable_dim==0:
+                generated_variable = model_object.Var(lb=variable_bound[0], ub=variable_bound[1], integer=False, name=variable_name)
+            else:
+                dims = tuple(len(dim) for dim in variable_dim)
+                generated_variable = model_object.Array(model_object.Var, dims, lb=0)
+
+        case 'itvar':
+            if variable_dim==0:
+                generated_variable = model_object.Var(lb=variable_bound[0], ub=variable_bound[1], integer=True, name=variable_name)
+            else:
+                dims = tuple(len(dim) for dim in variable_dim)
+                generated_variable = model_object.Array(model_object.Var, dims, integer=True)
+
+        case 'btvar':
+            if variable_dim==0:
+                 generated_variable = model_object.Var(lb=variable_bound[0], ub=variable_bound[1], integer=True, name=variable_name)
+            else:
+                dims = tuple(len(dim) for dim in variable_dim)
+                generated_variable = model_object.Array(model_object.Var, dims, lb=0, ub=1, integer=True)
+
+    return generated_variable
+
