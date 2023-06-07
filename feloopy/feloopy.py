@@ -21,7 +21,7 @@ from .operators.fix_operators import *
 from .operators.epsilon import *
 from .operators.metric_operators import *
 from collections import defaultdict
-        
+
 
 import warnings
 import itertools as it
@@ -53,6 +53,7 @@ class Model:
         """
 
         if solution_method == 'constraint': solution_method = 'exact'
+
         self.binary_variable = self.add_binary_variable = self.boolean_variable = self.add_boolean_variable = self.bvar
         self.positive_variable = self.add_positive_variable = self.pvar
         self.integer_variable = self.add_integer_variable = self.ivar
@@ -78,7 +79,9 @@ class Model:
         self.avar= self.coll()
 
         match solution_method:
+
             case 'exact':
+
                 self.features = {
                     'solution_method': 'exact',
                     'model_name': model_name,
@@ -99,13 +102,18 @@ class Model:
                     'objective_being_optimized': 0,
                     'scens': scens,
                 }
+
                 self.mainvars = self.coll()
                 self.maindims = self.coll()
+
                 from .generators import model_generator
                 self.model = model_generator.generate_model(self.features)
                 self.sm = self.model
+
             case 'heuristic':
+
                 self.agent = agent
+
                 if self.agent[0] == 'idle':
                     self.features = {
                         'agent_status': 'idle',
@@ -134,6 +142,7 @@ class Model:
                         'vectorized': None,
                         'objective_being_optimized': 0,
                     }
+
                 elif self.agent[0] == 'feasibility_check':
                     self.features = {
                         'agent_status': 'feasibility_check',
@@ -149,6 +158,7 @@ class Model:
                         'objective_being_optimized': 0,
                         'directions': []
                     }
+
                     self.agent = self.agent[1].copy()
                 else:
                     self.features = {
@@ -553,6 +563,7 @@ class Model:
                     return {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=is_present) for key in sets(*dim)}
 
     # Methods for handling special automation operations
+    
     def scon_exactly_one_one(self, list_of_binary_variables):
         self.con(sum(list_of_binary_variables[i] for i in range(len(list_of_binary_variables)))==1)
 
@@ -3308,7 +3319,7 @@ class Implement:
 
         self.get_indicators(ideal_pareto, ideal_point, step, epsilon, p, n_clusters, save_path, show_log = True)
 
-    def get_indicators(self, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], step: Optional[tuple] = (0.1,), epsilon: float = 0.01, p: float = 2.0, n_clusters: int = 5, save_path: Optional[str] = None, show_log: Optional[bool] = False):
+    def get_indicators(self, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], step: Optional[tuple] = (0.2,), epsilon: float = 0.01, p: float = 2.0, n_clusters: int = 5, save_path: Optional[str] = None, show_log: Optional[bool] = False, normalize_hv: Optional[bool] = False, bypass_limit=False):
 
         """
         Calculates selected Pareto front metrics and displays the results in a tabulated format.
@@ -3319,111 +3330,61 @@ class Implement:
         :param n_clusters: An integer value for the number of clusters used in the knee point distance metric. Default is 5.
         :param save_path: A string value for the path where the results should be saved. Default is None.
         """
+        if len(self.get_obj())!=0:
 
-        obtained_pareto = self.BestReward
+            obtained_pareto = self.BestReward
+            from pyMultiobjective.util import indicators
 
-        from pyMultiobjective.util import indicators
-        ObjectivesDirections = [-1 if direction =='max' else 1 for direction in self.ObjectivesDirections]
-        def f1(X): return ObjectivesDirections[0]*self.Fitness(np.array(X))[0]
-        def f2(X): return ObjectivesDirections[1]*self.Fitness(np.array(X))[1]
-        def f3(X): return ObjectivesDirections[2]*self.Fitness(np.array(X))[2]
-        def f4(X): return ObjectivesDirections[3]*self.Fitness(np.array(X))[3]
-        def f5(X): return ObjectivesDirections[4]*self.Fitness(np.array(X))[4]
-        def f6(X): return ObjectivesDirections[5]*self.Fitness(np.array(X))[5]
-        my_list_of_functions = [f1, f2, f3, f4, f5, f6]
-        parameters = dict()
-        list_of_functions = []
-        for i in range(len(ObjectivesDirections)): list_of_functions.append(my_list_of_functions[i])
-        
-        solution = np.concatenate((self.BestAgent, self.BestReward*ObjectivesDirections), axis=1)
-    
-        parameters = {
-            'min_values': (0,)*self.ToTalVariableCounter[1],
-            'max_values': (1,)*self.ToTalVariableCounter[1],
-            'step': step*self.ToTalVariableCounter[1],
-            'solution': solution,
-            'pf_min': True,
-            'custom_pf': ideal_pareto*ObjectivesDirections if type(ideal_pareto) == np.ndarray else []
-        }
+            ObjectivesDirections = [-1 if direction =='max' else 1 for direction in self.ObjectivesDirections]
 
-        self.calculated_indicators = dict()
-        gd = indicators.gd_indicator(list_of_functions=list_of_functions, **parameters)
-        gdp = indicators.gd_plus_indicator(list_of_functions=list_of_functions, **parameters)
-        igd = indicators.igd_indicator(list_of_functions=list_of_functions, **parameters)
-        igdp = indicators.igd_plus_indicator(list_of_functions=list_of_functions, **parameters)
-        ms = indicators.ms_indicator(list_of_functions=list_of_functions, **parameters)
-        sp = indicators.sp_indicator(list_of_functions=list_of_functions, **parameters)
+            def f1(X): return ObjectivesDirections[0]*self.Fitness(np.array(X))[0]
+            def f2(X): return ObjectivesDirections[1]*self.Fitness(np.array(X))[1]
+            def f3(X): return ObjectivesDirections[2]*self.Fitness(np.array(X))[2]
+            def f4(X): return ObjectivesDirections[3]*self.Fitness(np.array(X))[3]
+            def f5(X): return ObjectivesDirections[4]*self.Fitness(np.array(X))[4]
+            def f6(X): return ObjectivesDirections[5]*self.Fitness(np.array(X))[5]
 
-        self.calculated_indicators['gd'] = gd
-        self.calculated_indicators['gdp'] = gdp
-        self.calculated_indicators['igd'] = igd
-        self.calculated_indicators['igdp'] = igdp
-        self.calculated_indicators['ms'] = ms
-        self.calculated_indicators['sp'] = sp
+            list_of_functions = [f1, f2, f3, f4, f5, f6]
 
-        parameters = {
-            'solution': solution,
-            'n_objs': len(ObjectivesDirections),
-            'ref_point': ideal_point,
-        }
-        
-        hypervolume = indicators.hv_indicator(**parameters)
-        self.calculated_indicators['hv'] = hypervolume
-        metrics = []
+            solution = np.concatenate((self.BestAgent, self.BestReward*ObjectivesDirections), axis=1)
+            self.calculated_indicators = dict()
 
-        if type(ideal_pareto) == np.ndarray:
-            metrics = [
-                ('Additive Epsilon Indicator Metric (min) [0, +inf)',metric_pareto_aem(ideal_pareto, obtained_pareto)),
-                ('Convergence Metric (min) [0,+inf)', metric_pareto_cvm(obtained_pareto, ideal_pareto)),
-                ('Coverage Ratio Metric (max) [0,1]', metric_pareto_crm(ideal_pareto, obtained_pareto)),
-                ('Epsilon Metric (max) [0 or 1]', metric_pareto_epm(obtained_pareto, ideal_pareto, epsilon)),
-                ('F-Ratio Metric (max) [0,1]', metric_pareto_frm(obtained_pareto, ideal_pareto)),
-                ('Generational Distance Metric (min) [0,+inf)', self.calculated_indicators['gd']),
-                ('Hyper Volume Metric (max) [0, +inf)', self.calculated_indicators['hv']),
-                ('Inverted Generational Distance (min) [0, +inf)', self.calculated_indicators['igd']),
-                ('Knee Point Distance Metric (min) [0, +inf)', metric_pareto_kdm(obtained_pareto, ideal_pareto, n_clusters)),
-                ('Maximum Pareto Front Error Metric (min) [0, +inf)',metric_pareto_mem(ideal_pareto, obtained_pareto)),
-                ('Maximum Spread Metric (max) [0, +inf)', self.calculated_indicators['ms']),
-                ('Quantity Metric (max) [0,1]', metric_pareto_qvm(obtained_pareto, ideal_pareto)),
-                ('R2 Metric (max) [0,1]', metric_pareto_r2m(obtained_pareto, ideal_pareto)),
-                ('Spacing Metric (max) [0,+inf)', self.calculated_indicators['sp']),
-                ('Spread Metric (max) [0, +inf)', metric_pareto_rsm(obtained_pareto, ideal_pareto)),
-                ('Generational Distance Metric Plus (min) [0, +inf)', self.calculated_indicators['gdp']),
-                ('Weighted Inverted Generational Distance Plus (min) [0, +inf)', self.calculated_indicators['igdp'])]
-        else:
+            #Does not require the ideal_pareto
+            parameters = {
+                'solution': solution,
+                'n_objs': len(ObjectivesDirections),
+                'ref_point': ideal_point,
+                'normalize': normalize_hv
+            }
+            hypervolume = indicators.hv_indicator(**parameters)
+            self.calculated_indicators['hv'] = hypervolume
 
-            metrics = [
-                ('Generational Distance Metric (min) [0,+inf)', self.calculated_indicators['gd']),
-                ('Hyper Volume Metric (max) [0, +inf)', self.calculated_indicators['hv']),
-                ('Inverted Generational Distance (min) [0, +inf)', self.calculated_indicators['igd']),
-                ('Maximum Spread Metric (max) [0, +inf)', self.calculated_indicators['ms']),
-                ('Spacing Metric (max) [0,+inf)', self.calculated_indicators['sp']),
-                ('Generational Distance Metric Plus (min) [0, +inf)', self.calculated_indicators['gdp']),
-                ('Inverted Generational Distance Plus (min) [0, +inf)', self.calculated_indicators['igdp'])]
+            parameters = {
+                'min_values': (0,)*self.ToTalVariableCounter[1],
+                'max_values': (1,)*self.ToTalVariableCounter[1],
+                'step': step*self.ToTalVariableCounter[1],
+                'solution': solution,
+                'pf_min': True,
+                'custom_pf': ideal_pareto*ObjectivesDirections if type(ideal_pareto) == np.ndarray else []
+            }
 
-        headers = ['Metric', 'Value']
-        results = [[metric[0], metric[1]] for metric in metrics]
-        table = tb(results, headers=headers)
+            sp = indicators.sp_indicator(list_of_functions=list_of_functions, **parameters)
+            self.calculated_indicators['sp'] = sp
 
-        if show_log:
-            print(table)
+            #Computationally efficient only if ideal_pareto exists
+            if self.ToTalVariableCounter[1]<=3 or ideal_pareto != [] or bypass_limit:
+                gd = indicators.gd_indicator(list_of_functions=list_of_functions, **parameters)
+                gdp = indicators.gd_plus_indicator(list_of_functions=list_of_functions, **parameters)
+                igd = indicators.igd_indicator(list_of_functions=list_of_functions, **parameters)
+                igdp = indicators.igd_plus_indicator(list_of_functions=list_of_functions, **parameters)
+                ms = indicators.ms_indicator(list_of_functions=list_of_functions, **parameters)
+                self.calculated_indicators['gd'] = gd
+                self.calculated_indicators['gdp'] = gdp
+                self.calculated_indicators['igd'] = igd
+                self.calculated_indicators['igdp'] = igdp
+                self.calculated_indicators['ms'] = ms
 
-            mean_values = np.mean(self.BestReward, axis=0)
-            std_values = np.std(self.BestReward, axis=0)
-            min_values = np.min(self.BestReward, axis=0)
-            max_values = np.max(self.BestReward, axis=0)
-
-            table_data = [['Objective']+['Mean', 'Standard Deviation', 'Min', 'Max']]
-            for i in range(len(ObjectivesDirections)):
-                table_data.append([f'Objective {i+1}', mean_values[i], std_values[i], min_values[i], max_values[i]])
-            print()
-            print(tabulate(table_data, headers='firstrow'))
-
-        if save_path is not None:
-            with open(save_path, 'w') as f:
-                f.write(table)
-
-        return metrics
+            return self.calculated_indicators
 
     def dis_time(self):
 
@@ -3479,6 +3440,93 @@ class Implement:
 
         return A
 
+    def get_bound(self, *args):
+        for i in args:
+            if len(i) >= 2:
+            
+                match self.VariablesType[i[0]]:
+
+                    case 'pvar':
+
+                        if self.VariablesDim[i[0]] == 0:
+                            UB = np.max((self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                            LB = np.min((self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                            return [LB,UB]
+
+                        else:
+                            def var(*args):
+                                self.NewAgentProperties = (self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                    self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
+                            return [np.min(var(*i[1])),np.max(var(*i[1]))]
+
+                    case 'fvar':
+
+                        if self.VariablesDim[i[0]] == 0:
+                            LB = np.min(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                            UB = np.max(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                            return [LB,UB]
+
+                        else:
+                            def var(*args):
+                                self.NewAgentProperties = (self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                    self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
+                            return [np.min(var(*i[1])),np.max(var(*i[1]))]
+
+                    case 'bvar':
+                        if self.VariablesDim[i[0]] == 0:
+                            LB = np.min(np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                            UB = np.max(np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                            return [LB,UB]
+
+                        else:
+                            def var(*args):
+                                self.NewAgentProperties = np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                    self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
+                            return [np.min(var(*i[1])),np.max(var(*i[1]))]
+                    case 'ivar':
+                        if self.VariablesDim[i[0]] == 0:
+                            LB = np.min(np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                            UB = np.min(np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                            return [LB,UB]
+
+                        else:
+                            def var(*args):
+                                self.NewAgentProperties = np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                    self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
+                            return [np.min(var(*i[1])),np.max(var(*i[1]))]
+                    case 'svar':
+                        return np.argsort(self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])[i[1]]
+
+            else:
+                match self.VariablesType[i[0]]:
+
+                    case 'pvar':
+                        UB = np.max((self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                        LB = np.min((self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                        return [LB,UB]
+
+                    case 'fvar':
+                        UB = np.max(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                        LB = np.min(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                        return [LB,UB]
+
+                    case 'bvar':
+                        UB = np.max(np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                        LB = np.min(np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                        return [LB,UB]
+
+                    case 'ivar':
+                        UB = np.max(np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                        LB= np.min(np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                        return [UB,LB]
+
+                    case 'svar':
+                        return np.argsort(self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])
+                    
     def get_payoff(self):
 
         payoff=[]
@@ -3492,156 +3540,99 @@ class Implement:
             payoff.append(val)
         return np.array(payoff)
 
-    def report(self, show_all_metrics=False):
-
-        print()
+    def report(self, show_all_metrics=False,  ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = []):
 
         import datetime
         now = datetime.datetime.now()
         date_str = now.strftime("Date: %Y-%m-%d")
         time_str = now.strftime("Time: %H:%M:%S")
-
-        box_width = 80
-        padding = box_width - len(date_str) - len(time_str) - 2
-
-        print("+" + "-"*box_width + "+")
-        print("|" + " " + "FelooPy v0.2.5".center(box_width-2) + " " + "|")
-        print("+" + "-"*box_width + "+")
-        print("| " + date_str + " "*padding + time_str + " |")
-        padding = box_width - len("Solver: "+ self.SolverName) - len("Interface: "+ self.InterfaceName) - 2
-        print("| " + "Interface: " + self.InterfaceName + " "*padding + "Solver: "+ self.SolverName + " |")
-        print("+" + "-"*box_width + "+")
-        print("|" + " " + "Model Information".center(box_width-2) + " " + "|")
-        print("+" + "-"*box_width + "+")
-
-        self.ModelName, self.InterfaceName, self.SolverName, self.ObjectivesDirections, self.SolutionMethod
-        # determine the maximum length of variables
-        ModelName = "The '" + self.ModelName + "' model has:"
-        print("|" + " " + ModelName.center(box_width-2) + " " + "|")
-        if self.PositiveVariableCounter[0]>0:
-            P_report = str(self.PositiveVariableCounter[1]) + " positive variable(s) in " + str(self.PositiveVariableCounter[0]) + " class(es)."
-            print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.BinaryVariableCounter[0]>0:
-            P_report = str(self.BinaryVariableCounter[1]) + " binary variable(s) in " + str(self.BinaryVariableCounter[0]) + " class(es)."
-            print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.IntegerVariableCounter[0]>0:
-            P_report = str(self.IntegerVariableCounter[1]) + " integer variable(s) in " + str(self.IntegerVariableCounter[0]) + " class(es)."
-            print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.FreeVariableCounter[0]>0:
-            P_report = str(self.FreeVariableCounter[1]) + " free variable(s) in " + str(self.FreeVariableCounter[0]) + " class(es)."
-            print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.ObjectivesCounter[0]>0:
-            P_report = str(self.ObjectivesCounter[1]) + " objective(s)."
-            print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.ConstraintsCounter[0]>0:
-            P_report = str(self.ConstraintsCounter[1]) + " constraint(s) in " + str(self.ConstraintsCounter[0]) + " class(es)."
-            print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        P_report =  "Total number of variables is " + str(self.ToTalVariableCounter[1]) + f" in {self.ToTalVariableCounter[0]} class(es)."
-        print("|" + " " + P_report.center(box_width-2) + " " + "|")
-
-        print("+" + "-"*box_width + "+")
-        print("|" + " " + "Solve Information".center(box_width-2) + " " + "|")
-        print("+" + "-"*box_width + "+")
-        padding = box_width - len("Method: "+ self.SolutionMethod) - len("Objective Value(s)") - 2
-        print("| " + "Method: "+ self.SolutionMethod + " "*padding + "Objective Value(s)" + " |")
         status= self.get_status()
-        if len(status)==0: 
-            status = ['infeasible (constrained)']
-        if len(self.ObjectivesDirections)!=1:
-            row = "| " + "Status: " + " "*(len(status[0]) - len("Status: ")) + " " * (box_width-10*len(self.ObjectivesDirections)+1  - len(str(status[0])) - 3)
-            for j in range(len(self.ObjectivesDirections)):
-                obj_row = self.ObjectivesDirections[j]
-                row += " " * (10 - len(obj_row)) + obj_row
-            print(row + " |")
-            if status[0] != "infeasible (constrained)":
-                for i in range(len(status)): 
-                    row = "| " + str(status[i]) + " " * (box_width-10*len(self.ObjectivesDirections) +1 - len(str(status[i])) - 3)
-                    obj_row = self.get_obj()[i]
-                    for j in range(len(obj_row)):
-                        num_str = format_string(obj_row[j])
-                        row += " " * (10 - len(num_str)) + num_str
-                    print(row + " |")
-                for j in range(len(self.ObjectivesDirections)):
-                    row = "| " + str(f"payoff {j}") + " " * (box_width-10*len(self.ObjectivesDirections) +1 - len(str(f"payoff {j}")) - 3)
-                    for k in range(len(self.ObjectivesDirections)):
-                        num_str = format_string(self.get_payoff()[j,k])
-                        row += " " * (10 - len(num_str)) + num_str
-                    print(row + " |")
-        else:
-            row = "| " + "Status: " + " "*(len(status) - len("Status: ")) + " " * (box_width-9*len(self.ObjectivesDirections) +1 - len(str(status)) - 3)
-            for j in range(len(self.ObjectivesDirections)):
-                obj_row = self.ObjectivesDirections[j]
-                row += " " * (9 - len(obj_row)) + obj_row
-            print(row + " |")
-            row = "| " + str(status) + " " * (box_width-9*len(self.ObjectivesDirections) +1 - len(str(status)) - 3)
-            obj_row = self.get_obj()
-            num_str = format_string(obj_row)
-            row += " " * (9 - len(num_str)) + num_str
-            print(row + " |")
-        print("+" + "-"*box_width + "+")
-        print("|" + " " + "Metric Information".center(box_width-2) + " " + "|")
-        print("+" + "-"*box_width + "+")
         hour = round(((self.end-self.start)), 3) % (24 * 3600) // 3600
         min = round(((self.end-self.start)), 3) % (24 * 3600) % 3600 // 60
         sec = round(((self.end-self.start)), 3) % (24 * 3600) % 3600 % 60
+        if len(status)==0: status = ['infeasible (constrained)']
+
+        box_width=80
+
+        vspace()
+        hline()
+        center("FelooPy v0.2.6")
+        hline()
+        two_column(date_str,time_str)
+        two_column(f"Interface: {self.InterfaceName}", f"Solver: {self.SolverName}")
+        hline()
+        center("Model information")
+        hline()
+        left_align(f"Name: {self.ModelName}")
+        list_three_column([
+            ("Feature:         ", "Class:", "Total:"),
+            ("Positive variable", self.PositiveVariableCounter[0], self.PositiveVariableCounter[1]),
+            ("Binary variable  ", self.BinaryVariableCounter[0], self.BinaryVariableCounter[1]),
+            ("Integer variable ", self.IntegerVariableCounter[0], self.IntegerVariableCounter[1]),
+            ("Free variable    ", self.FreeVariableCounter[0], self.FreeVariableCounter[1]),
+            ("Total variables  ", self.ToTalVariableCounter[0], self.ToTalVariableCounter[1]),
+            ("Objective        ", "-", self.ObjectivesCounter[1]),
+            ("Constraint       ", self.ConstraintsCounter[0], self.ConstraintsCounter[1])
+        ], )
+        hline()
+        center("Solve information")
+        hline()
+        two_column(f"Method: {self.SolutionMethod}", "Objective value")
+        status_row_print(self.ObjectivesDirections, status)
         if len(self.ObjectivesDirections)!=1:
-            if show_all_metrics:
-                try:
-                    try:
-                        self.get_indicators()
-                        print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec)+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| NP    (max):          ", format_string(len((self.get_obj())))+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| GD    (min):          ", format_string(self.calculated_indicators['gd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| IGD   (min):          ", format_string(self.calculated_indicators['igd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        if np.isnan(self.calculated_indicators['ms']):
-                            print("| MS    (max):               ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        else:
-                            print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| HV    (max):          ", format_string(self.calculated_indicators['hv']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    except:
-                        print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec)+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| NP    (max):          ", format_string(len((self.get_obj())))+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| GD    (min):          ", format_string(self.calculated_indicators['gd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| IGD   (min):          ", format_string(self.calculated_indicators['igd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        if np.isnan(self.calculated_indicators['ms']):
-                            print("| MS    (max):               ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        else:
-                            print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                except:
-                    print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-            else:
-                print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")     
+            try:
+                solution_print(self.ObjectivesDirections, status, self.get_obj(), self.get_payoff())
+            except:
+                print("Nothing found.")
         else:
-            print("| CPT   (microseconds): ", format_string((self.end-self.start)*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-            print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")     
-        print("+" + "-"*box_width + "+")
+            solution_print(self.ObjectivesDirections, status, self.get_obj())
+        hline()
+        center("Metric information")
+        hline()
+        self.calculated_indicators = None
+        try:
+            self.get_indicators(ideal_pareto= ideal_pareto, ideal_point=ideal_point)
+        except:
+            pass
+        metrics_print(self.ObjectivesDirections, show_all_metrics, self.get_obj(), self.calculated_indicators, self.start, self.end, hour, min, sec)
+        hline()
+        self.decision_information_print(status)
+
+    def decision_information_print(self, status, box_width=80):
         if type(status) == str:
-            print("|" + " " + "Decision Information".center(box_width-2) + " " + "|")
-            print("+" + "-"*box_width + "+")
+            center("Decision information")
+            hline()
             for i in self.VariablesDim.keys():
                 if self.VariablesDim[i] == 0:
-                    if self.get([i,(0,)])!=0:
-                        print(f"| {i} =", self.get([i,(0,)]), " "* (box_width-(len(f"| {i} =") + len(str(self.get([i,(0,)])))) -1) + "|")
-                elif len(self.VariablesDim[i])==1:
+                    if self.get([i, (0,)]) != 0:
+                        print(f"| {i} =", self.get([i, (0,)]), " " * (box_width - (len(f"| {i} =") + len(str(self.get([i, (0,)])))) - 1) + "|")
+                elif len(self.VariablesDim[i]) == 1:
                     for k in fix_dims(self.VariablesDim[i])[0]:
-                        if self.get([i,(k,)])!=0:
-                            print(f"| {i}[{k}] =", self.get([i,(k,)]), " "* (box_width-(len(f"| {i}[{k}] =") + len(str(self.get([i,(k,)])))) - 1) + "|")
+                        if self.get([i, (k,)]) != 0:
+                            print(f"| {i}[{k}] =", self.get([i, (k,)]), " " * (box_width - (len(f"| {i}[{k}] =") + len(str(self.get([i, (k,)])))) - 1) + "|")
                 else:
                     for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
-                        if self.get([i,(*k,)])!=0:
-                            print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get([i,(*k,)]), " "* (box_width-(len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get([i,(*k,)])))) - 1) + "|")
-            print("+" + "-"*box_width + "+")
+                        if self.get([i, (*k,)]) != 0:
+                            print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get([i, (*k,)]), " " * (box_width - (len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get([i, (*k,)])))) - 1) + "|")
+            hline()
 
+        else:
+            center("Decision information")
+            hline()
+            for i in self.VariablesDim.keys():
+                if self.VariablesDim[i] == 0:
+                    if self.get_bound([i, (0,)])[0] != 0 and self.get_bound([i, (0,)])[1]!=0:
+                        print(f"| {i} =", self.get_bound([i, (0,)]), " " * (box_width - (len(f"| {i} =") + len(str(self.get_bound([i, (0,)])))) - 1) + "|")
+                elif len(self.VariablesDim[i]) == 1:
+                    for k in fix_dims(self.VariablesDim[i])[0]:
+                        if self.get_bound([i, (k,)])[0] != 0 and self.get_bound([i, (k,)])[1] != 0:
+                            print(f"| {i}[{k}] =", self.get_bound([i, (k,)]), " " * (box_width - (len(f"| {i}[{k}] =") + len(str(self.get_bound([i, (k,)])))) - 1) + "|")
+                else:
+                    for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
+                        if self.get_bound([i, (*k,)])[0] != 0 and self.get_bound([i, (*k,)])[1] != 0:
+                            print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get_bound([i, (*k,)]), " " * (box_width - (len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get_bound([i, (*k,)])))) - 1) + "|")
+            hline()
+    
         
 # Alternatives for defining this class:
             

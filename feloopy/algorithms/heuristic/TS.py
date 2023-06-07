@@ -28,6 +28,7 @@ class TS:
         self.status_col = [-2]
         self.reward_col = [-1]
         self.single_objective_tot = self.f + 1 + 1
+        self.solve = self.run
 
     def run(self, evaluate):
 
