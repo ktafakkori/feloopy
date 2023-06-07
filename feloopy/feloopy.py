@@ -1828,7 +1828,7 @@ class Model:
         padding = box_width - len(date_str) - len(time_str) - 2
 
         print("+" + "-"*box_width + "+")
-        print("|" + " " + "FelooPy v0.2.5".center(box_width-2) + " " + "|")
+        print("|" + " " + "FelooPy v0.2.6".center(box_width-2) + " " + "|")
         print("+" + "-"*box_width + "+")
         print("| " + date_str + " "*padding + time_str + " |")
         padding = box_width - len("Solver: "+ self.SolverName) - len("Interface: "+ self.InterfaceName) - 2
