@@ -50,13 +50,15 @@ FelooPy can be installed on Linux-based distributions, Windows, or macOS. It has
 ```python
 import pip
 
+import pip
+
 def install(package):
   if hasattr(pip, 'main'):
-  pip.main(['install','-U', package])
+    pip.main(['install','-U', package])
   else:
-  pip._internal.main(['install','-U', package])
+    pip._internal.main(['install','-U', package])
 
-install('feloopy')
+install('feloopy==0.2.5')
 
 ````
 </td>
@@ -134,7 +136,7 @@ FelooPy (v0.2.5) has a few optional dependencies that can be installed using the
 * XPRESS: `pip install feloopy[xpress]`
 * Linux: `pip install feloopy[linux]` (for multi-objective optimization)
 
-For multi-objective optimization, you should use the linux command for installation. However, please note that the optional dependencies for Linux might not work on other operating systems. As a workaround, you can use a Conda-based Python 3.10 interpreter to ensure that optional dependencies for multi-objective optimization are installed correctly.
+For multi-objective optimization, you should use the linux command for installation. However, please note that the optional dependencies for Linux kernel might not work on some operating systems. As a workaround, you can use a Conda-based Python 3.10 interpreter to ensure that optional dependencies for multi-objective optimization are installed correctly.
 
 ### **Features**
 
@@ -146,7 +148,7 @@ FelooPy offers the following key features:
 * **Heuristic optimization algorithms**: Supports *197* heuristic optimization algorithms that can find best possible solutions to complex problems.
 * **Convex optimization algorithms**: Supports *20* convex optimization algorithms that ease tensor- and matrix-form modeling, primarily for convex problems.
 * **Constraint optimization algorithms**: Supports *2* constraint optimization algorithms that can handle a wide range of complex constraints for operational and time-dependent decisions.
-* **Multi-objective optimization algorithms**: Supports *17* multi-objective optimization algorithms, in which objectives might be contradicting or with different numerical units.
+* **Multi-objective optimization algorithms**: Supports *17* multi-objective optimization algorithms, in which objectives might be conflicting or with different numerical units.
 * **Multi-critera decision-making methods**: Supports *41* MCDM algorithms to solve decision problems with expert-based inputs without mathematical modeling.
 * **Solver configurations**: Lets you configure the solver to meet specific requirements.
 * **Auto-encoders for general purpose programming**: Provides auto-encoders to simplify general-purpose programming tasks.
