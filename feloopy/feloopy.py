@@ -3593,7 +3593,8 @@ class Implement:
         try:
             self.get_indicators(ideal_pareto= ideal_pareto, ideal_point=ideal_point)
         except:
-            pass
+            ""
+
         metrics_print(self.ObjectivesDirections, show_all_metrics, self.get_obj(), self.calculated_indicators, self.start, self.end, hour, min, sec)
         hline()
         self.decision_information_print(status)
