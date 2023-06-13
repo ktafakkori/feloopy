@@ -2709,7 +2709,7 @@ class Implement:
 
     def get_status(self):
 
-        if self.InterfaceName in ['mealpy', 'pymultiobjective']:
+        if self.InterfaceName in ['mealpy', 'pymultiobjective', 'pymoo']:
 
             if self.InterfaceName == 'mealpy':
 
@@ -2717,8 +2717,16 @@ class Implement:
 
             else:
                 status = []
-                for i in range(np.shape(self.BestReward)[0]):
-                    status.append(self.Check_Fitness(self.BestAgent[i]))
+                if self.InterfaceName == 'pymoo':
+
+                    for i in range(np.shape(self.BestReward)[0]):
+                        status.append(self.Check_Fitness(np.array([self.BestAgent[i]])))
+
+                else:
+
+                    for i in range(np.shape(self.BestReward)[0]):
+                        status.append(self.Check_Fitness(self.BestAgent[i]))
+                
 
                 return status
 
