@@ -14,6 +14,12 @@ import numpy as np
 
 def generate_heuristic_variable(features, type, name, variable_dim, variable_bound, agent):
 
+    #if features['interface_name'] == 'pymoo':
+
+    #   features['vectorized'] = False
+
+
+
     if features['agent_status'] == 'idle':
 
         if features['vectorized']:

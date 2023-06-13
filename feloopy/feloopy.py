@@ -176,10 +176,12 @@ class Model:
                         'directions': []
                     }
                     self.agent = self.agent[1].copy()
+
                 match self.features['interface_name']:
                     case 'mealpy': self.features['vectorized'] = False
                     case 'pymultiobjective': self.features['vectorized'] = False
                     case 'feloopy': self.features['vectorized'] = True
+                    case 'pymoo': self.features['vectorized'] = True
 
     def __getitem__(self, agent):
         """
@@ -201,7 +203,10 @@ class Model:
                     return 'feasible (constrained)'
         else:
             if self.features['vectorized']:
-                return self.agent
+                if self.features['interface_name']=='feloopy':
+                    return self.agent
+                else:
+                    return self.sing_result
             else:
                 return self.response
 
@@ -445,7 +450,7 @@ class Model:
                 return self.mainvars[("fvar",name)]
 
             case 'heuristic':
-
+                
                 return generate_heuristic_variable(self.features, 'fvar', name, dim, bound, self.agent)
 
     def dvar(self, name, dim=0):
@@ -1557,62 +1562,101 @@ class Model:
 
                     if self.features['vectorized']:
 
-                        self.penalty = np.zeros(np.shape(self.agent)[0])
+                        if self.features['interface_name']=='feloopy':
 
-                        if self.features['penalty_coefficient'] != 0 and len(self.features['constraints']) == 1:
+                            self.penalty = np.zeros(np.shape(self.agent)[0])
 
-                            self.features['constraints'][0] = np.reshape(
-                                self.features['constraints'][0], [np.shape(self.agent)[0], 1])
-                            self.features['constraints'].append(
-                                np.zeros(shape=(np.shape(self.agent)[0], 1)))
-                            self.penalty = np.amax(np.concatenate(
-                                self.features['constraints'], axis=1), axis=1)
+                            if self.features['penalty_coefficient'] != 0 and len(self.features['constraints']) == 1:
 
-                            self.agent[np.where(self.penalty == 0), -2] = 1
-                            self.agent[np.where(self.penalty > 0), -2] = -1
+                                self.features['constraints'][0] = np.reshape(
+                                    self.features['constraints'][0], [np.shape(self.agent)[0], 1])
+                                self.features['constraints'].append(
+                                    np.zeros(shape=(np.shape(self.agent)[0], 1)))
+                                self.penalty = np.amax(np.concatenate(
+                                    self.features['constraints'], axis=1), axis=1)
 
-                        if self.features['penalty_coefficient'] != 0 and len(self.features['constraints']) > 1:
+                                self.agent[np.where(self.penalty == 0), -2] = 1
+                                self.agent[np.where(self.penalty > 0), -2] = -1
 
-                            self.features['constraints'].append(
-                                np.zeros(shape=(np.shape(self.agent)[0], 1)))
-                            self.penalty = np.amax(np.concatenate(
-                                self.features['constraints'], axis=1), axis=1)
-                            self.agent[np.where(self.penalty == 0), -2] = 1
-                            self.agent[np.where(self.penalty > 0), -2] = -1
+                            if self.features['penalty_coefficient'] != 0 and len(self.features['constraints']) > 1:
 
+                                self.features['constraints'].append(
+                                    np.zeros(shape=(np.shape(self.agent)[0], 1)))
+                                self.penalty = np.amax(np.concatenate(
+                                    self.features['constraints'], axis=1), axis=1)
+                                self.agent[np.where(self.penalty == 0), -2] = 1
+                                self.agent[np.where(self.penalty > 0), -2] = -1
+
+                            else:
+
+                                self.agent[:, -2] = 2
+
+                            if type(objective_id) != str:
+
+                                if directions[objective_id] == 'max':
+                                    self.agent[:, -1] = np.reshape(self.features['objectives'][objective_id], [self.agent.shape[0],]) - np.reshape(
+                                        self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
+
+                                if directions[objective_id] == 'min':
+                                    self.agent[:, -1] = np.reshape(self.features['objectives'][objective_id], [self.agent.shape[0],]) + np.reshape(
+                                        self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
+
+                            else:
+
+                                self.agent[:, -1] = 0
+
+                                total_obj = self.features['objective_counter'][0]
+
+                                self.features['objectives'] = np.array(
+                                    self.features['objectives']).T[0]
+
+                                for i in range(self.features['objective_counter'][0]):
+
+                                    if directions[i] == 'max':
+                                        self.agent[:, -2-total_obj+i] = self.features['objectives'][:,
+                                                                                                    i] - self.features['penalty_coefficient'] * (self.penalty)**2
+
+                                    if directions[i] == 'min':
+                                        self.agent[:, -2-total_obj+i] = self.features['objectives'][:,
+                                                                                                    i] + self.features['penalty_coefficient'] * (self.penalty)**2
                         else:
 
-                            self.agent[:, -2] = 2
+                            self.penalty = np.zeros(np.shape(self.agent)[0])
 
-                        if type(objective_id) != str:
+                            if self.features['penalty_coefficient'] != 0 and len(self.features['constraints']) == 1:
 
-                            if directions[objective_id] == 'max':
-                                self.agent[:, -1] = np.reshape(self.features['objectives'][objective_id], [self.agent.shape[0],]) - np.reshape(
-                                    self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
+                                self.features['constraints'][0] = np.reshape(self.features['constraints'][0], [np.shape(self.agent)[0], 1])
+                                self.features['constraints'].append(np.zeros(shape=(np.shape(self.agent)[0], 1)))
+                                self.penalty = np.amax(np.concatenate(self.features['constraints'], axis=1), axis=1)
 
-                            if directions[objective_id] == 'min':
-                                self.agent[:, -1] = np.reshape(self.features['objectives'][objective_id], [self.agent.shape[0],]) + np.reshape(
-                                    self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
+                            if self.features['penalty_coefficient'] != 0 and len(self.features['constraints']) > 1:
 
-                        else:
+                                self.features['constraints'].append(np.zeros(shape=(np.shape(self.agent)[0], 1)))
+                                self.penalty = np.amax(np.concatenate(self.features['constraints'], axis=1), axis=1)
 
-                            self.agent[:, -1] = 0
+                            if type(objective_id) != str:
 
-                            total_obj = self.features['objective_counter'][0]
+                                if directions[objective_id] == 'max':
+                                    self.sing_result = np.reshape(self.features['objectives'][objective_id], [self.agent.shape[0],]) - np.reshape(self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
 
-                            self.features['objectives'] = np.array(
-                                self.features['objectives']).T[0]
+                                if directions[objective_id] == 'min':
+                                    self.sing_result = np.reshape(self.features['objectives'][objective_id], [self.agent.shape[0],]) + np.reshape(self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
 
-                            for i in range(self.features['objective_counter'][0]):
+                            else:
 
-                                if directions[i] == 'max':
-                                    self.agent[:, -2-total_obj+i] = self.features['objectives'][:,
-                                                                                                i] - self.features['penalty_coefficient'] * (self.penalty)**2
+                                total_obj = self.features['objective_counter'][0]
 
-                                if directions[i] == 'min':
-                                    self.agent[:, -2-total_obj+i] = self.features['objectives'][:,
-                                                                                                i] + self.features['penalty_coefficient'] * (self.penalty)**2
+                                self.sing_result = []
+                                
 
+                                for i in range(self.features['objective_counter'][0]):
+
+                                    
+                                    if directions[i] == 'max':
+                                        self.sing_result.append(self.features['objectives'][i] - self.features['penalty_coefficient'] * (self.penalty)**2)
+
+                                    if directions[i] == 'min':
+                                        self.sing_result.append(self.features['objectives'][i] + self.features['penalty_coefficient'] * (self.penalty)**2)
                     else:
 
                         self.penalty = 0
@@ -2545,6 +2589,10 @@ class Implement:
 
                 self.ModelObject = None
 
+            case 'pymoo':
+
+                self.ModelObject = None
+
             case 'feloopy':
 
                 from .generators.model import feloopy_model_generator
@@ -2574,6 +2622,7 @@ class Implement:
                 self.BestAgent, self.BestReward, self.start, self.end = pymultiobjective_solution_generator.generate_solution(
                     self.SolverName, self.AlgOptions, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
                 self.remove = []
+
                 for i in range(np.shape(self.BestReward)[0]):
 
                     if 'infeasible' in self.Check_Fitness(self.BestAgent[i]):
@@ -2583,6 +2632,21 @@ class Implement:
                 if len(self.remove) != 0:
                     self.remove_infeasible_solutions()
 
+            case 'pymoo':
+
+                from .generators.solution import pymoo_solution_generator
+                self.BestAgent, self.BestReward,self.start, self.end = pymoo_solution_generator.generate_solution(self.SolverName, self.AlgOptions, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
+                self.remove = []
+
+                for i in range(np.shape(self.BestReward)[0]):
+
+                    if 'infeasible' in self.Check_Fitness(np.array([self.BestAgent[i]])):
+
+                        self.remove.append(i)
+
+                if len(self.remove) != 0:
+                    self.remove_infeasible_solutions()
+            
             case 'feloopy':
 
                 from .generators.solution import feloopy_solution_generator

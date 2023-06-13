@@ -13,7 +13,7 @@ from setuptools import setup, find_packages
 common = ['tabulate', 'numpy', 'matplotlib',
           'infix', 'pandas', 'openpyxl', 'numba', 'plotly']
 interfaces = ['gekko', 'ortools', 'pulp', 'pyomo', 'pymprog',
-              'picos', 'linopy', 'cvxpy', 'cylp<=0.91.5', 'mip', 'mealpy', 'pyDecision','rsome']
+              'picos', 'linopy', 'cvxpy', 'cylp<=0.91.5', 'mip', 'mealpy', 'pyDecision','rsome', 'pymoo']
 solvers = ['cplex', 'docplex', 'xpress', 'gurobipy']
 
 setup(
