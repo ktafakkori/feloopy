@@ -15,7 +15,6 @@ def hline(box_width=80):
 def whline(box_width=80):
     print("+" + "."*box_width + "+")
 
-
 def hrule(box_width=80):
     print("+" + "="*box_width + "+")
 
@@ -37,7 +36,6 @@ def three_column(input1, input2, input3, box_width=80, underline=False):
         input3 = f"\033[4m{input3}\033[0m"
     
     print("| " + str(input1) + " " * padding1 + "  " + str(input2) + " " * padding2 + "  " + str(input3) + " |")
-
 
 def list_three_column(input_list, box_width=80, underline=False):
     column1_width = max(len(str(x[0])) for x in input_list) + 2

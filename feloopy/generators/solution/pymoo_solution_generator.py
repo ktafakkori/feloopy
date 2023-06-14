@@ -34,7 +34,7 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
         case "ns-ga-ii":
 
             from pymoo.algorithms.moo.nsga2 import NSGA2
-            algorithm = NSGA2(**AlgOptions)
+            algorithm = NSGA2()
 
         case "d-ns-ga-ii":
 
@@ -94,7 +94,7 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
         case "age-mo-ea-ii":
 
             from pymoo.algorithms.moo.age2 import AGEMOEA2
-            algorithm = AGEMOEA(**AlgOptions)
+            algorithm = AGEMOEA2(**AlgOptions)
 
     time_solve_begin = timeit.default_timer()
     res = minimize(problem, algorithm)
