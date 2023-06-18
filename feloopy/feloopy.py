@@ -13,7 +13,6 @@ from .helpers.error import *
 from .helpers.formatter import *
 from .operators.set_operators import *
 from .operators.math_operators import *
-from .operators.count_operators import *
 from .operators.update_operators import *
 from .operators.random_operators import *
 from .operators.heuristic_operators import *
@@ -52,7 +51,61 @@ class Model:
             key (number, optional): Key for the random number generator. Default: None.
         """
 
-        if solution_method == 'constraint': solution_method = 'exact'
+        self.initialize_aliases()
+        self.random = create_random_number_generator(key)
+        self.avar = self.coll()
+
+        if solution_method == 'constraint':
+            solution_method = 'exact'
+
+        self.features = {
+            'solution_method': solution_method,
+            'model_name': model_name,
+            'interface_name': interface_name,
+            'solver_name': None,
+            'constraints': [],
+            'constraint_labels': [],
+            'objectives': [],
+            'objective_labels': [],
+            'directions': [],
+            'positive_variable_counter': [0, 0],
+            'integer_variable_counter': [0, 0],
+            'binary_variable_counter': [0, 0],
+            'free_variable_counter': [0, 0],
+            'total_variable_counter': [0, 0],
+            'objective_counter': [0, 0],
+            'constraint_counter': [0, 0],
+            'objective_being_optimized': 0,
+            'scens': scens,
+        }
+
+        if solution_method == 'heuristic':
+            self.agent = agent
+            self.features.update({
+                'agent_status': self.agent[0],
+                'variable_spread': self.agent[2] if self.agent[0] != 'idle' else dict(),
+                'variable_type': dict() if self.agent[0] == 'idle' else None,
+                'variable_bound': dict() if self.agent[0] == 'idle' else None,
+                'variable_dim': dict() if self.agent[0] == 'idle' else None,
+                'pop_size': 1 if self.agent[0] == 'idle' else len(self.agent[1]),
+                'penalty_coefficient': 0 if self.agent[0] == 'idle' else self.agent[3],
+                'vectorized': None,
+            })
+
+            self.features['vectorized'] = interface_name in ['feloopy', 'pymoo']
+
+            if self.agent[0] != 'idle':
+                self.agent = self.agent[1].copy()
+
+        if solution_method == 'exact':
+            self.mainvars = self.coll()
+            self.maindims = self.coll()
+
+            from .generators import model_generator
+            self.model = model_generator.generate_model(self.features)
+            self.sm = self.model
+
+    def initialize_aliases(self):
 
         self.binary_variable = self.add_binary_variable = self.boolean_variable = self.add_boolean_variable = self.bvar
         self.positive_variable = self.add_positive_variable = self.pvar
@@ -75,114 +128,7 @@ class Model:
         self.dis = self.dis_var = self.display = self.show = self.print = self.display_variable = self.dis_variable
         self.status = self.show_status = self.dis_status
         self.objective_value = self.show_objective = self.display_objective = self.dis_obj
-        self.random = create_random_number_generator(key)
-        self.avar= self.coll()
-
-        match solution_method:
-
-            case 'exact':
-
-                self.features = {
-                    'solution_method': 'exact',
-                    'model_name': model_name,
-                    'interface_name': interface_name,
-                    'solver_name': None,
-                    'constraints': [],
-                    'constraint_labels': [],
-                    'objectives': [],
-                    'objective_labels': [],
-                    'directions': [],
-                    'positive_variable_counter': [0, 0],
-                    'integer_variable_counter': [0, 0],
-                    'binary_variable_counter': [0, 0],
-                    'free_variable_counter': [0, 0],
-                    'total_variable_counter': [0, 0],
-                    'objective_counter': [0, 0],
-                    'constraint_counter': [0, 0],
-                    'objective_being_optimized': 0,
-                    'scens': scens,
-                }
-
-                self.mainvars = self.coll()
-                self.maindims = self.coll()
-
-                from .generators import model_generator
-                self.model = model_generator.generate_model(self.features)
-                self.sm = self.model
-
-            case 'heuristic':
-
-                self.agent = agent
-
-                if self.agent[0] == 'idle':
-                    self.features = {
-                        'agent_status': 'idle',
-                        'solution_method': 'heuristic',
-                        'model_name': model_name,
-                        'interface_name': interface_name,
-                        'solver_name': None,
-                        'constraints': [],
-                        'constraint_labels': [],
-                        'objectives': [],
-                        'objective_labels': [],
-                        'directions': [],
-                        'positive_variable_counter': [0, 0],
-                        'integer_variable_counter': [0, 0],
-                        'binary_variable_counter': [0, 0],
-                        'free_variable_counter': [0, 0],
-                        'total_variable_counter': [0, 0],
-                        'objective_counter': [0, 0],
-                        'constraint_counter': [0, 0],
-                        'variable_spread': dict(),
-                        'variable_type': dict(),
-                        'variable_bound': dict(),
-                        'variable_dim': dict(),
-                        'pop_size': 1,
-                        'penalty_coefficient': 0,
-                        'vectorized': None,
-                        'objective_being_optimized': 0,
-                    }
-
-                elif self.agent[0] == 'feasibility_check':
-                    self.features = {
-                        'agent_status': 'feasibility_check',
-                        'solution_method': 'heuristic',
-                        'constraints': [],
-                        'objectives': [],
-                        'objective_counter': [0, 0],
-                        'interface_name': interface_name,
-                        'variable_spread': self.agent[2],
-                        'pop_size': len(self.agent[1]),
-                        'penalty_coefficient': self.agent[3],
-                        'vectorized': None,
-                        'objective_being_optimized': 0,
-                        'directions': []
-                    }
-
-                    self.agent = self.agent[1].copy()
-                else:
-                    self.features = {
-                        'agent_status': 'active',
-                        'solution_method': 'heuristic',
-                        'constraints': [],
-                        'objectives': [],
-                        'objective_counter': [0, 0],
-                        'interface_name': interface_name,
-                        'variable_spread': self.agent[2],
-                        'pop_size': len(self.agent[1]),
-                        'penalty_coefficient': self.agent[3],
-                        'vectorized': None,
-                        'objective_being_optimized': 0,
-                        'directions': []
-                    }
-                    self.agent = self.agent[1].copy()
-
-                match self.features['interface_name']:
-                    case 'mealpy': self.features['vectorized'] = False
-                    case 'pymultiobjective': self.features['vectorized'] = False
-                    case 'feloopy': self.features['vectorized'] = True
-                    case 'pymoo': self.features['vectorized'] = True
-
+            
     def __getitem__(self, agent):
         """
         Returns the required features of the model object.
@@ -191,24 +137,31 @@ class Model:
             agent (X): Input of the representor model/instance.
         """
 
-        if self.features['agent_status'] == 'idle':
+        agent_status = self.features['agent_status']
+        vectorized = self.features['vectorized']
+        interface_name = self.features['interface_name']
+
+        if agent_status == 'idle':
             return self
-        elif self.features['agent_status'] == 'feasibility_check':
-            if self.features['penalty_coefficient'] == 0:
-                return 'feasible (unconstrained)'
-            else:
-                if self.penalty > 0:
-                    return 'infeasible (constrained)'
-                else:
-                    return 'feasible (constrained)'
+
+        elif agent_status == 'feasibility_check':
+            return self.feasibility_check()
+
         else:
-            if self.features['vectorized']:
-                if self.features['interface_name']=='feloopy':
-                    return self.agent
-                else:
-                    return self.sing_result
-            else:
-                return self.response
+            return self.get_result(vectorized, interface_name)
+
+    def feasibility_check(self):
+
+        if self.features['penalty_coefficient'] == 0:
+            return 'feasible (unconstrained)'
+        else:
+            return 'infeasible (constrained)' if self.penalty > 0 else 'feasible (constrained)'
+
+    def get_result(self, vectorized, interface_name):
+        if vectorized:
+            return self.agent if interface_name == 'feloopy' else self.sing_result
+        else:
+            return self.response
 
     # Methods for variables definitions.
 
@@ -230,17 +183,13 @@ class Model:
         """
         
         dim = fix_dims(dim)
-        self.features = update_variable_features(
-            name, dim, bound, 'binary_variable_counter', self.features)
+        self.features = update_variable_features(name, dim, bound, 'binary_variable_counter', self.features)
 
-        match self.features['solution_method']:
-
-            case 'exact':
-
-                from .generators import variable_generator
-                self.mainvars[("btvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'btvar', name, bound, dim)
-                self.maindims[name] = dim
-                return self.mainvars[("btvar",name)]
+        if self.features['solution_method'] == 'exact':
+            from .generators import variable_generator
+            self.mainvars[("btvar", name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'btvar', name, bound, dim)
+            self.maindims[name] = dim
+            return self.mainvars[("btvar", name)]
 
     def ptvar(self, name, dim=0, bound=[0, None]):
         """
@@ -253,19 +202,15 @@ class Model:
         """
 
         dim = fix_dims(dim)
-        self.features = update_variable_features(
-            name, dim, bound, 'positive_variable_counter', self.features)
+        self.features = update_variable_features(name, dim, bound, 'positive_variable_counter', self.features)
 
-        match self.features['solution_method']:
-
-            case 'exact':
-
-                from .generators import variable_generator
-                self.mainvars[("ptvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'ptvar', name, bound, dim)
-                self.maindims[name] = dim
-                if self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
-                    self.con(self.mainvars[("ptvar",name)]>=0)
-                return self.mainvars[("ptvar",name)]
+        if self.features['solution_method'] == 'exact':
+            from .generators import variable_generator
+            self.mainvars[("ptvar", name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'ptvar', name, bound, dim)
+            self.maindims[name] = dim
+            if self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
+                self.con(self.mainvars[("ptvar", name)] >= 0)
+            return self.mainvars[("ptvar", name)]
 
     def itvar(self, name, dim=0, bound=[0, None]):
         """
@@ -278,19 +223,16 @@ class Model:
         """
 
         dim = fix_dims(dim)
-        self.features = update_variable_features(
-            name, dim, bound, 'integer_variable_counter', self.features)
+        self.features = update_variable_features(name, dim, bound, 'integer_variable_counter', self.features)
 
-        match self.features['solution_method']:
-
-            case 'exact':
-
-                from .generators import variable_generator
-                self.mainvars[("ptvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'itvar', name, bound, dim)
-                self.maindims[name] = dim
-                return self.mainvars[("ptvar",name)]
+        if self.features['solution_method'] == 'exact':
+            from .generators import variable_generator
+            self.mainvars[("ptvar", name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'itvar', name, bound, dim)
+            self.maindims[name] = dim
+            return self.mainvars[("ptvar", name)]
 
         return self.vars[name]
+
 
     def ftvar(self, name, dim=0, bound=[None, None]):
         """
@@ -303,17 +245,13 @@ class Model:
         """
 
         dim = fix_dims(dim)
-        self.features = update_variable_features(
-            name, dim, bound, 'free_variable_counter', self.features)
+        self.features = update_variable_features(name, dim, bound, 'free_variable_counter', self.features)
 
-        match self.features['solution_method']:
-
-            case 'exact':
-
-                from .generators import variable_generator
-                self.mainvars[("ftvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'ftvar', name, bound, dim)
-                self.maindims[name] = dim
-                return self.mainvars[("ftvar",name)]
+        if self.features['solution_method'] == 'exact':
+            from .generators import variable_generator
+            self.mainvars[("ftvar", name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'ftvar', name, bound, dim)
+            self.maindims[name] = dim
+            return self.mainvars[("ftvar", name)]
 
     def bvar(self, name, dim=0, bound=[0, 1]):
         """
@@ -326,34 +264,30 @@ class Model:
         """
 
         dim = fix_dims(dim)
-        self.features = update_variable_features(
-            name, dim, bound, 'binary_variable_counter', self.features)
+        self.features = update_variable_features(name, dim, bound, 'binary_variable_counter', self.features)
 
-        match self.features['solution_method']:
+        if self.features['solution_method'] == 'exact':
+            from .generators import variable_generator
+            self.mainvars[("bvar", name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'bvar', name, bound, dim)
+            self.maindims[name] = dim
 
-            case 'exact':
+            if self.features['interface_name'] in ['cvxpy']:
+                if dim == 0:
+                    self.con(self.mainvars[("bvar", name)] >= 0)
+                    self.con(self.mainvars[("bvar", name)] <= 1)
+                elif len(dim) == 1:
+                    for i in dim[0]:
+                        self.con(self.mainvars[("bvar", name)][i] >= 0)
+                        self.con(self.mainvars[("bvar", name)][i] <= 1)
+                else:
+                    for i in it.product(*tuple(dim)):
+                        self.con(self.mainvars[("bvar", name)][i] >= 0)
+                        self.con(self.mainvars[("bvar", name)][i] <= 1)
+            return self.mainvars[("bvar", name)]
 
-                from .generators import variable_generator
-                self.mainvars[("bvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'bvar', name, bound, dim)
-                self.maindims[name] = dim
+        elif self.features['solution_method'] == 'heuristic':
+            return generate_heuristic_variable(self.features, 'bvar', name, dim, bound, self.agent)
 
-                if self.features['interface_name'] in ['cvxpy']:
-                    if dim==0:
-                        self.con(self.mainvars[("bvar",name)]>=0)
-                        self.con(self.mainvars[("bvar",name)]<=1)
-                    elif len(dim)==1:
-                        for i in dim[0]:
-                            self.con(self.mainvars[("bvar",name)][i]>=0)
-                            self.con(self.mainvars[("bvar",name)][i]<=1)
-                    else:
-                        for i in it.product(*tuple(dim)):
-                            self.con(self.mainvars[("bvar",name)][i]>=0)
-                            self.con(self.mainvars[("bvar",name)][i]<=1)
-                return self.mainvars[("bvar",name)]
-
-            case 'heuristic':
-
-                return generate_heuristic_variable(self.features, 'bvar', name, dim, bound, self.agent)
 
     def pvar(self, name, dim=0, bound=[0, None]):
         """
@@ -423,7 +357,6 @@ class Model:
                 return self.mainvars[("ivar",name)]
 
             case 'heuristic':
-
                 return generate_heuristic_variable(self.features, 'ivar', name, dim, bound, self.agent)
 
     def fvar(self, name, dim=0, bound=[None, None]):
@@ -1785,19 +1718,6 @@ class Model:
         print(f"cpu time [{self.features['interface_name']}]: ", self.get_time(
         )*10**6, '(microseconds)', "%02d:%02d:%02d" % (hour, min, sec), '(h, m, s)')
 
-    def inf(self):
-
-        data = {"info": ["model", "interface", "solver", "direction", "method"], "detail": [self.features['model_name'], self.features['interface_name'], self.features['solver_name'], self.features['directions'], self.features['solution_method']], "variable": ["positive", "binary", "integer", "free", "tot"], "count [cat,tot]": [str(self.features['positive_variable_counter']), str(
-            self.features['binary_variable_counter']), str(self.features['integer_variable_counter']), str(self.features['free_variable_counter']), str(self.features['total_variable_counter'])], "other": ["objective", "constraint"], "count [cat,tot] ": [self.features['objective_counter'], self.features['constraint_counter']]}
-
-        A = tb(data, headers="keys", tablefmt="github")
-
-        print("~~~~~~~~~~~~\nPROBLEM INFO\n~~~~~~~~~~~~")
-        print(A)
-        print("~~~~~~~~~~~~\n")
-
-        return A
-
     def scen_probs(self):
         """
         Returns an array of scenario probabilities
@@ -1845,8 +1765,7 @@ class Model:
 
         return self.model.state_function()
 
-    def report(self, show_all_metrics=False):
-        print()
+    def report(self, all_metrics: bool = False, feloopy_info: bool = True, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], save=None):
 
         self.interface_name = self.features['interface_name']
         self.solution_method = self.features['solution_method']
@@ -1863,122 +1782,121 @@ class Model:
         self.con_counter = self.features['constraint_counter']
         self.obj_counter = self.features['objective_counter']
 
-        import datetime
-        now = datetime.datetime.now()
-        date_str = now.strftime("Date: %Y-%m-%d")
-        time_str = now.strftime("Time: %H:%M:%S")
+        if save is not None:
+            stdout_origin = sys.stdout
+            sys.stdout = open(save, "w")
+
+        status = self.get_status()
+        hour, min, sec = calculate_time_difference(length=self.get_time())
+
+        if len(status) == 0:
+            status = ['infeasible (constrained)']
 
         box_width = 80
-        padding = box_width - len(date_str) - len(time_str) - 2
+        vspace()
 
-        print("+" + "-"*box_width + "+")
-        print("|" + " " + "FelooPy v0.2.6".center(box_width-2) + " " + "|")
-        print("+" + "-"*box_width + "+")
-        print("| " + date_str + " "*padding + time_str + " |")
-        padding = box_width - len("Solver: "+ self.solver_name) - len("Interface: "+ self.interface_name) - 2
-        print("| " + "Interface: " + self.interface_name + " "*padding + "Solver: "+ self.solver_name + " |")
-        print("+" + "-"*box_width + "+")
-        print("|" + " " + "Model Information".center(box_width-2) + " " + "|")
-        print("+" + "-"*box_width + "+")
+        if feloopy_info:
+            
+            import datetime
+            now = datetime.datetime.now()
+            date_str = now.strftime("Date: %Y-%m-%d")
+            time_str = now.strftime("Time: %H:%M:%S")
+            tline_text("FelooPy v0.2.6")
+            empty_line()
+            two_column(date_str, time_str)
+            two_column(f"Interface: {self.interface_name}", f"Solver: {self.solver_name}")
+            empty_line()
+            bline()
 
-        self.model_name, self.interface_name, self.solver_name, self.objectives_directions, self.solution_method
-        # determine the maximum length of variables
-        ModelName = "The '" + self.model_name + "' model has:"
-        print("|" + " " + ModelName.center(box_width-2) + " " + "|")
-        if self.pos_var_counter[0]>0:
-            P_report = str(self.pos_var_counter[1]) + " positive variable(s) in " + str(self.pos_var_counter[0]) + " class(es)."
-            print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.bin_var_counter[0]>0:
-            P_report = str(self.bin_var_counter[1]) + " binary variable(s) in " + str(self.bin_var_counter[0]) + " class(es)."
-            print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.int_var_counter[0]>0:
-            P_report = str(self.int_var_counter[1]) + " integer variable(s) in " + str(self.int_var_counter[0]) + " class(es)."
-            print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.free_var_counter[0]>0:
-            P_report = str(self.free_var_counter[1]) + " free variable(s) in " + str(self.free_var_counter[0]) + " class(es)."
-            print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.obj_counter[0]>0:
-            P_report = str(self.obj_counter[1]) + " objective(s)."
-            print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.con_counter[0]>0:
-            P_report = str(self.con_counter[1]) + " constraint(s) in " + str(self.con_counter[0]) + " class(es)."
-            print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        P_report =  "Total number of variables is " + str(self.tot_counter[1]) + f" in {self.tot_counter[0]} class(es)."
-        print("|" + " " + P_report.center(box_width-2) + " " + "|")
-
-
-        print("+" + "-"*box_width + "+")
-        print("|" + " " + "Solve Information".center(box_width-2) + " " + "|")
-        print("+" + "-"*box_width + "+")
-        padding = box_width - len("Method: "+ self.solution_method) - len("Objective Value(s)") - 2
-        print("| " + "Method: "+ self.solution_method + " "*padding + "Objective Value(s)" + " |")
-        status= self.get_status()
-        if len(self.objectives_directions)!=1:
-            row = "| " + "Status: " + " "*(len(status[0]) - len("Status: ")) + " " * (box_width-9*len(self.objectives_directions) +1 - len(str(status[0])) - 3)
-            for j in range(len(self.objectives_directions)):
-                obj_row = self.objectives_directions[j]
-                row += " " * (8 - len(obj_row)) + obj_row
-            print(row + " |")
-            for i in range(len(status)): 
-                row = "| " + str(status[i]) + " " * (box_width-9*len(self.objectives_directions) +1 - len(str(status[i])) - 3)
-                obj_row = self.get_obj()[i]
-                for j in range(len(obj_row)):
-                    num_str = format_string(obj_row[j])
-                    row += " " * (9 - len(num_str)) + num_str
-                print(row + " |")
-        else:
-            row = "| " + "Status: " + " "*(len(status) - len("Status: ")) + " " * (box_width-9*len(self.objectives_directions) +1 - len(str(status)) - 3)
-            for j in range(len(self.objectives_directions)):
-                obj_row = self.objectives_directions[j]
-                row += " " * (8 - len(obj_row)) + obj_row
-            print(row + " |")
-            row = "| " + str(status) + " " * (box_width-9*len(self.objectives_directions) +1 - len(str(status)) - 3)
-            obj_row = self.get_obj()
-            num_str = format_string(obj_row)
-            row += " " * (9 - len(num_str)) + num_str
-            print(row + " |")
-        print("+" + "-"*box_width + "+")
-        print("|" + " " + "Metric Information".center(box_width-2) + " " + "|")
-        print("+" + "-"*box_width + "+")
-        hour = round((self.get_time()), 3) % (24 * 3600) // 3600
-        min = round((self.get_time()), 3) % (24 * 3600) % 3600 // 60
-        sec = round((self.get_time()), 3) % (24 * 3600) % 3600 % 60
-
-    
-        if len(self.objectives_directions)!=1:
-            if show_all_metrics:
+        if sys_info:
+            try:
+                import psutil
+                import cpuinfo
+                import platform
+                tline_text("System")
+                empty_line()
+                cpu_info = cpuinfo.get_cpu_info()["brand_raw"]
+                cpu_cores = psutil.cpu_count(logical=False)
+                cpu_threads = psutil.cpu_count(logical=True)
+                ram_info = psutil.virtual_memory()
+                ram_total = ram_info.total
+                os_info = platform.system()
+                os_version = platform.version()
+                left_align(f"OS: {os_version} ({os_info})")
+                left_align(f"CPU   Model: {cpu_info}")
+                left_align(f"CPU   Cores: {cpu_cores}")
+                left_align(f"CPU Threads: {cpu_threads}")
                 try:
-                    try:
-                        self.get_indicators()
-                        print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
-                        print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec)+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| GD    (min):          ", format_string(self.calculated_indicators['gd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| IGD   (min):          ", format_string(self.calculated_indicators['igd'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp'])+ " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| HV    (max):          ", format_string(self.calculated_indicators['hv']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                    except:
-                        print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
-                        print("| GD    (min):          ", format_string(self.calculated_indicators['gd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| GDP   (min):          ", format_string(self.calculated_indicators['gdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| IGD   (min):          ", format_string(self.calculated_indicators['igd']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| IGDP  (min):          ", format_string(self.calculated_indicators['igdp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| MS    (max):          ", format_string(self.calculated_indicators['ms']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-                        print("| SP    (max):          ", format_string(self.calculated_indicators['sp']) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
+                    import GPUtil
+                    gpus = GPUtil.getGPUs()
+                    for gpu in gpus:
+                        left_align(f"GPU   Model: {gpu.name}")
+                        left_align(f"GPU    VRAM: {gpu.memoryTotal / 1024:.2f} GB")
                 except:
-                    print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
-                    print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-            else:
-                print("| CPT   (microseconds): ", format_string(self.get_time()*10**6) + " "*(box_width-len("| CPT   (microseconds): " + format_string(self.get_time()*10**6))) + "|")
-                print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")     
-        else:
-            print("| CPT   (microseconds): ", format_string((self.get_time())*10 **6) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")
-            print("| CPT   (hour:min:sec): ", "%02d:%02d:%02d" % (hour, min, sec) + " "*(box_width-len("| CPT   (micro-sec):    ")-8) + "|")     
-        print("+" + "-"*box_width + "+")
-        print("|" + " " + "Decision Information".center(box_width-2) + " " + "|")
-        print("+" + "-"*box_width + "+")
+                    pass
+                left_align(f"SYSTEM  RAM: {ram_total / (1024 ** 3):.2f} GB")
+            except:
+                pass
+            empty_line()
+            bline()
+
+        if model_info:
+            tline_text("Model")
+            empty_line()
+            left_align(f"Name: {self.model_name}")
+            list_three_column([
+                ("Feature:         ", "Class:", "Total:"),
+                ("Positive variable", self.pos_var_counter[0], self.pos_var_counter[1]),
+                ("Binary variable  ", self.bin_var_counter[0], self.bin_var_counter[1]),
+                ("Integer variable ", self.int_var_counter[0], self.int_var_counter[1]),
+                ("Free variable    ", self.free_var_counter[0], self.free_var_counter[1]), 
+                ("Total variables  ", self.tot_counter[0], self.tot_counter[1]), 
+                ("Objective        ", "-", self.obj_counter[1]), 
+                ("Constraint       ", self.con_counter[0], self.con_counter[1]) ])
+            empty_line()
+            bline()
+
+        if sol_info:
+            tline_text("Solve")
+            empty_line()
+            two_column(f"Method: {self.solution_method}", "Objective value")
+            status_row_print(self.objectives_directions, status)
+            if obj_values:
+                if len(self.objectives_directions) != 1:
+                    try:
+                        solution_print(self.objectives_directions, status, self.get_obj(), self.get_payoff())
+                    except:
+                        print("Nothing found.")
+                else:
+                    solution_print(self.objectives_directions, status, self.get_obj())
+            empty_line()
+            bline()
+
+        if metric_info:
+            tline_text("Metric")
+            empty_line()
+            self.calculated_indicators = None
+            try:
+                self.get_indicators(ideal_pareto=ideal_pareto, ideal_point=ideal_point)
+            except:
+                pass
+            metrics_print(self.objectives_directions, all_metrics, self.get_obj(), self.calculated_indicators, length=self.get_time())
+            empty_line()
+            bline()
+
+        if dec_info:
+            tline_text("Decision")
+            empty_line()
+            self.decision_information_print(status)
+            empty_line()
+            bline()
+
+        if save is not None:
+            sys.stdout.close()
+            sys.stdout = stdout_origin
+    
+    def decision_information_print(self,status, box_width=80):
+
         for i,j in self.mainvars.keys():
             if self.maindims[j] == 0:
                 if self.get(self.mainvars[(i,j)]) not in [0, None]:
@@ -2001,8 +1919,6 @@ class Model:
                     for k in it.product(*tuple(fix_dims(self.maindims[j]))):
                         if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
                             print(f"| {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"| {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "|")
-
-        print("+" + "-"*box_width + "+")
 
     # Methods to work with input and output data.
 
@@ -2548,28 +2464,28 @@ class Implement:
         Creates and returns an implementor for the representor model.
         '''
 
-        self.ModelInfo = ModelFunction(['idle'])
+        self.model_data = ModelFunction(['idle'])
         self.ModelFunction = ModelFunction
-        self.interface_name = self.ModelInfo.features['interface_name']
-        self.solution_method = self.ModelInfo.features['solution_method']
-        self.model_name = self.ModelInfo.features['model_name']
-        self.solver_name = self.ModelInfo.features['solver_name']
-        self.model_constraints = self.ModelInfo.features['constraints']
-        self.model_objectives = self.ModelInfo.features['objectives']
-        self.objectives_directions = self.ModelInfo.features['directions']
-        self.pos_var_counter = self.ModelInfo.features['positive_variable_counter']
-        self.bin_var_counter = self.ModelInfo.features['binary_variable_counter']
-        self.int_var_counter = self.ModelInfo.features['integer_variable_counter']
-        self.free_var_counter = self.ModelInfo.features['free_variable_counter']
-        self.tot_counter = self.ModelInfo.features['total_variable_counter']
-        self.con_counter = self.ModelInfo.features['constraint_counter']
-        self.obj_counter = self.ModelInfo.features['objective_counter']
-        self.AlgOptions = self.ModelInfo.features['solver_options']
-        self.VariablesSpread = self.ModelInfo.features['variable_spread']
-        self.VariablesType = self.ModelInfo.features['variable_type']
-        self.ObjectiveBeingOptimized = self.ModelInfo.features['objective_being_optimized']
-        self.VariablesBound = self.ModelInfo.features['variable_bound']
-        self.VariablesDim = self.ModelInfo.features['variable_dim']
+        self.interface_name = self.model_data.features['interface_name']
+        self.solution_method = self.model_data.features['solution_method']
+        self.model_name = self.model_data.features['model_name']
+        self.solver_name = self.model_data.features['solver_name']
+        self.model_constraints = self.model_data.features['constraints']
+        self.model_objectives = self.model_data.features['objectives']
+        self.objectives_directions = self.model_data.features['directions']
+        self.pos_var_counter = self.model_data.features['positive_variable_counter']
+        self.bin_var_counter = self.model_data.features['binary_variable_counter']
+        self.int_var_counter = self.model_data.features['integer_variable_counter']
+        self.free_var_counter = self.model_data.features['free_variable_counter']
+        self.tot_counter = self.model_data.features['total_variable_counter']
+        self.con_counter = self.model_data.features['constraint_counter']
+        self.obj_counter = self.model_data.features['objective_counter']
+        self.AlgOptions = self.model_data.features['solver_options']
+        self.VariablesSpread = self.model_data.features['variable_spread']
+        self.VariablesType = self.model_data.features['variable_type']
+        self.ObjectiveBeingOptimized = self.model_data.features['objective_being_optimized']
+        self.VariablesBound = self.model_data.features['variable_bound']
+        self.VariablesDim = self.model_data.features['variable_dim']
         self.status = 'Not solved'
         self.response = None
         self.AgentProperties = [None, None, None, None]
@@ -2604,7 +2520,7 @@ class Implement:
         self.BestAgent = np.delete(self.BestAgent, self.remove, axis=0)
         self.BestReward = np.delete(self.BestReward, self.remove, axis=0)
 
-    def sol(self, penalty_coefficient=0, number_of_times=1, show_plots=False, save_plots=False):
+    def sol(self, penalty_coefficient=0, number_of_times=1, show_plots=False, save_plots=False, show_log=False):
 
         self.penalty_coefficient = penalty_coefficient
 
@@ -2614,13 +2530,13 @@ class Implement:
 
                 from .generators.solution import mealpy_solution_generator
                 self.BestAgent, self.BestReward, self.start, self.end = mealpy_solution_generator.generate_solution(
-                    self.ModelObject, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
+                    self.ModelObject, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots,show_log)
 
             case 'pymultiobjective':
 
                 from .generators.solution import pymultiobjective_solution_generator
                 self.BestAgent, self.BestReward, self.start, self.end = pymultiobjective_solution_generator.generate_solution(
-                    self.solver_name, self.AlgOptions, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
+                    self.solver_name, self.AlgOptions, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots,show_log)
                 self.remove = []
 
                 for i in range(np.shape(self.BestReward)[0]):
@@ -2635,7 +2551,7 @@ class Implement:
             case 'pymoo':
 
                 from .generators.solution import pymoo_solution_generator
-                self.BestAgent, self.BestReward,self.start, self.end = pymoo_solution_generator.generate_solution(self.solver_name, self.AlgOptions, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
+                self.BestAgent, self.BestReward,self.start, self.end = pymoo_solution_generator.generate_solution(self.solver_name, self.AlgOptions, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots, show_log)
                 self.remove = []
 
                 for i in range(np.shape(self.BestReward)[0]):
@@ -2651,7 +2567,7 @@ class Implement:
 
                 from .generators.solution import feloopy_solution_generator
                 self.BestAgent, self.BestReward, self.start, self.end, self.status = feloopy_solution_generator.generate_solution(
-                    self.ModelObject, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots)
+                    self.ModelObject, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, show_log)
 
     def dis_plots(self, ideal_pareto: Optional[np.ndarray] = [], step: Optional[tuple] = (0.1,)):
 
@@ -3218,10 +3134,10 @@ class Implement:
                                         return var(*i[1])
                                 case 'ivar':
                                     if self.VariablesDim[i[0]] == 0:
-                                        return np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))[0]
+                                        return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))[0]
                                     else:
                                         def var(*args):
-                                            self.NewAgentProperties = np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                            self.NewAgentProperties = np.round(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
                                                 self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                                             return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
                                         return var(*i[1])
@@ -3237,7 +3153,7 @@ class Implement:
                                 case 'bvar':
                                     return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))[0]
                                 case 'ivar':
-                                    return np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))[0]
+                                    return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))[0]
                                 case 'svar':
                                     return np.argsort(self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])
                 case 'feloopy':
@@ -3268,7 +3184,7 @@ class Implement:
 
                                 case 'bvar':
                                     if self.VariablesDim[i[0]] == 0:
-                                        return np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                        return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
 
                                     else:
                                         def var(*args):
@@ -3279,11 +3195,11 @@ class Implement:
                                         return var(*i[1])
                                 case 'ivar':
                                     if self.VariablesDim[i[0]] == 0:
-                                        return np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                        return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
 
                                     else:
                                         def var(*args):
-                                            self.NewAgentProperties = np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                            self.NewAgentProperties = np.round(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
                                                 self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                                             return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
                                         return var(*i[1])
@@ -3301,7 +3217,7 @@ class Implement:
                                 case 'bvar':
                                     return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                                 case 'ivar':
-                                    return np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                    return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                                 case 'svar':
                                     return np.argsort(self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])
         else:
@@ -3491,113 +3407,51 @@ class Implement:
 
         print('objective: ', self.BestReward)
 
-    def inf(self):
-
-        print()
-        print("~~~~~~~~~~~~\nPROBLEM INFO\n~~~~~~~~~~~~")
-
-        A = tb(
-            {
-                "info": ["model", "interface", "solver", "direction", "method"],
-                "detail": [self.model_name, self.interface_name, self.solver_name, self.objectives_directions, self.solution_method],
-                "variable": ["positive", "binary", "integer", "free", "tot"],
-                "count [cat,tot]": [str(self.pos_var_counter), str(self.bin_var_counter), str(self.int_var_counter), str(self.free_var_counter), str(self.tot_counter)],
-                "other": ["objective", "constraint"],
-                "count [cat,tot] ": [str(self.obj_counter), str(self.con_counter)]
-            },
-            headers="keys", tablefmt="github"
-        )
-        print(A)
-        print("~~~~~~~~~~~~\n")
-
-        return A
 
     def get_bound(self, *args):
+
+        def calculate_lb_ub(var_type, var_bounds, var_spread, best_agent):
+            if var_type in ['pvar', 'fvar']:
+                lb = np.min(var_bounds[0] + best_agent[:, var_spread[0]:var_spread[1]] * (var_bounds[1] - var_bounds[0]))
+                ub = np.max(var_bounds[0] + best_agent[:, var_spread[0]:var_spread[1]] * (var_bounds[1] - var_bounds[0]))
+            elif var_type in ['bvar', 'ivar']:
+                lb = np.min(np.round(var_bounds[0] + best_agent[:, var_spread[0]:var_spread[1]] * (var_bounds[1] - var_bounds[0])))
+                ub = np.max(np.round(var_bounds[0] + best_agent[:, var_spread[0]:var_spread[1]] * (var_bounds[1] - var_bounds[0])))
+            return lb, ub
+
+        def calculate_new_agent_properties(var_bounds, var_spread, best_agent):
+            return var_bounds[0] + best_agent[:, var_spread[0]:var_spread[1]] * (var_bounds[1] - var_bounds[0])
+
+        def calculate_var(var_bounds, var_spread, var_dim, best_agent, *coords):
+            new_agent_properties = calculate_new_agent_properties(var_bounds, var_spread, best_agent)
+            index = sum(coords[k] * mt.prod(len(var_dim[j]) for j in range(k + 1, len(var_dim))) for k in range(len(var_dim)))
+            return new_agent_properties[index]
+
         for i in args:
             if len(i) >= 2:
-            
-                match self.VariablesType[i[0]]:
+                var_type = self.VariablesType[i[0]]
+                var_bounds = self.VariablesBound[i[0]]
+                var_spread = self.VariablesSpread[i[0]]
+                var_dim = self.VariablesDim[i[0]]
+                best_agent = self.BestAgent
 
-                    case 'pvar':
+                if var_dim == 0:
+                    lb, ub = calculate_lb_ub(var_type, var_bounds, var_spread, best_agent)
+                else:
+                    lb = np.min(calculate_var(var_bounds, var_spread, var_dim, best_agent, *i[1]))
+                    ub = np.max(calculate_var(var_bounds, var_spread, var_dim, best_agent, *i[1]))
 
-                        if self.VariablesDim[i[0]] == 0:
-                            UB = np.max((self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
-                            LB = np.min((self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
-                            return [LB,UB]
-
-                        else:
-                            def var(*args):
-                                self.NewAgentProperties = (self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
-                                    self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
-                                return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
-                            return [np.min(var(*i[1])),np.max(var(*i[1]))]
-
-                    case 'fvar':
-
-                        if self.VariablesDim[i[0]] == 0:
-                            LB = np.min(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
-                            UB = np.max(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
-                            return [LB,UB]
-
-                        else:
-                            def var(*args):
-                                self.NewAgentProperties = (self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
-                                    self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
-                                return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
-                            return [np.min(var(*i[1])),np.max(var(*i[1]))]
-
-                    case 'bvar':
-                        if self.VariablesDim[i[0]] == 0:
-                            LB = np.min(np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
-                            UB = np.max(np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
-                            return [LB,UB]
-
-                        else:
-                            def var(*args):
-                                self.NewAgentProperties = np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
-                                    self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
-                                return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
-                            return [np.min(var(*i[1])),np.max(var(*i[1]))]
-                    case 'ivar':
-                        if self.VariablesDim[i[0]] == 0:
-                            LB = np.min(np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
-                            UB = np.min(np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
-                            return [LB,UB]
-
-                        else:
-                            def var(*args):
-                                self.NewAgentProperties = np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
-                                    self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
-                                return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
-                            return [np.min(var(*i[1])),np.max(var(*i[1]))]
-                    case 'svar':
-                        return np.argsort(self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])[i[1]]
-
+                if var_type == 'svar':
+                    return np.argsort(best_agent[:, var_spread[0]:var_spread[1]])[i[1]]
             else:
-                match self.VariablesType[i[0]]:
+                var_type = self.VariablesType[i[0]]
+                var_bounds = self.VariablesBound[i[0]]
+                var_spread = self.VariablesSpread[i[0]]
+                best_agent = self.BestAgent
+                
+                lb, ub = calculate_lb_ub(var_type, var_bounds, var_spread, best_agent)
 
-                    case 'pvar':
-                        UB = np.max((self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
-                        LB = np.min((self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
-                        return [LB,UB]
-
-                    case 'fvar':
-                        UB = np.max(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
-                        LB = np.min(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
-                        return [LB,UB]
-
-                    case 'bvar':
-                        UB = np.max(np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
-                        LB = np.min(np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
-                        return [LB,UB]
-
-                    case 'ivar':
-                        UB = np.max(np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
-                        LB= np.min(np.floor(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
-                        return [UB,LB]
-
-                    case 'svar':
-                        return np.argsort(self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])
+            return [lb, ub]
                     
     def get_payoff(self):
 
@@ -3614,26 +3468,6 @@ class Implement:
 
     def report(self, all_metrics: bool = False, feloopy_info: bool = True, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], save=None):
 
-        """
-        Generate a report with various information about the optimization process.
-
-        Args:
-            all_metrics (bool, optional): If True, include all available metrics in the report. Default is False.
-            feloopy_info (bool, optional): If True, include information about the optimization loop. Default is True.
-            sys_info (bool, optional): If True, include information about the system. Default is False.
-            model_info (bool, optional): If True, include information about the model. Default is True.
-            sol_info (bool, optional): If True, include information about the solution. Default is True.
-            obj_values (bool, optional): If True, include the objective values in the report. Default is True.
-            dec_info (bool, optional): If True, include the solution values in the report. Default is True.
-            metric_info (bool, optional): If True, include metric information in the report. Default is True.
-            ideal_pareto (np.ndarray, optional): The ideal Pareto front to be used for comparison. Default is an empty array.
-            ideal_point (np.array, optional): The ideal point to be used for comparison. Default is an empty array.
-            save: It saves the report without showing it inside terminal. Please provide a path or string with the desired file name and format.
-
-        Returns:
-            str: A formatted report containing the requested information.
-        """
-
         if save is not None:
             stdout_origin = sys.stdout
             sys.stdout = open(save, "w")
@@ -3645,28 +3479,28 @@ class Implement:
             status = ['infeasible (constrained)']
 
         box_width = 80
+        vspace()
 
         if feloopy_info:
+            
             import datetime
             now = datetime.datetime.now()
             date_str = now.strftime("Date: %Y-%m-%d")
             time_str = now.strftime("Time: %H:%M:%S")
-            vspace()
-            tline()
-            center("FelooPy v0.2.6")
-            bline()
+            tline_text("FelooPy v0.2.6")
+            empty_line()
             two_column(date_str, time_str)
             two_column(f"Interface: {self.interface_name}", f"Solver: {self.solver_name}")
+            empty_line()
+            bline()
 
         if sys_info:
             try:
                 import psutil
                 import cpuinfo
                 import platform
-
-                tline()
-                center("System information")
-                bline()
+                tline_text("System")
+                empty_line()
                 cpu_info = cpuinfo.get_cpu_info()["brand_raw"]
                 cpu_cores = psutil.cpu_count(logical=False)
                 cpu_threads = psutil.cpu_count(logical=True)
@@ -3674,7 +3508,6 @@ class Implement:
                 ram_total = ram_info.total
                 os_info = platform.system()
                 os_version = platform.version()
-
                 left_align(f"OS: {os_version} ({os_info})")
                 left_align(f"CPU   Model: {cpu_info}")
                 left_align(f"CPU   Cores: {cpu_cores}")
@@ -3690,11 +3523,12 @@ class Implement:
                 left_align(f"SYSTEM  RAM: {ram_total / (1024 ** 3):.2f} GB")
             except:
                 pass
-            
-        if model_info:
-            tline()
-            center("Model information")
+            empty_line()
             bline()
+
+        if model_info:
+            tline_text("Model")
+            empty_line()
             left_align(f"Name: {self.model_name}")
             list_three_column([
                 ("Feature:         ", "Class:", "Total:"),
@@ -3705,11 +3539,12 @@ class Implement:
                 ("Total variables  ", self.tot_counter[0], self.tot_counter[1]), 
                 ("Objective        ", "-", self.obj_counter[1]), 
                 ("Constraint       ", self.con_counter[0], self.con_counter[1]) ])
+            empty_line()
+            bline()
 
         if sol_info:
-            tline()
-            center("Solve information")
-            bline()
+            tline_text("Solve")
+            empty_line()
             two_column(f"Method: {self.solution_method}", "Objective value")
             status_row_print(self.objectives_directions, status)
             if obj_values:
@@ -3720,25 +3555,27 @@ class Implement:
                         print("Nothing found.")
                 else:
                     solution_print(self.objectives_directions, status, self.get_obj())
+            empty_line()
+            bline()
 
         if metric_info:
-            tline()
-            center("Metric information")
-            bline()
+            tline_text("Metric")
+            empty_line()
             self.calculated_indicators = None
             try:
                 self.get_indicators(ideal_pareto=ideal_pareto, ideal_point=ideal_point)
             except:
                 pass
-
-        metrics_print(self.objectives_directions, all_metrics, self.get_obj(), self.calculated_indicators, self.start, self.end, hour, min, sec)
-
+            metrics_print(self.objectives_directions, all_metrics, self.get_obj(), self.calculated_indicators, self.start, self.end)
+            empty_line()
+            bline()
 
         if dec_info:
-            tline()
+            tline_text("Decision")
+            empty_line()
             self.decision_information_print(status)
-
-        bline()
+            empty_line()
+            bline()
 
         if save is not None:
             sys.stdout.close()
@@ -3746,8 +3583,6 @@ class Implement:
 
     def decision_information_print(self, status, box_width=80):
         if type(status) == str:
-            center("Decision information")
-            bline()
             for i in self.VariablesDim.keys():
                 if self.VariablesDim[i] == 0:
                     if self.get([i, (0,)]) != 0:
@@ -3760,10 +3595,7 @@ class Implement:
                     for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
                         if self.get([i, (*k,)]) != 0:
                             print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get([i, (*k,)]), " " * (box_width - (len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get([i, (*k,)])))) - 1) + "|")
-
         else:
-            center("Decision information")
-            bline()
             for i in self.VariablesDim.keys():
                 if self.VariablesDim[i] == 0:
                     if self.get_bound([i, (0,)])[0] != 0 and self.get_bound([i, (0,)])[1]!=0:
@@ -3777,7 +3609,6 @@ class Implement:
                         if self.get_bound([i, (*k,)])[0] != 0 and self.get_bound([i, (*k,)])[1] != 0:
                             print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get_bound([i, (*k,)]), " " * (box_width - (len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get_bound([i, (*k,)])))) - 1) + "|")
     
-        
 # Alternatives for defining this class:
             
 construct = make_model = implementor = implement = Implement

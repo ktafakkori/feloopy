@@ -14,7 +14,7 @@ from tabulate import tabulate as tb
 from mealpy.utils.visualize import *
 
 
-def generate_solution(model_object, fitness_function, total_features, objectives_directions, objective_number, number_of_times, show_plots, save_plots):
+def generate_solution(model_object, fitness_function, total_features, objectives_directions, objective_number, number_of_times, show_plots, save_plots,show_log):
 
     problem = {
         "fit_func": fitness_function,
@@ -23,6 +23,7 @@ def generate_solution(model_object, fitness_function, total_features, objectives
         "minmax": objectives_directions[objective_number],
         "log_to": None,
         "save_population": False,
+        "verbose": show_log
     }
 
     if number_of_times == 1:

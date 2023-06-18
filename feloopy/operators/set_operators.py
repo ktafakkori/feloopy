@@ -10,7 +10,6 @@
 
 import itertools as it
 
-
 def sets(*args):
     """ 
     Used to mimic 'for all' in mathamatical modeling, for multiple sets.

@@ -17,7 +17,6 @@ import math as mt
 def l(x, y):
     return x-y
 
-
 @make_infix('or', 'sub')
 def g(x, y):
     return y-x

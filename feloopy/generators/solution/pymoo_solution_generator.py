@@ -8,12 +8,19 @@
  # @ Copyright: 2023. MIT License. All Rights Reserved.
  '''
 
-def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, ObjectivesDirections, ObjectiveBeingOptimized, number_of_times, show_plots, save_plots):
+def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, ObjectivesDirections, ObjectiveBeingOptimized, number_of_times, show_plots, save_plots, show_log):
 
     import timeit
     from pymoo.core.problem import Problem
     from pymoo.optimize import minimize
     import numpy as np
+
+
+    if show_log:
+        verbose=True
+    
+    else:
+        verbose=False
 
     ObjectivesDirections = [-1 if direction =='max' else 1 for direction in ObjectivesDirections]
 
@@ -99,7 +106,7 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
             algorithm = AGEMOEA2(**AlgOptions)
 
     time_solve_begin = timeit.default_timer()
-    res = minimize(problem, algorithm)
+    res = minimize(problem, algorithm, verbose=verbose)
     time_solve_end = timeit.default_timer()
     pareto_front = ObjectivesDirections*res.F
     pareto_solutions = res.X

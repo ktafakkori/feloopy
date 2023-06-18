@@ -10,6 +10,7 @@
 
 from ..helpers.empty import *
 import numpy as np
+import math as mt
 
 
 def generate_heuristic_variable(features, type, name, variable_dim, variable_bound, agent):
@@ -17,8 +18,6 @@ def generate_heuristic_variable(features, type, name, variable_dim, variable_bou
     #if features['interface_name'] == 'pymoo':
 
     #   features['vectorized'] = False
-
-
 
     if features['agent_status'] == 'idle':
 

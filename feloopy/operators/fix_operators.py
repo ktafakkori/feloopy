@@ -8,23 +8,11 @@
  # @ Copyright: 2023. MIT License. All Rights Reserved.
  '''
 
-
 def fix_dims(dim):
-
     if dim == 0:
-
-        return dim
-    
-    if isinstance(dim, set):
-
         return dim
 
-    elif dim != 0:
+    if not isinstance(dim, set):
+        dim = [range(d) if not isinstance(d, range) else d for d in dim]
 
-        for i in range(len(dim)):
-
-            if type(dim[i]) != range:
-
-                dim[i] = range(dim[i])
-
-        return dim
+    return dim

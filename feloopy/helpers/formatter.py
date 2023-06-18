@@ -12,6 +12,16 @@ def center(input, box_width=80):
 def tline(box_width=80):
     print("╭" + "─"*box_width + "╮")
 
+def tline_text(input, box_width=80):
+    print("╭─ " + input +" " + "─"*(box_width-len(input)-3) + "╮")
+    
+
+def bline_text(input, box_width=80):
+    print("╰" + input + " " + "─"*(box_width-len(input)-3) + "╯")
+        
+def empty_line(box_width=80):
+    print("│" + " "*box_width + "│")
+
 def bline(box_width=80):
     print("╰" + "─"*box_width + "╯")
 
@@ -86,12 +96,30 @@ def status_row_print(ObjectivesDirections, status, box_width=80):
             obj_row = ObjectivesDirections[j]
             row += " " * (10 - len(obj_row)) + obj_row
         print(row + " │")
+        
     else:
-        row = "│ " + "Status: " + " "*(len(status) - len("Status: ")) + " " * (box_width-9*len(ObjectivesDirections) +1 - len(str(status)) - 3)
+        row = "│ " + "Status: " + " "*(len(status) - len("Status: ")) + " " * (box_width-10*len(ObjectivesDirections) + 1 - len(str(status)) - 3)
         for j in range(len(ObjectivesDirections)):
             obj_row = ObjectivesDirections[j]
-            row += " " * (9 - len(obj_row)) + obj_row
-        print(row + " │")
+            row += " " * (10 - len(obj_row)) + obj_row
+
+        if len(row + " │")==box_width+2:
+            print(row + " │")
+
+        elif len(row + " │") <box_width+2:
+            row = "│ " + "Status: " + " "*(len(status) - len("Status: ")) + " " * (box_width-10*len(ObjectivesDirections) + 1 - len(str(status)) - 3)
+            for j in range(len(ObjectivesDirections)):
+                obj_row = ObjectivesDirections[j]
+                row += " " * (10 - len(obj_row)) + obj_row
+            print(row + " │")
+            
+        else:
+            row = "│ " + "Status: " + " "*(len(status) - len("Status: ")) + " " * (box_width-10*len(ObjectivesDirections) - len(str(status)) - 3)
+            for j in range(len(ObjectivesDirections)):
+                obj_row = ObjectivesDirections[j]
+                row += " " * (10 - len(obj_row)) + obj_row
+            print(row + " │")
+
 
 def solution_print(ObjectivesDirections, status, get_obj, get_payoff=None, box_width=80):
     if len(ObjectivesDirections)!=1:
@@ -142,7 +170,9 @@ def solution_print(ObjectivesDirections, status, get_obj, get_payoff=None, box_w
         row += " " * (9 - len(num_str)) + num_str
         print(row + " │")
 
-def metrics_print(ObjectivesDirections, show_all_metrics, get_obj, calculated_indicators, start, end, hour, min, sec, box_width = 80):
+def metrics_print(ObjectivesDirections, show_all_metrics, get_obj, calculated_indicators, start=0, end=0, length=None, box_width = 80):
+    hour, min, sec =  calculate_time_difference(start, end, length)
+
     try:
         if len(ObjectivesDirections) != 1:
             if show_all_metrics and len(get_obj) != 0:
@@ -152,11 +182,23 @@ def metrics_print(ObjectivesDirections, show_all_metrics, get_obj, calculated_in
                         two_column(label, format_string(value))
     except Exception as e:
         center(f"No special metric is calculatable.")
-    two_column('CPT (microseconds)', format_string((end - start) * 10 ** 6))
+        
+    if length== None:
+        two_column('CPT (microseconds)', format_string((end - start) * 10 ** 6))
+    else:
+        two_column('CPT (microseconds)', format_string((length) * 10 ** 6))
+
     two_column('CPT (hour:min:sec)', "%02d:%02d:%02d" % (hour, min, sec))        
 
-def calculate_time_difference(start, end):
-    hour = round((end - start), 3) % (24 * 3600) // 3600
-    minute = round((end - start), 3) % (24 * 3600) % 3600 // 60
-    second = round((end - start), 3) % (24 * 3600) % 3600 % 60
+def calculate_time_difference(start=0, end=0, length=None):
+    if length == None:
+        hour = round((end - start), 3) % (24 * 3600) // 3600
+        minute = round((end - start), 3) % (24 * 3600) % 3600 // 60
+        second = round((end - start), 3) % (24 * 3600) % 3600 % 60
+    else:
+
+        hour = round((length), 3) % (24 * 3600) // 3600
+        minute = round((length), 3) % (24 * 3600) % 3600 // 60
+        second = round((length), 3) % (24 * 3600) % 3600 % 60
+
     return hour, minute, second

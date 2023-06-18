@@ -8,38 +8,36 @@
  # @ Copyright: 2023. MIT License. All Rights Reserved.
  '''
 
+import math as mt
 
-from .count_operators import *
+def product(iterable):
+    return mt.prod(iterable)
 
+def count_variable(variable_dim, total_count, special_count):
+    total_count[0] += 1
+    special_count[0] += 1
+    count = 1 if variable_dim == 0 else product(len(dims) for dims in variable_dim)
+    special_count[1] += count
+    total_count[1] += count
+    return total_count, special_count
 
 def update_variable_features(name, variable_dim, variable_bound, variable_counter_type, features):
-    """ For hierarchical updating the features of the problem.
-    """
-    match features['solution_method']:
+    if features['solution_method'] == 'exact':
+        features['total_variable_counter'], features[variable_counter_type] = count_variable(variable_dim, features['total_variable_counter'], features[variable_counter_type])
+    elif features['solution_method'] == 'heuristic' and features['agent_status'] == 'idle':
+        start_counter = features['total_variable_counter'][1]
+        features['total_variable_counter'], features[variable_counter_type] = count_variable(variable_dim, features['total_variable_counter'], features[variable_counter_type])
+        end_counter = features['total_variable_counter'][1]
 
-        case 'exact':
-
-            features['total_variable_counter'], features['variable_counter_type'] = count_variable(
-                variable_dim, features['total_variable_counter'], features[variable_counter_type])
-
-        case 'heuristic':
-
-            if features['agent_status'] == 'idle':
-
-                features['variable_spread'][name] = [
-                    features['total_variable_counter'][1], 0]
-                features['total_variable_counter'], features[variable_counter_type] = count_variable(
-                    variable_dim, features['total_variable_counter'], features[variable_counter_type])
-                features['variable_spread'][name][1] = features['total_variable_counter'][1]
-                if variable_counter_type == 'free_variable_counter':
-                    features['variable_type'][name] = 'fvar'
-                if variable_counter_type == 'binary_variable_counter':
-                    features['variable_type'][name] = 'bvar'
-                if variable_counter_type == 'integer_variable_counter':
-                    features['variable_type'][name] = 'ivar'
-                if variable_counter_type == 'positive_variable_counter':
-                    features['variable_type'][name] = 'pvar'
-                features['variable_bound'][name] = variable_bound
-                features['variable_dim'][name] = variable_dim
+        features['variable_spread'][name] = [start_counter, end_counter]
+        variable_type_mapping = {
+            'free_variable_counter': 'fvar',
+            'binary_variable_counter': 'bvar',
+            'integer_variable_counter': 'ivar',
+            'positive_variable_counter': 'pvar'
+        }
+        features['variable_type'][name] = variable_type_mapping[variable_counter_type]
+        features['variable_bound'][name] = variable_bound
+        features['variable_dim'][name] = variable_dim
 
     return features

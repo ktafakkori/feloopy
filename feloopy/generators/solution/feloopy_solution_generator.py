@@ -13,7 +13,7 @@ from tabulate import tabulate as tb
 import numpy as np
 
 
-def generate_solution(model_object, fitness_function, total_features, objectives_directions, objective_number, number_of_times, show_plots):
+def generate_solution(model_object, fitness_function, total_features, objectives_directions, objective_number, number_of_times, show_plots,show_log):
 
     if number_of_times == 1:
 

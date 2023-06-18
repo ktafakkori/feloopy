@@ -12,7 +12,7 @@ import numpy as np
 import timeit
 
 
-def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, ObjectivesDirections, ObjectiveBeingOptimized, number_of_times, show_plots, save_plots):
+def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, ObjectivesDirections, ObjectiveBeingOptimized, number_of_times, show_plots, save_plots,show_log):
 
     ObjectivesDirections = [-1 if direction ==
                             'max' else 1 for direction in ObjectivesDirections]
@@ -27,7 +27,7 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
     my_list_of_functions = [f1, f2, f3, f4, f5, f6]
 
     parameters = dict()
-    parameters['verbose'] = False
+    parameters['verbose'] = show_log
 
     for key in AlgOptions:
 

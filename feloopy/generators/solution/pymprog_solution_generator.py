@@ -45,6 +45,8 @@ def generate_solution(features):
 
     if time_limit != None:
         tmlim = time_limit
+    else:
+        tmlim= None
 
     if solver_name not in pymprog_solver_selector.keys():
         raise RuntimeError(
