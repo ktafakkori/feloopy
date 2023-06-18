@@ -1848,20 +1848,20 @@ class Model:
     def report(self, show_all_metrics=False):
         print()
 
-        self.InterfaceName = self.features['interface_name']
-        self.SolutionMethod = self.features['solution_method']
-        self.ModelName = self.features['model_name']
-        self.SolverName = self.features['solver_name']
-        self.ModelConstraints = self.features['constraints']
-        self.ModelObjectives = self.features['objectives']
-        self.ObjectivesDirections = self.features['directions']
-        self.PositiveVariableCounter = self.features['positive_variable_counter']
-        self.BinaryVariableCounter = self.features['binary_variable_counter']
-        self.IntegerVariableCounter = self.features['integer_variable_counter']
-        self.FreeVariableCounter = self.features['free_variable_counter']
-        self.ToTalVariableCounter = self.features['total_variable_counter']
-        self.ConstraintsCounter = self.features['constraint_counter']
-        self.ObjectivesCounter = self.features['objective_counter']
+        self.interface_name = self.features['interface_name']
+        self.solution_method = self.features['solution_method']
+        self.model_name = self.features['model_name']
+        self.solver_name = self.features['solver_name']
+        self.model_constraints = self.features['constraints']
+        self.model_objectives = self.features['objectives']
+        self.objectives_directions = self.features['directions']
+        self.pos_var_counter = self.features['positive_variable_counter']
+        self.bin_var_counter = self.features['binary_variable_counter']
+        self.int_var_counter = self.features['integer_variable_counter']
+        self.free_var_counter = self.features['free_variable_counter']
+        self.tot_counter = self.features['total_variable_counter']
+        self.con_counter = self.features['constraint_counter']
+        self.obj_counter = self.features['objective_counter']
 
         import datetime
         now = datetime.datetime.now()
@@ -1875,64 +1875,64 @@ class Model:
         print("|" + " " + "FelooPy v0.2.6".center(box_width-2) + " " + "|")
         print("+" + "-"*box_width + "+")
         print("| " + date_str + " "*padding + time_str + " |")
-        padding = box_width - len("Solver: "+ self.SolverName) - len("Interface: "+ self.InterfaceName) - 2
-        print("| " + "Interface: " + self.InterfaceName + " "*padding + "Solver: "+ self.SolverName + " |")
+        padding = box_width - len("Solver: "+ self.solver_name) - len("Interface: "+ self.interface_name) - 2
+        print("| " + "Interface: " + self.interface_name + " "*padding + "Solver: "+ self.solver_name + " |")
         print("+" + "-"*box_width + "+")
         print("|" + " " + "Model Information".center(box_width-2) + " " + "|")
         print("+" + "-"*box_width + "+")
 
-        self.ModelName, self.InterfaceName, self.SolverName, self.ObjectivesDirections, self.SolutionMethod
+        self.model_name, self.interface_name, self.solver_name, self.objectives_directions, self.solution_method
         # determine the maximum length of variables
-        ModelName = "The '" + self.ModelName + "' model has:"
+        ModelName = "The '" + self.model_name + "' model has:"
         print("|" + " " + ModelName.center(box_width-2) + " " + "|")
-        if self.PositiveVariableCounter[0]>0:
-            P_report = str(self.PositiveVariableCounter[1]) + " positive variable(s) in " + str(self.PositiveVariableCounter[0]) + " class(es)."
+        if self.pos_var_counter[0]>0:
+            P_report = str(self.pos_var_counter[1]) + " positive variable(s) in " + str(self.pos_var_counter[0]) + " class(es)."
             print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.BinaryVariableCounter[0]>0:
-            P_report = str(self.BinaryVariableCounter[1]) + " binary variable(s) in " + str(self.BinaryVariableCounter[0]) + " class(es)."
+        if self.bin_var_counter[0]>0:
+            P_report = str(self.bin_var_counter[1]) + " binary variable(s) in " + str(self.bin_var_counter[0]) + " class(es)."
             print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.IntegerVariableCounter[0]>0:
-            P_report = str(self.IntegerVariableCounter[1]) + " integer variable(s) in " + str(self.IntegerVariableCounter[0]) + " class(es)."
+        if self.int_var_counter[0]>0:
+            P_report = str(self.int_var_counter[1]) + " integer variable(s) in " + str(self.int_var_counter[0]) + " class(es)."
             print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.FreeVariableCounter[0]>0:
-            P_report = str(self.FreeVariableCounter[1]) + " free variable(s) in " + str(self.FreeVariableCounter[0]) + " class(es)."
+        if self.free_var_counter[0]>0:
+            P_report = str(self.free_var_counter[1]) + " free variable(s) in " + str(self.free_var_counter[0]) + " class(es)."
             print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.ObjectivesCounter[0]>0:
-            P_report = str(self.ObjectivesCounter[1]) + " objective(s)."
+        if self.obj_counter[0]>0:
+            P_report = str(self.obj_counter[1]) + " objective(s)."
             print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        if self.ConstraintsCounter[0]>0:
-            P_report = str(self.ConstraintsCounter[1]) + " constraint(s) in " + str(self.ConstraintsCounter[0]) + " class(es)."
+        if self.con_counter[0]>0:
+            P_report = str(self.con_counter[1]) + " constraint(s) in " + str(self.con_counter[0]) + " class(es)."
             print("|" + " " + P_report.center(box_width-2) + " " + "|")
-        P_report =  "Total number of variables is " + str(self.ToTalVariableCounter[1]) + f" in {self.ToTalVariableCounter[0]} class(es)."
+        P_report =  "Total number of variables is " + str(self.tot_counter[1]) + f" in {self.tot_counter[0]} class(es)."
         print("|" + " " + P_report.center(box_width-2) + " " + "|")
 
 
         print("+" + "-"*box_width + "+")
         print("|" + " " + "Solve Information".center(box_width-2) + " " + "|")
         print("+" + "-"*box_width + "+")
-        padding = box_width - len("Method: "+ self.SolutionMethod) - len("Objective Value(s)") - 2
-        print("| " + "Method: "+ self.SolutionMethod + " "*padding + "Objective Value(s)" + " |")
+        padding = box_width - len("Method: "+ self.solution_method) - len("Objective Value(s)") - 2
+        print("| " + "Method: "+ self.solution_method + " "*padding + "Objective Value(s)" + " |")
         status= self.get_status()
-        if len(self.ObjectivesDirections)!=1:
-            row = "| " + "Status: " + " "*(len(status[0]) - len("Status: ")) + " " * (box_width-9*len(self.ObjectivesDirections) +1 - len(str(status[0])) - 3)
-            for j in range(len(self.ObjectivesDirections)):
-                obj_row = self.ObjectivesDirections[j]
+        if len(self.objectives_directions)!=1:
+            row = "| " + "Status: " + " "*(len(status[0]) - len("Status: ")) + " " * (box_width-9*len(self.objectives_directions) +1 - len(str(status[0])) - 3)
+            for j in range(len(self.objectives_directions)):
+                obj_row = self.objectives_directions[j]
                 row += " " * (8 - len(obj_row)) + obj_row
             print(row + " |")
             for i in range(len(status)): 
-                row = "| " + str(status[i]) + " " * (box_width-9*len(self.ObjectivesDirections) +1 - len(str(status[i])) - 3)
+                row = "| " + str(status[i]) + " " * (box_width-9*len(self.objectives_directions) +1 - len(str(status[i])) - 3)
                 obj_row = self.get_obj()[i]
                 for j in range(len(obj_row)):
                     num_str = format_string(obj_row[j])
                     row += " " * (9 - len(num_str)) + num_str
                 print(row + " |")
         else:
-            row = "| " + "Status: " + " "*(len(status) - len("Status: ")) + " " * (box_width-9*len(self.ObjectivesDirections) +1 - len(str(status)) - 3)
-            for j in range(len(self.ObjectivesDirections)):
-                obj_row = self.ObjectivesDirections[j]
+            row = "| " + "Status: " + " "*(len(status) - len("Status: ")) + " " * (box_width-9*len(self.objectives_directions) +1 - len(str(status)) - 3)
+            for j in range(len(self.objectives_directions)):
+                obj_row = self.objectives_directions[j]
                 row += " " * (8 - len(obj_row)) + obj_row
             print(row + " |")
-            row = "| " + str(status) + " " * (box_width-9*len(self.ObjectivesDirections) +1 - len(str(status)) - 3)
+            row = "| " + str(status) + " " * (box_width-9*len(self.objectives_directions) +1 - len(str(status)) - 3)
             obj_row = self.get_obj()
             num_str = format_string(obj_row)
             row += " " * (9 - len(num_str)) + num_str
@@ -1945,7 +1945,7 @@ class Model:
         sec = round((self.get_time()), 3) % (24 * 3600) % 3600 % 60
 
     
-        if len(self.ObjectivesDirections)!=1:
+        if len(self.objectives_directions)!=1:
             if show_all_metrics:
                 try:
                     try:
@@ -2550,20 +2550,20 @@ class Implement:
 
         self.ModelInfo = ModelFunction(['idle'])
         self.ModelFunction = ModelFunction
-        self.InterfaceName = self.ModelInfo.features['interface_name']
-        self.SolutionMethod = self.ModelInfo.features['solution_method']
-        self.ModelName = self.ModelInfo.features['model_name']
-        self.SolverName = self.ModelInfo.features['solver_name']
-        self.ModelConstraints = self.ModelInfo.features['constraints']
-        self.ModelObjectives = self.ModelInfo.features['objectives']
-        self.ObjectivesDirections = self.ModelInfo.features['directions']
-        self.PositiveVariableCounter = self.ModelInfo.features['positive_variable_counter']
-        self.BinaryVariableCounter = self.ModelInfo.features['binary_variable_counter']
-        self.IntegerVariableCounter = self.ModelInfo.features['integer_variable_counter']
-        self.FreeVariableCounter = self.ModelInfo.features['free_variable_counter']
-        self.ToTalVariableCounter = self.ModelInfo.features['total_variable_counter']
-        self.ConstraintsCounter = self.ModelInfo.features['constraint_counter']
-        self.ObjectivesCounter = self.ModelInfo.features['objective_counter']
+        self.interface_name = self.ModelInfo.features['interface_name']
+        self.solution_method = self.ModelInfo.features['solution_method']
+        self.model_name = self.ModelInfo.features['model_name']
+        self.solver_name = self.ModelInfo.features['solver_name']
+        self.model_constraints = self.ModelInfo.features['constraints']
+        self.model_objectives = self.ModelInfo.features['objectives']
+        self.objectives_directions = self.ModelInfo.features['directions']
+        self.pos_var_counter = self.ModelInfo.features['positive_variable_counter']
+        self.bin_var_counter = self.ModelInfo.features['binary_variable_counter']
+        self.int_var_counter = self.ModelInfo.features['integer_variable_counter']
+        self.free_var_counter = self.ModelInfo.features['free_variable_counter']
+        self.tot_counter = self.ModelInfo.features['total_variable_counter']
+        self.con_counter = self.ModelInfo.features['constraint_counter']
+        self.obj_counter = self.ModelInfo.features['objective_counter']
         self.AlgOptions = self.ModelInfo.features['solver_options']
         self.VariablesSpread = self.ModelInfo.features['variable_spread']
         self.VariablesType = self.ModelInfo.features['variable_type']
@@ -2577,13 +2577,13 @@ class Implement:
         self.get_var = self.get_variable = self.get
         self.search = self.solve = self.optimize = self.run = self.sol
 
-        match self.InterfaceName:
+        match self.interface_name:
 
             case 'mealpy':
 
                 from .generators.model import mealpy_model_generator
                 self.ModelObject = mealpy_model_generator.generate_model(
-                    self.SolverName, self.AlgOptions)
+                    self.solver_name, self.AlgOptions)
 
             case 'pymultiobjective':
 
@@ -2597,7 +2597,7 @@ class Implement:
 
                 from .generators.model import feloopy_model_generator
                 self.ModelObject = feloopy_model_generator.generate_model(
-                    self.ToTalVariableCounter[1], self.ObjectivesDirections, self.SolverName, self.AlgOptions)
+                    self.tot_counter[1], self.objectives_directions, self.solver_name, self.AlgOptions)
 
     def remove_infeasible_solutions(self):
 
@@ -2608,19 +2608,19 @@ class Implement:
 
         self.penalty_coefficient = penalty_coefficient
 
-        match self.InterfaceName:
+        match self.interface_name:
 
             case 'mealpy':
 
                 from .generators.solution import mealpy_solution_generator
                 self.BestAgent, self.BestReward, self.start, self.end = mealpy_solution_generator.generate_solution(
-                    self.ModelObject, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
+                    self.ModelObject, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
 
             case 'pymultiobjective':
 
                 from .generators.solution import pymultiobjective_solution_generator
                 self.BestAgent, self.BestReward, self.start, self.end = pymultiobjective_solution_generator.generate_solution(
-                    self.SolverName, self.AlgOptions, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
+                    self.solver_name, self.AlgOptions, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
                 self.remove = []
 
                 for i in range(np.shape(self.BestReward)[0]):
@@ -2635,7 +2635,7 @@ class Implement:
             case 'pymoo':
 
                 from .generators.solution import pymoo_solution_generator
-                self.BestAgent, self.BestReward,self.start, self.end = pymoo_solution_generator.generate_solution(self.SolverName, self.AlgOptions, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
+                self.BestAgent, self.BestReward,self.start, self.end = pymoo_solution_generator.generate_solution(self.solver_name, self.AlgOptions, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots)
                 self.remove = []
 
                 for i in range(np.shape(self.BestReward)[0]):
@@ -2651,7 +2651,7 @@ class Implement:
 
                 from .generators.solution import feloopy_solution_generator
                 self.BestAgent, self.BestReward, self.start, self.end, self.status = feloopy_solution_generator.generate_solution(
-                    self.ModelObject, self.Fitness, self.ToTalVariableCounter, self.ObjectivesDirections, self.ObjectiveBeingOptimized, number_of_times, show_plots)
+                    self.ModelObject, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots)
 
     def dis_plots(self, ideal_pareto: Optional[np.ndarray] = [], step: Optional[tuple] = (0.1,)):
 
@@ -2664,7 +2664,7 @@ class Implement:
         obtained_pareto = self.BestReward
 
         from pyMultiobjective.util import graphs
-        ObjectivesDirections = [-1 if direction =='max' else 1 for direction in self.ObjectivesDirections]
+        ObjectivesDirections = [-1 if direction =='max' else 1 for direction in self.objectives_directions]
         def f1(X): return ObjectivesDirections[0]*self.Fitness(np.array(X))[0]
         def f2(X): return ObjectivesDirections[1]*self.Fitness(np.array(X))[1]
         def f3(X): return ObjectivesDirections[2]*self.Fitness(np.array(X))[2]
@@ -2679,9 +2679,9 @@ class Implement:
         solution = np.concatenate((self.BestAgent, self.BestReward*ObjectivesDirections), axis=1)
     
         parameters = {
-        'min_values': (0,)*self.ToTalVariableCounter[1],
-        'max_values': (1,)*self.ToTalVariableCounter[1],
-        'step': step*self.ToTalVariableCounter[1],
+        'min_values': (0,)*self.tot_counter[1],
+        'max_values': (1,)*self.tot_counter[1],
+        'step': step*self.tot_counter[1],
         'solution': solution, 
         'show_pf': True,
         'show_pts': True,
@@ -2693,9 +2693,9 @@ class Implement:
         graphs.plot_mooa_function(list_of_functions = list_of_functions, **parameters)
 
         parameters = {
-            'min_values': (0,)*self.ToTalVariableCounter[1],
-            'max_values': (1,)*self.ToTalVariableCounter[1],
-            'step': step*self.ToTalVariableCounter[1],
+            'min_values': (0,)*self.tot_counter[1],
+            'max_values': (1,)*self.tot_counter[1],
+            'step': step*self.tot_counter[1],
             'solution': solution, 
             'show_pf': True,
             'pf_min': True,  
@@ -2709,15 +2709,15 @@ class Implement:
 
     def get_status(self):
 
-        if self.InterfaceName in ['mealpy', 'pymultiobjective', 'pymoo']:
+        if self.interface_name in ['mealpy', 'pymultiobjective', 'pymoo']:
 
-            if self.InterfaceName == 'mealpy':
+            if self.interface_name == 'mealpy':
 
                 return self.Check_Fitness(self.BestAgent)
 
             else:
                 status = []
-                if self.InterfaceName == 'pymoo':
+                if self.interface_name == 'pymoo':
 
                     for i in range(np.shape(self.BestReward)[0]):
                         status.append(self.Check_Fitness(np.array([self.BestAgent[i]])))
@@ -2848,7 +2848,7 @@ class Implement:
 
         axs = fig.add_subplot(1, 5, 4)
         x = np.arange(no_epochs)
-        if self.ObjectivesDirections[self.ObjectiveBeingOptimized] == 'max':
+        if self.objectives_directions[self.ObjectiveBeingOptimized] == 'max':
             axs.plot(x, max_epoch_obj, 'green', alpha=0.4)
             axs.plot(x, ave_epoch_obj, 'green', alpha=0.8)
             axs.plot(x, min_epoch_obj, 'green', alpha=0.4)
@@ -2862,7 +2862,7 @@ class Implement:
             axs.fill_between(x, ave_epoch_obj - std_epoch_obj,
                              ave_epoch_obj + std_epoch_obj, color='red', alpha=0.3)
         axs.set_xlabel('Epoch')
-        if self.ObjectivesDirections[self.ObjectiveBeingOptimized] == 'max':
+        if self.objectives_directions[self.ObjectiveBeingOptimized] == 'max':
             axs.set_ylabel('Maximum reward')
         else:
             axs.set_ylabel('Maximum loss')
@@ -2912,7 +2912,7 @@ class Implement:
         axs.fill_between(x, ave_epoch_obj - std_epoch_obj,
                          ave_epoch_obj + std_epoch_obj, color='orange', alpha=0.3)
         axs.set_xlabel('Epoch')
-        if self.ObjectivesDirections[self.ObjectiveBeingOptimized] == 'max':
+        if self.objectives_directions[self.ObjectiveBeingOptimized] == 'max':
             axs.set_ylabel('Average reward')
         else:
             axs.set_ylabel('Average loss')
@@ -2956,7 +2956,7 @@ class Implement:
 
         axs = fig.add_subplot(1, 5, 2)
         x = np.arange(no_epochs)
-        if self.ObjectivesDirections[self.ObjectiveBeingOptimized] == 'max':
+        if self.objectives_directions[self.ObjectiveBeingOptimized] == 'max':
             axs.plot(x, max_epoch_obj, 'red', alpha=0.4)
             axs.plot(x, ave_epoch_obj, 'red', alpha=0.8)
             axs.plot(x, min_epoch_obj, 'red', alpha=0.4)
@@ -2970,17 +2970,17 @@ class Implement:
                              ave_epoch_obj + std_epoch_obj, color='green', alpha=0.3)
         axs.set_xlabel('Epoch')
         axs.set_xlim(-0.5, no_epochs-1+0.5)
-        if self.ObjectivesDirections[self.ObjectiveBeingOptimized] == 'max':
+        if self.objectives_directions[self.ObjectiveBeingOptimized] == 'max':
             axs.set_ylabel('Minimum reward')
         else:
             axs.set_ylabel('Minimum loss')
 
-        if self.ObjectivesDirections[self.ObjectiveBeingOptimized] == 'min':
+        if self.objectives_directions[self.ObjectiveBeingOptimized] == 'min':
             best_min_min = np.inf
             best_min_min_t = []
             best_sol_t = []
             best_per_episode = []
-            no_features = self.ToTalVariableCounter[1]
+            no_features = self.tot_counter[1]
             for epoch in range(0, no_epochs):
                 best_min = []
                 best_sol = []
@@ -3017,7 +3017,7 @@ class Implement:
             best_min_min_t = []
             best_sol_t = []
             best_per_episode = []
-            no_features = self.ToTalVariableCounter[1]
+            no_features = self.tot_counter[1]
             for epoch in range(0, no_epochs):
                 best_min = []
                 best_sol = []
@@ -3136,7 +3136,7 @@ class Implement:
 
         findbest = np.zeros(shape=(no_episodes, no_epochs))
 
-        if self.ObjectivesDirections[self.ObjectiveBeingOptimized] == 'min':
+        if self.objectives_directions[self.ObjectiveBeingOptimized] == 'min':
             for episode in range(0, no_episodes):
                 episode_tracker = []
                 best = np.inf
@@ -3183,8 +3183,8 @@ class Implement:
         return [obj, time, accuracy, prob_per_epoch]
 
     def get(self, *args):
-        if self.ObjectivesCounter[0] == 1:
-            match self.InterfaceName:
+        if self.obj_counter[0] == 1:
+            match self.interface_name:
                 case 'mealpy':
                     for i in args:
                         if len(i) >= 2:
@@ -3407,7 +3407,7 @@ class Implement:
             obtained_pareto = self.BestReward
             from pyMultiobjective.util import indicators
 
-            ObjectivesDirections = [-1 if direction =='max' else 1 for direction in self.ObjectivesDirections]
+            ObjectivesDirections = [-1 if direction =='max' else 1 for direction in self.objectives_directions]
 
             def f1(X): return ObjectivesDirections[0]*self.Fitness(np.array(X))[0]
             def f2(X): return ObjectivesDirections[1]*self.Fitness(np.array(X))[1]
@@ -3432,9 +3432,9 @@ class Implement:
             self.calculated_indicators['hv'] = hypervolume
 
             parameters = {
-                'min_values': (0,)*self.ToTalVariableCounter[1],
-                'max_values': (1,)*self.ToTalVariableCounter[1],
-                'step': step*self.ToTalVariableCounter[1],
+                'min_values': (0,)*self.tot_counter[1],
+                'max_values': (1,)*self.tot_counter[1],
+                'step': step*self.tot_counter[1],
                 'solution': solution,
                 'pf_min': True,
                 'custom_pf': ideal_pareto*ObjectivesDirections if type(ideal_pareto) == np.ndarray else []
@@ -3444,7 +3444,7 @@ class Implement:
             self.calculated_indicators['sp'] = sp
 
             #Computationally efficient only if ideal_pareto exists
-            if self.ToTalVariableCounter[1]<=3 or ideal_pareto != [] or bypass_limit:
+            if self.tot_counter[1]<=3 or ideal_pareto != [] or bypass_limit:
                 gd = indicators.gd_indicator(list_of_functions=list_of_functions, **parameters)
                 gdp = indicators.gd_plus_indicator(list_of_functions=list_of_functions, **parameters)
                 igd = indicators.igd_indicator(list_of_functions=list_of_functions, **parameters)
@@ -3464,7 +3464,7 @@ class Implement:
         min = round(((self.end-self.start)), 3) % (24 * 3600) % 3600 // 60
         sec = round(((self.end-self.start)), 3) % (24 * 3600) % 3600 % 60
 
-        print(f"cpu time [{self.InterfaceName}]: ", (self.end-self.start)*10 **
+        print(f"cpu time [{self.interface_name}]: ", (self.end-self.start)*10 **
               6, '(microseconds)', "%02d:%02d:%02d" % (hour, min, sec), '(h, m, s)')
 
         
@@ -3499,11 +3499,11 @@ class Implement:
         A = tb(
             {
                 "info": ["model", "interface", "solver", "direction", "method"],
-                "detail": [self.ModelName, self.InterfaceName, self.SolverName, self.ObjectivesDirections, self.SolutionMethod],
+                "detail": [self.model_name, self.interface_name, self.solver_name, self.objectives_directions, self.solution_method],
                 "variable": ["positive", "binary", "integer", "free", "tot"],
-                "count [cat,tot]": [str(self.PositiveVariableCounter), str(self.BinaryVariableCounter), str(self.IntegerVariableCounter), str(self.FreeVariableCounter), str(self.ToTalVariableCounter)],
+                "count [cat,tot]": [str(self.pos_var_counter), str(self.bin_var_counter), str(self.int_var_counter), str(self.free_var_counter), str(self.tot_counter)],
                 "other": ["objective", "constraint"],
-                "count [cat,tot] ": [str(self.ObjectivesCounter), str(self.ConstraintsCounter)]
+                "count [cat,tot] ": [str(self.obj_counter), str(self.con_counter)]
             },
             headers="keys", tablefmt="github"
         )
@@ -3602,17 +3602,17 @@ class Implement:
     def get_payoff(self):
 
         payoff=[]
-        for i in range(len(self.ObjectivesDirections)):
-            if self.ObjectivesDirections[i]=='max':
+        for i in range(len(self.objectives_directions)):
+            if self.objectives_directions[i]=='max':
                 ind =np.argmax(self.get_obj()[:, i])
                 val = self.get_obj()[ind, :]
-            elif self.ObjectivesDirections[i] =='min':
+            elif self.objectives_directions[i] =='min':
                 ind = np.argmin(self.get_obj()[:, i])
                 val = self.get_obj()[ind, :]
             payoff.append(val)
         return np.array(payoff)
 
-    def report(self, all_metrics=False, feloopy_info=True, sys_info=False, model_info=True, sol_info=True, obj_values=True, dec_info=True, metric_info=True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = []):
+    def report(self, all_metrics: bool = False, feloopy_info: bool = True, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], save=None):
 
         """
         Generate a report with various information about the optimization process.
@@ -3628,110 +3628,121 @@ class Implement:
             metric_info (bool, optional): If True, include metric information in the report. Default is True.
             ideal_pareto (np.ndarray, optional): The ideal Pareto front to be used for comparison. Default is an empty array.
             ideal_point (np.array, optional): The ideal point to be used for comparison. Default is an empty array.
+            save: It saves the report without showing it inside terminal. Please provide a path or string with the desired file name and format.
 
         Returns:
             str: A formatted report containing the requested information.
         """
 
-        import datetime
-        now = datetime.datetime.now()
-        date_str = now.strftime("Date: %Y-%m-%d")
-        time_str = now.strftime("Time: %H:%M:%S")
-        status= self.get_status()
-        hour = round(((self.end-self.start)), 3) % (24 * 3600) // 3600
-        min = round(((self.end-self.start)), 3) % (24 * 3600) % 3600 // 60
-        sec = round(((self.end-self.start)), 3) % (24 * 3600) % 3600 % 60
-        if len(status)==0: status = ['infeasible (constrained)']
+        if save is not None:
+            stdout_origin = sys.stdout
+            sys.stdout = open(save, "w")
 
-        box_width=80
+        status = self.get_status()
+        hour, min, sec = calculate_time_difference(self.start,self.end)
+
+        if len(status) == 0:
+            status = ['infeasible (constrained)']
+
+        box_width = 80
 
         if feloopy_info:
+            import datetime
+            now = datetime.datetime.now()
+            date_str = now.strftime("Date: %Y-%m-%d")
+            time_str = now.strftime("Time: %H:%M:%S")
             vspace()
             tline()
             center("FelooPy v0.2.6")
             bline()
-            two_column(date_str,time_str)
-            two_column(f"Interface: {self.InterfaceName}", f"Solver: {self.SolverName}")
-            
-        if sys_info:
-            import psutil
-            import cpuinfo
-            import platform
+            two_column(date_str, time_str)
+            two_column(f"Interface: {self.interface_name}", f"Solver: {self.solver_name}")
 
-            tline()
-            center("System information")
-            bline()
-            cpu_info = cpuinfo.get_cpu_info()["brand_raw"]
-            cpu_cores = psutil.cpu_count(logical=False)
-            cpu_threads = psutil.cpu_count(logical=True)
-            ram_info = psutil.virtual_memory()
-            ram_total = ram_info.total
-            os_info = platform.system()
-            os_version = platform.version()
-            
-            left_align(f"OS: {os_version} ({os_info})")
-            left_align(f"CPU   Model: {cpu_info}")
-            left_align(f"CPU   Cores: {cpu_cores}")
-            left_align(f"CPU Threads: {cpu_threads}")
+        if sys_info:
             try:
-                import GPUtil
-                gpus = GPUtil.getGPUs()
-                for gpu in gpus:
-                    left_align(f"GPU   Model: {gpu.name}")
-                    left_align(f"GPU    VRAM: {gpu.memoryTotal / 1024:.2f} GB")
+                import psutil
+                import cpuinfo
+                import platform
+
+                tline()
+                center("System information")
+                bline()
+                cpu_info = cpuinfo.get_cpu_info()["brand_raw"]
+                cpu_cores = psutil.cpu_count(logical=False)
+                cpu_threads = psutil.cpu_count(logical=True)
+                ram_info = psutil.virtual_memory()
+                ram_total = ram_info.total
+                os_info = platform.system()
+                os_version = platform.version()
+
+                left_align(f"OS: {os_version} ({os_info})")
+                left_align(f"CPU   Model: {cpu_info}")
+                left_align(f"CPU   Cores: {cpu_cores}")
+                left_align(f"CPU Threads: {cpu_threads}")
+                try:
+                    import GPUtil
+                    gpus = GPUtil.getGPUs()
+                    for gpu in gpus:
+                        left_align(f"GPU   Model: {gpu.name}")
+                        left_align(f"GPU    VRAM: {gpu.memoryTotal / 1024:.2f} GB")
+                except:
+                    pass
+                left_align(f"SYSTEM  RAM: {ram_total / (1024 ** 3):.2f} GB")
             except:
                 pass
-            left_align(f"SYSTEM  RAM: {ram_total / (1024 ** 3):.2f} GB")
-        
+            
         if model_info:
             tline()
             center("Model information")
             bline()
-            left_align(f"Name: {self.ModelName}")
+            left_align(f"Name: {self.model_name}")
             list_three_column([
                 ("Feature:         ", "Class:", "Total:"),
-                ("Positive variable", self.PositiveVariableCounter[0], self.PositiveVariableCounter[1]),
-                ("Binary variable  ", self.BinaryVariableCounter[0], self.BinaryVariableCounter[1]),
-                ("Integer variable ", self.IntegerVariableCounter[0], self.IntegerVariableCounter[1]),
-                ("Free variable    ", self.FreeVariableCounter[0], self.FreeVariableCounter[1]),
-                ("Total variables  ", self.ToTalVariableCounter[0], self.ToTalVariableCounter[1]),
-                ("Objective        ", "-", self.ObjectivesCounter[1]),
-                ("Constraint       ", self.ConstraintsCounter[0], self.ConstraintsCounter[1])
-            ], )
-            
+                ("Positive variable", self.pos_var_counter[0], self.pos_var_counter[1]),
+                ("Binary variable  ", self.bin_var_counter[0], self.bin_var_counter[1]),
+                ("Integer variable ", self.int_var_counter[0], self.int_var_counter[1]),
+                ("Free variable    ", self.free_var_counter[0], self.free_var_counter[1]), 
+                ("Total variables  ", self.tot_counter[0], self.tot_counter[1]), 
+                ("Objective        ", "-", self.obj_counter[1]), 
+                ("Constraint       ", self.con_counter[0], self.con_counter[1]) ])
 
         if sol_info:
             tline()
             center("Solve information")
             bline()
-            two_column(f"Method: {self.SolutionMethod}", "Objective value")
-            status_row_print(self.ObjectivesDirections, status)
+            two_column(f"Method: {self.solution_method}", "Objective value")
+            status_row_print(self.objectives_directions, status)
             if obj_values:
-                if len(self.ObjectivesDirections)!=1:
+                if len(self.objectives_directions) != 1:
                     try:
-                        solution_print(self.ObjectivesDirections, status, self.get_obj(), self.get_payoff())
+                        solution_print(self.objectives_directions, status, self.get_obj(), self.get_payoff())
                     except:
                         print("Nothing found.")
                 else:
-                    solution_print(self.ObjectivesDirections, status, self.get_obj())
-        
+                    solution_print(self.objectives_directions, status, self.get_obj())
+
         if metric_info:
             tline()
             center("Metric information")
             bline()
             self.calculated_indicators = None
             try:
-                self.get_indicators(ideal_pareto= ideal_pareto, ideal_point=ideal_point)
+                self.get_indicators(ideal_pareto=ideal_pareto, ideal_point=ideal_point)
             except:
-                ""
-            metrics_print(self.ObjectivesDirections, all_metrics, self.get_obj(), self.calculated_indicators, self.start, self.end, hour, min, sec)
-       
+                pass
+
+        metrics_print(self.objectives_directions, all_metrics, self.get_obj(), self.calculated_indicators, self.start, self.end, hour, min, sec)
+
+
         if dec_info:
             tline()
             self.decision_information_print(status)
 
         bline()
-        
+
+        if save is not None:
+            sys.stdout.close()
+            sys.stdout = stdout_origin
 
     def decision_information_print(self, status, box_width=80):
         if type(status) == str:

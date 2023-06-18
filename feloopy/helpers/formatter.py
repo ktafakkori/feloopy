@@ -9,21 +9,20 @@ def format_string(input):
 def center(input, box_width=80):
     print("|" + " " + str(input).center(box_width-2) + " " + "|")
 
-
 def tline(box_width=80):
-    print("┌" + "─"*box_width + "┐")
+    print("╭" + "─"*box_width + "╮")
 
 def bline(box_width=80):
-    print("└" + "─"*box_width + "┘")
+    print("╰" + "─"*box_width + "╯")
 
 def hline(box_width=80):
-    print("+" + "-"*box_width + "+")
+    print("├" + "─"*box_width + "┤")
 
 def whline(box_width=80):
-    print("+" + "."*box_width + "+")
+    print("+" + "."*box_width + "┤")
 
 def hrule(box_width=80):
-    print("+" + "="*box_width + "+")
+    print("├" + "="*box_width + "┤")
 
 def vspace():
     print()
@@ -156,8 +155,8 @@ def metrics_print(ObjectivesDirections, show_all_metrics, get_obj, calculated_in
     two_column('CPT (microseconds)', format_string((end - start) * 10 ** 6))
     two_column('CPT (hour:min:sec)', "%02d:%02d:%02d" % (hour, min, sec))        
 
-
-
-
-
-
+def calculate_time_difference(start, end):
+    hour = round((end - start), 3) % (24 * 3600) // 3600
+    minute = round((end - start), 3) % (24 * 3600) % 3600 // 60
+    second = round((end - start), 3) % (24 * 3600) % 3600 % 60
+    return hour, minute, second
