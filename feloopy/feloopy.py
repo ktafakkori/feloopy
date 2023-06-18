@@ -3598,7 +3598,7 @@ class Implement:
         else:
             for i in self.VariablesDim.keys():
                 if self.VariablesDim[i] == 0:
-                    if self.get_bound([i, (0,)])[0] != 0 and self.get_bound([i, (0,)])[1]!=0:
+                    if self.get_bound([i, (0,)])!=[0,0]:
                         print(f"| {i} =", self.get_bound([i, (0,)]), " " * (box_width - (len(f"| {i} =") + len(str(self.get_bound([i, (0,)])))) - 1) + "|")
                 elif len(self.VariablesDim[i]) == 1:
                     for k in fix_dims(self.VariablesDim[i])[0]:
@@ -3606,7 +3606,7 @@ class Implement:
                             print(f"| {i}[{k}] =", self.get_bound([i, (k,)]), " " * (box_width - (len(f"| {i}[{k}] =") + len(str(self.get_bound([i, (k,)])))) - 1) + "|")
                 else:
                     for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
-                        if self.get_bound([i, (*k,)])[0] != 0 and self.get_bound([i, (*k,)])[1] != 0:
+                        if self.get_bound([i, (*k,)])[0] != [0,0]:
                             print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get_bound([i, (*k,)]), " " * (box_width - (len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get_bound([i, (*k,)])))) - 1) + "|")
     
 # Alternatives for defining this class:
