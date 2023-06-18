@@ -67,7 +67,7 @@ class Model:
         self.random_tensor_variable = self.add_random_tensor_variable = self.rtvar
         self.dependent_variable = self.add_dependent_variable = self.dvar
         self.objective = self.reward = self.hypothesis = self.fitness = self.goal = self.add_objective = self.obj
-        self.constraint = self.equation = self.add_constraint = self.add_equation = self.st = self.subject_to = self.cb = self.computed_by = self.con
+        self.constraint = self.equation = self.add_constraint = self.add_equation = self.st = self.subject_to = self.cb = self.computed_by = self.penalize = self.pen = self.con
         self.solve = self.implement = self.run = self.optimize = self.sol
         self.get_obj = self.get_objective
         self.get_stat = self.get_status
@@ -1471,7 +1471,7 @@ class Model:
                     else:
                         self.features['constraints'].append(expression)
 
-    def sol(self, directions=None, solver_name=None, solver_options=dict(), objective_id=0, email=None, debug=False, time_limit=None, cpu_threads=None, absolute_gap=None, relative_gap=None, show_log=False, save_log=False, save_model=False, max_iterations=None, obj_operators=[]):
+    def sol(self, directions=None, solver_name=None, solver_options=dict(), obj_id=0, email=None, debug=False, time_limit=None, cpu_threads=None, absolute_gap=None, relative_gap=None, show_log=False, save_log=False, save_model=False, max_iterations=None, obj_operators=[]):
         """
         Solve Command Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1481,7 +1481,7 @@ class Model:
             directions (list, optional): please set the optimization directions of the objectives, if not provided before. Defaults to None.
             solver_name (_type_, optional): please set the solver_name. Defaults to None.
             solver_options (dict, optional): please set the solver options using a dictionary with solver specific keys. Defaults to None.
-            objective_id (int, optional): please provide the objective id (number) that you wish to optimize. Defaults to 0.
+            obj_id (int, optional): please provide the objective id (number) that you wish to optimize. Defaults to 0.
             email (_type_, optional): please provide your email address if you wish to use cloud solvers (e.g., NEOS server). Defaults to None.
             debug (bool, optional): please state if the model should be checked for feasibility or logical bugs. Defaults to False.
             time_limit (seconds, optional): please state if the model should be solved under a specific timelimit. Defaults to None.
@@ -1490,10 +1490,10 @@ class Model:
             relative_gap (%, optional): please state a releative gap (%) to find the optimal objective value. Defaults to None.
         """
 
-        if len(directions)<len(self.features['objectives']):
+        if len(directions)!=len(self.features['objectives']):
             raise MultiObjectivityError("The number of directions and the provided objectives do not match.")
 
-        self.features['objective_being_optimized'] = objective_id
+        self.features['objective_being_optimized'] = obj_id
         self.features['solver_name'] = solver_name
         self.features['solver_options'] = solver_options
         self.features['debug_mode'] = debug
@@ -1508,15 +1508,15 @@ class Model:
         self.features['max_iterations'] = max_iterations
         self.features['obj_operators'] = obj_operators
 
-        if type(objective_id) != str and directions != None:
+        if type(obj_id) != str and directions != None:
 
-            if self.features['directions'][objective_id] == None:
+            if self.features['directions'][obj_id] == None:
 
-                self.features['directions'][objective_id] = directions[objective_id]
+                self.features['directions'][obj_id] = directions[obj_id]
 
             for i in range(len(self.features['objectives'])):
 
-                if i != objective_id:
+                if i != obj_id:
 
                     del self.features['directions'][i]
 
@@ -1524,7 +1524,7 @@ class Model:
 
                     del self.features['objectives'][i]
 
-            objective_id = 0
+            obj_id = 0
 
             self.features['objective_counter'] = [1, 1]
 
@@ -1591,14 +1591,14 @@ class Model:
 
                                 self.agent[:, -2] = 2
 
-                            if type(objective_id) != str:
+                            if type(obj_id) != str:
 
-                                if directions[objective_id] == 'max':
-                                    self.agent[:, -1] = np.reshape(self.features['objectives'][objective_id], [self.agent.shape[0],]) - np.reshape(
+                                if directions[obj_id] == 'max':
+                                    self.agent[:, -1] = np.reshape(self.features['objectives'][obj_id], [self.agent.shape[0],]) - np.reshape(
                                         self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
 
-                                if directions[objective_id] == 'min':
-                                    self.agent[:, -1] = np.reshape(self.features['objectives'][objective_id], [self.agent.shape[0],]) + np.reshape(
+                                if directions[obj_id] == 'min':
+                                    self.agent[:, -1] = np.reshape(self.features['objectives'][obj_id], [self.agent.shape[0],]) + np.reshape(
                                         self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
 
                             else:
@@ -1634,13 +1634,13 @@ class Model:
                                 self.features['constraints'].append(np.zeros(shape=(np.shape(self.agent)[0], 1)))
                                 self.penalty = np.amax(np.concatenate(self.features['constraints'], axis=1), axis=1)
 
-                            if type(objective_id) != str:
+                            if type(obj_id) != str:
 
-                                if directions[objective_id] == 'max':
-                                    self.sing_result = np.reshape(self.features['objectives'][objective_id], [self.agent.shape[0],]) - np.reshape(self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
+                                if directions[obj_id] == 'max':
+                                    self.sing_result = np.reshape(self.features['objectives'][obj_id], [self.agent.shape[0],]) - np.reshape(self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
 
-                                if directions[objective_id] == 'min':
-                                    self.sing_result = np.reshape(self.features['objectives'][objective_id], [self.agent.shape[0],]) + np.reshape(self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
+                                if directions[obj_id] == 'min':
+                                    self.sing_result = np.reshape(self.features['objectives'][obj_id], [self.agent.shape[0],]) + np.reshape(self.features['penalty_coefficient'] * (self.penalty)**2, [self.agent.shape[0],])
 
                             else:
 
@@ -1666,15 +1666,15 @@ class Model:
                             self.penalty = np.amax(
                                 np.array([0]+self.features['constraints'], dtype=object))
 
-                        if type(objective_id) != str:
+                        if type(obj_id) != str:
 
-                            if directions[objective_id] == 'max':
-                                self.response = self.features['objectives'][objective_id] - \
+                            if directions[obj_id] == 'max':
+                                self.response = self.features['objectives'][obj_id] - \
                                     self.features['penalty_coefficient'] * \
                                     (self.penalty-0)**2
 
-                            if directions[objective_id] == 'min':
-                                self.response = self.features['objectives'][objective_id] + \
+                            if directions[obj_id] == 'min':
+                                self.response = self.features['objectives'][obj_id] + \
                                     self.features['penalty_coefficient'] * \
                                     (self.penalty-0)**2
 
@@ -3612,7 +3612,26 @@ class Implement:
             payoff.append(val)
         return np.array(payoff)
 
-    def report(self, show_all_metrics=False,  ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = []):
+    def report(self, all_metrics=False, feloopy_info=True, sys_info=False, model_info=True, sol_info=True, obj_values=True, dec_info=True, metric_info=True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = []):
+
+        """
+        Generate a report with various information about the optimization process.
+
+        Args:
+            all_metrics (bool, optional): If True, include all available metrics in the report. Default is False.
+            feloopy_info (bool, optional): If True, include information about the optimization loop. Default is True.
+            sys_info (bool, optional): If True, include information about the system. Default is False.
+            model_info (bool, optional): If True, include information about the model. Default is True.
+            sol_info (bool, optional): If True, include information about the solution. Default is True.
+            obj_values (bool, optional): If True, include the objective values in the report. Default is True.
+            dec_info (bool, optional): If True, include the solution values in the report. Default is True.
+            metric_info (bool, optional): If True, include metric information in the report. Default is True.
+            ideal_pareto (np.ndarray, optional): The ideal Pareto front to be used for comparison. Default is an empty array.
+            ideal_point (np.array, optional): The ideal point to be used for comparison. Default is an empty array.
+
+        Returns:
+            str: A formatted report containing the requested information.
+        """
 
         import datetime
         now = datetime.datetime.now()
@@ -3626,55 +3645,98 @@ class Implement:
 
         box_width=80
 
-        vspace()
-        hline()
-        center("FelooPy v0.2.6")
-        hline()
-        two_column(date_str,time_str)
-        two_column(f"Interface: {self.InterfaceName}", f"Solver: {self.SolverName}")
-        hline()
-        center("Model information")
-        hline()
-        left_align(f"Name: {self.ModelName}")
-        list_three_column([
-            ("Feature:         ", "Class:", "Total:"),
-            ("Positive variable", self.PositiveVariableCounter[0], self.PositiveVariableCounter[1]),
-            ("Binary variable  ", self.BinaryVariableCounter[0], self.BinaryVariableCounter[1]),
-            ("Integer variable ", self.IntegerVariableCounter[0], self.IntegerVariableCounter[1]),
-            ("Free variable    ", self.FreeVariableCounter[0], self.FreeVariableCounter[1]),
-            ("Total variables  ", self.ToTalVariableCounter[0], self.ToTalVariableCounter[1]),
-            ("Objective        ", "-", self.ObjectivesCounter[1]),
-            ("Constraint       ", self.ConstraintsCounter[0], self.ConstraintsCounter[1])
-        ], )
-        hline()
-        center("Solve information")
-        hline()
-        two_column(f"Method: {self.SolutionMethod}", "Objective value")
-        status_row_print(self.ObjectivesDirections, status)
-        if len(self.ObjectivesDirections)!=1:
-            try:
-                solution_print(self.ObjectivesDirections, status, self.get_obj(), self.get_payoff())
-            except:
-                print("Nothing found.")
-        else:
-            solution_print(self.ObjectivesDirections, status, self.get_obj())
-        hline()
-        center("Metric information")
-        hline()
-        self.calculated_indicators = None
-        try:
-            self.get_indicators(ideal_pareto= ideal_pareto, ideal_point=ideal_point)
-        except:
-            ""
+        if feloopy_info:
+            vspace()
+            tline()
+            center("FelooPy v0.2.6")
+            bline()
+            two_column(date_str,time_str)
+            two_column(f"Interface: {self.InterfaceName}", f"Solver: {self.SolverName}")
+            
+        if sys_info:
+            import psutil
+            import cpuinfo
+            import platform
 
-        metrics_print(self.ObjectivesDirections, show_all_metrics, self.get_obj(), self.calculated_indicators, self.start, self.end, hour, min, sec)
-        hline()
-        self.decision_information_print(status)
+            tline()
+            center("System information")
+            bline()
+            cpu_info = cpuinfo.get_cpu_info()["brand_raw"]
+            cpu_cores = psutil.cpu_count(logical=False)
+            cpu_threads = psutil.cpu_count(logical=True)
+            ram_info = psutil.virtual_memory()
+            ram_total = ram_info.total
+            os_info = platform.system()
+            os_version = platform.version()
+            
+            left_align(f"OS: {os_version} ({os_info})")
+            left_align(f"CPU   Model: {cpu_info}")
+            left_align(f"CPU   Cores: {cpu_cores}")
+            left_align(f"CPU Threads: {cpu_threads}")
+            try:
+                import GPUtil
+                gpus = GPUtil.getGPUs()
+                for gpu in gpus:
+                    left_align(f"GPU   Model: {gpu.name}")
+                    left_align(f"GPU    VRAM: {gpu.memoryTotal / 1024:.2f} GB")
+            except:
+                pass
+            left_align(f"SYSTEM  RAM: {ram_total / (1024 ** 3):.2f} GB")
+        
+        if model_info:
+            tline()
+            center("Model information")
+            bline()
+            left_align(f"Name: {self.ModelName}")
+            list_three_column([
+                ("Feature:         ", "Class:", "Total:"),
+                ("Positive variable", self.PositiveVariableCounter[0], self.PositiveVariableCounter[1]),
+                ("Binary variable  ", self.BinaryVariableCounter[0], self.BinaryVariableCounter[1]),
+                ("Integer variable ", self.IntegerVariableCounter[0], self.IntegerVariableCounter[1]),
+                ("Free variable    ", self.FreeVariableCounter[0], self.FreeVariableCounter[1]),
+                ("Total variables  ", self.ToTalVariableCounter[0], self.ToTalVariableCounter[1]),
+                ("Objective        ", "-", self.ObjectivesCounter[1]),
+                ("Constraint       ", self.ConstraintsCounter[0], self.ConstraintsCounter[1])
+            ], )
+            
+
+        if sol_info:
+            tline()
+            center("Solve information")
+            bline()
+            two_column(f"Method: {self.SolutionMethod}", "Objective value")
+            status_row_print(self.ObjectivesDirections, status)
+            if obj_values:
+                if len(self.ObjectivesDirections)!=1:
+                    try:
+                        solution_print(self.ObjectivesDirections, status, self.get_obj(), self.get_payoff())
+                    except:
+                        print("Nothing found.")
+                else:
+                    solution_print(self.ObjectivesDirections, status, self.get_obj())
+        
+        if metric_info:
+            tline()
+            center("Metric information")
+            bline()
+            self.calculated_indicators = None
+            try:
+                self.get_indicators(ideal_pareto= ideal_pareto, ideal_point=ideal_point)
+            except:
+                ""
+            metrics_print(self.ObjectivesDirections, all_metrics, self.get_obj(), self.calculated_indicators, self.start, self.end, hour, min, sec)
+       
+        if dec_info:
+            tline()
+            self.decision_information_print(status)
+
+        bline()
+        
 
     def decision_information_print(self, status, box_width=80):
         if type(status) == str:
             center("Decision information")
-            hline()
+            bline()
             for i in self.VariablesDim.keys():
                 if self.VariablesDim[i] == 0:
                     if self.get([i, (0,)]) != 0:
@@ -3687,11 +3749,10 @@ class Implement:
                     for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
                         if self.get([i, (*k,)]) != 0:
                             print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get([i, (*k,)]), " " * (box_width - (len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get([i, (*k,)])))) - 1) + "|")
-            hline()
 
         else:
             center("Decision information")
-            hline()
+            bline()
             for i in self.VariablesDim.keys():
                 if self.VariablesDim[i] == 0:
                     if self.get_bound([i, (0,)])[0] != 0 and self.get_bound([i, (0,)])[1]!=0:
@@ -3704,7 +3765,6 @@ class Implement:
                     for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
                         if self.get_bound([i, (*k,)])[0] != 0 and self.get_bound([i, (*k,)])[1] != 0:
                             print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get_bound([i, (*k,)]), " " * (box_width - (len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get_bound([i, (*k,)])))) - 1) + "|")
-            hline()
     
         
 # Alternatives for defining this class:

@@ -10,8 +10,13 @@
 
 from ortools.sat.python import cp_model
 
-ortools_status_dict = {cp_model.OPTIMAL: "optimal",
-                       cp_model.FEASIBLE: "feasible"}
+ortools_status_dict = {
+    cp_model.OPTIMAL: "optimal",
+    cp_model.FEASIBLE: "feasible",
+    cp_model.INFEASIBLE: "infeasible",
+    cp_model.MODEL_INVALID: "model_invalid",
+    cp_model.UNKNOWN: "unknown"
+}
 
 
 def Get(model_object, result, input1, input2=None):

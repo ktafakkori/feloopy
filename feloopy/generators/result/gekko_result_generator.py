@@ -10,8 +10,7 @@
 
 import gekko as gekko_interface
 
-gekko_status_dict = {0: "not_optimal", 1: "optimal"}
-
+gekko_status_dict = {0: "unknown", 1: "optimal"}
 
 def Get(model_object, result, input1, input2=None):
 

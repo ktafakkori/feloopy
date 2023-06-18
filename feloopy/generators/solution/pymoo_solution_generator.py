@@ -24,7 +24,9 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
         
         def _evaluate(self, x, out, *args, **kwargs):
 
+    
             f = Fitness(np.array(x))
+
             out["F"] = np.column_stack([ObjectivesDirections[i]*f[i] for i in range(len(ObjectivesDirections))])
     
     problem = MyProblem()

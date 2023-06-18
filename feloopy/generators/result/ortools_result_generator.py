@@ -13,7 +13,6 @@ from ortools.linear_solver import pywraplp as ortools_interface
 ortools_status_dict = {0: "optimal", 1: "feasible", 2: "infeasible",
                        3: "unbounded", 4: "abnormal", 5: "model_invalid", 6: "not_solved"}
 
-
 def Get(model_object, result, input1, input2=None):
 
     input1 = input1[0]
