@@ -56,7 +56,7 @@ class Model:
         self.avar = self.coll()
 
         if solution_method == 'constraint':
-            self.solution_method_was = 'cosntraint'
+            self.solution_method_was = 'constraint'
             solution_method = 'exact'
         else:
             self.solution_method_was=None
