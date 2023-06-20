@@ -53,7 +53,7 @@ def generate_solution(features):
             model_object.add(constraint)
 
         time_solve_begin = timeit.default_timer()
-        result = model_object.solve(TimeLimit=time_limit, log_output=log)
+        result = model_object.solve(TimeLimit=time_limit)
         time_solve_end = timeit.default_timer()
 
         generated_solution = [result, [time_solve_begin, time_solve_end]]

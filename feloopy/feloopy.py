@@ -56,7 +56,11 @@ class Model:
         self.avar = self.coll()
 
         if solution_method == 'constraint':
+            self.solution_method_was = 'cosntraint'
             solution_method = 'exact'
+        else:
+            self.solution_method_was=None
+
 
         self.features = {
             'solution_method': solution_method,
@@ -72,6 +76,7 @@ class Model:
             'integer_variable_counter': [0, 0],
             'binary_variable_counter': [0, 0],
             'free_variable_counter': [0, 0],
+            'event_variable_counter': [0, 0],
             'total_variable_counter': [0, 0],
             'objective_counter': [0, 0],
             'constraint_counter': [0, 0],
@@ -511,29 +516,50 @@ class Model:
             dim (list, optional): Dimensions of this variable. Default: 0.
         """
 
+        self.features = update_variable_features(name, dim, None, 'event_variable_counter', self.features)
+
         if len(interval) == 1:
             interval = [interval[0], None, None]
 
         if dim == 0:
 
             if self.features['interface_name'] == 'cplex_cp':
-                return self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=name, optional=optional)
+
+                self.mainvars[("evar",name)] = self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=name, optional=optional)
+                self.maindims[name] = dim
+
+                return self.mainvars[("evar",name)]
             
             if self.features['interface_name'] == 'ortools_cp':
-                return self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=name, is_present=optional)
+                self.mainvars[("evar",name)] = self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=name, is_present=optional)
+                self.maindims[name] = dim
+
+                return self.mainvars[("evar",name)]
         else:
+
             if self.features['interface_name'] == 'cplex_cp':
+
                 if len(dim) == 1:
-                    return {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=optional) for key in dim[0]}
+                    self.mainvars[("evar",name)] = {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=optional) for key in dim[0]}
+                    self.maindims[name] = dim
+                    return self.mainvars[("evar",name)] 
+                
                 else:
-                    return {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=optional) for key in sets(*dim)}
+                    self.mainvars[("evar",name)]  = {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=optional) for key in sets(*dim)}
+                    self.maindims[name] = dim
+                    return  self.mainvars[("evar",name)] 
 
             if self.features['interface_name'] == 'ortools_cp':
 
                 if len(dim) == 1:
-                    return {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=optional) for key in dim[0]}
+                    self.mainvars[("evar",name)] = {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=optional) for key in dim[0]}
+                    self.maindims[name] = dim
+                    return self.mainvars[("evar",name)]
+                
                 else:
-                    return {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=optional) for key in sets(*dim)}
+                    self.mainvars[("evar",name)]  = {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=optional) for key in sets(*dim)}
+                    self.maindims[name] = dim
+                    return self.mainvars[("evar",name)] 
 
     def cevar(self, name, indices, interval=None, optional=False):
         if interval==None: interval = {i: [None, None, None] for i in indices}
@@ -1706,13 +1732,16 @@ class Model:
 
         if self.features['interface_name'] == 'cplex_cp':
             return self.solution[0].get_var_solution(invterval_variable).get_start()
+        
         if self.features['interface_name'] == 'ortools_cp':
+
             ""
 
     def get_interval(self, invterval_variable):
 
         if self.features['interface_name'] == 'cplex_cp':
             return self.solution[0].get_var_solution(invterval_variable)
+        
         if self.features['interface_name'] == 'ortools_cp':
             ""
 
@@ -1815,7 +1844,10 @@ class Model:
     def report(self, all_metrics: bool = False, feloopy_info: bool = True, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], save=None):
 
         self.interface_name = self.features['interface_name']
-        self.solution_method = self.features['solution_method']
+        if self.solution_method_was==None:
+            self.solution_method = self.features['solution_method']
+        else:
+            self.solution_method = self.solution_method_was
         self.model_name = self.features['model_name']
         self.solver_name = self.features['solver_name']
         self.model_constraints = self.features['constraints']
@@ -1825,6 +1857,7 @@ class Model:
         self.bin_var_counter = self.features['binary_variable_counter']
         self.int_var_counter = self.features['integer_variable_counter']
         self.free_var_counter = self.features['free_variable_counter']
+        self.event_var_counter = self.features['event_variable_counter']
         self.tot_counter = self.features['total_variable_counter']
         self.con_counter = self.features['constraint_counter']
         self.obj_counter = self.features['objective_counter']
@@ -1897,6 +1930,7 @@ class Model:
                 ("Binary variable  ", self.bin_var_counter[0], self.bin_var_counter[1]),
                 ("Integer variable ", self.int_var_counter[0], self.int_var_counter[1]),
                 ("Free variable    ", self.free_var_counter[0], self.free_var_counter[1]), 
+                ("Event variable   ", self.event_var_counter[0], self.event_var_counter[1]),
                 ("Total variables  ", self.tot_counter[0], self.tot_counter[1]), 
                 ("Objective        ", "-", self.obj_counter[1]), 
                 ("Constraint       ", self.con_counter[0], self.con_counter[1]) ])
@@ -1945,27 +1979,54 @@ class Model:
     def decision_information_print(self,status, box_width=80):
 
         for i,j in self.mainvars.keys():
-            if self.maindims[j] == 0:
-                if self.get(self.mainvars[(i,j)]) not in [0, None]:
-                    print(f"| {j} =", self.get(self.mainvars[(i,j)]), " "* (box_width-(len(f"| {j} =") + len(str(self.get(self.mainvars[(i,j)]))))-1) + "|")
-            elif len(self.maindims[j])==1:
-                try:
-                    for k in fix_dims(self.maindims[j])[0]:
-                        if self.get(self.mainvars[(i,j)][k]) not in [0, None]:
-                            print(f"| {j}[{k}] =", self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"| {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "|")
-                except:
-                    for k in fix_dims(self.maindims[j])[0]:
-                        if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
-                            print(f"| {j}[{k}] =", self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"| {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "|")
+
+            if i!='evar':
+
+                if self.maindims[j] == 0:
+
+                    if self.get(self.mainvars[(i,j)]) not in [0, None]:
+
+                        print(f"| {j} =", self.get(self.mainvars[(i,j)]), " "* (box_width-(len(f"| {j} =") + len(str(self.get(self.mainvars[(i,j)]))))-1) + "|")
+
+                elif len(self.maindims[j])==1:
+                    try:
+                        for k in fix_dims(self.maindims[j])[0]:
+                            if self.get(self.mainvars[(i,j)][k]) not in [0, None]:
+                                print(f"| {j}[{k}] =", self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"| {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "|")
+                    except:
+                        for k in fix_dims(self.maindims[j])[0]:
+                            if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
+                                print(f"| {j}[{k}] =", self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"| {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "|")
+                else:
+                    try:
+                        for k in it.product(*tuple(fix_dims(self.maindims[j]))):
+                            if self.get(self.mainvars[(i,j)][k]) not in [0, None]:
+                                print(f"| {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"| {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "|")
+                    except:
+                        for k in it.product(*tuple(fix_dims(self.maindims[j]))):
+                            if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
+                                print(f"| {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"| {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "|")
+
             else:
-                try:
+
+                if self.maindims[j] == 0:
+                        if self.get_start(self.mainvars[(i,j)])!=None:
+                            print(f"| {j} =", [self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])])))-1) + "|")
+
+
+                elif len(self.maindims[j])==1:                    
+                    for k in fix_dims(self.maindims[j])[0]:
+                        if self.get_start(self.mainvars[(i,j)][k])!=None:
+                            print(f"| {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "|")
+
+                else:                    
                     for k in it.product(*tuple(fix_dims(self.maindims[j]))):
-                        if self.get(self.mainvars[(i,j)][k]) not in [0, None]:
-                            print(f"| {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"| {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "|")
-                except:
-                    for k in it.product(*tuple(fix_dims(self.maindims[j]))):
-                        if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
-                            print(f"| {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"| {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "|")
+                        if self.get_start(self.mainvars[(i,j)][k])!=None:
+                            print(f"| {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "|")
+                    
+
+
+
 
     # Methods to work with input and output data.
 
