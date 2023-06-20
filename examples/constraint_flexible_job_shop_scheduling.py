@@ -12,7 +12,7 @@ TJO = [(t, j, o) for j in J for o in range(J_O[j]) for t in [sum(J_O[:j]) + o]]
 TM = [(triplet[0], k) for triplet in TJO for k in np.random.choice(K, np.random.random_integers(1, len(K)), replace=False)]
 
 # Random intervals for each task-machine pair
-interval = {i: [np.random.random_integers(20,34), None, None] for i in TM}
+interval = {i: [m.uniformint(20,34), None, None] for i in TM}
 
 # Event variables for task-job-operation and task-machine
 tjo = m.cevar('task_job_operation', TJO)
