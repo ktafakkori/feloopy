@@ -25,14 +25,14 @@ m.obj(m.max([m.end_of(tm[t, k]) for t, k in TM]))
 for k in K:
     m.con(m.forbid_overlap([tm[t,kk] for t, kk in TM if kk == k]))
 
-# Define the precedence constraint for tasks within the same job
+# Precedence constraint for operations of the same job
 predecessor = {task2: task1[0] for task1, task2 in sets(TJO,TJO) if task1[1]==task2[1] and task1[2] + 1 == task2[2]}
 for j in J:
     for task in TJO:
         if task[1] == j and task[2] >= 1:
             m.con(m.prec_end_before_start(tjo[(predecessor[task], task[1], task[2] - 1)], tjo[task]))
 
-# Add alternative constraints to ensure each task is assigned to only one machine
+# Each task is assigned to only one machine
 for task in tjo:
     m.con(m.alternative(tjo[task], [tm[(o, m)] for (o, m) in tm if (o == task[0])], 1))
 
