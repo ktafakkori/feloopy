@@ -55,4 +55,4 @@ for j in J:
 m.sol(['min'], 'cplex')
 
 # Display
-m.report()
+m.report(sys_info=True)

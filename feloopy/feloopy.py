@@ -191,6 +191,9 @@ class Model:
             self.maindims[name] = dim
             return self.mainvars[("btvar", name)]
 
+    def cbtvar(self, name, indices, bound=[0,1]):
+        return {i: self.btvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =0, bound=bound) for i in indices}
+
     def ptvar(self, name, dim=0, bound=[0, None]):
         """
         Creates and returns a tensor-like positive variable.
@@ -211,6 +214,9 @@ class Model:
             if self.features['interface_name'] in ['rsome_ro', 'rsome_dro']:
                 self.con(self.mainvars[("ptvar", name)] >= 0)
             return self.mainvars[("ptvar", name)]
+
+    def cptvar(self, name, indices, bound=[0,None]):
+        return {i: self.ptvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =0, bound=bound) for i in indices}
 
     def itvar(self, name, dim=0, bound=[0, None]):
         """
@@ -233,7 +239,9 @@ class Model:
 
         return self.vars[name]
 
-
+    def citvar(self, name, indices, bound=[0,None]):
+        return {i: self.itvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =0, bound=bound) for i in indices}
+    
     def ftvar(self, name, dim=0, bound=[None, None]):
         """
         Creates and returns a tensor-like free variable.
@@ -253,6 +261,9 @@ class Model:
             self.maindims[name] = dim
             return self.mainvars[("ftvar", name)]
 
+    def cftvar(self, name, indices, bound=[None,None]):
+        return {i: self.ftvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =0, bound=bound) for i in indices}
+    
     def bvar(self, name, dim=0, bound=[0, 1]):
         """
         Creates and returns a binary variable.
@@ -288,7 +299,9 @@ class Model:
         elif self.features['solution_method'] == 'heuristic':
             return generate_heuristic_variable(self.features, 'bvar', name, dim, bound, self.agent)
 
-
+    def cbvar(self, name, indices, bound=[0,1]):
+        return {i: self.bvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =0, bound=bound) for i in indices}
+    
     def pvar(self, name, dim=0, bound=[0, None]):
         """
         Creates and returns a positive variable.
@@ -334,6 +347,9 @@ class Model:
 
                 return generate_heuristic_variable(self.features, 'pvar', name, dim, bound, self.agent)
 
+    def cpvar(self, name, indices, bound=[0,None]):
+        return {i: self.pvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =0, bound=bound) for i in indices}
+    
     def ivar(self, name, dim=0, bound=[0, None]):
         """
         Creates and returns an integer variable.
@@ -359,6 +375,9 @@ class Model:
             case 'heuristic':
                 return generate_heuristic_variable(self.features, 'ivar', name, dim, bound, self.agent)
 
+    def civar(self, name, indices, bound=[0,None]):
+        return {i: self.ivar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =0, bound=bound) for i in indices}
+    
     def fvar(self, name, dim=0, bound=[None, None]):
         """
         Creates and returns a free variable.
@@ -385,6 +404,9 @@ class Model:
             case 'heuristic':
                 
                 return generate_heuristic_variable(self.features, 'fvar', name, dim, bound, self.agent)
+
+    def cfvar(self, name, indices, bound=[None,None]):
+        return {i: self.fvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =0, bound=bound) for i in indices}
 
     def dvar(self, name, dim=0):
         """
@@ -428,6 +450,9 @@ class Model:
                         else:
                             return np.zeros([len(dims) for dims in dim])
 
+    def cdvar(self, name, indices):
+        return {i: self.dvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =0) for i in indices}
+
     def rvar(self, name, dim=0):
         """
         Creates and returns a random variable.
@@ -439,7 +464,10 @@ class Model:
         dim = fix_dims(dim)
         from .generators import variable_generator
         return variable_generator.generate_variable(self.features['interface_name'], self.model, 'rvar', name, [None, None], dim)
-    
+
+    def crvar(self, name, indices):
+        return {i: self.rvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =0) for i in indices}
+
     def rtvar(self, name, dim=0):
         """
         Creates and returns a tensor-like random variable.
@@ -452,6 +480,9 @@ class Model:
         from .generators import variable_generator
         return variable_generator.generate_variable(self.features['interface_name'], self.model, 'rtvar', name, [None, None], dim)
     
+    def crtvar(self, name, indices):
+        return {i: self.rtvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =0) for i in indices}
+ 
     def svar(self, name, dim=0):
         """
         Creates and returns a sequential variable.
@@ -467,7 +498,10 @@ class Model:
 
         return generate_heuristic_variable(self.features, 'svar', name, dim, [0, 1], self.agent)
 
-    def evar(self, name, interval=[None, None, None], dim=0, is_present=False):
+    def csvar(self, name, indices):
+        return {i: self.svar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =0) for i in indices}
+
+    def evar(self, name, interval=[None, None, None], dim=0, optional=False):
         """        
         Creates and returns an event (interval) variable.
 
@@ -483,22 +517,35 @@ class Model:
         if dim == 0:
 
             if self.features['interface_name'] == 'cplex_cp':
-                return self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=name, optional=is_present)
+                return self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=name, optional=optional)
+            
             if self.features['interface_name'] == 'ortools_cp':
-                return self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=name, is_present=is_present)
+                return self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=name, is_present=optional)
         else:
             if self.features['interface_name'] == 'cplex_cp':
                 if len(dim) == 1:
-                    return {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=is_present) for key in dim[0]}
+                    return {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=optional) for key in dim[0]}
                 else:
-                    return {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=is_present) for key in sets(*dim)}
+                    return {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=optional) for key in sets(*dim)}
 
             if self.features['interface_name'] == 'ortools_cp':
 
                 if len(dim) == 1:
-                    return {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=is_present) for key in dim[0]}
+                    return {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=optional) for key in dim[0]}
                 else:
-                    return {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=is_present) for key in sets(*dim)}
+                    return {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=optional) for key in sets(*dim)}
+
+    def cevar(self, name, indices, interval=None, optional=False):
+        if interval==None: interval = {i: [None, None, None] for i in indices}
+        try:
+            return {i: self.evar(name+f"[{i}]".replace("(", "").replace(")", ""), interval=interval[i], dim=0, optional=optional) for i in indices}
+        except:
+            dc = dict()
+            counter = 0
+            for i in indices:
+                dc[i] = self.evar(name+f"[{i}]".replace("(", "").replace(")", ""), interval=interval[counter], dim=0, optional=optional)
+                counter +=1
+                
 
     # Methods for handling special automation operations
     
@@ -3602,11 +3649,11 @@ class Implement:
                         print(f"| {i} =", self.get_bound([i, (0,)]), " " * (box_width - (len(f"| {i} =") + len(str(self.get_bound([i, (0,)])))) - 1) + "|")
                 elif len(self.VariablesDim[i]) == 1:
                     for k in fix_dims(self.VariablesDim[i])[0]:
-                        if self.get_bound([i, (k,)])[0] != 0 and self.get_bound([i, (k,)])[1] != 0:
+                        if self.get_bound([i, (k,)])!= [0,0]:
                             print(f"| {i}[{k}] =", self.get_bound([i, (k,)]), " " * (box_width - (len(f"| {i}[{k}] =") + len(str(self.get_bound([i, (k,)])))) - 1) + "|")
                 else:
                     for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
-                        if self.get_bound([i, (*k,)])[0] != [0,0]:
+                        if self.get_bound([i, (*k,)]) != [0,0]:
                             print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get_bound([i, (*k,)]), " " * (box_width - (len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get_bound([i, (*k,)])))) - 1) + "|")
     
 # Alternatives for defining this class:
