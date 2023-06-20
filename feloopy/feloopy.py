@@ -57,10 +57,10 @@ class Model:
 
         if solution_method == 'constraint':
             self.solution_method_was = 'constraint'
+
             solution_method = 'exact'
         else:
             self.solution_method_was=None
-
 
         self.features = {
             'solution_method': solution_method,
@@ -573,7 +573,6 @@ class Model:
                 dc[i] = self.evar(name+f"[{i}]".replace("(", "").replace(")", ""), interval=interval[counter], dim=0, optional=optional)
                 counter +=1
                 
-
     # Methods for handling special automation operations
     
     def scon_exactly_one_one(self, list_of_binary_variables):
