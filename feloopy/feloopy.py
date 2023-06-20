@@ -566,6 +566,7 @@ class Model:
         try:
             return {i: self.evar(name+f"[{i}]".replace("(", "").replace(")", ""), interval=interval[i], dim=0, optional=optional) for i in indices}
         except:
+            print("yes)")
             dc = dict()
             counter = 0
             for i in indices:
@@ -1372,6 +1373,12 @@ class Model:
 
                 return input2
 
+    def synchronize(self, interval, array):
+        """
+        Synchronizes an interval variable interval and a set of interval variables in array.
+        """
+        return self.model.synchronize(interval,array)
+        
     def control_resource(self, *args, function='pulse'):
         """
         Creates and returns a dynamic resource usage control function.
@@ -2072,6 +2079,32 @@ class Model:
             return self.random.uniform(low=lb, high=ub)
         else:
             return self.random.uniform(low=lb, high=ub, size=([len(i) for i in dim]))
+
+    def uniformlist(self, lb_sample_size, ub_sample_size, candidate_set, parameter_dim=0, fixed_sample_size=None, replace=False, sorted=True):
+
+        dim = fix_dims(parameter_dim)
+
+        if dim==0:
+            if fixed_sample_size==None:
+
+                if sorted:
+
+                    return np.sort(self.random.choice(candidate_set, self.random.integers(lb_sample_size, ub_sample_size), replace=replace))
+                
+                else:
+
+                    return self.random.choice(candidate_set, self.random.integers(lb_sample_size, ub_sample_size), replace=replace)
+        else:
+            if fixed_sample_size==None:
+
+                if sorted:
+
+                    return [np.sort(self.random.choice(candidate_set, self.random.integers(lb_sample_size, ub_sample_size), replace=replace)) for i in dim[0]]
+                
+                else:
+
+                    return [self.random.choice(candidate_set, self.random.integers(lb_sample_size, ub_sample_size), replace=replace) for i in dim[0]]
+
 
     def uniformint(self, lb, ub, parameter_dim=0):
         """
