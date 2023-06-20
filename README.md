@@ -132,9 +132,9 @@ FelooPy (v0.2.5) has a few optional dependencies that can be installed using the
 
 * All solvers: `pip install feloopy[all_solvers]`
 * Gurobi: `pip install feloopy[gurobi]`
-* CPLEX: `pip install feloopy[cplex]`
-* XPRESS: `pip install feloopy[xpress]`
-* Linux: `pip install feloopy[linux]` (for multi-objective optimization)
+* Cplex: `pip install feloopy[cplex]`
+* Xpress: `pip install feloopy[xpress]`
+* Linux: `pip install feloopy[linux]` (better support for multi-objective optimization)
 
 For multi-objective optimization, you should use the linux command for installation. However, please note that the optional dependencies for Linux kernel might not work on some operating systems. As a workaround, you can use a Conda-based Python 3.10 interpreter to ensure that optional dependencies for multi-objective optimization are installed correctly.
 
