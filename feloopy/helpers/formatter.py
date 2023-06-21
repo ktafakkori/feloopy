@@ -90,7 +90,7 @@ def constraint_print(type, input):
         three_column(type, f"{input[0]}", f"{input[1]}")
 
 def status_row_print(ObjectivesDirections, status, box_width=80):
-    if len(ObjectivesDirections) != 1:
+    if len(ObjectivesDirections) != 1 and ObjectivesDirections[0] !="nan":
         row = "│ " + "Status: " + " " * (len(status[0]) - len("Status: ")) + " " * (box_width - 10 * len(ObjectivesDirections) + 1 - len(str(status[0])) - 3)
         for j in range(len(ObjectivesDirections)):
             obj_row = ObjectivesDirections[j]
@@ -98,7 +98,7 @@ def status_row_print(ObjectivesDirections, status, box_width=80):
         print(row + " │")
         
     else:
-        row = "│ " + "Status: " + " "*(len(status) - len("Status: ")) + " " * (box_width-10*len(ObjectivesDirections) + 1 - len(str(status)) - 3)
+        row = "│ " + "Status: " + " "*(len(str(status)) - len("Status: ")) + " " * (box_width-10*len(ObjectivesDirections) + 1 - len(str(status)) - 3)
         for j in range(len(ObjectivesDirections)):
             obj_row = ObjectivesDirections[j]
             row += " " * (10 - len(obj_row)) + obj_row
@@ -107,14 +107,14 @@ def status_row_print(ObjectivesDirections, status, box_width=80):
             print(row + " │")
 
         elif len(row + " │") <box_width+2:
-            row = "│ " + "Status: " + " "*(len(status) - len("Status: ")) + " " * (box_width-10*len(ObjectivesDirections) + 1 - len(str(status)) - 3)
+            row = "│ " + "Status: " + " "*(len(str(status)) - len("Status: ")) + " " * (box_width-10*len(ObjectivesDirections) + 1 - len(str(status)) - 3)
             for j in range(len(ObjectivesDirections)):
                 obj_row = ObjectivesDirections[j]
                 row += " " * (10 - len(obj_row)) + obj_row
             print(row + " │")
             
         else:
-            row = "│ " + "Status: " + " "*(len(status) - len("Status: ")) + " " * (box_width-10*len(ObjectivesDirections) - len(str(status)) - 3)
+            row = "│ " + "Status: " + " "*(len(str(status)) - len("Status: ")) + " " * (box_width-10*len(ObjectivesDirections) - len(str(status)) - 3)
             for j in range(len(ObjectivesDirections)):
                 obj_row = ObjectivesDirections[j]
                 row += " " * (10 - len(obj_row)) + obj_row
@@ -124,7 +124,7 @@ def status_row_print(ObjectivesDirections, status, box_width=80):
 def solution_print(ObjectivesDirections, status, get_obj, get_payoff=None, box_width=80):
     if len(ObjectivesDirections)!=1:
         if status[0] != "infeasible (constrained)":
-            for i in range(len(status)):
+            for i in range(len(str(status))):
                 row = "│ " + str(status[i]) + " " * (box_width - 10 * len(ObjectivesDirections) + 1 - len(str(status[i])) - 3)
                 obj_row = get_obj[i]
                 for j in range(len(obj_row)):

@@ -125,7 +125,7 @@ class Model:
         self.random_tensor_variable = self.add_random_tensor_variable = self.rtvar
         self.dependent_variable = self.add_dependent_variable = self.dvar
         self.objective = self.reward = self.hypothesis = self.fitness = self.goal = self.add_objective = self.obj
-        self.constraint = self.equation = self.add_constraint = self.add_equation = self.st = self.subject_to = self.cb = self.computed_by = self.penalize = self.pen = self.con
+        self.constraint = self.equation = self.add_constraint = self.add_equation = self.st = self.subject_to = self.cb = self.computed_by = self.penalize = self.pen = self.eq = self.con
         self.solve = self.implement = self.run = self.optimize = self.sol
         self.get_obj = self.get_objective
         self.get_stat = self.get_status
@@ -1401,7 +1401,7 @@ class Model:
 
     # Methods for modeling and solving.
 
-    def obj(self, expression, direction=None, label=None):
+    def obj(self, expression=0, direction=None, label=None):
         """
         Objective Function Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1501,9 +1501,15 @@ class Model:
             absolute_gap (value, optional): please state an abolute gap to find the optimal objective value. Defaults to None.
             relative_gap (%, optional): please state a releative gap (%) to find the optimal objective value. Defaults to None.
         """
+        if len(self.features['objectives'])==0:
+            self.obj()
+            self.features['objective_counter'][1] = 0
+            self.features['directions'] = ["nan"]
+            solver_name = directions
 
-        if len(directions)!=len(self.features['objectives']):
-            raise MultiObjectivityError("The number of directions and the provided objectives do not match.")
+        else:
+            if len(directions)!=len(self.features['objectives']):
+                raise MultiObjectivityError("The number of directions and the provided objectives do not match.")
 
         self.features['objective_being_optimized'] = obj_id
         self.features['solver_name'] = solver_name
@@ -1875,7 +1881,7 @@ class Model:
         status = self.get_status()
         hour, min, sec = calculate_time_difference(length=self.get_time())
 
-        if len(status) == 0:
+        if len(str(status)) == 0:
             status = ['infeasible (constrained)']
 
         box_width = 80
@@ -1953,7 +1959,7 @@ class Model:
                     try:
                         solution_print(self.objectives_directions, status, self.get_obj(), self.get_payoff())
                     except:
-                        print("Nothing found.")
+                        left_align("Nothing found.")
                 else:
                     solution_print(self.objectives_directions, status, self.get_obj())
             empty_line()
@@ -3615,7 +3621,7 @@ class Implement:
         status = self.get_status()
         hour, min, sec = calculate_time_difference(self.start,self.end)
 
-        if len(status) == 0:
+        if len(str(status)) == 0:
             status = ['infeasible (constrained)']
 
         box_width = 80
