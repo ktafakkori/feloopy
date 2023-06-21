@@ -1501,18 +1501,12 @@ class Model:
             absolute_gap (value, optional): please state an abolute gap to find the optimal objective value. Defaults to None.
             relative_gap (%, optional): please state a releative gap (%) to find the optimal objective value. Defaults to None.
         """
-        if len(self.features['objectives'])==0:
-            self.obj()
-            self.features['objective_counter'][1] = 0
-            self.features['directions'] = ["nan"]
-            solver_name = directions
 
-        else:
-            if len(directions)!=len(self.features['objectives']):
-                raise MultiObjectivityError("The number of directions and the provided objectives do not match.")
+        
+        if len(self.features['objectives']) !=0 and len(directions)!=len(self.features['objectives']):
+            raise MultiObjectivityError("The number of directions and the provided objectives do not match.")
 
         self.features['objective_being_optimized'] = obj_id
-        self.features['solver_name'] = solver_name
         self.features['solver_options'] = solver_options
         self.features['debug_mode'] = debug
         self.features['time_limit'] = time_limit
@@ -1525,32 +1519,36 @@ class Model:
         self.features['email_address'] = email
         self.features['max_iterations'] = max_iterations
         self.features['obj_operators'] = obj_operators
+        self.features['solver_name'] = solver_name
 
-        if type(obj_id) != str and directions != None:
+        try:
+            if type(obj_id) != str and directions != None:
 
-            if self.features['directions'][obj_id] == None:
+                if self.features['directions'][obj_id] == None:
 
-                self.features['directions'][obj_id] = directions[obj_id]
+                    self.features['directions'][obj_id] = directions[obj_id]
 
-            for i in range(len(self.features['objectives'])):
+                for i in range(len(self.features['objectives'])):
 
-                if i != obj_id:
+                    if i != obj_id:
 
-                    del self.features['directions'][i]
+                        del self.features['directions'][i]
 
-                    del directions[i]
+                        del directions[i]
 
-                    del self.features['objectives'][i]
+                        del self.features['objectives'][i]
 
-            obj_id = 0
+                obj_id = 0
 
-            self.features['objective_counter'] = [1, 1]
+                self.features['objective_counter'] = [1, 1]
 
-        else:
+            else:
 
-            for i in range(len(self.features['directions'])):
+                for i in range(len(self.features['directions'])):
 
-                self.features['directions'][i] = directions[i]
+                    self.features['directions'][i] = directions[i]
+        except:
+            pass
 
         match self.features['solution_method']:
 
@@ -1559,8 +1557,28 @@ class Model:
                 self.features['model_object_before_solve'] = self.model
 
                 from .generators import solution_generator
-                self.solution = solution_generator.generate_solution(
-                    self.features)
+
+                try:
+                    if len(self.features['objectives'])==0:
+                        self.obj()
+                        self.features['objective_counter'][1] = 0
+                        self.features['directions'] = ["nan"]
+                        self.features['solver_name'] = directions
+        
+                    self.solution = solution_generator.generate_solution(
+                        self.features)
+                
+                except:
+
+                    if len(self.features['objectives'])==0:
+                        self.obj()
+                        self.features['objective_counter'][1] = 0
+                        self.features['directions'] = ["min"]
+                        self.features['solver_name'] = directions
+        
+                    self.solution = solution_generator.generate_solution(self.features)
+                    
+
 
                 try:
                     self.obj_val = self.get_objective()

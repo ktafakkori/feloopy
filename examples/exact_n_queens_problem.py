@@ -1,6 +1,8 @@
 from feloopy import *
 
-m = target_model('exact', 'n_queens_problem', 'mip')
+# Credit: https://python-mip.readthedocs.io/en/latest/examples.html
+
+m = target_model('exact', 'n_queens_problem', 'pyomo')
 
 N = 30
 x = m.bvar('x', [N,N])

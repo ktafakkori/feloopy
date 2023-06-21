@@ -1,5 +1,7 @@
 from feloopy import *
 
+# Credit: https://xiongpengnus.github.io/rsome/
+
 m = target_model('exact', 'mean_varience_portfolio', 'rsome_ro')
 
 n = 150                                     

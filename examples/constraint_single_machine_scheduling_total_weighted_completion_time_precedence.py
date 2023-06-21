@@ -1,5 +1,7 @@
 from feloopy import *
 
+# Credit: https://github.com/ErayCakici/Scheduling-DOCPLEX-Examples_CP
+
 m = target_model('constraint', 'single_machine_scheduling', 'cplex_cp', key=0)
 
 J = m.set(10)

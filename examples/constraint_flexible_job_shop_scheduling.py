@@ -1,5 +1,7 @@
 from feloopy import *
 
+# Credit: https://github.com/ErayCakici/Scheduling-DOCPLEX-Examples_CP
+
 m = target_model('constraint', 'flexible_job_shop_scheduling', 'cplex_cp', key=1)
 
 # Sets for jobs and machines
