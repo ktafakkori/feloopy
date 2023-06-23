@@ -77,6 +77,8 @@ class Model:
             'binary_variable_counter': [0, 0],
             'free_variable_counter': [0, 0],
             'event_variable_counter': [0, 0],
+            'sequential_variable_counter': [0,0],
+            'dependent_variable_counter': [0,0],
             'total_variable_counter': [0, 0],
             'objective_counter': [0, 0],
             'constraint_counter': [0, 0],

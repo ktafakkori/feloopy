@@ -24,8 +24,11 @@ def count_variable(variable_dim, total_count, special_count):
 def update_variable_features(name, variable_dim, variable_bound, variable_counter_type, features):
     if features['solution_method'] == 'exact':
         features['total_variable_counter'], features[variable_counter_type] = count_variable(variable_dim, features['total_variable_counter'], features[variable_counter_type])
+
     elif features['solution_method'] == 'heuristic' and features['agent_status'] == 'idle':
+
         start_counter = features['total_variable_counter'][1]
+        
         features['total_variable_counter'], features[variable_counter_type] = count_variable(variable_dim, features['total_variable_counter'], features[variable_counter_type])
         end_counter = features['total_variable_counter'][1]
 
