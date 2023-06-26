@@ -9,15 +9,12 @@
  '''
 
 from ..helpers.empty import *
+from ..helpers.error import *
 import numpy as np
 import math as mt
 
 
 def generate_heuristic_variable(features, type, name, variable_dim, variable_bound, agent):
-
-    #if features['interface_name'] == 'pymoo':
-
-    #   features['vectorized'] = False
 
     if features['agent_status'] == 'idle':
 
@@ -25,59 +22,59 @@ def generate_heuristic_variable(features, type, name, variable_dim, variable_bou
 
             if variable_dim == 0:
 
-                return EMPTY(0)
-
+                if type == 'pvar' or type == 'fvar':
+                    return variable_bound[0] + np.random.rand(100,1)*(variable_bound[1]-variable_bound[0])
+                if type == 'bvar' or type == 'ivar':
+                    return np.round(variable_bound[0] + np.random.rand(100,1)*(variable_bound[1]-variable_bound[0])).astype(int)
+                if type == 'svar':
+                    raise VariableDimError("Dimension is set to be 0 or not defined for a sequential variable.")
+                
             else:
 
-                if type != 'svar':
-
-                    return np.random.rand(*tuple([100]+[len(dims) for dims in variable_dim]))
-
-                else:
-
+                if type == 'pvar' or type == 'fvar':
+                    return variable_bound[0] + np.random.rand(*tuple([100]+[len(dims) for dims in variable_dim]))*(variable_bound[1]-variable_bound[0])
+                if type == 'bvar' or type == 'ivar':
+                    return np.round(variable_bound[0] + np.random.rand(*tuple([100]+[len(dims) for dims in variable_dim]))*(variable_bound[1]-variable_bound[0])).astype(int) 
+                if type == 'svar':          
                     return np.argsort(np.random.rand(*tuple([100]+[len(dims) for dims in variable_dim])), axis=1)
 
         else:
 
             if variable_dim == 0:
 
-                return EMPTY(0)
-
+                if type == 'pvar' or type == 'fvar':
+                    return variable_bound[0] + np.random.rand()*(variable_bound[1]-variable_bound[0])
+                if type == 'bvar' or type == 'ivar':
+                    return np.round(variable_bound[0] + np.random.rand()*(variable_bound[1]-variable_bound[0])).astype(int)
+                if type == 'svar':
+                    raise VariableDimError("Dimension is set to be 0 or not defined for a sequential variable.")
+            
             else:
 
-                if type != 'svar':
-
-                    return np.random.rand(*tuple([len(dims) for dims in variable_dim]))
-
-                else:
-
-                    return np.argsort(np.random.rand(*tuple([len(dims) for dims in variable_dim])))
+                if type == 'pvar' or type == 'fvar':
+                    return variable_bound[0] + np.random.rand(*tuple([len(dims) for dims in variable_dim]))*(variable_bound[1]-variable_bound[0])
+                if type == 'bvar' or type == 'ivar':
+                    return np.round(variable_bound[0] + np.random.rand(*tuple([len(dims) for dims in variable_dim]))*(variable_bound[1]-variable_bound[0])).astype(int) 
+                if type == 'svar':          
+                    return np.argsort(np.random.rand(*tuple([len(dims) for dims in variable_dim])), axis=1)
     else:
 
         spread = features['variable_spread'][name]
-
         if features['vectorized']:
-
             if variable_dim == 0:
-
                 if type == 'bvar' or type == 'ivar':
-
-                    return np.round(variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0]))
-
+                    return np.round(variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])).astype(int)
+                
                 elif type == 'pvar' or type == 'fvar':
-
                     return variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])
-
                 else:
-
                     return np.argsort(agent[:, spread[name][0]:spread[name][1]])
-
             else:
 
                 if type == 'bvar' or type == 'ivar':
 
                     var = np.round(
-                        variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0]))
+                        variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])).astype(int)
 
                     return np.reshape(var, [var.shape[0]]+[len(dims) for dims in variable_dim])
 
@@ -97,7 +94,7 @@ def generate_heuristic_variable(features, type, name, variable_dim, variable_bou
 
                 if type == 'bvar' or type == 'ivar':
 
-                    return np.round(variable_bound[0] + agent[spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0]))
+                    return np.round(variable_bound[0] + agent[spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])).astype(int)
 
                 elif type == 'pvar' or type == 'fvar':
 
@@ -111,7 +108,7 @@ def generate_heuristic_variable(features, type, name, variable_dim, variable_bou
 
                 if type == 'bvar' or type == 'ivar':
 
-                    return np.reshape(np.round(variable_bound[0] + agent[spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])), [len(dims) for dims in variable_dim])
+                    return np.reshape(np.round(variable_bound[0] + agent[spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])), [len(dims) for dims in variable_dim]).astype(int)
 
                 elif type == 'pvar' or type == 'fvar':
 
