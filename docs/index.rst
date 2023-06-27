@@ -1,57 +1,75 @@
-Welcome to FelooPy's documentation!
-=======================================
+Welcome to FelooPy's Documentation!
+====================================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-##############################
 Introduction
-##############################
+============
 
 FelooPy
 -------
 
-.. figure:: _static/logo.svg
+.. figure:: _static/logo.png
    :alt: FelooPy Logo
 
-FelooPy (pronounced /fɛlupaɪ/) is a free and open-source Python library for automated operations research that serves as both a hyper-optimization interface and an integrated optimization environment. The name comes from the idea of suggesting practical and applicable solutions for systems, industries, and supply chains, and it also references the importance of loops in programming and algorithm development, and draws similarities to the name "Floppy" to highlight memory efficiency. FelooPy helps operations research scientists achieve their goals using various target, representor, and learner models. In simple words, FelooPy is a unified framework for optimization algorithms, decision-making methods, and modeling and analytical tools.
+Welcome to FelooPy (pronounced /fɛlupaɪ/), a free and open-source Python library designed for automated operations research. FelooPy serves as a comprehensive hyper-optimization interface and a fully integrated optimization environment.
 
-News
-----
+The name 'FelooPy' encapsulates our mission: to provide practical and applicable solutions for systems, industries, and supply chains. It echoes the importance of 'loops' in programming and algorithm development, drawing a playful parallel with the word 'Floppy' to highlight memory efficiency.
 
-🎉 *Version 0.2.5 is out: Added new features!* 🎉
+FelooPy is a powerful tool for operations research scientists. It combines various target, representor, and learner models with a unified framework of optimization algorithms, decision-making methods, and modeling and analytical tools. Simply put, FelooPy is your one-stop solution for all things optimization.
+
+Latest News
+===========
+
+🎉 *Exciting Update: FelooPy Version 0.2.5 is now available!* 🎉
+
+We are thrilled to announce the release of FelooPy Version 0.2.5. This update brings a host of new features designed to enhance your experience and make your optimization tasks even easier. Stay tuned for more updates!
 
 
-##############################
+Features
+========
+
+FelooPy offers the following key features:
+
+* 📘 Simplest optimization programming language: Designed for easy use.
+* 🔧 Comprehensive toolkit: For modeling, solving, and analyzing optimization problems.
+* 🎯 Extensive support for optimization algorithms: Including exact (107), heuristic (197), convex (20), constraint (2), and multi-objective (17).
+* 🧮 Multi-criteria decision-making methods: Supporting 41 MCDM algorithms.
+* ⚙️ Customizable solver configurations: For specific requirements.
+* 🔄 General-purpose programming made easy: With auto-encoders.
+* 📐 Handles mixed-integer non-linear programming problems: With auto-linearizers.
+* 📏 Special constraints modeling: Supported by auto-logic.
+* 📊 Key parameters impact analysis: Provided by auto-sensitivity.
+
 Installation
-##############################
+============
 
-FelooPy can be installed on Linux-based distributions, Windows, or macOS. It has a few dependencies that should work on all these platforms.
+FelooPy is compatible with Linux-based distributions, Windows, and macOS.
 
 Quick Installation
 ------------------
+
+Install the latest version with pip:
 
 .. code-block:: bash
 
    pip install --upgrade feloopy
 
-PyPI Installation
------------------
+Specific Version Installation
+-----------------------------
+
+Install a specific version from PyPI:
 
 .. code-block:: bash
 
    pip install feloopy==0.2.5
 
-Command Installation
---------------------
-
-.. code-block:: bash
-
-   !pip install feloopy==0.2.5
-
 Script Installation
 -------------------
+
+Use a Python script for installation:
 
 .. code-block:: python
 
@@ -68,9 +86,11 @@ Script Installation
 Local Installation
 ------------------
 
-1. Download the `feloopy-0.2.5.zip`_ file.
-2. Extract it into a specific directory.
-3. Open a terminal in that directory.
+Install from a local zip file:
+
+1. Download the `feloopy-0.2.5.zip`_.
+2. Extract to a directory.
+3. Install from terminal in that directory:
 
 .. code-block:: bash
 
@@ -79,7 +99,9 @@ Local Installation
 Colab Installation
 ------------------
 
-1. Run this cell and reload (CTRL + R) (using "py310" or "py311"):
+Install in a Colab environment:
+
+1. Prepare the environment:
 
 .. code-block:: bash
 
@@ -87,7 +109,7 @@ Colab Installation
    !bash ./py310.sh -b -f -p /usr/local
    !python -m ipykernel install --name "py310" --user
 
-2. Run this cell and reload (CTRL + R):
+2. Install FelooPy:
 
 .. code-block:: bash
 
@@ -96,80 +118,32 @@ Colab Installation
 Git Installation
 ----------------
 
+Install directly from GitHub:
+
 .. code-block:: bash
 
    pip install -U git+https://github.com/ktafakkori/feloopy
 
 .. _feloopy-0.2.5.zip: https://example.com/feloopy-0.2.5.zip
 
-##############################
-Features
-##############################
-
-FelooPy offers the following key features:
-
-Simplest optimization programming language
-   Designed to be easy to use, even for those with little or no programming experience.
-
-Modeling, solving and analyzing optimization problems
-   Provides a complete suite of tools for modeling, solving and analyzing a wide range of optimization problems.
-
-Exact optimization algorithms
-   Supports *107* exact optimization algorithms that guarantee the optimal solution to your problem.
-
-Heuristic optimization algorithms 
-   Supports *197* heuristic optimization algorithms that can find best possible solutions to complex problems.
-
-Convex optimization algorithms
-   Supports *20* convex optimization algorithms that ease tensor- and matrix-form modeling, primarily for convex problems.
-
-Constraint optimization algorithms
-   Supports *2* constraint optimization algorithms that can handle a wide range of complex constraints for operational and time-dependent decisions.
-
-Multi-objective optimization algorithms
-   Supports *17* multi-objective optimization algorithms, in which objectives might be conflicting or with different numerical units.
-
-Multi-critera decision-making methods
-   Supports *41* MCDM algorithms to solve decision problems with expert-based inputs without mathematical modeling.
-
-Solver configurations
-   Lets you configure the solver to meet specific requirements.
-
-Auto-encoders for general purpose programming
-   Provides auto-encoders to simplify general-purpose programming tasks.
-
-Auto-linearizers for linear programming conversions
-   Provides auto-linearizers that can handle mixed-integer non-linear programming problems.
-
-Auto-logic for modeling special constraints
-   Provides auto-logic to help you model and solve problems with special constraints.
-
-Auto-sensitivity for analyzing the impact of key parameters
-   Provides auto-sensitivity tools to help you analyze the impact of key parameters on your optimization problem.
-
-##############################
 Contributions
-##############################
+=============
 
-We welcome your contributions to this project. This includes reporting bugs, submitting pull requests, testing changes, and providing examples. 
+Your contributions are welcome! This includes bug reporting, pull requests submission, changes testing, and examples providing.
 
-##############################
 Support FelooPy
-##############################
+===============
 
-We are committed to continuing the development of FelooPy and would greatly appreciate your support. You can help us by:
+Support us in the following ways:
 
-- ⭐️ Starring the project on GitHub: Your stars motivate us to keep improving FelooPy. You can star the project [here](https://github.com/ktafakkori/feloopy/stargazers).
+* ⭐ Give us a star on `GitHub <https://github.com/ktafakkori/feloopy/stargazers>`_.
+* 🍴 Fork the project on `GitHub <https://github.com/ktafakkori/feloopy/network/members>`_.
+* 💰 Make a donation on our `support page <https://ktafakkori.github.io/support/>`_.
 
-- 🍴 Forking the project on GitHub: You can also contribute to FelooPy by forking the project [here](https://github.com/ktafakkori/feloopy/network/members).
-
-- 💰 Making a donation: Your donations help to sustain and maintain the project and add new features. If you would like to support us, please visit our [support page](https://ktafakkori.github.io/support/).
-
-##############################
 Citation
-##############################
+========
 
-If you use FelooPy in your research or project, please consider citing it as follows:
+Please cite FelooPy in your research or project:
 
 .. code-block:: bibtex
 
@@ -182,10 +156,7 @@ If you use FelooPy in your research or project, please consider citing it as fol
      url          = {https://github.com/ktafakkori/feloopy/}
    }
 
-This will help others discover and make use of FelooPy, and it will also give credit to its contributors and maintainers.
-
-##############################
 License
-##############################
+=======
 
-FelooPy is released under the MIT License. Read the [LICENSE](https://github.com/ktafakkori/feloopy/blob/main/LICENSE) file for more information.
+FelooPy is released under the [MIT License](https://github.com/ktafakkori/feloopy/blob/main/LICENSE).
