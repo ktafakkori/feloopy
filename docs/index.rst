@@ -1,3 +1,6 @@
+Welcome to FelooPy's Documentation
+==================================
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -8,8 +11,9 @@ Introduction
 FelooPy
 -------
 
-.. figure:: _static/logo.png
-   :alt: FelooPy Logo
+.. raw:: html
+
+   <img src="_static/logo.png" alt="FelooPy Logo" class="transparent-background"/>
 
 Welcome to FelooPy (pronounced /fɛlupaɪ/), a free and open-source Python library designed for automated operations research. FelooPy serves as a comprehensive hyper-optimization interface and a fully integrated optimization environment.
 
