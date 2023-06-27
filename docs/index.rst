@@ -26,16 +26,67 @@ FelooPy can be installed on Linux-based distributions, Windows, or macOS. It has
 
 .. list-table::
    :header-rows: 1
+   :align: center
+   :widths: 10 40 20
 
    * - Method
      - Description
      - Requirements
    * - Quick
-     - ``pip install --upgrade feloopy``
+     - ::
+       
+         pip install --upgrade feloopy
      - Python >= 3.10
    * - PyPI
-     - ``pip install feloopy==0.2.5``
+     - ::
+       
+         pip install feloopy==0.2.5
      - Python >= 3.10
+   * - Command
+     - ::
+       
+         !pip install feloopy==0.2.5
+     - Python >= 3.10
+   * - Script
+     - ::
+       
+         import pip
+
+         def install(package):
+           if hasattr(pip, 'main'):
+             pip.main(['install','-U', package])
+           else:
+             pip._internal.main(['install','-U', package])
+
+         install('feloopy==0.2.5')
+     - Python >= 3.10
+   * - Local
+     - 1. Download the `feloopy-0.2.5.zip`_ file.
+       2. Extract it into a specific directory.
+       3. Open a terminal in that directory.
+       4. Type: ::
+       
+           pip install .
+     - Python >= 3.10
+   * - Colab
+     - 1. Run this cell and reload (CTRL + R) (using "py310" or "py311"): ::
+       
+           !wget https://github.com/korakot/kora/releases/download/v0.10/py310.sh
+           !bash ./py310.sh -b -f -p /usr/local
+           !python -m ipykernel install --name "py310" --user
+
+       2. Run this cell and reload (CTRL + R): ::
+       
+           !pip install feloopy==0.2.5
+     - Python >= 3.10
+   * - Git
+     - ::
+       
+         pip install -U git+https://github.com/ktafakkori/feloopy
+     - Python >= 3.10
+
+.. _feloopy-0.2.5.zip: https://example.com/feloopy-0.2.5.zip
+
 
 .. note::
 
@@ -100,7 +151,8 @@ We are committed to continuing the development of FelooPy and would greatly appr
 
 If you use FelooPy in your research or project, please consider citing it as follows:
 
-```bibtex
+```
+
 @software{ktafakkori2022Sep,
   author       = {Keivan Tafakkori},
   title        = {{FelooPy: An integrated optimization environment for AutoOR in Python}},
@@ -109,6 +161,7 @@ If you use FelooPy in your research or project, please consider citing it as fol
   publisher    = {GitHub},
   url          = {https://github.com/ktafakkori/feloopy/}
 }
+
 ```
 This will help others discover and make use of FelooPy, and it will also give credit to its contributors and maintainers.
 
