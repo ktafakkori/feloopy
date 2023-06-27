@@ -20,7 +20,7 @@ html_theme_options = {
     'repo_name': 'feloopy',
     "logo": {
         "text": "FelooPy's Documentation",
-        "image_dark": "_static/logo3.png",
+        "image_dark": "_static/logo.svg",
         "alt_text": "FelooPy's Documentation",
     }
 }
