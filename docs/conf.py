@@ -21,3 +21,5 @@ html_theme_options = {
 }
 
 html_logo = "_static/logo3.png"
+
+html_css_files = ["custom.css"]
