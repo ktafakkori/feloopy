@@ -20,4 +20,4 @@ html_theme_options = {
     'repo_name': 'feloopy',
 }
 
-html_logo = "miscellaneous/logo/logo3.png"
+html_logo = "_static/logo3.png"
