@@ -156,6 +156,10 @@ FelooPy offers the following key features:
 * **Auto-logic for modeling special constraints**: Provides auto-logic to help you model and solve problems with special constraints.
 * **Auto-sensitivity for analyzing the impact of key parameters**: Provides auto-sensitivity tools to help you analyze the impact of key parameters on your optimization problem.
 
+### **Documentation**
+
+Please refer to https://feloopy.readthedocs.io/en/latest/.
+
 ### **Contributions**
 
 We welcome your contributions to this project, such as reporting bugs, submitting pull requests, testing changes, providing examples, and so on.
