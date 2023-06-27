@@ -11,3 +11,12 @@ extensions = []
 # -- Options for HTML output -------------------------------------------------
 
 html_theme = 'sphinx_rtd_theme'
+
+html_theme_options = {
+    'base_url': '/',
+    'color_primary': 'indigo',
+    'color_accent': 'grey',
+    'repo_url': 'https://github.com/ktafakkori/feloopy/',
+    'repo_name': 'feloopy',
+}
+
