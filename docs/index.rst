@@ -1,6 +1,3 @@
-Welcome to FelooPy's Documentation!
-====================================
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -26,7 +23,6 @@ Latest News
 🎉 *Exciting Update: FelooPy Version 0.2.5 is now available!* 🎉
 
 We are thrilled to announce the release of FelooPy Version 0.2.5. This update brings a host of new features designed to enhance your experience and make your optimization tasks even easier. Stay tuned for more updates!
-
 
 Features
 ========
