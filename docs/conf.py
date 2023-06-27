@@ -18,16 +18,11 @@ html_theme_options = {
     'color_accent': 'grey',
     'repo_url': 'https://github.com/ktafakkori/feloopy/',
     'repo_name': 'feloopy',
-    "icon_links": [
-        {
-            "name": "FelooPy",
-            "url": "https://github.com/ktafakkori/feloopy/",
-            "icon": "_static/logo3.png",
-            "type": "local",
-            "attributes": {"target": "_blank"},
-        },
-    ]
-
+    "logo": {
+        "text": "FelooPy's Documentation",
+        "image_dark": "_static/logo3.png",
+        "alt_text": "FelooPy's Documentation",
+    }
 }
 
 html_logo = "_static/logo3.png"
