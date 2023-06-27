@@ -7,48 +7,39 @@ def format_string(input):
         return "{:.2f}".format(input)
     
 def center(input, box_width=80):
-    output = "|" + " " + str(input).center(box_width-2) + " " + "|"
-    print(output.encode("utf-8"))
+    print("|" + " " + str(input).center(box_width-2) + " " + "|")
 
 def tline(box_width=80):
-    output = "╭" + "─"*box_width + "╮"
-    print(output.encode("utf-8"))
+    print("╭" + "─"*box_width + "╮")
 
 def tline_text(input, box_width=80):
-    output = "╭─ " + input +" " + "─"*(box_width-len(input)-3) + "╮"
-    print(output.encode("utf-8"))
+    print("╭─ " + input +" " + "─"*(box_width-len(input)-3) + "╮")
     
+
 def bline_text(input, box_width=80):
-    output = "╰" + input + " " + "─"*(box_width-len(input)-3) + "╯"
-    print(output.encode("utf-8"))
+    print("╰" + input + " " + "─"*(box_width-len(input)-3) + "╯")
         
 def empty_line(box_width=80):
-    output = "│" + " "*box_width + "│"
-    print(output.encode("utf-8"))
+    print("│" + " "*box_width + "│")
 
 def bline(box_width=80):
-    output = "╰" + "─"*box_width + "╯"
-    print(output.encode("utf-8"))
+    print("╰" + "─"*box_width + "╯")
 
 def hline(box_width=80):
-    output = "├" + "─"*box_width + "┤"
-    print(output.encode("utf-8"))
+    print("├" + "─"*box_width + "┤")
 
 def whline(box_width=80):
-    output = "+" + "."*box_width + "┤"
-    print(output.encode("utf-8"))
+    print("+" + "."*box_width + "┤")
 
 def hrule(box_width=80):
-    output = "├" + "="*box_width + "┤"
-    print(output.encode("utf-8"))
+    print("├" + "="*box_width + "┤")
 
 def vspace():
     print()
 
 def two_column(input1,input2, box_width=80):
     padding = box_width - len(input1) - len(input2) - 2
-    output = "│ " + str(input1) + " "*padding + str(input2) + " │"
-    print(output.encode("utf-8"))
+    print("│ " + str(input1) + " "*padding + str(input2) + " │")
 
 def three_column(input1, input2, input3, box_width=80, underline=False):
     total_padding = box_width - len(input1) - len(input2) - len(input3) - 6
@@ -60,8 +51,7 @@ def three_column(input1, input2, input3, box_width=80, underline=False):
         input2 = f"\033[4m{input2}\033[0m"
         input3 = f"\033[4m{input3}\033[0m"
     
-    output = "│ " + str(input1) + " " * padding1 + "  " + str(input2) + " " * padding2 + "  " + str(input3) + " │"
-    print(output.encode("utf-8"))
+    print("│ " + str(input1) + " " * padding1 + "  " + str(input2) + " " * padding2 + "  " + str(input3) + " │")
 
 def list_three_column(input_list, box_width=80, underline=False):
     column1_width = max(len(str(x[0])) for x in input_list) + 2
@@ -79,16 +69,13 @@ def list_three_column(input_list, box_width=80, underline=False):
                 input1 = f"\033[4m{input1}\033[0m"
                 input2 = f"\033[4m{input2}\033[0m"
                 input3 = f"\033[4m{input3}\033[0m"
-            output = f"│ {input1:<{column1_width}}{padding1 * ' '}{input2:<{column2_width}}{padding2 * ' '}{input3:<{column3_width}} │"
-            print(output.encode("utf-8"))
+            print(f"│ {input1:<{column1_width}}{padding1 * ' '}{input2:<{column2_width}}{padding2 * ' '}{input3:<{column3_width}} │")
 
 def left_align(input, box_width=80):
-    output = "│" + " " + input.ljust(box_width-2) + " " + "│"
-    print(output.encode("utf-8"))
+    print("│" + " " + input.ljust(box_width-2) + " " + "│")
 
 def right_align(input, box_width=80):
-    output = "│" + " " + input.rjust(box_width-2) + " " + "│"
-    print(output.encode("utf-8"))
+    print("│" + " " + input.rjust(box_width-2) + " " + "│")
 
 def feature_print(type, input):
     if input[0]>0:
