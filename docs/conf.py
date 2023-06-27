@@ -20,7 +20,7 @@ html_theme_options = {
     'repo_name': 'feloopy',
     "icon_links": [
         {
-            "name": "PyData",
+            "name": "FelooPy",
             "url": "https://github.com/ktafakkori/feloopy/",
             "icon": "_static/logo3.png",
             "type": "local",
