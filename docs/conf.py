@@ -6,15 +6,15 @@ author = 'Keivan Tafakkori'
 
 # -- General configuration ---------------------------------------------------
 
-extensions = ['myst_parser']
+extensions = ['myst_parser', 'sphinx_copybutton']
 
 source_suffix = ['.rst', '.md']
 
 # -- Options for HTML output -------------------------------------------------
 
-html_theme = 'pydata_sphinx_theme'
+html_theme = 'sphinx_book_theme'
 
-html_logo = "_static/empty_logo.png"
+html_logo = "_static/logo.png"
 
 html_css_files = [
     '_static/custom.css',
