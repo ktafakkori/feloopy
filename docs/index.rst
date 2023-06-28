@@ -19,10 +19,6 @@ Introduction
 FelooPy
 -------
 
-.. raw:: html
-
-   <img src="_static/logo.png" alt="FelooPy Logo" class="transparent-background"/>
-
 Welcome to FelooPy (pronounced /fɛlupaɪ/), a free and open-source Python library designed for automated operations research. FelooPy serves as a comprehensive hyper-optimization interface and a fully integrated optimization environment.
 
 The name 'FelooPy' encapsulates our mission: to provide practical and applicable solutions for systems, industries, and supply chains. It echoes the importance of 'loops' in programming and algorithm development, drawing a playful parallel with the word 'Floppy' to highlight memory efficiency.
