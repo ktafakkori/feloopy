@@ -387,17 +387,20 @@ class Model:
     
     def fvar(self, name, dim=0, bound=[None, None]):
         """
-        Creates and returns a free variable.
+        `fvar` method is used to create and return a free variable.
 
-        Args:
-            name (str): Name of this variable.
-            dim (list, optional): Dimensions of this variable. Default: 0.
-            bound (list, optional): Bounds of this variable. Default: [None, None].
+        Parameters:
+        - name (str): Name.
+        - dim (list, optional): Dimensions. Default is 0.
+        - bound (list, optional): Lower and upper bounds. Default is [None, None]. Required for heuristic optimization.
+
+        Returns:
+        - variable: A free variable.
         """
 
         dim = fix_dims(dim)
-        self.features = update_variable_features(
-            name, dim, bound, 'free_variable_counter', self.features)
+
+        self.features = update_variable_features(name, dim, bound, 'free_variable_counter', self.features)
 
         match self.features['solution_method']:
 

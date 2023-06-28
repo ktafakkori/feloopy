@@ -1,28 +1,21 @@
-# Exact optimization
+# Exact Optimization
 
-In this documentation section, the elements that let you work with exact optimization algorithms using `feloopy` in Python are defined.
+This section of the documentation provides an overview of the elements in `feloopy` that enable you to work with exact optimization algorithms in Python.
 
-## Variable creation methods
+## Defining Variables 
 
-### `fvar`
+### `fvar` method
 
-creates a free variable (continuous, real-valued) with a specified name, dimensions, and bounds.
+`fvar` method is used to create and return a free variable.
 
-### Parameters:
+#### Parameters
 
-- `name`: String representing the free variable's name.
-- `dim`: List of sets or integers for dimensions (default is 0, a scalar variable).
-- `bound`: Optional list of [lower_bound, upper_bound] (no bounds by default).
+- **`name` (str):** Name.
 
-### Returns:
+- **`dim` (list, optional):** Dimensions. Default is `0`.
 
-The generated free variable.
+- **`bound` (list, optional):** Lower and upper bounds. Default is `[None, None]`.
 
-### Example Usage:
+#### Returns
 
-```python
-# Create a free variable named 'x' with two dimensions, and no bounds
-# my_variable = my_instance.fvar('x', [2, 2])
-```
-
-
+- **`variable`:** A free variable.
