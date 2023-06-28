@@ -20,11 +20,4 @@ html_css_files = [
     '_static/custom.css',
 ]
 
-html_theme_options = {
-    "logo": {
-        "alt_text": "FelooPy's documentation",
-         "text": "FelooPy's documentation",
-    }
-}
-
 
