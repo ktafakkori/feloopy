@@ -14,20 +14,7 @@ source_suffix = ['.rst', '.md']
 
 html_theme = 'pydata_sphinx_theme'
 
-html_theme_options = {
-    'base_url': '/',
-    'color_primary': 'indigo',
-    'color_accent': 'grey',
-    'repo_url': 'https://github.com/ktafakkori/feloopy/',
-    'repo_name': 'feloopy',
-    "logo": {
-        "text": "FelooPy's Documentation",
-        "image_dark": "_static/logo.svg",
-        "alt_text": "FelooPy's Documentation",
-    }
-}
-
-html_logo = "_static/logo3.png"
+html_logo = "_static/logo.png"
 
 html_css_files = [
     '_static/custom.css',
