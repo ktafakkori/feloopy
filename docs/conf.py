@@ -14,9 +14,17 @@ source_suffix = ['.rst', '.md']
 
 html_theme = 'pydata_sphinx_theme'
 
-html_logo = "_static/logo.png"
+html_logo = "_static/empty_logo.png"
 
 html_css_files = [
     '_static/custom.css',
 ]
+
+html_theme_options = {
+    "logo": {
+        "alt_text": "FelooPy's documentation",
+         "text": "FelooPy's documentation",
+    }
+}
+
 
