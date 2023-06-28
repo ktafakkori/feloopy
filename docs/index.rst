@@ -5,8 +5,13 @@ Welcome to FelooPy's Documentation
    :maxdepth: 2
    :caption: Contents:
 
-   exact_optimization
-
+   exact
+   heuristic
+   convex
+   constraint
+   multiobjective
+   multicriteria
+   uncertain
 
 Introduction
 ============
