@@ -5,6 +5,9 @@ Welcome to FelooPy's Documentation
    :maxdepth: 2
    :caption: Contents:
 
+   exact_optimization
+
+
 Introduction
 ============
 

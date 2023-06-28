@@ -6,7 +6,9 @@ author = 'Keivan Tafakkori'
 
 # -- General configuration ---------------------------------------------------
 
-extensions = []
+extensions = ['myst_parser']
+
+source_suffix = ['.rst', '.md']
 
 # -- Options for HTML output -------------------------------------------------
 
