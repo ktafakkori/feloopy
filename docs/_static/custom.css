@@ -10,4 +10,10 @@
   .pydata-sphinx-theme header nav .navbar-brand {
     padding-left: 50px; /* Adjust the padding to accommodate the logo */
   }
-  
+
+.transparent-background {
+    background: transparent;
+    width: 200px;
+    height: auto;
+}
+
