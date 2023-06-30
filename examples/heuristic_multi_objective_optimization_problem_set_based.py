@@ -2,7 +2,7 @@ from feloopy import *
 
 def instance(X):
     m = representor_model('heuristic','my_model','pymoo',X)
-    x = m.bvar('x', bound= [0,2])
+    x = m.pvar('x', bound= [-1000,1000])
     m.obj(x[...,0]**2)
     m.obj((x[...,0]-2)**2)
     m.sol(['min','min'], 'ns-ga-ii', obj_id='all')
