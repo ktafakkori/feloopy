@@ -21,7 +21,7 @@ m.obj(sum(p[j]*x[j] for j in J))
 m.con(sum(w[j]*x[j] for j in J) <= W)
     
 #Solve (Using solvers with "_online" at the end)
-m.sol(['max'], 'octeract_online', email="youremail@domain.com")
+m.sol(['max'], 'bonmin_online', email="youremail@domain.com")
 
 # Display
 m.report()

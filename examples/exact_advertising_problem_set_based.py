@@ -10,7 +10,7 @@ I = range(len(c))  # Set of ads
 J = range(len(v))  # Set of viewer types
 
 # Environment
-m = target_model('exact', 'advertising problem', 'pulp', key=0)
+m = target_model('exact', 'advertising problem', 'linopy', key=0)
 
 # Variables
 x = m.pvar('x', [I])

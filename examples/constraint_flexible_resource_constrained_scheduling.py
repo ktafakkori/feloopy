@@ -17,7 +17,7 @@ operation_requires_resource = m.uniformint(0,4, [O,R])
 batch_size_of_operation = m.uniformint(2,5,[O])
 duration_of_each_operation_class = m.uniformint(10,40,[C])
 
-operation = m.cevar('operation', [o for o,c in sets(O,C) if class_of_operation[o]==c], [[duration_of_each_operation_class[c], None, None] for o,c in sets(O,C) if class_of_operation[o]==c], optional=True)
+operation = m.cevar('operation', [o for o,c in sets(O,C) if class_of_operation[o]==c], {o: [duration_of_each_operation_class[c], None, None] for o,c in sets(O,C) if class_of_operation[o]==c}, optional=True)
 job_operation = m.cevar('job_operation', [(j,o) for j,o in sets(J,O)], {(j,o): [duration_of_each_operation_class[c], None, None] for j,o,c in sets(J,O,C) if class_of_operation[o]==c}, optional=True)
 tardiness_indicator = m.bvar('tardiness', [J])
 

@@ -29,6 +29,8 @@ from tabulate import tabulate as tb
 from typing import List, Tuple, Optional
 import sys
 
+
+
 warnings.filterwarnings("ignore")
 
 avar = defaultdict()
@@ -75,9 +77,20 @@ class Model:
         self.avar = self.coll()
 
         if solution_method == 'constraint':
+
+            if interface_name == 'cplex_cp':
+                import docplex.cp.model as constraint_tools
+            if interface_name == 'ortools_cp':
+                import ortools.sat.python.cp_model as constraint_tools
             self.solution_method_was = 'constraint'
             solution_method = 'exact'
+
         elif solution_method == 'convex':
+
+            if interface_name == 'cvxpy':
+                import cvxpy as convex_tools
+            if interface_name == 'gurobi':
+                import gurobipy as convex_tools
             self.solution_method_was = 'convex'
             solution_method = 'exact'
         else:
@@ -1631,24 +1644,24 @@ class Model:
                 self.model.Add(interval.EndExpr() < domain[0])
                 self.model.Add(interval.EndExpr() > domain[1])
 
-def forbid_overlap(self, interval_variables, transition_matrix=None):
-    """
-    Forbids overlapping of interval variables.
+    def forbid_overlap(self, interval_variables, transition_matrix=None):
+        """
+        Forbids overlapping of interval variables.
 
-    Parameters:
-    interval_variables (list of IntervalVar): The list of interval variables.
-    transition_matrix (list of list of bool, optional): Transition matrix. Defaults to None.
+        Parameters:
+        interval_variables (list of IntervalVar): The list of interval variables.
+        transition_matrix (list of list of bool, optional): Transition matrix. Defaults to None.
 
-    """
+        """
 
-    if self.features['interface_name'] == 'cplex_cp':
-        if transition_matrix == None:
-            return self.model.no_overlap(interval_variables)
-        else:
-            return self.model.no_overlap(interval_variables, transition_matrix)
+        if self.features['interface_name'] == 'cplex_cp':
+            if transition_matrix == None:
+                return self.model.no_overlap(interval_variables)
+            else:
+                return self.model.no_overlap(interval_variables, transition_matrix)
 
-    if self.features['interface_name'] == 'ortools_cp':
-        return self.model.AddNoOverlap(interval_variables)
+        if self.features['interface_name'] == 'ortools_cp':
+            return self.model.AddNoOverlap(interval_variables)
 
     def forbid_extent(self, interval, function):
         """

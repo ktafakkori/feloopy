@@ -2,7 +2,7 @@ from feloopy import *
 
 # Credit: https://python-mip.readthedocs.io/en/latest/examples.html
 
-m = target_model('exact', 'n_queens_problem', 'pyomo')
+m = target_model('exact', 'n_queens_problem', 'mip')
 
 N = 30
 x = m.bvar('x', [N,N])
@@ -16,6 +16,6 @@ for j in range(N):
 for k in range(2 - N, N - 2 + 1):
     m.eq(sum(x[i,i-k] for i in range(N) if 0<= i-k< N) <=1)
 
-m.sol('cbc')
+m.sol('cplex')
 
 m.report()

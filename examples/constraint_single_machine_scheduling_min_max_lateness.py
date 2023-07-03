@@ -9,7 +9,7 @@ J = m.set(10)
 due_date = m.uniform(75, 200, [J])
 release_time = m.uniform(1,50, [J])
 
-process_interval = m.cevar('job', J, [[m.uniformint(10,40), None, None] for j in J])
+process_interval = m.cevar('job', J, {j: [m.uniformint(10,40), None, None] for j in J})
 max_lateness = m.ivar('lateness')
 
 m.obj(max_lateness)

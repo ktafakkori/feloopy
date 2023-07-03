@@ -36,7 +36,7 @@ m.report()
 # Store
 w = [] 
 for i in U: 
-    w.append(m.get(x)[i][0])
+    w.append(m.get(x)[i])
 
 b = m.get(z)
 

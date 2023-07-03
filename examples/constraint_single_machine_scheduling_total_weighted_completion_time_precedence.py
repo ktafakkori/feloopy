@@ -14,7 +14,7 @@ for j in J:
     if j>=len(J)/2:
         precedences.append((m.uniformint(0,len(J)/2-1), j))
 
-process_interval = m.cevar('job', J, [[m.uniformint(10,40), None, None] for j in J])
+process_interval = m.cevar('job', J, {j: [m.uniformint(10,40), None, None] for j in J})
 
 m.obj(sum([m.end_of(process_interval[j])*priority_weights[j] for j in J])) 
 

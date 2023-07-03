@@ -11,7 +11,7 @@
 import mip as mip_interface
 import timeit
 
-mip_solver_selector = {'cbc': 'cbc'}
+mip_solver_selector = {'cbc': 'cbc', 'gurobi': 'gurobi', 'cplex': 'cplex', 'glpk': 'glpk'}
 
 
 def generate_solution(features):
@@ -38,6 +38,11 @@ def generate_solution(features):
     if solver_name not in mip_solver_selector.keys():
         raise RuntimeError(
             "Using solver '%s' is not supported by 'mip'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
+    
+    if log:
+        ""
+    else:
+        model_object.verbose = 0
 
     match debug:
 

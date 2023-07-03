@@ -8,7 +8,6 @@
  # @ Copyright: 2023. MIT License. All Rights Reserved.
  '''
 
-
 from docplex.cp.model import CpoModel as CPLEXMODEL
 
 
