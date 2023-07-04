@@ -25,6 +25,7 @@ In this documentation section, the elements that let you work with heuristic opt
 
 - `orig`: original version (based on reference)
 - `base`: developed version (improved implementation)
+- `levy`: Levy flight version
 - `bio-inspired`: 13 bio-inspired algorithms from 2008-2023
 - `evolution-inspired`: 8 evolution-inspired algorithms from 
 
@@ -48,7 +49,183 @@ In this documentation section, the elements that let you work with heuristic opt
     }
     ```
 
+## 1994 Algorithms
 
+### `orig-ga`
+
+- Evolution-inspired
+
+- Src: [GA mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/GA.py)
+
+- Ref: Whitley, D., 1994. A genetic algorithm tutorial. Statistics and computing, 4(2), pp.65-85.
+
+- Config:
+
+    ```python 
+    { 
+        "epoch": "(int): maximum number of iterations, default = 10000", 
+        "pop_size": "(int) number of population size, default = 100", 
+        "pc": "(float): cross-over probability, default = 0.95", 
+        "pm": "(float): mutation probability, default = 0.025", 
+        "selection": "(str): Optional, can be ['roulette', 'tournament', 'random'], default = 'tournament'", 
+        "k_way": "(float): Optional, set it when use 'tournament' selection, default = 0.2", 
+        "crossover": "(str): Optional, can be ['one_point', 'multi_points', 'uniform', 'arithmetic'], default = 'uniform'",
+        "mutation_multipoints": "(bool): Optional, True or False, effect on mutation process, default = False",
+        "mutation": "(str): Optional, can be ['flip', 'swap'] for multipoints and can be ['flip', 'swap', 'scramble', 'inversion'] for one-point, default='flip'" 
+    }
+    ```
+
+### `single-ga`
+
+- Evolution-inspired
+
+- Src: [GA mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/GA.py)
+
+- Ref: Whitley, D., 1994. A genetic algorithm tutorial. Statistics and computing, 4(2), pp.65-85.
+
+- Config:
+
+    ```python 
+    { 
+        "epoch": "(int): maximum number of iterations, default = 10000", 
+        "pop_size": "(int) number of population size, default = 100", 
+        "pc": "(float) cross-over probability, default = 0.95", 
+        "pm": "(float) mutation probability, default = 0.8", 
+        "selection": "(str) Optional, can be ['roulette', 'tournament', 'random'], default = 'tournament'", 
+        "crossover": "(str) Optional, can be ['one_point', 'multi_points', 'uniform', 'arithmetic'], default = 'uniform'", 
+        "mutation": "(str) Optional, can be ['flip', 'swap', 'scramble', 'inversion'], default = 'flip'", 
+        "k_way": "(float) Optional, set it when use 'tournament' selection, default = 0.2" 
+    }
+    ```
+
+### `elite-single-ga`
+
+- Evolution-inspired
+
+- Src: [GA mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/GA.py)
+
+- Ref: Whitley, D., 1994. A genetic algorithm tutorial. Statistics and computing, 4(2), pp.65-85.
+
+- Config:
+
+    ```python 
+    { 
+    "epoch": "(int): maximum number of iterations, default = 10000", 
+    "pop_size": "(int) number of population size, default = 100", 
+    "pc": "(float): [0.7, 0.95], cross-over probability, default = 0.95", 
+    "pm": "(float): [0.01, 0.2], mutation probability, default = 0.025", 
+    "selection": "(str): Optional, can be ['roulette', 'tournament', 'random'], default = 'tournament'", 
+    "crossover": "(str): Optional, can be ['one_point', 'multi_points', 'uniform', 'arithmetic'], default = 'uniform'", 
+    "mutation": "(str): Optional, can be ['flip', 'swap', 'scramble', 'inversion'] for one-point", 
+    "k_way": "(float): Optional, set it when use 'tournament' selection, default = 0.2", 
+    "elite_best": "(float/int): Optional, can be float (percentage of the best in elite group), or int (the number of best elite), default = 0.1", 
+    "elite_worst": "(float/int): Optional, can be float (percentage of the worst in elite group), or int (the number of worst elite), default = 0.3", 
+    "strategy": "(int): Optional, can be 0 or 1. If = 0, the selection is select parents from (elite_worst + non_elite_group). Else, the selection will select dad from elite_worst and mom from non_elite_group." }
+    ```
+
+### `multi-ga`
+
+- Bio-inspired
+
+- Src: [MultiGA mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/GA.py)
+
+- Ref: Whitley, D., 1994. A genetic algorithm tutorial. Statistics and computing, 4(2), pp.65-85.
+
+- Config: 
+
+    ```python
+    { "epoch": "(int): maximum number of iterations, default = 10000", 
+    "pop_size": "(int) number of population size, default = 100", 
+    "pc": "(float): cross-over probability, default = 0.95", 
+    "pm": "(float): mutation probability, default = 0.025", 
+    "selection": "(str): Optional, can be ['roulette', 'tournament', 'random'], default = 'tournament'", 
+    "crossover": "(str): Optional, can be ['one_point', 'multi_points', 'uniform', 'arithmetic'], default = 'uniform'", 
+    "mutation": "(str): Optional, can be ['flip', 'swap'] for multipoints", 
+    "k_way": "(float): Optional, set it when use 'tournament' selection, default = 0.2" }
+    ```
+
+### `elite-multi-ga`
+
+- Evolution-inspired
+
+- Src: [Elite Multi-GA mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/EliteMultiGA.py)
+
+- Ref: Whitley, D. (1994). A genetic algorithm tutorial. Statistics and computing, 4(2), pp.65-85.
+
+- Config:
+
+    ```python
+    { 
+        "epoch": "(int): maximum number of iterations, default = 10000", 
+        "pop_size": "(int): number of population size, default = 100", 
+        "pc": "(float): [0.7, 0.95], cross-over probability, default = 0.95", 
+        "pm": "(float): [0.01, 0.2], mutation probability, default = 0.025", 
+        "selection": "(str): Optional, can be ['roulette', 'tournament', 'random'], default = 'tournament'", 
+        "k_way": "(float): Optional, set it when use 'tournament' selection, default = 0.2", 
+        "crossover": "(str): Optional, can be ['one_point', 'multi_points', 'uniform', 'arithmetic'], default = 'uniform'", 
+        "mutation": "(str): Optional, can be ['flip', 'swap'] for multipoints", 
+        "elite_best": "(float/int): Optional, can be float (percentage of the best in elite group), or int (the number of best elite), default = 0.1", 
+        "elite_worst": "(float/int): Optional, can be float (percentage of the worst in elite group), or int (the number of worst elite), default = 0.3", 
+        "strategy": "(int): Optional, can be 0 or 1. If = 0, the selection is select parents from (elite_worst + non_elite_group). Else, the selection will select dad from elite_worst and mom from non_elite_group." 
+    }
+    ```
+
+## 1999 Algorithms
+
+### `orig-ep`, `levy-ep`
+
+- Evolution-inspired
+
+- Src: [EP mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/EP.py)
+
+- Ref: Yao, X., Liu, Y. and Lin, G., 1999. Evolutionary programming made faster. IEEE Transactions on Evolutionary computation, 3(2), pp.82-102.
+
+- Config: 
+
+    ```python
+    { 
+        "epoch": "(int): maximum number of iterations, default = 10000", 
+        "pop_size": "(int) number of population size (miu in the paper), default = 100", 
+        "bout_size": "(float): percentage of child agents implement tournament selection", 
+    }
+    ```
+
+## 2001 Algorithms
+
+### `cma-es`, `simp-cma-es`
+
+- Evolution-inspired
+
+- Src: [CMA-ES mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/ES.py)
+
+- Ref: Hansen, N., & Ostermeier, A. (2001). Completely derandomized self-adaptation in evolution strategies. Evolutionary computation, 9(2), 159-195.
+
+- Config: 
+
+    ```python 
+    { "epoch": "(int): maximum number of iterations, default = 10000", "pop_size": "(int) number of population size (miu in the paper), default = 100" }
+    ```
+
+## 2002 Algorithms
+
+### `orig-es`, `levy-es`
+
+- Evolution-based
+
+- Src: [ES mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/ES.py)
+
+- Ref: Beyer, H.G. and Schwefel, H.P., 2002. Evolution strategies–a comprehensive introduction. Natural computing, 1(1), pp.3-52.
+
+- Config: 
+
+    ```python
+    { 
+        "epoch": "(int): maximum number of iterations, default = 10000",
+        "pop_size": "(int) number of population size, default = 100",
+         "lamda": "(float) Percentage of child agents, evolving in the next generation, default=0.75" 
+    }
+    ```
+    
 ## 2006 Algorithms
 
 ### `orig-iwo`
@@ -70,6 +247,23 @@ In this documentation section, the elements that let you work with heuristic opt
         "exponent": "(int) Variance Reduction Exponent"
         "sigma_start": "(float) The initial value of standard deviation"
         "sigma_end": "(float) The final value of standard deviation"
+    }
+    ```
+
+### `sap-de`
+
+- Evolution-inspired
+
+- Src: [SAPDE mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/DE.py)
+
+- Ref: Teo, J. (2006). Exploring dynamic self-adaptive populations in differential evolution. Soft Comput, 10(8), 673–686. doi: 10.1007/s00500-005-0537-1
+
+- Config: 
+    ```python
+    {
+        'epoch': "maximum number of iterations (int), default = 10000",
+        'pop_size': "number of population size (int), default = 100",
+        'branch': "gaussian (absolute) or uniform (relative) method (str)",
     }
     ```
 
@@ -115,6 +309,24 @@ In this documentation section, the elements that let you work with heuristic opt
         'ap': "The Adaptation Parameter control value of f and cr (float) (c in the paper), default = 0.1",
     }
     ```
+
+## 2012 Algorithms
+
+### `OriginalFPA`
+
+- Bio-inspired
+
+- Src: [OriginalFPA mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/FPA.py)
+
+- Ref: Yang, X.S., 2012, September. Flower pollination algorithm for global optimization. In International
+conference on unconventional computing and natural computation (pp. 240-249). Springer, Berlin, Heidelberg.
+
+- Config: 
+
+    ```python 
+    { "epoch": "(int): maximum number of iterations, default = 10000", "pop_size": "(int): number of population size, default = 100", "p_s": "(float): switch probability, default = 0.8", "levy_multiplier": "(float): multiplier factor of Levy-flight trajectory, default = 0.2" }
+    ```
+
 
 ## 2014 Algorithms
 
