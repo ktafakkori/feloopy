@@ -2147,19 +2147,18 @@ class Model:
                                 self.agent[:, -1] = 0
 
                                 total_obj = self.features['objective_counter'][0]
+                                
+                                self.features['objectives'] = np.array(self.features['objectives']).T
 
-                                self.features['objectives'] = np.array(
-                                    self.features['objectives']).T[0]
+                                print(self.features['objectives'])
 
                                 for i in range(self.features['objective_counter'][0]):
 
                                     if directions[i] == 'max':
-                                        self.agent[:, -2-total_obj+i] = self.features['objectives'][:,
-                                                                                                    i] - self.features['penalty_coefficient'] * (self.penalty)**2
+                                        self.agent[:, -2-total_obj+i] = self.features['objectives'][:,i] - self.features['penalty_coefficient'] * (self.penalty)**2
 
                                     if directions[i] == 'min':
-                                        self.agent[:, -2-total_obj+i] = self.features['objectives'][:,
-                                                                                                    i] + self.features['penalty_coefficient'] * (self.penalty)**2
+                                        self.agent[:, -2-total_obj+i] = self.features['objectives'][:,i] + self.features['penalty_coefficient'] * (self.penalty)**2
                         else:
 
                             self.penalty = np.zeros(np.shape(self.agent)[0])
@@ -3309,34 +3308,32 @@ class Implement:
 
     def get_status(self):
 
-        if self.interface_name in ['mealpy', 'pymultiobjective', 'pymoo']:
+        if self.interface_name == 'mealpy':
 
-            if self.interface_name == 'mealpy':
-
-                return self.Check_Fitness(self.BestAgent)
-
-            else:
-                status = []
-                if self.interface_name == 'pymoo':
-
-                    for i in range(np.shape(self.BestReward)[0]):
-                        status.append(self.Check_Fitness(np.array([self.BestAgent[i]])))
-
-                else:
-
-                    for i in range(np.shape(self.BestReward)[0]):
-                        status.append(self.Check_Fitness(self.BestAgent[i]))
-                
-
-                return status
+            return self.Check_Fitness(self.BestAgent)
 
         else:
-            if self.status[0] == 1:
-                return 'feasible (constrained)'
-            elif self.status[0] == 2:
-                return 'feasible (unconstrained)'
-            elif self.status[0] == -1:
-                return 'infeasible'
+            status = []
+            if self.interface_name in ['feloopy', 'pymoo']:
+
+                for i in range(np.shape(self.BestReward)[0]):
+                    status.append(self.Check_Fitness(np.array([self.BestAgent[i]])))
+
+            else:
+
+                for i in range(np.shape(self.BestReward)[0]):
+                    status.append(self.Check_Fitness(self.BestAgent[i]))
+            
+
+            return status
+
+        #else:
+            #if self.status[0] == 1:
+                #return 'feasible (constrained)'
+            #elif self.status[0] == 2:
+                #return 'feasible (unconstrained)'
+            #elif self.status[0] == -1:
+                #return 'infeasible'
 
     def Check_Fitness(self, X):
 
