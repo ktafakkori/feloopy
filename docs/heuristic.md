@@ -26,6 +26,28 @@ In this documentation section, the elements that let you work with heuristic opt
 `orig`: original version
 `base`: developed version
 
+## 2006 Algorithms
+
+- Bio-inspired
+
+- Src: [IWO mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/bio_based/IWO.py)
+
+- Ref: Mehrabian, A. R., & Lucas, C. (2006). A novel numerical optimization algorithm inspired from weed colonization. Ecological Informatics, 1(4), 355–366. doi: 10.1016/j.ecoinf.2006.07.003
+
+- Config: 
+
+    ```python
+    {
+            "epoch": "(int): maximum number of iterations, default = 10000"
+            "pop_size": "(int) number of population size, default = 100"
+            "seed_min": "(int) Number of Seeds (min)"
+            "seed_max": "(int) Number of seeds (max)"
+            "exponent": "(int) Variance Reduction Exponent"
+            "sigma_start": "(float) The initial value of standard deviation"
+            "sigma_end": "(float) The final value of standard deviation"
+    }
+    ```
+
 ## 2008 Algorithms
 
 ### `orig-bbo`, `base-bbo`
@@ -63,11 +85,12 @@ In this documentation section, the elements that let you work with heuristic opt
     {
         'epoch': "max iterations (int), default = 10000",
         'pop_size': "population size (int), default = 100",
+        'p_c': "crossover probability (float) [0,1], default = 0.9"
         'p_m': "initial mutation probability (float) [0,1], default = 0.01",
         'n_best': "elites survived (int) [2, pop_size/2], default = 2",
         'alpha': "similarity factor (float) [0,1], default = 0.98", 
         'beta': "initial proportional factor (float) [0,1], default = 0.9", 
-        'gamma': " similar to cooling factor of a cooling schedule in the simulated annealing (float) [0,1], default = 0.9",
+        'gamma': "similar to cooling factor of a cooling schedule in the simulated annealing (float) [0,1], default = 0.9",
     }
     ```
 
