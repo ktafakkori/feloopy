@@ -23,8 +23,8 @@ In this documentation section, the elements that let you work with heuristic opt
 
 ## Algorithm Types
 
-`orig`: original version
-`base`: developed version
+- `orig`: original version (based on reference)
+- `base`: developed version (improved implementation)
 
 ## 2006 Algorithms
 
@@ -40,13 +40,13 @@ In this documentation section, the elements that let you work with heuristic opt
 
     ```python
     {
-            "epoch": "(int): maximum number of iterations, default = 10000"
-            "pop_size": "(int) number of population size, default = 100"
-            "seed_min": "(int) Number of Seeds (min)"
-            "seed_max": "(int) Number of seeds (max)"
-            "exponent": "(int) Variance Reduction Exponent"
-            "sigma_start": "(float) The initial value of standard deviation"
-            "sigma_end": "(float) The final value of standard deviation"
+        "epoch": "(int): maximum number of iterations, default = 10000"
+        "pop_size": "(int) number of population size, default = 100"
+        "seed_min": "(int) Number of Seeds (min)"
+        "seed_max": "(int) Number of seeds (max)"
+        "exponent": "(int) Variance Reduction Exponent"
+        "sigma_start": "(float) The initial value of standard deviation"
+        "sigma_end": "(float) The final value of standard deviation"
     }
     ```
 
@@ -70,8 +70,30 @@ In this documentation section, the elements that let you work with heuristic opt
         'elites': "elites survived (int), default = 2",
     }
     ```
-## 2018 Algorithms
 
+## 2017 Algorithms
+
+### `orig-sbo`, `base-sbo`
+
+- Bio-inspired
+
+- Src: [SBO mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/bio_based/SBO.py)
+
+- Ref: Samareh Moosavi, S. H., & Khatibi Bardsiri, V. (2017). Satin bowerbird optimizer: A new optimization algorithm to optimize ANFIS for software development effort estimation. Engineering Applications of Artificial Intelligence, 60, 1–15. doi: 10.1016/j.engappai.2017.01.006
+
+- Config: 
+
+    ```python
+    {
+        'epoch': "maximum number of iterations, default = 10000",
+        'pop_size': "number of population size, default = 100",
+        'alpha': "the greatest step size, default=0.94",
+        'p_m': "mutation probability, default=0.05",
+        'psw': "proportion of space width (z in the paper), default=0.02",
+    }
+    ```
+
+## 2018 Algorithms
 
 ### `orig-eoa`
 
