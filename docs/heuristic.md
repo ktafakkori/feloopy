@@ -360,11 +360,11 @@ conference on unconventional computing and natural computation (pp. 240-249). Sp
 
 ## 2013 Algorithms
 
-### `orig-shade`
+### `sha-de`
 
 - Evolution-inspired
 
-- Src: [OriginalSHADE mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/SHADE.py)
+- Src: [SHADE mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/SHADE.py)
 
 - Ref: Tanabe, R. and Fukunaga, A., 2013, June. Success-history based parameter adaptation for
 differential evolution. In 2013 IEEE congress on evolutionary computation (pp. 71-78). IEEE.
@@ -450,6 +450,25 @@ differential evolution. In 2013 IEEE congress on evolutionary computation (pp. 7
         'gamma_max': "[0.1, 0.5] factor for mutation process",
         'n_trials': "number of attempts for a larva to set in the reef, no default value specified",
         'restart_count': "reset the whole population after global best solution is not improved after restart_count times, no default value specified"
+    }
+    ```
+
+### `l-sha-de`
+
+- Bio-inspired
+
+- Src: [L_SHADE mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/SHADE.py)
+
+- Ref: Tanabe, R. and Fukunaga, A.S., 2014, July. Improving the search performance of SHADE using linear population size reduction. In 2014 IEEE congress on evolutionary computation (CEC) (pp. 1658-1665). IEEE.
+
+- Config:
+
+    ```python
+    { 
+        "epoch": "(int): maximum number of iterations, default = 750",
+        "pop_size": "(int): number of population size, default = 100", 
+        "miu_f": "(float): initial weighting factor, default = 0.5", 
+        "miu_cr": "(float): initial cross-over probability, default = 0.5",
     }
     ```
 
@@ -651,7 +670,9 @@ differential evolution. In 2013 IEEE congress on evolutionary computation (pp. 7
 
 ### `orig-tsa`
 
-- Bio-inspiredhttps://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/DE.pystic paradigm for global optimization. Engineering Applications of Artificial Intelligence, 90, 103541. doi: 10.1016/j.engappai.2020.103541
+- Bio-inspired
+- Src: https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/DE.py
+- stic paradigm for global optimization. Engineering Applications of Artificial Intelligence, 90, 103541. doi: 10.1016/j.engappai.2020.103541
 
 - Config:
 
