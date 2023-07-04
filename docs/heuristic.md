@@ -28,6 +28,27 @@ In this documentation section, the elements that let you work with heuristic opt
 - `bio-inspired`: 13 bio-inspired algorithms from 2008-2023
 - `evolution-inspired`: 8 evolution-inspired algorithms from 
 
+
+## 2005 Algorithms
+
+### `sa-de`
+
+- Evolution-inspired
+
+- Src: [SADE mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/DE.py)
+
+- Ref: Qin, A. K., & Suganthan, P. N. (2005). Self-adaptive differential evolution algorithm for numerical optimization. 2005 IEEE Congress on Evolutionary Computation. IEEE. doi: 10.1109/CEC.2005.1554904
+
+- Config:
+
+    ```python
+    {
+        'epoch': "max iterations (int), default = 10000",
+        'pop_size': "population size (int), default = 100",
+    }
+    ```
+
+
 ## 2006 Algorithms
 
 ### `orig-iwo`
@@ -73,6 +94,28 @@ In this documentation section, the elements that let you work with heuristic opt
     }
     ```
 
+## 2009 Algorithms
+
+### `ja-de`
+
+- Evolution-inspired
+
+- Src: https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/DE.py
+
+- Ref: Zhang, J., & Sanderson, A. C. (2009). JADE: Adaptive Differential Evolution With Optional External Archive. IEEE Transactions on Evolutionary Computation, 13(5), 945–958. doi: 10.1109/TEVC.2009.2014613
+
+- Config: 
+    ```python
+    {
+        'epoch': "maximum number of iterations (int), default = 10000",
+        'pop_size': "number of population size (int), default = 100",
+        'miu_f': "initial adaptive f (float), default = 0.5",
+        'miu_cr': "initial adaptive cr (float), default = 0.5",
+        'pt': "The percent of top best agents (float) (p in the paper), default = 0.1",
+        'ap': "The Adaptation Parameter control value of f and cr (float) (c in the paper), default = 0.1",
+    }
+    ```
+
 ## 2014 Algorithms
 
 ### `orig-sos`
@@ -92,13 +135,33 @@ In this documentation section, the elements that let you work with heuristic opt
     }
     ```
 
-### `orig-cro`, `o-cro`
+### `orig-cro`
 
 - Evolution-based
 
 - Src: [CRO mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/CRO.py)
 
-- Ref: Salcedo-Sanz, S., Del Ser, J., Landa-Torres, I., Gil-López, S., & Portilla-Figueras, J. A. (2014). The Coral Reefs Optimization Algorithm: A Novel Metaheuristic for Efficiently Solving Optimization Problems. Scientific World Journal, 2014. doi: 10.1155/2014/739768
+- Ref: Salcedo-Shttps://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/DE.py: "maximum number of iterations, default = 10000",
+        'pop_size': "number of population size, default = 100",
+        'po': "the rate between free/occupied at the beginning, no default value specified",
+        'Fb': "BroadcastSpawner/ExistingCorals rate, no default value specified",
+        'Fa': "fraction of corals duplicates its self and tries to settle in a different part of the reef, no default value specified",
+        'Fd': "fraction of the worse health corals in reef will be applied depredation, no default value specified",
+        'Pd': "the maximum of probability of depredation, no default value specified",
+        'GCR': "probability for mutation process, no default value specified",
+        'gamma_min': "factor for mutation process, no default value specified",
+        'gamma_max': "factor for mutation process, no default value specified",
+        'n_trials': "number of attempts for a larva to set in the reef, no default value specified"
+    }
+    ```
+
+### `o-cro`
+
+- Evolution-based
+
+- Src: [OCRO mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/CRO.py)
+
+- Ref: Nguyen, T., Nguyen, T., Nguyen, B. M., & Nguyen, G. (2019). Efficient Time-Series Forecasting Using Neural Network and Opposition-Based Coral Reefs Optimization. International Journal of Computational Intelligence Systems, 12(2), 1144–1161. doi: 10.2991/ijcis.d.190930.003
 
 - Config:
 
@@ -110,11 +173,12 @@ In this documentation section, the elements that let you work with heuristic opt
         'Fb': "BroadcastSpawner/ExistingCorals rate, no default value specified",
         'Fa': "fraction of corals duplicates its self and tries to settle in a different part of the reef, no default value specified",
         'Fd': "fraction of the worse health corals in reef will be applied depredation, no default value specified",
-        'Pd': "the maximum of probability of depredation, no default value specified",
+        'Pd': "Probability of depredation, no default value specified",
         'GCR': "probability for mutation process, no default value specified",
-        'gamma_min': "factor for mutation process, no default value specified",
-        'gamma_max': "factor for mutation process, no default value specified",
-        'n_trials': "number of attempts for a larva to set in the reef, no default value specified"
+        'gamma_min': "[0.01, 0.1] factor for mutation process",
+        'gamma_max': "[0.1, 0.5] factor for mutation process",
+        'n_trials': "number of attempts for a larva to set in the reef, no default value specified",
+        'restart_count': "reset the whole population after global best solution is not improved after restart_count times, no default value specified"
     }
     ```
 
@@ -163,6 +227,32 @@ In this documentation section, the elements that let you work with heuristic opt
     ```
 
 ## 2018 Algorithms
+
+
+### `base-de`
+
+- Evolution-inspired
+
+- Src: [DE mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/DE.py)
+
+- Ref: Mohamed, A. W., Hadi, A. A., & Jambi, K. M. (2018). Novel mutation strategy for enhancing SHADE and LSHADE algorithms for global Numerical Optimization. Swarm and Evolutionary Computation, 50. doi: 10.1016/j.swevo.2018.10.006
+
+- Config:
+    ```python
+    {        
+    'epoch': "maximum number of iterations, default = 10000",
+    'pop_size': "number of population size, default = 100",
+    'wf': "weighting factor (float) [0.5, 0.95], default = 0.8",
+    'cr': "crossover rate (float) [0.5, 0.95], default = 0.9",
+    'strategy': """variant version of DE algorithm (int) [0, 5], there are lots of variant versions of DE algorithm, including:
+        + 0: DE/current-to-rand/1/bin
+        + 1: DE/best/1/bin
+        + 2: DE/best/2/bin
+        + 3: DE/rand/2/bin
+        + 4: DE/current-to-best/1/bin
+        + 5: DE/current-to-rand/1/bin"""
+    }
+    ```
 
 ### `orig-eoa`
 
@@ -290,11 +380,7 @@ In this documentation section, the elements that let you work with heuristic opt
 
 ### `orig-tsa`
 
-- Bio-inspired
-
-- Src: [TSA mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/bio_based/TSA.py)
-
-- Ref: Kaur, S., Awasthi, L. K., Sangal, A. L., & Dhiman, G. (2020). Tunicate Swarm Algorithm: A new bio-inspired based metaheuristic paradigm for global optimization. Engineering Applications of Artificial Intelligence, 90, 103541. doi: 10.1016/j.engappai.2020.103541
+- Bio-inspiredhttps://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/DE.pystic paradigm for global optimization. Engineering Applications of Artificial Intelligence, 90, 103541. doi: 10.1016/j.engappai.2020.103541
 
 - Config:
 
