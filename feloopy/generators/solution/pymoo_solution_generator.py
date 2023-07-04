@@ -13,8 +13,9 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
     import timeit
     from pymoo.core.problem import Problem
     from pymoo.optimize import minimize
-    import numpy as np
+    from pymoo.factory import get_termination, get_reference_directions
 
+    import numpy as np
 
     if show_log:
         verbose=True
@@ -106,7 +107,8 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
             algorithm = AGEMOEA2(**AlgOptions)
 
     time_solve_begin = timeit.default_timer()
-    res = minimize(problem, algorithm, verbose=verbose)
+    termination = get_termination("n_gen", AlgOptions.get('n_gen', 100))
+    res = minimize(problem, algorithm, termination=termination, verbose=verbose)
     time_solve_end = timeit.default_timer()
     pareto_front = ObjectivesDirections*res.F
     pareto_solutions = res.X
