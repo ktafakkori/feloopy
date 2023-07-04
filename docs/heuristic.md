@@ -29,24 +29,24 @@ In this documentation section, the elements that let you work with heuristic opt
 - `bio-inspired`: 13 bio-inspired algorithms from 2008-2023
 - `evolution-inspired`: 8 evolution-inspired algorithms from 
 
+## 1989 Algorithms
 
-## 2005 Algorithms
+- Src: [MA mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/MA.py)
 
-### `sa-de`
-
-- Evolution-inspired
-
-- Src: [SADE mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/DE.py)
-
-- Ref: Qin, A. K., & Suganthan, P. N. (2005). Self-adaptive differential evolution algorithm for numerical optimization. 2005 IEEE Congress on Evolutionary Computation. IEEE. doi: 10.1109/CEC.2005.1554904
+- Ref: Moscato, P., 1989. On evolution, search, optimization, genetic algorithms and martial arts: Towards memetic algorithms. Caltech concurrent computation program, C3P Report, 826, p.1989.
 
 - Config:
 
     ```python
-    {
-        'epoch': "max iterations (int), default = 10000",
-        'pop_size': "population size (int), default = 100",
-    }
+        {
+            "epoch": "(int): maximum number of iterations, default = 10000",
+            "pop_size": "(int): number of population size, default = 100",
+            "pc": "(float): cross-over probability, default = 0.85",
+            "pm": "(float): mutation probability, default = 0.15",
+            "p_local": "(float): Probability of local search for each agent, default=0.5",
+            "max_local_gens": "(int): number of local search agent will be created during local search mechanism, default=10",
+            "bits_per_param": "(int): number of bits to decode a real number to 0-1 bitstring, default=4"
+        }
     ```
 
 ## 1994 Algorithms
@@ -225,7 +225,26 @@ In this documentation section, the elements that let you work with heuristic opt
          "lamda": "(float) Percentage of child agents, evolving in the next generation, default=0.75" 
     }
     ```
-    
+
+
+## 2005 Algorithms
+
+### `sa-de`
+
+- Evolution-inspired
+
+- Src: [SADE mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/DE.py)
+
+- Ref: Qin, A. K., & Suganthan, P. N. (2005). Self-adaptive differential evolution algorithm for numerical optimization. 2005 IEEE Congress on Evolutionary Computation. IEEE. doi: 10.1109/CEC.2005.1554904
+
+- Config:
+
+    ```python
+    {
+        'epoch': "max iterations (int), default = 10000",
+        'pop_size': "population size (int), default = 100",
+    }
+    ```
 ## 2006 Algorithms
 
 ### `orig-iwo`
