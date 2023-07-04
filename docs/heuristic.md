@@ -71,7 +71,46 @@ In this documentation section, the elements that let you work with heuristic opt
     }
     ```
 
+## 2014 Algorithms
+
+- Bio-inspired 
+
+- Src: [SOS mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/bio_based/SOS.py)
+
+- Ref: Cheng, M.-Y., & Prayogo, D. (2014). Symbiotic Organisms Search: A new metaheuristic optimization algorithm. Computers & Structures, 139. doi: 10.1016/j.compstruc.2014.03.007
+
+- Config:
+
+    ```python
+    {
+        'epoch': "maximum number of iterations, default = 10000",
+        'pop_size': "number of population size, default = 100",
+    }
+    ```
+
+## 2015 Algorithms
+
+### `orig-vcs`, `base-vcs`
+
+- Bio-inspired
+
+- Src: [VCS mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/bio_based/VCS.py)
+
+- Ref: Li, M. D., Zhao, H., Weng, X. W., & Han, T. (2016). A novel nature-inspired algorithm for optimization: Virus colony search. Advances in Engineering Software, 92, 65–88. doi: 10.1016/j.advengsoft.2015.11.004
+
+- Config: 
+
+    ```python
+    {
+        'epoch': "maximum number of iterations, default = 10000",
+        'pop_size': "number of population size, default = 100",
+        'lamda': "Number of the best will keep, default = 0.5",
+        'sigma': "Weight factor, default = 1.5"
+    }
+    ```
+
 ## 2017 Algorithms
+
 
 ### `orig-sbo`, `base-sbo`
 
@@ -90,6 +129,23 @@ In this documentation section, the elements that let you work with heuristic opt
         'alpha': "the greatest step size, default=0.94",
         'p_m': "mutation probability, default=0.05",
         'psw': "proportion of space width (z in the paper), default=0.02",
+    }
+    ```
+
+### `orig-tpo`
+
+- Bio-inspired
+
+- Ref: Halim, A. H., & Ismail, I. (2019). Tree Physiology Optimization in Benchmark Function and Traveling Salesman Problem. Journal of Intelligent Systems, 28(5), 849–871. doi: 10.1515/jisys-2017-0156
+
+- Config:
+    ```python
+    {
+        'epoch': "maximum number of iterations, default = 10000",
+        'pop_size': "number of population size, default = 100",
+        'alpha': "Absorption constant for tree root elongation, default=0.3",
+        'beta': "Diversification factor of tree shoot, default=50.",
+        'theta': "Factor to reduce randomization, Theta = Power law to reduce randomization as iteration increases, default=0.9"
     }
     ```
 
@@ -118,7 +174,71 @@ In this documentation section, the elements that let you work with heuristic opt
     }
     ```
 
+## 2019 Algorithms
+
+### `orig-soa`, `base-soa`
+
+- Bio-inspired
+
+- Ref: Dhiman, G., & Kumar, V. (2019). Seagull optimization algorithm: Theory and its applications for large-scale industrial engineering problems. Knowledge-Based Systems, 165, 169–196. doi: 10.1016/j.knosys.2018.11.024
+
+- Config:
+
+    ```python
+    {
+        'epoch': "maximum number of iterations, default = 1000",
+        'pop_size': "number of population size, default = 100",
+        'fc': "freequency of employing variable A (A linear decreased from fc to 0), default = 2"
+    }
+
+    ```
+
+### `orig-who`
+
+- Bio-inspired
+
+- Src: [WHO mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/bio_based/WHO.py)
+
+- Ref: Amali, D. and Dinakaran, M., 2019. Wildebeest herd optimization: a new global optimization algorithm inspired by wildebeest herding behaviour. Journal of Intelligent & Fuzzy Systems, 37(6), pp.8063-8076.
+
+- Config:
+
+    ```python
+    {
+        'epoch': "maximum number of iterations, default = 10000",
+        'pop_size': "number of population size, default = 100",
+        'n_explore_step': "number of exploration step, default = 3",
+        'n_exploit_step': "number of exploitation step, default = 3",
+        'eta': "learning rate, default = 0.15",
+        'p_hi': "the probability of wildebeest move to another position based on herd instinct, default = 0.9",
+        'local_alpha': "control local movement (alpha 1), no default value specified",
+        'local_beta': "control local movement (beta 1), no default value specified",
+        'global_alpha': "control global movement (alpha 2), no default value specified",
+        'global_beta': "control global movement (beta 2), no default value specified",
+        'delta_w': "dist to worst, no default value specified",
+        'delta_c': "dist to best, no default value specified"
+    }
+    ```
+
 ## 2020 Algorithms
+
+### `orig-sma`, `base-sma`
+
+- Bio-inspired
+
+- Src: [SMA mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/bio_based/SMA.py)
+
+- Ref: Li, S., Chen, H., Wang, M., Heidari, A. A., & Mirjalili, S. (2020). Slime mould algorithm: A new method for stochastic optimization. Future Generation Computer Systems, 111, 300–323. doi: 10.1016/j.future.2020.03.055
+
+- Config:
+
+    ```python
+    {
+        'epoch': "maximum number of iterations, default = 1000",
+        'pop_size': "number of population size, default = 100",
+        'p_t': "probability threshold (z in the paper), default = 0.03",
+    }
+    ```
 
 ### `orig-bmo`
 
@@ -138,6 +258,22 @@ In this documentation section, the elements that let you work with heuristic opt
     }
     ```
 
+### `orig-tsa`
+
+- Bio-inspired
+
+- Src: [TSA mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/bio_based/TSA.py)
+
+- Ref: Kaur, S., Awasthi, L. K., Sangal, A. L., & Dhiman, G. (2020). Tunicate Swarm Algorithm: A new bio-inspired based metaheuristic paradigm for global optimization. Engineering Applications of Artificial Intelligence, 90, 103541. doi: 10.1016/j.engappai.2020.103541
+
+- Config:
+
+    ```python
+    {
+        'epoch': "max iterations (int), default = 10000",
+        'pop_size': "population size (int), default = 100",
+    }
+    ```
 ## 2023 Algorithms
 
 ### `orig-bboa`
