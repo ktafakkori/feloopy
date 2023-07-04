@@ -28,6 +28,8 @@ In this documentation section, the elements that let you work with heuristic opt
 
 ## 2006 Algorithms
 
+### `orig-iwo`
+
 - Bio-inspired
 
 - Src: [IWO mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/bio_based/IWO.py)
