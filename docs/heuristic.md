@@ -25,6 +25,8 @@ In this documentation section, the elements that let you work with heuristic opt
 
 - `orig`: original version (based on reference)
 - `base`: developed version (improved implementation)
+- `bio-inspired`: 13 bio-inspired algorithms from 2008-2023
+- `evolution-inspired`: 8 evolution-inspired algorithms from 
 
 ## 2006 Algorithms
 
@@ -73,6 +75,8 @@ In this documentation section, the elements that let you work with heuristic opt
 
 ## 2014 Algorithms
 
+### `orig-sos`
+
 - Bio-inspired 
 
 - Src: [SOS mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/bio_based/SOS.py)
@@ -88,7 +92,33 @@ In this documentation section, the elements that let you work with heuristic opt
     }
     ```
 
-## 2015 Algorithms
+### `orig-cro`, `o-cro`
+
+- Evolution-based
+
+- Src: [CRO mealpy](https://github.com/thieu1995/mealpy/blob/master/mealpy/evolutionary_based/CRO.py)
+
+- Ref: Salcedo-Sanz, S., Del Ser, J., Landa-Torres, I., Gil-López, S., & Portilla-Figueras, J. A. (2014). The Coral Reefs Optimization Algorithm: A Novel Metaheuristic for Efficiently Solving Optimization Problems. Scientific World Journal, 2014. doi: 10.1155/2014/739768
+
+- Config:
+
+    ```python
+    {
+        'epoch': "maximum number of iterations, default = 10000",
+        'pop_size': "number of population size, default = 100",
+        'po': "the rate between free/occupied at the beginning, no default value specified",
+        'Fb': "BroadcastSpawner/ExistingCorals rate, no default value specified",
+        'Fa': "fraction of corals duplicates its self and tries to settle in a different part of the reef, no default value specified",
+        'Fd': "fraction of the worse health corals in reef will be applied depredation, no default value specified",
+        'Pd': "the maximum of probability of depredation, no default value specified",
+        'GCR': "probability for mutation process, no default value specified",
+        'gamma_min': "factor for mutation process, no default value specified",
+        'gamma_max': "factor for mutation process, no default value specified",
+        'n_trials': "number of attempts for a larva to set in the reef, no default value specified"
+    }
+    ```
+
+## 2016 Algorithms
 
 ### `orig-vcs`, `base-vcs`
 
@@ -129,23 +159,6 @@ In this documentation section, the elements that let you work with heuristic opt
         'alpha': "the greatest step size, default=0.94",
         'p_m': "mutation probability, default=0.05",
         'psw': "proportion of space width (z in the paper), default=0.02",
-    }
-    ```
-
-### `orig-tpo`
-
-- Bio-inspired
-
-- Ref: Halim, A. H., & Ismail, I. (2019). Tree Physiology Optimization in Benchmark Function and Traveling Salesman Problem. Journal of Intelligent Systems, 28(5), 849–871. doi: 10.1515/jisys-2017-0156
-
-- Config:
-    ```python
-    {
-        'epoch': "maximum number of iterations, default = 10000",
-        'pop_size': "number of population size, default = 100",
-        'alpha': "Absorption constant for tree root elongation, default=0.3",
-        'beta': "Diversification factor of tree shoot, default=50.",
-        'theta': "Factor to reduce randomization, Theta = Power law to reduce randomization as iteration increases, default=0.9"
     }
     ```
 
@@ -217,6 +230,23 @@ In this documentation section, the elements that let you work with heuristic opt
         'global_beta': "control global movement (beta 2), no default value specified",
         'delta_w': "dist to worst, no default value specified",
         'delta_c': "dist to best, no default value specified"
+    }
+    ```
+
+### `orig-tpo`
+
+- Bio-inspired
+
+- Ref: Halim, A. H., & Ismail, I. (2019). Tree Physiology Optimization in Benchmark Function and Traveling Salesman Problem. Journal of Intelligent Systems, 28(5), 849–871. doi: 10.1515/jisys-2017-0156
+
+- Config:
+    ```python
+    {
+        'epoch': "maximum number of iterations, default = 10000",
+        'pop_size': "number of population size, default = 100",
+        'alpha': "Absorption constant for tree root elongation, default=0.3",
+        'beta': "Diversification factor of tree shoot, default=50.",
+        'theta': "Factor to reduce randomization, Theta = Power law to reduce randomization as iteration increases, default=0.9"
     }
     ```
 
