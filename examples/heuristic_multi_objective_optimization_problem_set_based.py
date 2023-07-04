@@ -5,7 +5,8 @@ def instance(X):
     x = m.pvar('x', bound= [-1000,1000])
     m.obj(x[...,0]**2)
     m.obj((x[...,0]-2)**2)
-    m.sol(['min','min'], 'ns-ga-ii', obj_id='all')
+    m.sol(['min','min'], 'ns-ga-ii', {'n_gen':100}, 'all')
+    
     return m[X]
 
 m = implement(instance)

@@ -124,7 +124,7 @@ def status_row_print(ObjectivesDirections, status, box_width=80):
 def solution_print(ObjectivesDirections, status, get_obj, get_payoff=None, box_width=80):
     if len(ObjectivesDirections)!=1:
         if status[0] != "infeasible (constrained)":
-            for i in range(len(str(status))):
+            for i in range(len(status)):
                 row = "│ " + str(status[i]) + " " * (box_width - 10 * len(ObjectivesDirections) + 1 - len(str(status[i])) - 3)
                 obj_row = get_obj[i]
                 for j in range(len(obj_row)):

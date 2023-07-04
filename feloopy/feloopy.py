@@ -4094,48 +4094,95 @@ class Implement:
 
     def get_bound(self, *args):
 
-        def calculate_lb_ub(var_type, var_bounds, var_spread, best_agent):
-            if var_type in ['pvar', 'fvar']:
-                lb = np.min(var_bounds[0] + best_agent[:, var_spread[0]:var_spread[1]] * (var_bounds[1] - var_bounds[0]))
-                ub = np.max(var_bounds[0] + best_agent[:, var_spread[0]:var_spread[1]] * (var_bounds[1] - var_bounds[0]))
-            elif var_type in ['bvar', 'ivar']:
-                lb = np.min(np.round(var_bounds[0] + best_agent[:, var_spread[0]:var_spread[1]] * (var_bounds[1] - var_bounds[0])))
-                ub = np.max(np.round(var_bounds[0] + best_agent[:, var_spread[0]:var_spread[1]] * (var_bounds[1] - var_bounds[0])))
-            return lb, ub
-
-        def calculate_new_agent_properties(var_bounds, var_spread, best_agent):
-            return var_bounds[0] + best_agent[:, var_spread[0]:var_spread[1]] * (var_bounds[1] - var_bounds[0])
-
-        def calculate_var(var_bounds, var_spread, var_dim, best_agent, *coords):
-            new_agent_properties = calculate_new_agent_properties(var_bounds, var_spread, best_agent)
-            index = sum(coords[k] * mt.prod(len(var_dim[j]) for j in range(k + 1, len(var_dim))) for k in range(len(var_dim)))
-            return new_agent_properties[index]
-
         for i in args:
+
             if len(i) >= 2:
-                var_type = self.VariablesType[i[0]]
-                var_bounds = self.VariablesBound[i[0]]
-                var_spread = self.VariablesSpread[i[0]]
-                var_dim = self.VariablesDim[i[0]]
-                best_agent = self.BestAgent
+            
+                match self.VariablesType[i[0]]:
 
-                if var_dim == 0:
-                    lb, ub = calculate_lb_ub(var_type, var_bounds, var_spread, best_agent)
-                else:
-                    lb = np.min(calculate_var(var_bounds, var_spread, var_dim, best_agent, *i[1]))
-                    ub = np.max(calculate_var(var_bounds, var_spread, var_dim, best_agent, *i[1]))
+                    case 'pvar':
 
-                if var_type == 'svar':
-                    return np.argsort(best_agent[:, var_spread[0]:var_spread[1]])[i[1]]
+                        if self.VariablesDim[i[0]] == 0:
+                            UB = np.max((self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                            LB = np.min((self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                            return [LB,UB]
+
+                        else:
+                            def var(*args):
+                                self.NewAgentProperties = (self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                    self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                return self.NewAgentProperties[:,sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
+                            return [np.min(var(*i[1])),np.max(var(*i[1]))]
+
+                    case 'fvar':
+
+                        if self.VariablesDim[i[0]] == 0:
+                            LB = np.min(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                            UB = np.max(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                            return [LB,UB]
+
+                        else:
+                            def var(*args):
+                                self.NewAgentProperties = (self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                    self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                return self.NewAgentProperties[:,sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
+                            return [np.min(var(*i[1])),np.max(var(*i[1]))]
+
+                    case 'bvar':
+                        if self.VariablesDim[i[0]] == 0:
+                            LB = np.min(np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                            UB = np.max(np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                            return [LB,UB]
+
+                        else:
+                            def var(*args):
+                                self.NewAgentProperties = np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                    self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                return self.NewAgentProperties[:,sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
+                            return [np.min(var(*i[1])),np.max(var(*i[1]))]
+                        
+                    case 'ivar':
+                        if self.VariablesDim[i[0]] == 0:
+                            LB = np.min(np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                            UB = np.min(np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                            return [LB,UB]
+
+                        else:
+                            def var(*args):
+                                self.NewAgentProperties = np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
+                                    self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                return self.NewAgentProperties[:,sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
+                            return [np.min(var(*i[1])),np.max(var(*i[1]))]
+                        
+                    case 'svar':
+                        return np.argsort(self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])[i[1]]
+
             else:
-                var_type = self.VariablesType[i[0]]
-                var_bounds = self.VariablesBound[i[0]]
-                var_spread = self.VariablesSpread[i[0]]
-                best_agent = self.BestAgent
-                
-                lb, ub = calculate_lb_ub(var_type, var_bounds, var_spread, best_agent)
 
-            return [lb, ub]
+                match self.VariablesType[i[0]]:
+
+                    case 'pvar':
+                        UB = np.max((self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                        LB = np.min((self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                        return [LB,UB]
+
+                    case 'fvar':
+                        UB = np.max(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                        LB = np.min(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                        return [LB,UB]
+
+                    case 'bvar':
+                        UB = np.max(np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                        LB = np.min(np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                        return [LB,UB]
+
+                    case 'ivar':
+                        UB = np.max(np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                        LB= np.min(np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0])))
+                        return [UB,LB]
+
+                    case 'svar':
+                        return np.argsort(self.BestAgent[:,self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])
                     
     def get_payoff(self):
 
@@ -4236,7 +4283,7 @@ class Implement:
                     try:
                         solution_print(self.objectives_directions, status, self.get_obj(), self.get_payoff())
                     except:
-                        print("Nothing found.")
+                        left_align("Nothing found.")
                 else:
                     solution_print(self.objectives_directions, status, self.get_obj())
             empty_line()

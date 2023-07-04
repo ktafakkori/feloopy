@@ -106,8 +106,39 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
             from pymoo.algorithms.moo.age2 import AGEMOEA2
             algorithm = AGEMOEA2(**AlgOptions)
 
+    from pymoo.termination.default import DefaultMultiObjectiveTermination
+
+    termination = DefaultMultiObjectiveTermination(
+        xtol=1e-8,
+        cvtol=1e-6,
+        ftol=0.0025,
+        period=30,
+        n_max_gen=1000,
+        n_max_evals=100000
+    )
+
+    if AlgOptions.get('n_gen', None)!=None:
+        termination = get_termination("n_gen", AlgOptions['n_gen'])
+
+    if AlgOptions.get('n_eval', None)!=None:
+        termination = get_termination("n_gen", AlgOptions['n_eval'])
+
+    if AlgOptions.get('time', None)!=None:
+        termination = get_termination("time", AlgOptions['time'])
+
+    if AlgOptions.get('design_space_tolerance_period', None)!=None:
+
+        from pymoo.termination.xtol import DesignSpaceTermination
+        from pymoo.termination.robust import RobustTermination
+        termination = RobustTermination(DesignSpaceTermination(**AlgOptions['design_space_tolerance_period'][0]), period=AlgOptions['design_space_tolerance_period'][1])
+
+    if AlgOptions.get('objective_space_tolerance_period', None): 
+
+        from pymoo.termination.ftol import MultiObjectiveSpaceTermination
+        from pymoo.termination.robust import RobustTermination
+        termination = RobustTermination(MultiObjectiveSpaceTermination(**AlgOptions['objective_space_tolerance_period'][0]), period=AlgOptions['objective_space_tolerance_period'][1])
+
     time_solve_begin = timeit.default_timer()
-    termination = get_termination("n_gen", AlgOptions.get('n_gen', 100))
     res = minimize(problem, algorithm, termination=termination, verbose=verbose)
     time_solve_end = timeit.default_timer()
     pareto_front = ObjectivesDirections*res.F
