@@ -14,7 +14,11 @@ import numpy as np
 import math as mt
 
 
-def generate_heuristic_variable(features, type, name, variable_dim, variable_bound, agent):
+def generate_heuristic_variable(features, type, name, variable_dim, variable_bound, agent, no_agents):
+
+    if no_agents==None:
+        no_agents=100
+    
 
     if features['agent_status'] == 'idle':
 
@@ -23,20 +27,20 @@ def generate_heuristic_variable(features, type, name, variable_dim, variable_bou
             if variable_dim == 0:
 
                 if type == 'pvar' or type == 'fvar':
-                    return variable_bound[0] + np.random.rand(100,1)*(variable_bound[1]-variable_bound[0])
+                    return variable_bound[0] + np.random.rand(no_agents,1)*(variable_bound[1]-variable_bound[0])
                 if type == 'bvar' or type == 'ivar':
-                    return np.round(variable_bound[0] + np.random.rand(100,1)*(variable_bound[1]-variable_bound[0])).astype(int)
+                    return np.round(variable_bound[0] + np.random.rand(no_agents,1)*(variable_bound[1]-variable_bound[0])).astype(int)
                 if type == 'svar':
                     raise VariableDimError("Dimension is set to be 0 or not defined for a sequential variable.")
                 
             else:
 
                 if type == 'pvar' or type == 'fvar':
-                    return variable_bound[0] + np.random.rand(*tuple([100]+[len(dims) for dims in variable_dim]))*(variable_bound[1]-variable_bound[0])
+                    return variable_bound[0] + np.random.rand(*tuple([no_agents]+[len(dims) for dims in variable_dim]))*(variable_bound[1]-variable_bound[0])
                 if type == 'bvar' or type == 'ivar':
-                    return np.round(variable_bound[0] + np.random.rand(*tuple([100]+[len(dims) for dims in variable_dim]))*(variable_bound[1]-variable_bound[0])).astype(int) 
+                    return np.round(variable_bound[0] + np.random.rand(*tuple([no_agents]+[len(dims) for dims in variable_dim]))*(variable_bound[1]-variable_bound[0])).astype(int) 
                 if type == 'svar':          
-                    return np.argsort(np.random.rand(*tuple([100]+[len(dims) for dims in variable_dim])), axis=1)
+                    return np.argsort(np.random.rand(*tuple([no_agents]+[len(dims) for dims in variable_dim])), axis=1)
 
         else:
 

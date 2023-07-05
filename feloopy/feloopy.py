@@ -37,7 +37,7 @@ avar = defaultdict()
 
 class Model:
 
-    def __init__(self, solution_method, model_name, interface_name, agent=None, scens=1, key=None):
+    def __init__(self, solution_method, model_name, interface_name, agent=None, scens=1, no_agents= None, key=None):
 
         """
         Creates and returns the modeling environment.
@@ -75,6 +75,14 @@ class Model:
             
         self.random = create_random_number_generator(key)
         self.avar = self.coll()
+
+        self.no_agents = no_agents
+
+        if interface_name == 'rsome_ro':
+            from rsome import ro as robust_tools
+        
+        if interface_name == 'rsome_dro':
+            from rsome import dro as robust_tools
 
         if solution_method == 'constraint':
 
@@ -373,7 +381,7 @@ class Model:
 
             case 'heuristic':
                 
-                return generate_heuristic_variable(self.features, 'fvar', name, dim, bound, self.agent)
+                return generate_heuristic_variable(self.features, 'fvar', name, dim, bound, self.agent,self.no_agents)
             
     def pvar(self, name, dim=0, bound=[0, None]):
 
@@ -417,7 +425,7 @@ class Model:
 
             case 'heuristic':
 
-                return generate_heuristic_variable(self.features, 'pvar', name, dim, bound, self.agent)
+                return generate_heuristic_variable(self.features, 'pvar', name, dim, bound, self.agent,self.no_agents)
 
     def ivar(self, name, dim=0, bound=[0, None]):
 
@@ -460,7 +468,7 @@ class Model:
                 return self.mainvars[("ivar",name)]
 
             case 'heuristic':
-                return generate_heuristic_variable(self.features, 'ivar', name, dim, bound, self.agent)
+                return generate_heuristic_variable(self.features, 'ivar', name, dim, bound, self.agent,self.no_agents)
                    
     def bvar(self, name, dim=0, bound=[0, 1]):
 
@@ -497,7 +505,7 @@ class Model:
             return self.mainvars[("bvar", name)]
 
         elif self.features['solution_method'] == 'heuristic':
-            return generate_heuristic_variable(self.features, 'bvar', name, dim, bound, self.agent)
+            return generate_heuristic_variable(self.features, 'bvar', name, dim, bound, self.agent,self.no_agents)
     
     def cfvar(self, name, indices, dim=0, bound=[None, None]):
 
@@ -587,6 +595,11 @@ class Model:
 
         dim = fix_dims(dim)
 
+        if self.no_agents!=None:
+            default_pop= self.no_agents
+        else:
+            default_pop = 100
+
         match self.features['solution_method']:
 
             case 'exact':
@@ -600,7 +613,7 @@ class Model:
                         if dim == 0:
                             return 0
                         else:
-                            return np.random.rand(*tuple([50]+[len(dims) for dims in dim]))
+                            return np.random.rand(*tuple([default_pop]+[len(dims) for dims in dim]))
                     else:
                         if dim == 0:
                             return 0
@@ -705,7 +718,7 @@ class Model:
         dim = fix_dims([length])
         self.features = update_variable_features(name, dim, [0, 1], 'integer_variable_counter', self.features)
         self.features['variable_type'][name] = 'svar'
-        return generate_heuristic_variable(self.features, 'svar', name, dim, [0, 1], self.agent)
+        return generate_heuristic_variable(self.features, 'svar', name, dim, [0, 1], self.agent, self.no_agents)
 
     def csvar(self, name, indices, length=1):
         """
@@ -2007,6 +2020,9 @@ class Model:
             relative_gap (%, optional): please state a releative gap (%) to find the optimal objective value. Defaults to None.
         """
 
+        if self.no_agents!=None:
+            if self.features['interface_name'] in ['mealpy' , 'feloopy']:
+                solver_options['pop_size'] = self.no_agents
         
         if len(self.features['objectives']) !=0 and len(directions)!=len(self.features['objectives']):
             raise MultiObjectivityError("The number of directions and the provided objectives do not match.")
@@ -2349,6 +2365,7 @@ class Model:
             return E(expr)
 
     def norm(self,expr_or_1D_array_of_variables, degree):
+        
         """
         Returns the first, second, or infinity norm of a 1-D array.
         """
@@ -3308,12 +3325,25 @@ class Implement:
 
     def get_status(self):
 
-        if self.interface_name == 'mealpy':
+        if len(self.objectives_directions)==1:
 
-            return self.Check_Fitness(self.BestAgent)
+            if self.interface_name == 'mealpy':
+
+                return self.Check_Fitness(self.BestAgent)
+        
+            else:
+
+                if self.status[0] == 1:
+                    return 'feasible (constrained)'
+                elif self.status[0] == 2:
+                    return 'feasible (unconstrained)'
+                elif self.status[0] == -1:
+                    return 'infeasible'
 
         else:
+
             status = []
+            
             if self.interface_name in ['feloopy', 'pymoo']:
 
                 for i in range(np.shape(self.BestReward)[0]):
@@ -3327,13 +3357,7 @@ class Implement:
 
             return status
 
-        #else:
-            #if self.status[0] == 1:
-                #return 'feasible (constrained)'
-            #elif self.status[0] == 2:
-                #return 'feasible (unconstrained)'
-            #elif self.status[0] == -1:
-                #return 'infeasible'
+        
 
     def Check_Fitness(self, X):
 

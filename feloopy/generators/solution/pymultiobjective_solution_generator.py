@@ -14,8 +14,7 @@ import timeit
 
 def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, ObjectivesDirections, ObjectiveBeingOptimized, number_of_times, show_plots, save_plots,show_log):
 
-    ObjectivesDirections = [-1 if direction ==
-                            'max' else 1 for direction in ObjectivesDirections]
+    ObjectivesDirections = [-1 if direction =='max' else 1 for direction in ObjectivesDirections]
 
     def f1(X): return ObjectivesDirections[0]*Fitness(np.array(X))[0]
     def f2(X): return ObjectivesDirections[1]*Fitness(np.array(X))[1]
@@ -33,8 +32,10 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
 
         if key == 'epoch':
             parameters['generations'] = AlgOptions[key]
+
         elif key == 'show_log':
             parameters['verbose'] = AlgOptions[key]
+
         else:
             parameters[key] = AlgOptions[key]
 
@@ -47,7 +48,6 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
     for i in range(len(ObjectivesDirections)):
 
         list_of_functions.append(my_list_of_functions[i])
-
 
     match solver_name:
 
@@ -140,5 +140,4 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
     sol = solver(list_of_functions=list_of_functions, **parameters)
     time_solve_end = timeit.default_timer()
 
-   
     return sol[:, :ToTalVariableCounter[1]], list_of_directions*sol[:, ToTalVariableCounter[1]:], time_solve_begin, time_solve_end
