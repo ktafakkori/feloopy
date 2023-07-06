@@ -9,6 +9,7 @@
  '''
 
 from feloopy import *
+
 #Environment
 m = target_model('exact', 'transportation planning problem', 'pymprog', key=0)
 

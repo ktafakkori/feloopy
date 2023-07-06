@@ -221,6 +221,7 @@ class Model:
         dim = fix_dims(shape)
         self.features = update_variable_features(name, dim, bound, 'free_variable_counter', self.features)
         if self.features['solution_method'] == 'exact':
+            
             from .generators import variable_generator
             self.mainvars[("ftvar", name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'ftvar', name, bound, dim)
             self.maindims[name] = dim

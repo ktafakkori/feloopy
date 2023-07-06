@@ -61,27 +61,27 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
                 generated_variable = VariableGenerator(1, integer=False, nonneg=False, name=variable_name)
             else:
                 dims = tuple(len(dim) for dim in variable_dim)
-                generated_variable = VariableGenerator(*dims, integer=False, name=variable_name)
+                generated_variable = VariableGenerator(dims, integer=False, name=variable_name)
 
         case 'ptvar':
             if variable_dim ==0:
                 generated_variable = VariableGenerator(1, integer=False, nonneg=True, name=variable_name)
             else:
                 dims = tuple(len(dim) for dim in variable_dim)
-                generated_variable = VariableGenerator(*dims, integer=False, nonneg=True, name=variable_name)
+                generated_variable = VariableGenerator(dims, integer=False, nonneg=True, name=variable_name)
 
         case 'itvar':
             if variable_dim ==0:
                 generated_variable = VariableGenerator(1, nonneg=True, integer=True, name=variable_name)
             else:
                 dims = tuple(len(dim) for dim in variable_dim)
-                generated_variable = VariableGenerator(*dims, integer=True, nonneg=True, name=variable_name)
+                generated_variable = VariableGenerator(dims, integer=True, nonneg=True, name=variable_name)
 
         case 'btvar':
             if variable_dim ==0:
                 generated_variable = VariableGenerator(1, nonneg=True, integer=True, name=variable_name)
             else:
                 dims = tuple(len(dim) for dim in variable_dim)
-                generated_variable = VariableGenerator(*dims, integer=True, nonneg=True, name=variable_name)
+                generated_variable = VariableGenerator(dims, integer=True, nonneg=True, name=variable_name)
 
     return generated_variable
