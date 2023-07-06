@@ -1,806 +1,246 @@
 '''
  # @ Author: Keivan Tafakkori
  # @ Created: 2023-05-11
- # @ Modified: 2023-05-12
+ # @ Modified: 2023-07-06
  # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
  # @ Github: https://github.com/ktafakkori
  # @ Website: https://ktafakkori.github.io/
  # @ Copyright: 2023. MIT License. All Rights Reserved.
  '''
 
-
 def generate_model(solver_name, solver_options):
 
-    match solver_name:
+    module_mappings = {
 
         # Evolution-Inspired Heuristic Optimization Algorithms
 
-        case 'orig-ep':
-            from mealpy.evolutionary_based import EP
-            model_object = EP.OriginalEP(**solver_options)
-
-        case 'levy-ep':
-            from mealpy.evolutionary_based import EP
-            model_object = EP.LevyEP(**solver_options)
-
-        case 'orig-es':
-            from mealpy.evolutionary_based import ES
-            model_object = ES.OriginalES(**solver_options)
-
-        case 'levy-es':
-            from mealpy.evolutionary_based import ES
-            model_object = ES.LevyES(**solver_options)
-
-        case 'orig-ma':
-            from mealpy.evolutionary_based import MA
-            model_object = MA.OriginalMA(**solver_options)
-
-        case 'base-ga':
-            from mealpy.evolutionary_based import GA
-            model_object = GA.BaseGA(**solver_options)
-
-        case 'single-ga':
-            from mealpy.evolutionary_based import GA
-            model_object = GA.SingleGA(**solver_options)
-
-        case 'multi-ga':
-            from mealpy.evolutionary_based import GA
-            model_object = GA.MultiGA(**solver_options)
-
-        case 'elite-single-ga':
-            from mealpy.evolutionary_based import GA
-            model_object = GA.EliteSingleGA(**solver_options)
-
-        case 'elite-multi-ga':
-            from mealpy.evolutionary_based import GA
-            model_object = GA.EliteMultiGA(**solver_options)
-
-        case 'base-de':
-            from mealpy.evolutionary_based import DE
-            model_object = DE.BaseDE(**solver_options)
-
-        case 'ja-de':
-            from mealpy.evolutionary_based import DE
-            model_object = DE.JADE(**solver_options)
-
-        case 'sa-de':
-            from mealpy.evolutionary_based import DE
-            model_object = DE.SADE(**solver_options)
-
-        case 'sha-de':
-            from mealpy.evolutionary_based import DE
-            model_object = DE.SHADE(**solver_options)
-
-        case 'l-sha-de':
-            from mealpy.evolutionary_based import DE
-            model_object = DE.L_SHADE(**solver_options)
-
-        case 'sap-de':
-            from mealpy.evolutionary_based import DE
-            model_object = DE.SAP_DE(**solver_options)
-
-        case 'orig-fpa':
-            from mealpy.evolutionary_based import FPA
-            model_object = FPA.OriginalFPA(**solver_options)
-
-        case 'orig-cro':
-            from mealpy.evolutionary_based import CRO
-            model_object = CRO.OriginalCRO(**solver_options)
-
-        case 'o-cro':
-            from mealpy.evolutionary_based import CRO
-            model_object = CRO.OCRO(**solver_options)
-
-        case 'cma-es':
-            from mealpy.evolutionary_based import ES
-            model_object = ES.CMA_ES(**solver_options)
-
-        case 'simp-cma-es':
-            from mealpy.evolutionary_based import ES
-            model_object = ES.Simple_CMA_ES(**solver_options)
+        'orig-ep': ('mealpy.evolutionary_based', 'EP', 'OriginalEP'),
+        'levy-ep': ('mealpy.evolutionary_based', 'EP', 'LevyEP'),
+        'orig-es': ('mealpy.evolutionary_based', 'ES', 'OriginalES'),
+        'levy-es': ('mealpy.evolutionary_based', 'ES', 'LevyES'),
+        'orig-ma': ('mealpy.evolutionary_based', 'MA', 'OriginalMA'),
+        'base-ga': ('mealpy.evolutionary_based', 'GA', 'BaseGA'),
+        'single-ga': ('mealpy.evolutionary_based', 'GA', 'SingleGA'),
+        'multi-ga': ('mealpy.evolutionary_based', 'GA', 'MultiGA'),
+        'elite-single-ga': ('mealpy.evolutionary_based', 'GA', 'EliteSingleGA'),
+        'elite-multi-ga': ('mealpy.evolutionary_based', 'GA', 'EliteMultiGA'),
+        'base-de': ('mealpy.evolutionary_based', 'DE', 'BaseDE'),
+        'ja-de': ('mealpy.evolutionary_based', 'DE', 'JADE'),
+        'sa-de': ('mealpy.evolutionary_based', 'DE', 'SADE'),
+        'sha-de': ('mealpy.evolutionary_based', 'DE', 'SHADE'),
+        'l-sha-de': ('mealpy.evolutionary_based', 'DE', 'L_SHADE'),
+        'sap-de': ('mealpy.evolutionary_based', 'DE', 'SAP_DE'),
+        'orig-fpa': ('mealpy.evolutionary_based', 'FPA', 'OriginalFPA'),
+        'orig-cro': ('mealpy.evolutionary_based', 'CRO', 'OriginalCRO'),
+        'o-cro': ('mealpy.evolutionary_based', 'CRO', 'OCRO'),
+        'cma-es': ('mealpy.evolutionary_based', 'ES', 'CMA_ES'),
+        'simp-cma-es': ('mealpy.evolutionary_based', 'ES', 'Simple_CMA_ES'),
 
         # Swarm-Inspired Heuristic Optimization Algorithms
 
-        case 'orig-pso':
-            from mealpy.swarm_based import PSO
-            model_object = PSO.OriginalPSO(**solver_options)
-
-        case 'p-pso':
-            from mealpy.swarm_based import PSO
-            model_object = PSO.PPSO(**solver_options)
-
-        case 'h-pso-tvac':
-            from mealpy.swarm_based import PSO
-            model_object = PSO.HPSO_TVAC(**solver_options)
-
-        case 'c-pso':
-            from mealpy.swarm_based import PSO
-            model_object = PSO.C_PSO(**solver_options)
-
-        case 'cl-pso':
-            from mealpy.swarm_based import PSO
-            model_object = PSO.CL_PSO(**solver_options)
-
-        case 'orig-bfo':
-            from mealpy.swarm_based import BFO
-            model_object = BFO.OriginalBFO(**solver_options)
-
-        case 'orig-beesa':
-            from mealpy.swarm_based import BeesA
-            model_object = BeesA.OriginalBeesA(**solver_options)
-
-        case 'a-bfo':
-            from mealpy.swarm_based import BFO
-            model_object = BFO.OriginalBFO(**solver_options)
-
-        case 'prob-beesa':
-            from mealpy.swarm_based import BeesA
-            model_object = BeesA.ProbBeesA(**solver_options)
-
-        case 'orig-cso':
-            from mealpy.swarm_based import CSO
-            model_object = CSO.OriginalCSO(**solver_options)
-
-        case 'orig-abc':
-            from mealpy.swarm_based import ABC
-            model_object = ABC.OriginalABC(**solver_options)
-
-        case 'orig-acor':
-            from mealpy.swarm_based import ACOR
-            model_object = ACOR.orig_acor(**solver_options)
-
-        case 'orig-csa':
-            from mealpy.swarm_based import CSA
-            model_object = CSA.OriginalCSA(**solver_options)
-
-        case 'orig-ffa':
-            from mealpy.swarm_based import FFA
-            model_object = FFA.OriginalFFA(**solver_options)
-
-        case 'orig-fa':
-            from mealpy.swarm_based import FA
-            model_object = FA.OriginalFA(**solver_options)
-
-        case 'orig-ba':
-            from mealpy.swarm_based import BA
-            model_object = BA.OriginalBA(**solver_options)
-
-        case 'adap-ba':
-            from mealpy.swarm_based import BA
-            model_object = BA.AdaptiveBA(**solver_options)
-
-        case 'modi-ba':
-            from mealpy.swarm_based import BA
-            model_object = BA.ModifiedBA(**solver_options)
-
-        case 'orig-foa':
-            from mealpy.swarm_based import FOA
-            model_object = FOA.OriginalFOA(**solver_options)
-
-        case 'base-foa':
-            from mealpy.swarm_based import FOA
-            model_object = FOA.BaseFOA(**solver_options)
-
-        case 'whale-foa':
-            from mealpy.swarm_based import FOA
-            model_object = FOA.WhaleFOA(**solver_options)
-
-        case 'orig-sspidero':
-            from mealpy.swarm_based import SSpiderO
-            model_object = SSpiderO.OriginalSSpiderO(**solver_options)
-
-        case 'orig-gwo':
-            from mealpy.swarm_based import GWO
-            model_object = GWO.OriginalGWO(**solver_options)
-
-        case 'rw-gwo':
-            from mealpy.swarm_based import GWO
-            model_object = GWO.RW_GWO(**solver_options)
-
-        case 'orig-sspidera':
-            from mealpy.swarm_based import SSpiderA
-            model_object = SSpiderA.OriginalSSpiderA(**solver_options)
-
-        case 'orig-alo':
-            from mealpy.swarm_based import ALO
-            model_object = ALO.OriginalALO(**solver_options)
-
-        case 'base-alo':
-            from mealpy.swarm_based import ALO
-            model_object = ALO.BaseALO(**solver_options)
-
-        case 'orig-mfo':
-            from mealpy.swarm_based import MFO
-            model_object = MFO.OriginalMFO(**solver_options)
-
-        case 'base-mfo':
-            from mealpy.swarm_based import MFO
-            model_object = MFO.BaseMFO(**solver_options)
-
-        case 'orig-eho':
-            from mealpy.swarm_based import EHO
-            model_object = EHO.OriginalEHO(**solver_options)
-
-        case 'orig-ja':
-            from mealpy.swarm_based import JA
-            model_object = JA.OriginalJA(**solver_options)
-
-        case 'base-ja':
-            from mealpy.swarm_based import JA
-            model_object = JA.BaseJA(**solver_options)
-
-        case 'levy-ja':
-            from mealpy.swarm_based import JA
-            model_object = JA.LevyJA(**solver_options)
-
-        case 'orig-woa':
-            from mealpy.swarm_based import WOA
-            model_object = WOA.OriginalWOA(**solver_options)
-
-        case 'hi-woa':
-            from mealpy.swarm_based import WOA
-            model_object = WOA.HI_WOA(**solver_options)
-
-        case 'orig-do':
-            from mealpy.swarm_based import DO
-            model_object = DO.OriginalDO(**solver_options)
-
-        case 'orig-bsa':
-            from mealpy.swarm_based import BSA
-            model_object = BSA.OriginalBSA(**solver_options)
-
-        case 'orig-sho':
-            from mealpy.swarm_based import SHO
-            model_object = SHO.OriginalSHO(**solver_options)
-
-        case 'orig-sso':
-            from mealpy.swarm_based import SSO
-            model_object = SSO.OriginalSSO(**solver_options)
-
-        case 'orig-srsr':
-            from mealpy.swarm_based import SRSR
-            model_object = SRSR.OriginalSRSR(**solver_options)
-
-        case 'orig-goa':
-            from mealpy.swarm_based import GOA
-            model_object = GOA.OriginalGOA(**solver_options)
-
-        case 'orig-coa':
-            from mealpy.swarm_based import COA
-            model_object = COA.OriginalCOA(**solver_options)
-
-        case 'orig-msa':
-            from mealpy.swarm_based import MSA
-            model_object = MSA.OriginalMSA(**solver_options)
-
-        case 'orig-slo':
-            from mealpy.swarm_based import SLO
-            model_object = SLO.OriginalSLO(**solver_options)
-
-        case 'modi-slo':
-            from mealpy.swarm_based import SLO
-            model_object = SLO.ModifiedSLO(**solver_options)
-
-        case 'impr-slo':
-            from mealpy.swarm_based import SLO
-            model_object = SLO.ImprovedSLO(**solver_options)
-
-        case 'orig-nmra':
-            from mealpy.swarm_based import NMRA
-            model_object = NMRA.OriginalNMRA(**solver_options)
-
-        case 'impr-nmra':
-            from mealpy.swarm_based import NMRA
-            model_object = NMRA.ImprovedNMRA(**solver_options)
-
-        case 'orig-pfa':
-            from mealpy.swarm_based import PFA
-            model_object = PFA.OriginalPFA(**solver_options)
-
-        case 'orig-sfo':
-            from mealpy.swarm_based import SFO
-            model_object = SFO.OriginalSFO(**solver_options)
-
-        case 'impr-sfo':
-            from mealpy.swarm_based import SFO
-            model_object = SFO.ImprovedSFO(**solver_options)
-
-        case 'orig-hho':
-            from mealpy.swarm_based import HHO
-            model_object = HHO.OriginalHHO(**solver_options)
-
-        case 'orig-mrfo':
-            from mealpy.swarm_based import MRFO
-            model_object = MRFO.OriginalMRFO(**solver_options)
-
-        case 'orig-bes':
-            from mealpy.swarm_based import BES
-            model_object = BES.OriginalBES(**solver_options)
-
-        case 'orig-ssa':
-            from mealpy.swarm_based import SSA
-            model_object = SSA.OriginalSSA(**solver_options)
-
-        case 'base-ssa':
-            from mealpy.swarm_based import SSA
-            model_object = SSA.BaseSSA(**solver_options)
-
-        case 'orig-hgs':
-            from mealpy.swarm_based import HGS
-            model_object = HGS.OriginalHGS(**solver_options)
-
-        case 'orig-ao':
-            from mealpy.swarm_based import AO
-            model_object = AO.OriginalAO(**solver_options)
-
-        case 'gwo-woa':
-            from mealpy.swarm_based import GWO
-            model_object = GWO.OriginalGWO(**solver_options)
-
-        case 'orig-mpa':
-            from mealpy.swarm_based import MPA
-            model_object = MPA.OriginalMPA(**solver_options)
-
-        case 'orig-hba':
-            from mealpy.swarm_based import HBA
-            model_object = HBA.OriginalHBA(**solver_options)
-
-        case 'orig-scso':
-            from mealpy.swarm_based import SCSO
-            model_object = SCSO.OriginalSCSO(**solver_options)
-
-        case 'orig-tso':
-            from mealpy.swarm_based import TSO
-            model_object = TSO.OriginalTSO(**solver_options)
-
-        case 'orig-avoa':
-            from mealpy.swarm_based import AVOA
-            model_object = AVOA.OriginalAVOA(**solver_options)
-
-        case 'orig-agto':
-            from mealpy.swarm_based import AGTO
-            model_object = AGTO.OriginalAGTO(**solver_options)
-
-        case 'orig-aro':
-            from mealpy.swarm_based import ARO
-            model_object = ARO.OriginalARO(**solver_options)
-
-        case 'levy-aro':
-            from mealpy.swarm_based import ARO
-            model_object = ARO.LARO(**solver_options)
-
-        case 'selec-aro':
-            from mealpy.swarm_based import ARO
-            model_object = ARO.IARO(**solver_options)
-
-        case 'wmqi-mrfo':
-            from mealpy.swarm_based import MRFO
-            model_object = MRFO.WMQIMRFO(**solver_options)
-
-        case 'orig-esoa':
-            from mealpy.swarm_based import ESOA
-            model_object = ESOA.OriginalESOA(**solver_options)
-
-        case 'sea-ho':
-            from mealpy.swarm_based import SeaHO
-            model_object = SeaHO.OriginalSeaHO(**solver_options)
-
-        case 'orig-mgo':
-            from mealpy.swarm_based import MGO
-            model_object = MGO.OriginalMGO(**solver_options)
-
-        case 'orig-gjo':
-            from mealpy.swarm_based import GJO
-            model_object = GJO.OriginalGJO(**solver_options)
-
-        case 'orig-fox':
-            from mealpy.swarm_based import FOX
-            model_object = FOX.OriginalFOX(**solver_options)
-
-        case 'orig-gto':
-            from mealpy.swarm_based import GTO
-            model_object = GTO.OriginalGTO(**solver_options)
-
-        case 'modi101-gto':
-            from mealpy.swarm_based import GTO
-            model_object = GTO.Matlab101GTO(**solver_options)
-
-        case 'modi102-gto':
-            from mealpy.swarm_based import GTO
-            model_object = GTO.Matlab102GTO(**solver_options)
+        'orig-pso': ('mealpy.swarm_based', 'PSO', 'OriginalPSO'),
+        'p-pso': ('mealpy.swarm_based', 'PSO', 'PPSO'),
+        'h-pso-tvac': ('mealpy.swarm_based', 'PSO', 'HPSO_TVAC'),
+        'c-pso': ('mealpy.swarm_based', 'PSO', 'C_PSO'),
+        'cl-pso': ('mealpy.swarm_based', 'PSO', 'CL_PSO'),
+        'orig-bfo': ('mealpy.swarm_based', 'BFO', 'OriginalBFO'),
+        'orig-beesa': ('mealpy.swarm_based', 'BeesA', 'OriginalBeesA'),
+        'a-bfo': ('mealpy.swarm_based', 'BFO', 'OriginalBFO'),
+        'prob-beesa': ('mealpy.swarm_based', 'BeesA', 'ProbBeesA'),
+        'orig-cso': ('mealpy.swarm_based', 'CSO', 'OriginalCSO'),
+        'orig-abc': ('mealpy.swarm_based', 'ABC', 'OriginalABC'),
+        'orig-acor': ('mealpy.swarm_based', 'ACOR', 'orig_acor'),
+        'orig-csa': ('mealpy.swarm_based', 'CSA', 'OriginalCSA'),
+        'orig-ffa': ('mealpy.swarm_based', 'FFA', 'OriginalFFA'),
+        'orig-fa': ('mealpy.swarm_based', 'FA', 'OriginalFA'),
+        'orig-ba': ('mealpy.swarm_based', 'BA', 'OriginalBA'),
+        'adap-ba': ('mealpy.swarm_based', 'BA', 'AdaptiveBA'),
+        'modi-ba': ('mealpy.swarm_based', 'BA', 'ModifiedBA'),
+        'orig-foa': ('mealpy.swarm_based', 'FOA', 'OriginalFOA'),
+        'base-foa': ('mealpy.swarm_based', 'FOA', 'BaseFOA'),
+        'whale-foa': ('mealpy.swarm_based', 'FOA', 'WhaleFOA'),
+        'orig-sspidero': ('mealpy.swarm_based', 'SSpiderO', 'OriginalSSpiderO'),
+        'orig-gwo': ('mealpy.swarm_based', 'GWO', 'OriginalGWO'),
+        'impr-gwo': ('mealpy.swarm_based', 'GWO', 'IGWO'),
+        'rw-gwo': ('mealpy.swarm_based', 'GWO', 'RW_GWO'),
+        'orig-sspidera': ('mealpy.swarm_based', 'SSpiderA', 'OriginalSSpiderA'),
+        'orig-alo': ('mealpy.swarm_based', 'ALO', 'OriginalALO'),
+        'base-alo': ('mealpy.swarm_based', 'ALO', 'BaseALO'),
+        'orig-mfo': ('mealpy.swarm_based', 'MFO', 'OriginalMFO'),
+        'base-mfo': ('mealpy.swarm_based', 'MFO', 'BaseMFO'),
+        'orig-eho': ('mealpy.swarm_based', 'EHO', 'OriginalEHO'),
+        'orig-ja': ('mealpy.swarm_based', 'JA', 'OriginalJA'),
+        'base-ja': ('mealpy.swarm_based', 'JA', 'BaseJA'),
+        'levy-ja': ('mealpy.swarm_based', 'JA', 'LevyJA'),
+        'orig-woa': ('mealpy.swarm_based', 'WOA', 'OriginalWOA'),
+        'hi-woa': ('mealpy.swarm_based', 'WOA', 'HI_WOA'),
+        'orig-do': ('mealpy.swarm_based', 'DO', 'OriginalDO'),
+        'orig-bsa': ('mealpy.swarm_based', 'BSA', 'OriginalBSA'),
+        'orig-sho': ('mealpy.swarm_based', 'SHO', 'OriginalSHO'),
+        'orig-sso': ('mealpy.swarm_based', 'SSO', 'OriginalSSO'),
+        'orig-srsr': ('mealpy.swarm_based', 'SRSR', 'OriginalSRSR'),
+        'orig-goa': ('mealpy.swarm_based', 'GOA', 'OriginalGOA'),
+        'orig-coa': ('mealpy.swarm_based', 'COA', 'OriginalCOA'),
+        'orig-msa': ('mealpy.swarm_based', 'MSA', 'OriginalMSA'),
+        'orig-slo': ('mealpy.swarm_based', 'SLO', 'OriginalSLO'),
+        'modi-slo': ('mealpy.swarm_based', 'SLO', 'ModifiedSLO'),
+        'impr-slo': ('mealpy.swarm_based', 'SLO', 'ImprovedSLO'),
+        'orig-nmra': ('mealpy.swarm_based', 'NMRA', 'OriginalNMRA'),
+        'impr-nmra': ('mealpy.swarm_based', 'NMRA', 'ImprovedNMRA'),
+        'orig-pfa': ('mealpy.swarm_based', 'PFA', 'OriginalPFA'),
+        'orig-sfo': ('mealpy.swarm_based', 'SFO', 'OriginalSFO'),
+        'impr-sfo': ('mealpy.swarm_based', 'SFO', 'ImprovedSFO'),
+        'orig-hho': ('mealpy.swarm_based', 'HHO', 'OriginalHHO'),
+        'orig-mrfo': ('mealpy.swarm_based', 'MRFO', 'OriginalMRFO'),
+        'orig-bes': ('mealpy.swarm_based', 'BES', 'OriginalBES'),
+        'orig-ssa': ('mealpy.swarm_based', 'SSA', 'OriginalSSA'),
+        'base-ssa': ('mealpy.swarm_based', 'SSA', 'BaseSSA'),
+        'orig-hgs': ('mealpy.swarm_based', 'HGS', 'OriginalHGS'),
+        'orig-ao': ('mealpy.swarm_based', 'AO', 'OriginalAO'),
+        'gwo-woa': ('mealpy.swarm_based', 'GWO', 'GWO_WOA'),
+        'orig-mpa': ('mealpy.swarm_based', 'MPA', 'OriginalMPA'),
+        'orig-hba': ('mealpy.swarm_based', 'HBA', 'OriginalHBA'),
+        'orig-scso': ('mealpy.swarm_based', 'SCSO', 'OriginalSCSO'),
+        'orig-tso': ('mealpy.swarm_based', 'TSO', 'OriginalTSO'),
+        'orig-avoa': ('mealpy.swarm_based', 'AVOA', 'OriginalAVOA'),
+        'orig-agto': ('mealpy.swarm_based', 'AGTO', 'OriginalAGTO'),
+        'orig-aro': ('mealpy.swarm_based', 'ARO', 'OriginalARO'),
+        'levy-aro': ('mealpy.swarm_based', 'ARO', 'LARO'),
+        'selec-aro': ('mealpy.swarm_based', 'ARO', 'IARO'),
+        'wmqi-mrfo': ('mealpy.swarm_based', 'MRFO', 'WMQIMRFO'),
+        'orig-esoa': ('mealpy.swarm_based', 'ESOA', 'OriginalESOA'),
+        'sea-ho': ('mealpy.swarm_based', 'SeaHO', 'OriginalSeaHO'),
+        'orig-mgo': ('mealpy.swarm_based', 'MGO', 'OriginalMGO'),
+        'orig-gjo': ('mealpy.swarm_based', 'GJO', 'OriginalGJO'),
+        'orig-fox': ('mealpy.swarm_based', 'FOX', 'OriginalFOX'),
+        'orig-gto': ('mealpy.swarm_based', 'GTO', 'OriginalGTO'),
+        'modi101-gto': ('mealpy.swarm_based', 'GTO', 'Matlab101GTO'),
+        'modi102-gto': ('mealpy.swarm_based', 'GTO', 'Matlab102GTO'),
 
         # Physics-Inspired Heuristic Optimization Algorithms
-
-        case 'orig-sa':
-            from mealpy.physics_based import SA
-            model_object = SA.OriginalSA(**solver_options)
-
-        case 'orig-wdo':
-            from mealpy.physics_based import WDO
-            model_object = WDO.OriginalWDO(**solver_options)
-
-        case 'orig-mvo':
-            from mealpy.physics_based import MVO
-            model_object = MVO.OriginalMVO(**solver_options)
-
-        case 'base-mvo':
-            from mealpy.physics_based import MVO
-            model_object = MVO.BaseMVO(**solver_options)
-
-        case 'orig-two':
-            from mealpy.physics_based import TWO
-            model_object = TWO.OriginalTWO(**solver_options)
-
-        case 'oppo-two':
-            from mealpy.physics_based import TWO
-            model_object = TWO.OppoTWO(**solver_options)
-
-        case 'levy-two':
-            from mealpy.physics_based import TWO
-            model_object = TWO.LevyTWO(**solver_options)
-
-        case 'enha-two':
-            from mealpy.physics_based import TWO
-            model_object = TWO.EnhancedTWO(**solver_options)
-
-        case 'orig-efo':
-            from mealpy.physics_based import EFO
-            model_object = EFO.OriginalEFO(**solver_options)
-
-        case 'base-efo':
-            from mealpy.physics_based import EFO
-            model_object = EFO.BaseEFO(**solver_options)
-
-        case 'orig-nro':
-            from mealpy.physics_based import NRO
-            model_object = NRO.OriginalNRO(**solver_options)
-
-        case 'orig-hgso':
-            from mealpy.physics_based import HGSO
-            model_object = HGSO.OriginalHGSO(**solver_options)
-
-        case 'orig-aso':
-            from mealpy.physics_based import ASO
-            model_object = ASO.OriginalASO(**solver_options)
-
-        case 'orig-eo':
-            from mealpy.physics_based import EO
-            model_object = EO.OriginalEO(**solver_options)
-
-        case 'modi-eo':
-            from mealpy.physics_based import EO
-            model_object = EO.ModifiedEO(**solver_options)
-
-        case 'adap-eo':
-            from mealpy.physics_based import EO
-            model_object = EO.AdaptiveEO(**solver_options)
-
-        case 'orig-archoa':
-            from mealpy.physics_based import ArchOA
-            model_object = ArchOA.OriginalArchOA(**solver_options)
-
-        case 'orig-rime':
-            from mealpy.physics_based import RIME
-            model_object = RIME.OriginalRIME(**solver_options)
-
-        case 'orig-evo':
-            from mealpy.physics_based import EVO
-            model_object = EVO.OriginalEVO(**solver_options)
-
-        case 'orig-cdo':
-            from mealpy.physics_based import CDO
-            model_object = CDO.OriginalCDO
-
-        case 'orig-fla':
-            from mealpy.physics_based import FLA
-            model_object = FLA.OriginalFLA
+        
+        'orig-sa': ('mealpy.physics_based', 'SA', 'OriginalSA'),
+        'orig-wdo': ('mealpy.physics_based', 'WDO', 'OriginalWDO'),
+        'orig-mvo': ('mealpy.physics_based', 'MVO', 'OriginalMVO'),
+        'base-mvo': ('mealpy.physics_based', 'MVO', 'BaseMVO'),
+        'orig-two': ('mealpy.physics_based', 'TWO', 'OriginalTWO'),
+        'oppo-two': ('mealpy.physics_based', 'TWO', 'OppoTWO'),
+        'levy-two': ('mealpy.physics_based', 'TWO', 'LevyTWO'),
+        'enha-two': ('mealpy.physics_based', 'TWO', 'EnhancedTWO'),
+        'orig-efo': ('mealpy.physics_based', 'EFO', 'OriginalEFO'),
+        'base-efo': ('mealpy.physics_based', 'EFO', 'BaseEFO'),
+        'orig-nro': ('mealpy.physics_based', 'NRO', 'OriginalNRO'),
+        'orig-hgso': ('mealpy.physics_based', 'HGSO', 'OriginalHGSO'),
+        'orig-aso': ('mealpy.physics_based', 'ASO', 'OriginalASO'),
+        'orig-eo': ('mealpy.physics_based', 'EO', 'OriginalEO'),
+        'modi-eo': ('mealpy.physics_based', 'EO', 'ModifiedEO'),
+        'adap-eo': ('mealpy.physics_based', 'EO', 'AdaptiveEO'),
+        'orig-archoa': ('mealpy.physics_based', 'ArchOA', 'OriginalArchOA'),
+        'orig-rime': ('mealpy.physics_based', 'RIME', 'OriginalRIME'),
+        'orig-evo': ('mealpy.physics_based', 'EVO', 'OriginalEVO'),
+        'orig-cdo': ('mealpy.physics_based', 'CDO', 'OriginalCDO'),
+        'orig-fla': ('mealpy.physics_based', 'FLA', 'OriginalFLA'),
 
         # Human-Inspired Heuristic Optimization Algorithms
 
-        case 'orig-ca':
-            from mealpy.human_based import CA
-            model_object = CA.OriginalCA(**solver_options)
-
-        case 'orig-ica':
-            from mealpy.human_based import ICA
-            model_object = ICA.OriginalICA(**solver_options)
-
-        case 'orig-tlo':
-            from mealpy.human_based import TLO
-            model_object = TLO.OriginalTLO(**solver_options)
-
-        case 'base-tlo':
-            from mealpy.human_based import TLO
-            model_object = TLO.BaseTLO(**solver_options)
-
-        case 'itlo':
-            from mealpy.human_based import TLO
-            model_object = TLO.ImprovedTLO(**solver_options)
-
-        case 'orig-bso':
-            from mealpy.human_based import BSO
-            model_object = BSO.OriginalBSO(**solver_options)
-
-        case 'impr-bso':
-            from mealpy.human_based import BSO
-            model_object = BSO.ImprovedBSO(**solver_options)
-
-        case 'orig-qsa':
-            from mealpy.human_based import QSA
-            model_object = QSA.OriginalQSA(**solver_options)
-
-        case 'base-qsa':
-            from mealpy.human_based import QSA
-            model_object = QSA.BaseQSA(**solver_options)
-
-        case 'oppo-qsa':
-            from mealpy.human_based import QSA
-            model_object = QSA.OppoQSA(**solver_options)
-
-        case 'levy-qsa':
-            from mealpy.human_based import QSA
-            model_object = QSA.LevyQSA(**solver_options)
-
-        case 'impr-qsa':
-            from mealpy.human_based import QSA
-            model_object = QSA.ImprovedQSA(**solver_options)
-
-        case 'orig-saro':
-            from mealpy.human_based import SARO
-            model_object = SARO.OriginalSARO(**solver_options)
-
-        case 'base-saro':
-            from mealpy.human_based import SARO
-            model_object = SARO.BaseSARO(**solver_options)
-
-        case 'orig-lco':
-            from mealpy.human_based import LCO
-            model_object = LCO.OriginalLCO(**solver_options)
-
-        case 'base-lco':
-            from mealpy.human_based import LCO
-            model_object = LCO.BaseLCO(**solver_options)
-
-        case 'impr-lco':
-            from mealpy.human_based import LCO
-            model_object = LCO.ImprovedLCO(**solver_options)
-
-        case 'orig-ssdo':
-            from mealpy.human_based import SSDO
-            model_object = SSDO.OriginalSSDO(**solver_options)
-
-        case 'orig-gska':
-            from mealpy.human_based import GSKA
-            model_object = GSKA.OriginalGSKA(**solver_options)
-
-        case 'base-gska':
-            from mealpy.human_based import GSKA
-            model_object = GSKA.BaseGSKA(**solver_options)
-
-        case 'orig-chio':
-            from mealpy.human_based import CHIO
-            model_object = CHIO.OriginalCHIO(**solver_options)
-
-        case 'base-chio':
-            from mealpy.human_based import CHIO
-            model_object = CHIO.BaseCHIO(**solver_options)
-
-        case 'orig-fbio':
-            from mealpy.human_based import FBIO
-            model_object = FBIO.OriginalFBIO(**solver_options)
-
-        case 'base-fbio':
-            from mealpy.human_based import FBIO
-            model_object = FBIO.BaseFBIO(**solver_options)
-
-        case 'orig-bro':
-            from mealpy.human_based import BRO
-            model_object = BRO.OriginalBRO(**solver_options)
-
-        case 'base-bro':
-            from mealpy.human_based import BRO
-            model_object = BRO.BaseBRO(**solver_options)
-
-        case 'orig-spbo':
-            from mealpy.human_based import SPBO
-            model_object = SPBO.OriginalSPBO(**solver_options)
-
-        case 'dev-spbo':
-            from mealpy.human_based import SPBO
-            model_object = SPBO.DevSPBO(**solver_options)
-
-        case 'orig-dmoa':
-            print('OriginalDMOA: Not supported yet. Using SPBO instead')
-            # from mealpy.human_based import DMOA
-            # model_object = DMOA.OriginalDMOA(**solver_options)
-            from mealpy.human_based import SPBO
-            model_object = SPBO.DevSPBO(**solver_options)
-
-        case 'dev-dmoa':
-            print('DevDMOA: Not supported yet. Using SPBO instead')
-            # from mealpy.human_based import DMOA
-            # model_object = DMOA.DevDMOA(**solver_options)
-            from mealpy.human_based import SPBO
-            model_object = SPBO.DevSPBO(**solver_options)
-
-        case 'orig-huco':
-            from mealpy.human_based import HCO
-            model_object = HCO.OriginalHCO(**solver_options)
-
-        case 'orig-warso':
-            from mealpy.human_based import WarSO
-            model_object = WarSO.OriginalWarSO(**solver_options)
-
-        case 'orig-hbo':
-            from mealpy.human_based import HBO
-            model_object = HBO.OriginalHBO(**solver_options)
+        'orig-ca': ('mealpy.human_based', 'CA', 'OriginalCA'),
+        'orig-ica': ('mealpy.human_based', 'ICA', 'OriginalICA'),
+        'orig-tlo': ('mealpy.human_based', 'TLO', 'OriginalTLO'),
+        'base-tlo': ('mealpy.human_based', 'TLO', 'BaseTLO'),
+        'itlo': ('mealpy.human_based', 'TLO', 'ImprovedTLO'),
+        'orig-bso': ('mealpy.human_based', 'BSO', 'OriginalBSO'),
+        'impr-bso': ('mealpy.human_based', 'BSO', 'ImprovedBSO'),
+        'orig-qsa': ('mealpy.human_based', 'QSA', 'OriginalQSA'),
+        'base-qsa': ('mealpy.human_based', 'QSA', 'BaseQSA'),
+        'oppo-qsa': ('mealpy.human_based', 'QSA', 'OppoQSA'),
+        'levy-qsa': ('mealpy.human_based', 'QSA', 'LevyQSA'),
+        'impr-qsa': ('mealpy.human_based', 'QSA', 'ImprovedQSA'),
+        'orig-saro': ('mealpy.human_based', 'SARO', 'OriginalSARO'),
+        'base-saro': ('mealpy.human_based', 'SARO', 'BaseSARO'),
+        'orig-lco': ('mealpy.human_based', 'LCO', 'OriginalLCO'),
+        'base-lco': ('mealpy.human_based', 'LCO', 'BaseLCO'),
+        'impr-lco': ('mealpy.human_based', 'LCO', 'ImprovedLCO'),
+        'orig-ssdo': ('mealpy.human_based', 'SSDO', 'OriginalSSDO'),
+        'orig-gska': ('mealpy.human_based', 'GSKA', 'OriginalGSKA'),
+        'base-gska': ('mealpy.human_based', 'GSKA', 'BaseGSKA'),
+        'orig-chio': ('mealpy.human_based', 'CHIO', 'OriginalCHIO'),
+        'base-chio': ('mealpy.human_based', 'CHIO', 'BaseCHIO'),
+        'orig-fbio': ('mealpy.human_based', 'FBIO', 'OriginalFBIO'),
+        'base-fbio': ('mealpy.human_based', 'FBIO', 'BaseFBIO'),
+        'orig-bro': ('mealpy.human_based', 'BRO', 'OriginalBRO'),
+        'base-bro': ('mealpy.human_based', 'BRO', 'BaseBRO'),
+        'orig-spbo': ('mealpy.human_based', 'SPBO', 'OriginalSPBO'),
+        'dev-spbo': ('mealpy.human_based', 'SPBO', 'DevSPBO'),
+        'orig-dmoa': ('mealpy.human_based', 'SPBO', 'DevSPBO'),
+        'dev-dmoa': ('mealpy.human_based', 'SPBO', 'DevSPBO'),
+        'orig-huco': ('mealpy.human_based', 'HCO', 'OriginalHCO'),
+        'orig-warso': ('mealpy.human_based', 'WarSO', 'OriginalWarSO'),
+        'orig-hbo': ('mealpy.human_based', 'HBO', 'OriginalHBO'),
 
         # Bio-Inspired Heuristic Optimization Algorithms
 
-        case 'orig-iwo':
-            from mealpy.bio_based import IWO
-            model_object = IWO.OriginalIWO(**solver_options)
-
-        case 'orig-bboa':
-            from mealpy.bio_based import BBO
-            model_object = BBO.OriginalBBO(**solver_options)
-
-        case 'base-bbo':
-            from mealpy.bio_based import BBO
-            model_object = BBO.BaseBBO(**solver_options)
-
-        case 'orig-vcs':
-            from mealpy.bio_based import VCS
-            model_object = VCS.OriginalVCS(**solver_options)
-
-        case 'base-vcs':
-            from mealpy.bio_based import VCS
-            model_object = VCS.BaseVCS(**solver_options)
-
-        case 'orig-sbo':
-            from mealpy.bio_based import SBO
-            model_object = SBO.OriginalSBO(**solver_options)
-
-        case 'base-sbo':
-            from mealpy.bio_based import SBO
-            model_object = SBO.BaseSBO(**solver_options)
-
-        case 'orig-eoa':
-            from mealpy.bio_based import EOA
-            model_object = EOA.OriginalEOA(**solver_options)
-
-        case 'orig-who':
-            from mealpy.bio_based import WHO
-            model_object = WHO.OriginalWHO(**solver_options)
-
-        case 'orig-sma':
-            from mealpy.bio_based import SMA
-            model_object = SMA.OriginalSMA(**solver_options)
-
-        case 'base-sma':
-            from mealpy.bio_based import SMA
-            model_object = SMA.BaseSMA(**solver_options)
-
-        case 'orig-bmo':
-            from mealpy.bio_based import BMO
-            model_object = BMO.OriginalBMO(**solver_options)
-
-        case 'orig-tsa':
-            from mealpy.bio_based import TSA
-            model_object = TSA.OriginalTSA(**solver_options)
-
-        case 'orig-sos':
-            from mealpy.bio_based import SOS
-            model_object = SOS.OriginalSOS(**solver_options)
-
-        case 'orig-soa':
-            from mealpy.bio_based import SOA
-            model_object = SOA.OriginalSOA(**solver_options)
-
-        case 'dev-soa':
-            from mealpy.bio_based import SOA
-            model_object = SOA.DevSOA(**solver_options)
+        'orig-iwo': ('mealpy.bio_based', 'IWO', 'OriginalIWO'),
+        'orig-bboa': ('mealpy.bio_based', 'BBO', 'OriginalBBO'),
+        'base-bbo': ('mealpy.bio_based', 'BBO', 'BaseBBO'),
+        'orig-vcs': ('mealpy.bio_based', 'VCS', 'OriginalVCS'),
+        'base-vcs': ('mealpy.bio_based', 'VCS', 'BaseVCS'),
+        'orig-sbo': ('mealpy.bio_based', 'SBO', 'OriginalSBO'),
+        'base-sbo': ('mealpy.bio_based', 'SBO', 'BaseSBO'),
+        'orig-eoa': ('mealpy.bio_based', 'EOA', 'OriginalEOA'),
+        'orig-who': ('mealpy.bio_based', 'WHO', 'OriginalWHO'),
+        'orig-sma': ('mealpy.bio_based', 'SMA', 'OriginalSMA'),
+        'base-sma': ('mealpy.bio_based', 'SMA', 'BaseSMA'),
+        'orig-bmo': ('mealpy.bio_based', 'BMO', 'OriginalBMO'),
+        'orig-tsa': ('mealpy.bio_based', 'TSA', 'OriginalTSA'),
+        'orig-sos': ('mealpy.bio_based', 'SOS', 'OriginalSOS'),
+        'orig-soa': ('mealpy.bio_based', 'SOA', 'OriginalSOA'),
+        'dev-soa': ('mealpy.bio_based', 'SOA', 'DevSOA'),
 
         # System-Inspired Heuristic Optimization Algorithms
 
-        case 'orig-gco':
-            from mealpy.system_based import GCO
-            model_object = GCO.OriginalGCO(**solver_options)
-
-        case 'base-gco':
-            from mealpy.system_based import GCO
-            model_object = GCO.BaseGCO(**solver_options)
-
-        case 'orig-wca':
-            from mealpy.system_based import WCA
-            model_object = WCA.OriginalWCA(**solver_options)
-
-        case 'orig-aeo':
-            from mealpy.system_based import AEO
-            model_object = AEO.OriginalAEO(**solver_options)
-
-        case 'enha-aeo':
-            from mealpy.system_based import AEO
-            model_object = AEO.EnhancedAEO(**solver_options)
-
-        case 'modi-aeo':
-            from mealpy.system_based import AEO
-            model_object = AEO.ModifiedAEO(**solver_options)
-
-        case 'impr-aeo':
-            from mealpy.system_based import AEO
-            model_object = AEO.ImprovedAEO(**solver_options)
-
-        case 'augm-aeo':
-            from mealpy.system_based import AEO
-            model_object = AEO.AugmentedAEO(**solver_options)
+        'orig-gco': ('mealpy.system_based', 'GCO', 'OriginalGCO'),
+        'base-gco': ('mealpy.system_based', 'GCO', 'BaseGCO'),
+        'orig-wca': ('mealpy.system_based', 'WCA', 'OriginalWCA'),
+        'orig-aeo': ('mealpy.system_based', 'AEO', 'OriginalAEO'),
+        'enha-aeo': ('mealpy.system_based', 'AEO', 'EnhancedAEO'),
+        'modi-aeo': ('mealpy.system_based', 'AEO', 'ModifiedAEO'),
+        'impr-aeo': ('mealpy.system_based', 'AEO', 'ImprovedAEO'),
+        'augm-aeo': ('mealpy.system_based', 'AEO', 'AugmentedAEO'),
 
         # Math-Inspired Heuristic Optimization Algorithms
 
-        case 'orig-hc':
-            from mealpy.math_based import HC
-            model_object = HC.OriginalHC(**solver_options)
-
-        case 'swarm-hc':
-            from mealpy.math_based import HC
-            model_object = HC.SwarmHC(**solver_options)
-
-        case 'orig-cem':
-            from mealpy.math_based import CEM
-            model_object = CEM.OriginalCEM(**solver_options)
-
-        case 'orig-sca':
-            from mealpy.math_based import SCA
-            model_object = SCA.OriginalSCA(**solver_options)
-
-        case 'base-sca':
-            from mealpy.math_based import SCA
-            model_object = SCA.BaseSCA(**solver_options)
-
-        case 'orig-beesa':
-            from mealpy.math_based import AOA
-            model_object = AOA.OriginalAOA(**solver_options)
-
-        case 'orig-cgo':
-            from mealpy.math_based import CGO
-            model_object = CGO.OriginalCGO(**solver_options)
-
-        case 'orig-gbo':
-            from mealpy.math_based import GBO
-            model_object = GBO.OriginalGBO(**solver_options)
-
-        case 'orig-info':
-            from mealpy.math_based import INFO
-            model_object = INFO.OriginalINFO(**solver_options)
-
-        case 'orig-pss':
-            from mealpy.math_based import PSS
-            model_object = PSS.OriginalPSS(**solver_options)
-
-        case 'orig-run':
-            from mealpy.math_based import RUN
-            model_object = RUN.OriginalRUN(**solver_options)
-
-        case 'orig-circle-sa':
-            from mealpy.math_based import CircleSA
-            model_object = CircleSA.OriginalCircleSA(**solver_options)
-
-        case 'ql-sca':
-            from mealpy.math_based import SCA
-            model_object = SCA.QleSCA(**solver_options)
-
-        case 'orig-shio':
-            from mealpy.math_based import SHIO
-            model_object = SHIO.OriginalSHIO(**solver_options)
+        'orig-ts': ('mealpy.math_based', 'TS', 'OriginalTS'),
+        'orig-hc': ('mealpy.math_based', 'HC', 'OriginalHC'),
+        'swarm-hc': ('mealpy.math_based', 'HC', 'SwarmHC'),
+        'orig-cem': ('mealpy.math_based', 'CEM', 'OriginalCEM'),
+        'orig-sca': ('mealpy.math_based', 'SCA', 'OriginalSCA'),
+        'base-sca': ('mealpy.math_based', 'SCA', 'BaseSCA'),
+        'orig-beesa': ('mealpy.math_based', 'AOA', 'OriginalAOA'),
+        'orig-cgo': ('mealpy.math_based', 'CGO', 'OriginalCGO'),
+        'orig-gbo': ('mealpy.math_based', 'GBO', 'OriginalGBO'),
+        'orig-info': ('mealpy.math_based', 'INFO', 'OriginalINFO'),
+        'orig-pss': ('mealpy.math_based', 'PSS', 'OriginalPSS'),
+        'orig-run': ('mealpy.math_based', 'RUN', 'OriginalRUN'),
+        'orig-circle-sa': ('mealpy.math_based', 'CircleSA', 'OriginalCircleSA'),
+        'ql-sca': ('mealpy.math_based', 'SCA', 'QleSCA'),
+        'orig-shio': ('mealpy.math_based', 'SHIO', 'OriginalSHIO'),
 
         # Music-Inspired Heuristic Optimization Algorithms
+        
+        'orig-hs': ('mealpy.music_based', 'HS', 'OriginalHS'),
+        'base-hs': ('mealpy.music_based', 'HS', 'BaseHS'),
+    }
 
-        case 'orig-hs':
-            from mealpy.music_based import HS
-            model_object = HS.OriginalHS(**solver_options)
+    module_name, class_name, model_name = module_mappings.get(solver_name, (None, None, None))
 
-        case 'base-hs':
-            from mealpy.music_based import HS
-            model_object = HS.BaseHS(**solver_options)
+    if module_name and class_name and model_name:
+    
+        module = __import__(module_name, fromlist=[class_name])
+        model_class = getattr(module, class_name)
+        model_object = getattr(model_class, model_name)(**solver_options)
+
+    else:
+    
+        raise ValueError("Invalid solver name. Please refer to https://feloopy.readthedocs.io/en/latest/heuristic.html")
 
     return model_object

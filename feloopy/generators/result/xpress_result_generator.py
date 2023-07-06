@@ -23,12 +23,12 @@ def Get(model_object, result, input1, input2=None):
 
         case 'status':
 
-            return result[0]
+            return model_object.getProbStatusString()
 
         case 'objective':
 
-            return model_object.getSolution(result[0])
-
+            return model_object.getObjVal()
+        
         case 'time':
 
             return (result[1][1]-result[1][0])

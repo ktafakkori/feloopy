@@ -23,7 +23,7 @@ def instance(X):
     m.con(sum(w[j]*x[j] for j in J) |l| W)
 
     # Solve
-    m.sol(['max'], 'base-ga', {'epoch':10})
+    m.sol(['max'], 'sha-dez', {'epoch':10})
 
     return m[X]
 

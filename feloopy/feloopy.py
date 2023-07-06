@@ -51,18 +51,18 @@ class Model:
             key (number, optional): Key for the random number generator. Default: None.
         """
 
-        self.binary_variable = self.add_binary_variable = self.boolean_variable = self.add_boolean_variable = self.bvar
-        self.positive_variable = self.add_positive_variable = self.pvar
-        self.integer_variable = self.add_integer_variable = self.ivar
-        self.free_variable = self.add_free_variable = self.fvar
-        self.sequential_variable = self.add_sequential_variable = self.svar
-        self.positive_tensor_variable = self.add_positive_tensor_variable = self.ptvar
-        self.binary_tensor_variable = self.add_binary_tensor_variable = self.add_boolean_tensor_variable = self.boolean_tensor_variable = self.btvar
-        self.integer_tensor_variable = self.add_integer_tensor_variable = self.itvar
-        self.free_tensor_variable = self.add_free_tensor_variable = self.ftvar
+        self.binary_variable = self.binary = self.bool = self.add_bool = self.add_binary = self.add_binary_variable = self.boolean_variable = self.add_boolean_variable = self.bvar
+        self.positive_variable = self.positive = self.add_positive = self.add_positive_variable = self.pvar
+        self.integer_variable = self.integer = self.add_integer =  self.add_integer_variable = self.ivar
+        self.free_variable = self.free = self.float = self.add_free = self.add_float = self.real = self.add_real = self.add_free_variable = self.fvar
+        self.sequential_variable = self.sequence = self.sequential = self.add_sequence = self.add_sequential = self.add_sequential_variable = self.svar
+        self.positive_tensor_variable = self.positive_tensor = self.add_positive_tensor = self.add_positive_tensor_variable = self.ptvar
+        self.binary_tensor_variable = self.binary_tensor = self.add_binary_tensor = self.add_binary_tensor_variable = self.add_boolean_tensor_variable = self.boolean_tensor_variable = self.btvar
+        self.integer_tensor_variable = self.integer_tensor = self.add_integer_tensor = self.add_integer_tensor_variable = self.itvar
+        self.free_tensor_variable = self.free_tensor = self.float_tensor = self.add_free_tensor = self.add_float_tensor = self.add_free_tensor_variable = self.ftvar
         self.random_variable = self.add_random_variable = self.rvar
         self.random_tensor_variable = self.add_random_tensor_variable = self.rtvar
-        self.dependent_variable = self.add_dependent_variable = self.dvar
+        self.dependent_variable = self.array = self.add_array = self.add_dependent_variable = self.dvar
         self.objective = self.reward = self.hypothesis = self.fitness = self.goal = self.add_objective = self.loss = self.gain = self.obj 
         self.constraint = self.equation = self.add_constraint = self.add_equation = self.st = self.subject_to = self.cb = self.computed_by = self.penalize = self.pen = self.eq = self.con
         self.solve = self.implement = self.run = self.optimize = self.sol

@@ -35,6 +35,11 @@ def generate_solution(features):
     max_iterations = features['max_iterations']
     solver_options = features['solver_options']
 
+    if log:
+        ""
+    else:
+        model_object.controls.outputlog = 0
+
     if solver_name not in xpress_solver_selector.keys():
         raise RuntimeError(
             "Using solver '%s' is not supported by 'xpress'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
