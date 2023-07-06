@@ -1,9 +1,9 @@
 ### **Introduction**
 
-| FelooPy                                            | [![version code](https://img.shields.io/badge/version-0.2.5-darkgreen.svg)](https://github.com/ktafakkori/feloopy/releases) [![number of users](https://static.pepy.tech/personalized-badge/feloopy?period=total&units=international_system&left_color=grey&right_color=darkgreen&left_text=users)](https://pepy.tech/project/feloopy) ![release date](https://img.shields.io/github/release-date/ktafakkori/feloopy?color=blue) [![monthly Downloads](https://static.pepy.tech/personalized-badge/feloopy?period=month&units=international_system&left_color=grey&right_color=blue&left_text=monthly%20downloads%20)](https://pepy.tech/project/feloopy) [![license type](https://img.shields.io/badge/license-MIT-darkred.svg)](https://opensource.org/licenses/MIT) |
+| FelooPy                                            | [![version code](https://img.shields.io/badge/version-0.2.6-darkgreen.svg)](https://github.com/ktafakkori/feloopy/releases) [![number of users](https://static.pepy.tech/personalized-badge/feloopy?period=total&units=international_system&left_color=grey&right_color=darkgreen&left_text=users)](https://pepy.tech/project/feloopy) ![release date](https://img.shields.io/github/release-date/ktafakkori/feloopy?color=blue) [![monthly Downloads](https://static.pepy.tech/personalized-badge/feloopy?period=month&units=international_system&left_color=grey&right_color=blue&left_text=monthly%20downloads%20)](https://pepy.tech/project/feloopy) [![license type](https://img.shields.io/badge/license-MIT-darkred.svg)](https://opensource.org/licenses/MIT) |
 | :------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ![Image description](miscellaneous/logo/logo1.png) | FelooPy (pronounced /fɛlupaɪ/) is a free and open-source Python library for automated operations research that serves as both a hyper-optimization interface and an integrated optimization environment. The name comes from the idea of suggesting practical and applicable solutions for systems, industries, and supply chains, and it also references the importance of loops in programming and algorithm development, and draws similarities to the name "Floppy" to highlight memory efficiency. FelooPy helps operations research scientists achieve their goals using various target, representor, and learner models. In simple words, FelooPy is a unified framework for optimization algorithms, decision-making methods, and modeling and analytical tools. |
-| News                                               | 🎉 _Version 0.2.5 is out: Added new features!_ 🎉                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| News                                               | 🎉 _Version 0.2.6 is out: Robustness and stability!_ 🎉                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 ### **Installation**
 
@@ -29,7 +29,7 @@ FelooPy can be installed on Linux-based distributions, Windows, or macOS. It has
 <td> PyPI </td>
 <td>
     
-`pip install feloopy==0.2.5`
+`pip install feloopy==0.2.6`
 </td>
 <td> Python >= 3.10 </td>
 </tr>
@@ -38,7 +38,7 @@ FelooPy can be installed on Linux-based distributions, Windows, or macOS. It has
 <td> Command </td>
 <td>
     
-`!pip install feloopy==0.2.5`
+`!pip install feloopy==0.2.6`
 </td>
 <td> Python >= 3.10 </td>
 </tr>
@@ -50,15 +50,13 @@ FelooPy can be installed on Linux-based distributions, Windows, or macOS. It has
 ```python
 import pip
 
-import pip
-
 def install(package):
   if hasattr(pip, 'main'):
     pip.main(['install','-U', package])
   else:
     pip._internal.main(['install','-U', package])
 
-install('feloopy==0.2.5')
+install('feloopy==0.2.6')
 
 ````
 </td>
@@ -69,7 +67,7 @@ install('feloopy==0.2.5')
 <td> Local </td>
 <td>
 
-1. Download the [feloopy-0.2.5.zip][c] file.
+1. Download the [feloopy-0.2.6.zip][c] file.
 2. Extract it into a specific directory.
 3. Open a terminal in that directory.
 4. Type: `pip install .`
@@ -95,7 +93,7 @@ install('feloopy==0.2.5')
 2. Run this cell and reload (CTRL + R):
 
 ```python
-!pip install feloopy==0.2.5
+!pip install feloopy==0.2.6
 ```
 
 </td>
@@ -128,7 +126,7 @@ conda activate feloopy
 pip install feloopy
 ```
 
-FelooPy (v0.2.5) has a few optional dependencies that can be installed using the following commands:
+FelooPy (v0.2.6) has a few optional dependencies that can be installed using the following commands:
 
 * All solvers: `pip install feloopy[all_solvers]`
 * Gurobi: `pip install feloopy[gurobi]`

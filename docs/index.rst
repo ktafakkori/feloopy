@@ -28,9 +28,9 @@ FelooPy is a powerful tool for operations research scientists. It combines vario
 Latest News
 ===========
 
-🎉 *Exciting Update: FelooPy Version 0.2.5 is now available!* 🎉
+🎉 *Exciting Update: FelooPy Version 0.2.6 is now available!* 🎉
 
-We are thrilled to announce the release of FelooPy Version 0.2.5. This update brings a host of new features designed to enhance your experience and make your optimization tasks even easier. Stay tuned for more updates!
+We are thrilled to announce the release of FelooPy Version 0.2.6. This update brings stability and robustness!
 
 Features
 ========
@@ -39,7 +39,7 @@ FelooPy offers the following key features:
 
 * 📘 Simplest optimization programming language: Designed for easy use.
 * 🔧 Comprehensive toolkit: For modeling, solving, and analyzing optimization problems.
-* 🎯 Extensive support for optimization algorithms: Including exact (107), heuristic (197), convex (20), constraint (2), and multi-objective (17).
+* 🎯 Extensive support for optimization algorithms: Including exact (107), heuristic (198), convex (20), constraint (2), and multi-objective (17).
 * 🧮 Multi-criteria decision-making methods: Supporting 41 MCDM algorithms.
 * ⚙️ Customizable solver configurations: For specific requirements.
 * 🔄 General-purpose programming made easy: With auto-encoders.
@@ -68,7 +68,7 @@ Install a specific version from PyPI:
 
 .. code-block:: bash
 
-   pip install feloopy==0.2.5
+   pip install feloopy==0.2.6
 
 Script Installation
 -------------------
@@ -85,14 +85,14 @@ Use a Python script for installation:
      else:
        pip._internal.main(['install','-U', package])
 
-   install('feloopy==0.2.5')
+   install('feloopy==0.2.6')
 
 Local Installation
 ------------------
 
 Install from a local zip file:
 
-1. Download the `feloopy-0.2.5.zip`_.
+1. Download the `feloopy-0.2.6.zip`_.
 2. Extract to a directory.
 3. Install from terminal in that directory:
 
@@ -117,7 +117,7 @@ Install in a Colab environment:
 
 .. code-block:: bash
 
-   !pip install feloopy==0.2.5
+   !pip install feloopy==0.2.6
 
 Git Installation
 ----------------
@@ -128,7 +128,7 @@ Install directly from GitHub:
 
    pip install -U git+https://github.com/ktafakkori/feloopy
 
-.. _feloopy-0.2.5.zip: https://example.com/feloopy-0.2.5.zip
+.. _feloopy-0.2.6.zip: https://example.com/feloopy-0.2.6.zip
 
 Contributions
 =============
