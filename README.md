@@ -117,7 +117,6 @@ install('feloopy==0.2.6')
 
 </div>
 
-
 FelooPy requires Python 3.10 or later to be installed on your system. If you don't have Python installed, or if you have an older version, you can download it from the official website (https://www.python.org/downloads/) and follow the installation instructions. Alternatively, if you are using Anaconda, you can create a new environment with Python 3.10 or later and install FelooPy in that environment:
 
 ```
