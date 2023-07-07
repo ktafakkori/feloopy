@@ -2527,7 +2527,29 @@ class Model:
         if save is not None:
             sys.stdout.close()
             sys.stdout = stdout_origin
-    
+
+    def get_numpy_var(self, var_name):
+
+        for i,j in self.mainvars.keys():
+            if j==var_name:
+                if self.maindims[j]==0:
+                    output = self.get(self.mainvars[(i,j)])
+                elif len(self.maindims[j])==1:
+                    output = np.zeros(shape=len(fix_dims(self.maindims[j])[0]))
+                    for k in fix_dims(self.maindims[j])[0]:
+                        try:
+                            output[k] = self.get(self.mainvars[(i,j)][k])
+                        except:
+                            output[k] = self.get(self.mainvars[(i,j)])[k]
+                else:
+                    output = np.zeros(shape=tuple([len(dim) for dim in fix_dims(self.maindims[j])]))
+                    for k in it.product(*tuple(fix_dims(self.maindims[j]))):
+                        try:
+                            output[k] = self.get(self.mainvars[(i,j)][k])
+                        except:
+                            output[k] =  self.get(self.mainvars[(i,j)])[k]
+        return output
+
     def decision_information_print(self,status, box_width=80):
 
         for i,j in self.mainvars.keys():
@@ -4334,12 +4356,39 @@ class Implement:
             sys.stdout.close()
             sys.stdout = stdout_origin
 
+    def get_numpy_var(self, var_name):
+
+        for i in self.VariablesDim.keys():
+            if i==var_name:
+
+                if self.VariablesDim[i] == 0:
+
+                    output = self.get([i, (0,)])
+
+                elif len(self.VariablesDim[i]) == 1:
+
+                    output = np.zeros(shape=len(fix_dims(self.VariablesDim[i])[0]))
+
+                    for k in fix_dims(self.VariablesDim[i])[0]:
+                        
+                        output[k] = self.get([i, (k,)])
+
+                else:
+                    output = np.zeros(shape=tuple([len(dim) for dim in fix_dims(self.VariablesDim[i])]))
+                    for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
+
+                        output[k] = self.get([i, (*k,)])
+
+        return output
+
+
     def decision_information_print(self, status, box_width=80):
         if type(status) == str:
             for i in self.VariablesDim.keys():
                 if self.VariablesDim[i] == 0:
                     if self.get([i, (0,)]) != 0:
                         print(f"| {i} =", self.get([i, (0,)]), " " * (box_width - (len(f"| {i} =") + len(str(self.get([i, (0,)])))) - 1) + "|")
+
                 elif len(self.VariablesDim[i]) == 1:
                     for k in fix_dims(self.VariablesDim[i])[0]:
                         if self.get([i, (k,)]) != 0:
