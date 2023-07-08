@@ -60,7 +60,7 @@ def generate_heuristic_variable(features, type, name, variable_dim, variable_bou
                 if type == 'bvar' or type == 'ivar':
                     return np.round(variable_bound[0] + np.random.rand(*tuple([len(dims) for dims in variable_dim]))*(variable_bound[1]-variable_bound[0])).astype(int) 
                 if type == 'svar':          
-                    return np.argsort(np.random.rand(*tuple([len(dims) for dims in variable_dim])), axis=1)
+                    return np.argsort(np.random.rand(*tuple([len(dims) for dims in variable_dim])))
     else:
 
         spread = features['variable_spread'][name]
