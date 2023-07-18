@@ -96,7 +96,7 @@ def generate_solution(features):
 
             counter=0
             for constraint in model_constraints:
-                model_object.add_constraint(constraint, name=constraint_labels[counter])
+                model_object.add_constraint(constraint, ctname=constraint_labels[counter])
                 counter+=1
 
             if save_model != False:
