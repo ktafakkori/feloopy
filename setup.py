@@ -11,7 +11,7 @@
 from setuptools import setup, find_packages
 
 common = ['tabulate', 'numpy', 'matplotlib', 'infix', 'pandas', 'openpyxl', 'numba', 'plotly', 'psutil', 'py-cpuinfo', 'win-unicode-console']
-interfaces = ['gekko', 'ortools', 'pulp', 'pyomo', 'pymprog', 'picos', 'linopy', 'cvxpy', 'cylp<=0.91.5', 'mip', 'mealpy', 'pyDecision','rsome', 'pymoo']
+interfaces = ['gekko', 'ortools', 'pulp', 'pyomo', 'pymprog', 'picos', 'linopy', 'cvxpy', 'cylp', 'mip', 'mealpy', 'pyDecision','rsome', 'pymoo']
 solvers = ['cplex', 'docplex', 'xpress', 'gurobipy']
 
 setup(

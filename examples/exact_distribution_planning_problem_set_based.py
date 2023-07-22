@@ -49,7 +49,7 @@ for k, p, t in sets(K, P, T):
     m.con(sum(y[j, k, p, t] for j in J) + sum(z[i, k, p, t] for i in I) >= dk[k, p, t])
 
 # Solve
-m.sol(['min'], 'cplex')
+m.sol(['min'], 'cbc')
 
 # Display
 m.report()
