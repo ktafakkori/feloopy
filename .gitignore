@@ -11,6 +11,7 @@ build/
 develop-eggs/
 dist/
 downloads/
+extra/
 eggs/
 .eggs/
 *.png
