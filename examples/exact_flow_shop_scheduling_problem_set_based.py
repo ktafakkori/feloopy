@@ -62,7 +62,7 @@ for j in J:
     m.con(d[j, 1] >= c[j, 0])
 
 # Solve
-m.sol(['min'], 'cplex')
+m.sol(['min'], 'cbc')
 
 # Display
 m.report(sys_info=True)
