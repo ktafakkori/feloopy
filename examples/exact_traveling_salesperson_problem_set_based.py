@@ -44,4 +44,4 @@ for i, j in sets(U, N):
 #Solve
 m.sol(['min'], 'glop', show_log=False)
 
-m.report()
+m.report(show_tensors=True)

@@ -60,3 +60,4 @@ m.obj(z*q+x*(q**2))
 #Solve
 m.sol(['max'],'apopt')
 
+m.report()

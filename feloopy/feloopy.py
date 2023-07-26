@@ -2393,7 +2393,7 @@ class Model:
 
         return self.model.state_function()
 
-    def report(self, all_metrics: bool = False, feloopy_info: bool = True, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], save=None):
+    def report(self, all_metrics: bool = False, feloopy_info: bool = True, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], show_tensors = False, show_detailed_tensors=False, save=None):
 
         self.interface_name = self.features['interface_name']
         if self.solution_method_was==None:
@@ -2520,7 +2520,7 @@ class Model:
         if dec_info:
             tline_text("Decision")
             empty_line()
-            self.decision_information_print(status)
+            self.decision_information_print(status, show_tensors, show_detailed_tensors)
             empty_line()
             bline()
 
@@ -2550,55 +2550,99 @@ class Model:
                             output[k] =  self.get(self.mainvars[(i,j)])[k]
         return output
 
-    def decision_information_print(self,status, box_width=80):
+    def decision_information_print(self,status, show_tensors, show_detailed_tensors, box_width=80):
+        
+        if show_detailed_tensors: show_tensors=True
+        
+        if not show_tensors:
 
-        for i,j in self.mainvars.keys():
+            for i,j in self.mainvars.keys():
 
-            if i!='evar':
+                if i!='evar':
 
-                if self.maindims[j] == 0:
+                    if self.maindims[j] == 0:
 
-                    if self.get(self.mainvars[(i,j)]) not in [0, None]:
+                        if self.get(self.mainvars[(i,j)]) not in [0, None]:
 
-                        print(f"| {j} =", self.get(self.mainvars[(i,j)]), " "* (box_width-(len(f"| {j} =") + len(str(self.get(self.mainvars[(i,j)]))))-1) + "|")
+                            print(f"| {j} =", self.get(self.mainvars[(i,j)]), " "* (box_width-(len(f"| {j} =") + len(str(self.get(self.mainvars[(i,j)]))))-1) + "|")
 
-                elif len(self.maindims[j])==1:
-                    try:
-                        for k in fix_dims(self.maindims[j])[0]:
-                            if self.get(self.mainvars[(i,j)][k]) not in [0, None]:
-                                print(f"| {j}[{k}] =", self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"| {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "|")
-                    except:
-                        for k in fix_dims(self.maindims[j])[0]:
-                            if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
-                                print(f"| {j}[{k}] =", self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"| {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "|")
+                    elif len(self.maindims[j])==1:
+                        try:
+                            for k in fix_dims(self.maindims[j])[0]:
+                                if self.get(self.mainvars[(i,j)][k]) not in [0, None]:
+                                    print(f"| {j}[{k}] =", self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"| {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "|")
+                        except:
+                            for k in fix_dims(self.maindims[j])[0]:
+                                if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
+                                    print(f"| {j}[{k}] =", self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"| {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "|")
+                    else:
+                        try:
+                            for k in it.product(*tuple(fix_dims(self.maindims[j]))):
+                                if self.get(self.mainvars[(i,j)][k]) not in [0, None]:
+                                    print(f"| {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"| {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "|")
+                        except:
+                            for k in it.product(*tuple(fix_dims(self.maindims[j]))):
+                                if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
+                                    print(f"| {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"| {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "|")
+
                 else:
-                    try:
+
+                    if self.maindims[j] == 0:
+                            if self.get_start(self.mainvars[(i,j)])!=None:
+                                print(f"| {j} =", [self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])])))-1) + "|")
+
+
+                    elif len(self.maindims[j])==1:                    
+                        for k in fix_dims(self.maindims[j])[0]:
+                            if self.get_start(self.mainvars[(i,j)][k])!=None:
+                                print(f"| {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "|")
+
+                    else:                    
                         for k in it.product(*tuple(fix_dims(self.maindims[j]))):
-                            if self.get(self.mainvars[(i,j)][k]) not in [0, None]:
-                                print(f"| {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"| {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "|")
-                    except:
-                        for k in it.product(*tuple(fix_dims(self.maindims[j]))):
-                            if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
-                                print(f"| {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"| {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "|")
-
-            else:
-
-                if self.maindims[j] == 0:
-                        if self.get_start(self.mainvars[(i,j)])!=None:
-                            print(f"| {j} =", [self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])])))-1) + "|")
-
-
-                elif len(self.maindims[j])==1:                    
-                    for k in fix_dims(self.maindims[j])[0]:
-                        if self.get_start(self.mainvars[(i,j)][k])!=None:
-                            print(f"| {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "|")
-
-                else:                    
-                    for k in it.product(*tuple(fix_dims(self.maindims[j]))):
-                        if self.get_start(self.mainvars[(i,j)][k])!=None:
-                            print(f"| {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "|")
+                            if self.get_start(self.mainvars[(i,j)][k])!=None:
+                                print(f"| {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "|")
                     
+        else:
+            
+            if show_detailed_tensors: np.set_printoptions(threshold=np.inf)
+            
+            for i,j in self.mainvars.keys():
+                
+                if i!='evar':
+                    
+                    numpy_var = self.get_numpy_var(j) 
 
+                    if type(numpy_var)==np.ndarray:
+
+                        numpy_str = np.array2string(numpy_var, separator=', ', prefix='| ', style=str)
+                        rows = numpy_str.split('\n')
+                        first_row_len = len(rows[0])
+                        for i, row in enumerate(rows):
+                            if i == 0:
+                                left_align(f"{j} = {row}")
+                            else:
+                                left_align(" "*(len(f"{j} =")-1)+row)
+                    else:
+                        left_align(f"{j} = {numpy_var}")
+                        
+                else:
+
+                    if self.maindims[j] == 0:
+                            if self.get_start(self.mainvars[(i,j)])!=None:
+                                print(f"| {j} =", [self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])])))-1) + "|")
+
+                    elif len(self.maindims[j])==1:                    
+                        for k in fix_dims(self.maindims[j])[0]:
+                            if self.get_start(self.mainvars[(i,j)][k])!=None:
+                                print(f"| {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "|")
+
+                    else:                    
+                        for k in it.product(*tuple(fix_dims(self.maindims[j]))):
+                            if self.get_start(self.mainvars[(i,j)][k])!=None:
+                                print(f"| {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "|")
+                    
+                             
+            
     # Methods to work with input and output data.
 
     def max(self, *args):
@@ -3253,7 +3297,7 @@ class Implement:
 
                 from .generators.solution import mealpy_solution_generator
                 self.BestAgent, self.BestReward, self.start, self.end = mealpy_solution_generator.generate_solution(
-                    self.ModelObject, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots,show_log)
+                    self.ModelObject, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots,show_log, self.AlgOptions)
 
             case 'pymultiobjective':
 
@@ -4241,7 +4285,7 @@ class Implement:
             payoff.append(val)
         return np.array(payoff)
 
-    def report(self, all_metrics: bool = False, feloopy_info: bool = True, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], save=None):
+    def report(self, all_metrics: bool = False, feloopy_info: bool = True, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], show_tensors = False, show_detailed_tensors=False, save=None):
 
         if save is not None:
             stdout_origin = sys.stdout
@@ -4348,7 +4392,7 @@ class Implement:
         if dec_info:
             tline_text("Decision")
             empty_line()
-            self.decision_information_print(status)
+            self.decision_information_print(status,show_tensors, show_detailed_tensors)
             empty_line()
             bline()
 
@@ -4382,35 +4426,65 @@ class Implement:
         return output
 
 
-    def decision_information_print(self, status, box_width=80):
-        if type(status) == str:
-            for i in self.VariablesDim.keys():
-                if self.VariablesDim[i] == 0:
-                    if self.get([i, (0,)]) != 0:
-                        print(f"| {i} =", self.get([i, (0,)]), " " * (box_width - (len(f"| {i} =") + len(str(self.get([i, (0,)])))) - 1) + "|")
+    def decision_information_print(self, status, show_tensors, show_detailed_tensors, box_width=80):
+        
+        
+        if show_detailed_tensors: show_tensors=True
+        
+        if not show_tensors:
+        
+            if type(status) == str:
+                for i in self.VariablesDim.keys():
+                    if self.VariablesDim[i] == 0:
+                        if self.get([i, (0,)]) != 0:
+                            print(f"| {i} =", self.get([i, (0,)]), " " * (box_width - (len(f"| {i} =") + len(str(self.get([i, (0,)])))) - 1) + "|")
 
-                elif len(self.VariablesDim[i]) == 1:
-                    for k in fix_dims(self.VariablesDim[i])[0]:
-                        if self.get([i, (k,)]) != 0:
-                            print(f"| {i}[{k}] =", self.get([i, (k,)]), " " * (box_width - (len(f"| {i}[{k}] =") + len(str(self.get([i, (k,)])))) - 1) + "|")
-                else:
-                    for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
-                        if self.get([i, (*k,)]) != 0:
-                            print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get([i, (*k,)]), " " * (box_width - (len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get([i, (*k,)])))) - 1) + "|")
-        else:
-            for i in self.VariablesDim.keys():
-                if self.VariablesDim[i] == 0:
-                    if self.get_bound([i, (0,)])!=[0,0]:
-                        print(f"| {i} =", self.get_bound([i, (0,)]), " " * (box_width - (len(f"| {i} =") + len(str(self.get_bound([i, (0,)])))) - 1) + "|")
-                elif len(self.VariablesDim[i]) == 1:
-                    for k in fix_dims(self.VariablesDim[i])[0]:
-                        if self.get_bound([i, (k,)])!= [0,0]:
-                            print(f"| {i}[{k}] =", self.get_bound([i, (k,)]), " " * (box_width - (len(f"| {i}[{k}] =") + len(str(self.get_bound([i, (k,)])))) - 1) + "|")
-                else:
-                    for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
-                        if self.get_bound([i, (*k,)]) != [0,0]:
-                            print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get_bound([i, (*k,)]), " " * (box_width - (len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get_bound([i, (*k,)])))) - 1) + "|")
+                    elif len(self.VariablesDim[i]) == 1:
+                        for k in fix_dims(self.VariablesDim[i])[0]:
+                            if self.get([i, (k,)]) != 0:
+                                print(f"| {i}[{k}] =", self.get([i, (k,)]), " " * (box_width - (len(f"| {i}[{k}] =") + len(str(self.get([i, (k,)])))) - 1) + "|")
+                    else:
+                        for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
+                            if self.get([i, (*k,)]) != 0:
+                                print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get([i, (*k,)]), " " * (box_width - (len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get([i, (*k,)])))) - 1) + "|")
+            else:
+                for i in self.VariablesDim.keys():
+                    if self.VariablesDim[i] == 0:
+                        if self.get_bound([i, (0,)])!=[0,0]:
+                            print(f"| {i} =", self.get_bound([i, (0,)]), " " * (box_width - (len(f"| {i} =") + len(str(self.get_bound([i, (0,)])))) - 1) + "|")
+                    elif len(self.VariablesDim[i]) == 1:
+                        for k in fix_dims(self.VariablesDim[i])[0]:
+                            if self.get_bound([i, (k,)])!= [0,0]:
+                                print(f"| {i}[{k}] =", self.get_bound([i, (k,)]), " " * (box_width - (len(f"| {i}[{k}] =") + len(str(self.get_bound([i, (k,)])))) - 1) + "|")
+                    else:
+                        for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
+                            if self.get_bound([i, (*k,)]) != [0,0]:
+                                print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get_bound([i, (*k,)]), " " * (box_width - (len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get_bound([i, (*k,)])))) - 1) + "|")
     
+        else:
+        
+            if show_detailed_tensors: np.set_printoptions(threshold=np.inf)
+            
+            for i in self.VariablesDim.keys():
+                
+                if type(status) == str:
+    
+                    numpy_var = self.get_numpy_var(i) 
+
+                    if type(numpy_var)==np.ndarray:
+
+                        numpy_str = np.array2string(numpy_var, separator=', ', prefix='| ', style=str)
+                        rows = numpy_str.split('\n')
+                        first_row_len = len(rows[0])
+                        for i, row in enumerate(rows):
+                            if i == 0:
+                                left_align(f"{i} = {row}")
+                            else:
+                                left_align(" "*(len(f"{i} =")-1)+row)
+                    else:
+                        left_align(f"{i} = {numpy_var}")
+                            
+                        
 # Alternatives for defining this class:
             
 construct = make_model = implementor = implement = Implement
