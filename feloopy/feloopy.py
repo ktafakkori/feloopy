@@ -2385,6 +2385,7 @@ class Model:
     
 
     def state_function(self):
+        
         """
 
         Creates and returns a state function.
