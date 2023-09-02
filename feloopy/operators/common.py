@@ -18,6 +18,7 @@ import itertools as it
 import matplotlib.style as style
 import matplotlib.pyplot as plt
 import math as mt
+from ..helpers.formatter import *
 
 from tabulate import tabulate as tb
 
@@ -210,125 +211,96 @@ def version(INPUT):
 
     return (INPUT)
 
+def sensitivity(model_function, params_list, range_of_change_list, step_of_change_list, show_table=True, show_plot=False, save_plot=False, file_name='sensfig.png', plot_style='ggplot', legends_list=None, axis_names=['% Change', 'Objective Value'], size_of_fig=[8, 6], dpi=80):
+    """
+    Generate a sensitivity analysis plot for parameters within their range of change.
 
-def sensitivity(model_function, params_list, range_of_change=[-10, 10], step_of_change=1, show_table=True, show_plot=False, save_plot=False, file_name='sensfig.png', plot_style='ggplot', legends_list=None, axis_names=['% Change', 'Objective Value'], size_of_fig=[[8, 6], 80]):
-    '''
+    Parameters:
+        model_function (callable): The model function to evaluate.
+        params_list (list): List of initial parameter values.
+        range_of_change_list (list): List of tuples representing the range of change for each parameter.
+        step_of_change_list (list): List of step values for sensitivity analysis.
+        show_table (bool, optional): Display a table of sensitivity analysis results. Default is True.
+        show_plot (bool, optional): Display the sensitivity analysis plot. Default is False.
+        save_plot (bool, optional): Save the plot as an image file. Default is False.
+        file_name (str, optional): File name for the saved plot. Default is 'sensfig.png'.
+        plot_style (str, optional): Style of the plot, e.g., 'ggplot'. Default is 'ggplot'.
+        legends_list (list, optional): List of legend labels for parameters. Default is None.
+        axis_names (list, optional): Names for the x and y axes. Default is ['% Change', 'Objective Value'].
+        size_of_fig (list, optional): Size of the figure in inches. Default is [8, 6].
+        dpi (int, optional): Dots per inch for the saved plot. Default is 80.
 
-    Sensitivity Analyser
-    ~~~~~~~~~~~~~~~~~~~~
-
-    * model_function (Function): The function that contains the model, its corresponding solve command, and returns its object.
-    * params_list (List): A list of parameters (e.g., [a], or [a,b])
-    * range_of_change (List): A list of two values that specify the range of sensitivity analysis (e.g., [-10, 10] is between -10% and 10%)
-    * step_of_change (Integer): A number which specifies the step of change.
-    * show_table (Boolean): If a table of the results is required = True
-    * show_plot (Boolean): If a plot of the results is required = True
-    * save_plot (Boolean): If the plot should be saved = True (save directory is where the code is running)
-    * file_name (String): The name and format of the file being saved (e.g., fig.png)
-    * plot_style (String): Provide the style desired (e.g., 'seaborn-dark','seaborn-darkgrid','seaborn-ticks','fivethirtyeight','seaborn-whitegrid','classic','_classic_test','seaborn-talk', 'seaborn-dark-palette', 'seaborn-bright', 'seaborn-pastel', 'grayscale', 'seaborn-notebook', 'ggplot', 'seaborn-colorblind', 'seaborn-muted', 'seaborn', 'seaborn-paper', 'bmh', 'seaborn-white', 'dark_background', 'seaborn-poster', or 'seaborn-deep')
-    * legends_list (List): Provide the legend Required (e.g., ['a','b'])
-    * axis_names: Specify the x-axis and y-axis title
-    * size_of_fig: Specify the size and dpi of the figure (e.g., [[8,6], 80] )
-    '''
-
-    OrigRange = range_of_change.copy()
-
-    ObjVals = [[] for i in params_list]
-
-    NewParamValues = params_list.copy()
-
-    data = [dict() for i in params_list]
-
+    """
     if show_plot:
-        plt.figure(figsize=(size_of_fig[0][0],
-                   size_of_fig[0][1]), dpi=size_of_fig[1])
+        fig, ax = plt.subplots(figsize=(size_of_fig[0], size_of_fig[1]), dpi=dpi)
 
-    for i in range(0, len(params_list)):
-
+    for i in range(len(params_list)):
         OriginalParameterValue = np.asarray(params_list[i])
 
         SensitivityPoints = []
         Percent = []
 
-        range_of_change = OrigRange.copy()
+        range_of_change = range_of_change_list[i].copy()
+        diff = np.copy(range_of_change[1] - range_of_change[0])
+        step_of_change = step_of_change_list[i]
 
-        diff = np.copy(range_of_change[1]-range_of_change[0])
-
-        for j in range(0, diff//step_of_change+1):
-
+        for j in range(0, diff // step_of_change + 1):
             Percent.append(range_of_change[0])
 
-            SensitivityPoints.append(
-                OriginalParameterValue*(1+range_of_change[0]/100))
+            if isinstance(params_list[i], int) and step_of_change in [-1, 1]:
+                SensitivityPoints.append(OriginalParameterValue + step_of_change)
+            else:
+                SensitivityPoints.append(OriginalParameterValue * (1 + range_of_change[0] / 100))
 
             range_of_change[0] += step_of_change
 
-        NewParamValues = params_list.copy()
-
-        data[i]['points'] = SensitivityPoints
+        x = Percent
+        y = []
 
         for SensitivityPointofaParam in SensitivityPoints:
-
+            NewParamValues = params_list.copy()
             NewParamValues[i] = SensitivityPointofaParam
-
             m = model_function(*tuple(NewParamValues))
-
-            ObjVals[i].append(m.get_obj())
-
-        x = Percent
-        y = ObjVals[i]
-
-        data[i]['change'] = x
-        data[i]['objective'] = y
+            y.append(m.get_obj())
 
         if show_table:
-            print()
-            print(f"SENSITIVITY ANALYSIS (PARAM: {i+1})\n --------")
-            print(
-                tb({
-                    "% change": x,
-                    "objective value": y
-                },
-                    headers="keys", tablefmt="github"))
-            print()
+            if legends_list:
+                tline_text(f"Sensitivity to {legends_list[i]}")
+            else:
+                tline_text(f"Sensitivity to {i}")
+
+            two_column("% Change", "Objective value")
+            for xi, yi in zip(x, y):
+                two_column(format_string(xi), format_string(yi))
+            bline()
 
         if show_plot:
-
             style.use(plot_style)
+            ax.set_xlabel(axis_names[0], fontsize=12)
+            ax.set_ylabel(axis_names[1], fontsize=12)
 
-            default_x_ticks = range(len(x))
-
-            plt.xlabel(axis_names[0], size=12)
-
-            plt.ylabel(axis_names[1], size=12)
-
-            if legends_list == None:
-
-                plt.plot(default_x_ticks, y,
-                         label=f"Parameter {i}", linewidth=3.5)
-
+            if legends_list:
+                ax.plot(x, y, label=legends_list[i], linewidth=3.5)
             else:
+                ax.plot(x, y, label=f"Parameter {i}", linewidth=3.5)
 
-                plt.plot(default_x_ticks, y,
-                         label=legends_list[i], linewidth=3.5)
+            ax.scatter(x, y)
 
-            plt.scatter(default_x_ticks, y)
-
-            plt.xticks(default_x_ticks, x)
-
-    if show_plot and len(params_list) >= 2:
-
-        plt.legend(loc="upper left")
+    if show_plot:
+        ax.legend()
 
     if show_plot and save_plot:
-
         plt.savefig(file_name, dpi=500)
 
     if show_plot:
-
         plt.show()
 
-    return pd.DataFrame(data)
+
+    if show_plot and save_plot:
+        plt.savefig(file_name, dpi=500)
+
+    if show_plot:
+        plt.show()
 
 
 def compare(results, show_fig=True, save_fig=False, file_name=None, dpi=800, fig_size=(15, 3), alpha=0.8, line_width=5):
