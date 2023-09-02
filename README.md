@@ -13,7 +13,7 @@
 
 FelooPy can be installed on Linux-based distributions, Windows, or macOS. It has a few dependencies that should work on all these platforms.
 
-<div align="center">
+<div align="left">
 
 <table>
 <tr>
