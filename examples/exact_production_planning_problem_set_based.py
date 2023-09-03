@@ -33,7 +33,7 @@ for r in R:
     m.con(sum(a[i,r]*x[i] for i in I) <= b[r])
 
 #Solve
-m.sol(['max'],'gurobi')
+m.sol(['max'],'glpk')
 
 # Display
 m.report()

@@ -2255,6 +2255,13 @@ class Model:
                                         self.features['penalty_coefficient'] * \
                                         (self.penalty)**2
 
+    def healthy(self):
+        try:
+            return True if 'optimal' or 'feasible' in self.get_status().lower() else False
+        except:
+            return True if 'feasible' or 'optimal' in self.get_status()[0].lower() else False
+            
+    
     def get_variable(self, variable_with_index):
         from .generators import result_generator
         return result_generator.get(self.features, self.model, self.solution, 'variable', variable_with_index)
@@ -2396,6 +2403,15 @@ class Model:
 
     def report(self, all_metrics: bool = False, feloopy_info: bool = True, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], show_tensors = False, show_detailed_tensors=False, save=None):
 
+
+        if not self.healthy():
+            print()
+            print()
+            print('WARNING: Model is not healthy!')
+            print()
+            print()
+            
+            
         self.interface_name = self.features['interface_name']
         if self.solution_method_was==None:
             self.solution_method = self.features['solution_method']
@@ -4288,6 +4304,13 @@ class Implement:
 
     def report(self, all_metrics: bool = False, feloopy_info: bool = True, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], show_tensors = False, show_detailed_tensors=False, save=None):
 
+        if not self.healthy():
+            print()
+            print()
+            print('WARNING: Model is not healthy!')
+            print()
+            print()
+            
         if save is not None:
             stdout_origin = sys.stdout
             sys.stdout = open(save, "w")
@@ -4426,6 +4449,13 @@ class Implement:
 
         return output
 
+    def healthy(self):
+        try:
+            return True if 'optimal' or 'feasible' in self.get_status().lower() else False
+        except:
+            return True if 'feasible' or 'optimal' in self.get_status()[0].lower() else False
+            
+            
 
     def decision_information_print(self, status, show_tensors, show_detailed_tensors, box_width=80):
         
