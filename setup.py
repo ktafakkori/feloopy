@@ -10,7 +10,7 @@
 
 from setuptools import setup, find_packages
 
-common = ['tabulate', 'numpy', 'matplotlib', 'infix', 'pandas', 'openpyxl', 'numba', 'plotly', 'psutil', 'py-cpuinfo', 'win-unicode-console']
+common = ['tabulate', 'numpy', 'matplotlib', 'infix', 'pandas', 'openpyxl', 'numba', 'plotly', 'psutil', 'py-cpuinfo', 'win-unicode-console', 'XlsxWriter']
 interfaces = ['gekko', 'ortools', 'pulp', 'pyomo', 'pymprog', 'picos', 'linopy', 'cvxpy', 'cylp', 'mip', 'mealpy', 'pyDecision','rsome', 'pymoo']
 solvers = ['cplex', 'docplex', 'xpress', 'gurobipy']
 

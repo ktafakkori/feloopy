@@ -17,6 +17,7 @@ import numpy as np
 import itertools as it
 import matplotlib.style as style
 import matplotlib.pyplot as plt
+from openpyxl import load_workbook
 import math as mt
 from ..helpers.formatter import *
 
@@ -155,18 +156,20 @@ def end_timer(show=False):
     return EndTime
 
 def load_from_excel(data_file: str, data_dimension: list, shape: list, indices_list: None, sheet_name: str, path=None):
-    '''
-    Multi-Dimensional Excel Parameter Reader! 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    """
+    Load data from an Excel file with multiple dimensions.
 
-    *data_file: Name of the dataset file (e.g., data.xlsx)
-    *data_dimension: data_dimension of the dataset
-    *shape[0]: Number of indices that exist in each row from left (e.g., 0, 1, 2, 3...)
-    *shape[1]: Number of indices that exist in each column from top (e.g., 0, 1, 2, 3...)
-    *indices_list: The string which accompanies index counter (e.g., if row0, row1, ... and col0,col1, then index is ['row','col'])
-    *sheet_name: Name of the excel sheet in which the corresponding parameter exists.
-    *path: specify directory of the dataset file (if not provided, the dataset file should exist in the same directory as the code.)
-    '''
+    Parameters:
+    - data_file (str): Name of the dataset file (e.g., data.xlsx).
+    - data_dimension (list): Dimensions of the dataset.
+    - shape (list): Number of indices that exist in each row and column.
+    - indices_list (None or list): The string which accompanies index counter (e.g., if row0, row1, and col0, col1, then index is ['row', 'col']).
+    - sheet_name (str): Name of the excel sheet containing the parameter.
+    - path (None or str): Specify the directory of the dataset file (if not provided, the dataset file should exist in the same directory as the code).
+
+    Returns:
+    - NumPy array containing the loaded data.
+    """
 
     if path == None:
         data_file = os.path.join(sys.path[0], data_file)
@@ -203,6 +206,259 @@ def load_from_excel(data_file: str, data_dimension: list, shape: list, indices_l
                             sheet_name=sheet_name).to_numpy()
 
         return par.reshape(par.shape[0],)
+
+def save_to_excel(data_array, data_file: str, sheet_name: str, indices: list = None, path=None):
+    
+    """
+    Save NumPy array data to an Excel file.
+
+    Parameters:
+    - data_array: NumPy array to be saved (3D or 4D).
+    - data_file (str): Name of the dataset file (e.g., data.xlsx).
+    - sheet_name (str): Base name for Excel sheets. For 3D data, sheets will be named as "{sheet_name}_slice_x", where x is the slice index.
+    - indices (None or list): The list of strings for row and column indices (e.g., ['Row', 'Column']).
+    - path (None or str): Specify the directory of the dataset file (if not provided, the dataset file will be created in the same directory as the code).
+
+    Raises:
+    - ValueError: If the input data_array's dimensions are not 2D, 3D, or 4D.
+
+    Notes:
+    - If the specified Excel file does not exist, it will be created.
+    - If the specified Excel file already exists, data will be appended to it.
+
+    """
+    
+    if path is None:
+        data_file = os.path.join(os.getcwd(), data_file)
+    else:
+        data_file = os.path.join(path, data_file)
+
+    if indices is None:
+        indices = ['Index']
+
+    if data_array.ndim not in [2, 3, 4]:
+        raise ValueError("Only 2D, 3D, and 4D arrays are supported.")
+
+    num_sheets = 1
+    if data_array.ndim > 2:
+        num_sheets = data_array.shape[0]
+
+    if not os.path.exists(data_file):
+       
+        with pd.ExcelWriter(data_file, engine='xlsxwriter') as writer:
+            for sheet_idx in range(num_sheets):
+                sheet_name_with_idx = f"{sheet_name}{sheet_idx}" if num_sheets > 1 else sheet_name
+                data_slice = data_array[sheet_idx] if num_sheets > 1 else data_array
+
+                num_rows, num_columns = data_slice.shape 
+
+                data_df = pd.DataFrame(data_slice, columns=[f'{indices[1]}{i}' for i in range(num_columns)])
+                data_df.insert(0, '', [f'{indices[0]}{i}' for i in range(num_rows)])
+
+                
+                data_df.to_excel(writer, sheet_name=sheet_name_with_idx, index=False, header=True)
+
+                
+                workbook = writer.book
+                worksheet = writer.sheets[sheet_name_with_idx]
+
+                
+                cell_format = workbook.add_format({'bold': False, 'border': 0})
+                for col_num, col in enumerate(data_df.columns, start=1):
+                    worksheet.set_column(col_num, col_num, None, cell_format)
+    else:
+       
+        with pd.ExcelWriter(data_file, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+            writer.book.sheets = {ws.title: ws for ws in writer.book.worksheets}
+            for sheet_idx in range(num_sheets):
+                sheet_name_with_idx = f"{sheet_name}{sheet_idx}" if num_sheets > 1 else sheet_name
+                data_slice = data_array[sheet_idx] if num_sheets > 1 else data_array
+
+                num_rows, num_columns = data_slice.shape  
+
+                data_df = pd.DataFrame(data_slice, columns=[f'{indices[1]}{i}' for i in range(num_columns)])
+                data_df.insert(0, '', [f'{indices[0]}{i}' for i in range(num_rows)])
+
+                
+                data_df.to_excel(writer, sheet_name=sheet_name_with_idx, index=False, header=True, startrow=0)
+                
+
+import os
+import csv
+import numpy as np
+
+
+def load_from_csv(data_file: str, data_dimension: list, indices_list=None, delimiter=',', path=None):
+    """
+    Load data from a CSV file with multiple dimensions.
+
+    Parameters:
+    - data_file (str): Name of the CSV dataset file (e.g., data.csv).
+    - data_dimension (list): Dimensions of the dataset.
+    - indices_list (None or list): The string which accompanies index counter (e.g., if row0, row1, and col0, col1, then index is ['row', 'col']).
+    - delimiter (str): The delimiter used in the CSV file (default is ',').
+    - path (None or str): Specify the directory of the CSV dataset file (if not provided, the CSV file should exist in the same directory as the code).
+
+    Returns:
+    - NumPy array containing the loaded data.
+    """
+    if path is None:
+        data_file = os.path.join(os.getcwd(), data_file)
+    else:
+        data_file = os.path.join(path, data_file)
+
+    if indices_list is None:
+        indices_list = ['']  
+        
+    data = np.genfromtxt(data_file, delimiter=delimiter, dtype=float, skip_header=1)
+    
+    return data[:,1:]
+
+
+def save_to_csv(data_array, data_file: str, indices: list = None, delimiter=',', path=None):
+    """
+    Save NumPy array data to a CSV file.
+
+    Parameters:
+    - data_array: NumPy array to be saved (2D).
+    - data_file (str): Name of the CSV dataset file (e.g., data.csv).
+    - indices (None or list): The list of strings for row and column indices (e.g., ['Row', 'Column']).
+    - delimiter (str): The delimiter to be used in the CSV file (default is ',').
+    - path (None or str): Specify the directory of the CSV dataset file (if not provided, the CSV file will be created in the same directory as the code).
+
+    Raises:
+    - ValueError: If the input data_array's dimensions are not 2D.
+
+    Notes:
+    - If the specified CSV file does not exist, it will be created.
+    - If the specified CSV file already exists, data will be overwritten.
+
+    """
+    if path is None:
+        data_file = os.path.join(os.getcwd(), data_file)
+    else:
+        data_file = os.path.join(path, data_file)
+
+    if indices is None:
+        indices = ['Index']
+
+    if data_array.ndim != 2:
+        raise ValueError("Only 2D arrays are supported for saving to CSV files.")
+
+    mode = 'w' 
+    
+    with open(data_file, mode, newline='') as file:
+        writer = csv.writer(file, delimiter=delimiter)
+
+        if mode == 'w':
+            writer.writerow([''] + [f"{indices[1]}{i}" for i in range(data_array.shape[1])])
+
+        for row_idx in range(data_array.shape[0]):
+            writer.writerow([f"{indices[0]}{row_idx}"] + data_array[row_idx].tolist())
+
+
+import json
+import os
+
+def load_from_json(data_file: str, path=None):
+    """
+    Load data from a JSON file.
+
+    Parameters:
+    - data_file (str): Name of the JSON dataset file (e.g., data.json).
+    - path (None or str): Specify the directory of the JSON dataset file (if not provided, the JSON file should exist in the same directory as the code).
+
+    Returns:
+    - Python dictionary containing the loaded data.
+    """
+    if path is None:
+        data_file = os.path.join(os.getcwd(), data_file)
+    else:
+        data_file = os.path.join(path, data_file)
+
+    with open(data_file, 'r') as file:
+        data = json.load(file)
+    
+    return data
+
+def save_to_json(data_dict, data_file: str, path=None):
+    """
+    Save data as a JSON file.
+
+    Parameters:
+    - data_dict (dict): Python dictionary to be saved.
+    - data_file (str): Name of the JSON dataset file (e.g., data.json).
+    - path (None or str): Specify the directory of the JSON dataset file (if not provided, the JSON file will be created in the same directory as the code).
+
+    Raises:
+    - ValueError: If the input data_dict is not a dictionary.
+
+    Notes:
+    - If the specified JSON file does not exist, it will be created.
+    - If the specified JSON file already exists, data will be overwritten.
+    """
+    if not isinstance(data_dict, dict):
+        raise ValueError("Input data_dict must be a dictionary.")
+
+    if path is None:
+        data_file = os.path.join(os.getcwd(), data_file)
+    else:
+        data_file = os.path.join(path, data_file)
+
+    with open(data_file, 'w') as file:
+        json.dump(data_dict, file)
+
+import sqlite3
+
+def save_to_sqlite(data_list, db_file: str, table_name: str, columns: dict, primary_key=None):
+    """
+    Save data to an SQLite database table. If the table doesn't exist, it will be created.
+
+    Parameters:
+    - data_list (list of tuples): List of data rows to be inserted into the table.
+    - db_file (str): Name of the SQLite database file.
+    - table_name (str): Name of the table to insert data into.
+    - columns (dict): Dictionary mapping column names to their data types.
+    - primary_key (str or None): Name of the primary key column. If None, no primary key is used.
+
+    Notes:
+    - The data_list should be a list of tuples, where each tuple represents a row of data.
+    - If a primary key is specified, the data for rows with existing primary keys will be updated.
+    """
+    connection = sqlite3.connect(db_file)
+    cursor = connection.cursor()
+
+    if primary_key:
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS {table_name} ({', '.join([f'{col} {data_type}' for col, data_type in columns.items()])}, PRIMARY KEY ({primary_key}))")
+    else:
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS {table_name} ({', '.join([f'{col} {data_type}' for col, data_type in columns.items()])})")
+
+    cursor.executemany(f"INSERT OR REPLACE INTO {table_name} ({', '.join(columns.keys())}) VALUES ({', '.join(['?'] * len(columns))})", data_list)
+
+    connection.commit()
+    connection.close()
+
+
+def load_from_sqlite(db_file: str, table_name: str):
+    """
+    Load data from an SQLite database table.
+
+    Parameters:
+    - db_file (str): Name of the SQLite database file.
+    - table_name (str): Name of the table to retrieve data from.
+
+    Returns:
+    - List of tuples containing the loaded data rows.
+    """
+    connection = sqlite3.connect(db_file)
+    cursor = connection.cursor()
+
+    cursor.execute(f"SELECT * FROM {table_name}")
+    data = cursor.fetchall()
+
+    connection.close()
+
+    return data
 
 
 def version(INPUT):
@@ -371,3 +627,7 @@ def compare(results, show_fig=True, save_fig=False, file_name=None, dpi=800, fig
 
     if show_fig:
         plt.show()
+
+
+
+
