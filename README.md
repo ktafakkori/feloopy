@@ -209,6 +209,8 @@ FelooPy is completely free and open-source and licensed under the [MIT][08] lice
 
 | Group/Channel Name | Join Link |
 |------------|-----------|
-| Linkedin Group (Language: EN)   | [Join Group](https://www.linkedin.com/groups/12881077/) |
+| LinkedIn Group (Language: EN)   | [Join Group](https://www.linkedin.com/groups/12881077/) |
+| Telegram Group (Language: EN)   | [Join Group](https://t.me/feloop_group_en) |
+| Telegram Channel (Language: EN) | [Join Channel](https://t.me/feloop_channel_en) |
 | Telegram Group (Language: FA)   | [Join Group](https://t.me/feloop_group) |
 | Telegram Channel (Language: FA) | [Join Channel](https://t.me/feloop_channel) |
