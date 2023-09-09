@@ -131,7 +131,7 @@ FelooPy (v0.2.6) has a few optional dependencies that can be installed using the
 * Gurobi: `pip install feloopy[gurobi]`
 * Cplex: `pip install feloopy[cplex]`
 * Xpress: `pip install feloopy[xpress]`
-* Xpress: `pip install feloopy[copt]`
+* Copt: `pip install feloopy[copt]`
 * Cylp: `pip install feloopy[cylp]` (might require installation of coin-or's optimization suite, visit [here](https://www.coin-or.org/download/binary/OptimizationSuite/) or [coin-or's GitHub page](https://github.com/coin-or/COIN-OR-OptimizationSuite))
 * Linux: `pip install feloopy[linux]` (better support for multi-objective optimization)
 
