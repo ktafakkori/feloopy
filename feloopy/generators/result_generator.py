@@ -86,6 +86,11 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
                 from .result import gurobi_result_generator
                 return gurobi_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
 
+            case 'copt':
+
+                from .result import copt_result_generator
+                return copt_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
+
             case 'xpress':
 
                 from .result import xpress_result_generator
@@ -100,7 +105,6 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
 
                 from .result import linopy_result_generator
                 return linopy_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
-
 
             case 'rsome_ro':
 
@@ -181,6 +185,11 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
                 from .result import gurobi_result_generator
                 return gurobi_result_generator.Get(model_object, model_solution, indicator)
 
+            case 'copt':
+
+                from .result import copt_result_generator
+                return copt_result_generator.Get(model_object, model_solution, indicator)
+            
             case 'xpress':
 
                 from .result import xpress_result_generator

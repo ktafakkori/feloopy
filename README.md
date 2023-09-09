@@ -5,9 +5,6 @@
 | ![FelooPy Logo](miscellaneous/logo/logo1.png) | **FelooPy** (pronounced /fɛlupaɪ/) is a free and open-source Python library for automated operations research. It serves as both a hyper-optimization interface and an integrated optimization environment. The name "FelooPy" reflects the idea of suggesting practical solutions for various systems, industries, and supply chains. It emphasizes the importance of loops in programming and algorithm development, drawing similarities to the name "Floppy" to highlight memory efficiency. FelooPy helps operations research scientists achieve their goals with a range of models and tools. In simple words, FelooPy is a unified framework for optimization algorithms, decision-making methods, modeling, and analysis. |
 | **News** | 🎉 Version 0.2.6 is out: Robustness and Stability! 🎉 |
 
-
-
-
 ### **Installation**
 
 FelooPy can be installed on Linux-based distributions, Windows, or macOS. It has a few dependencies that should work on all these platforms.
@@ -134,6 +131,8 @@ FelooPy (v0.2.6) has a few optional dependencies that can be installed using the
 * Gurobi: `pip install feloopy[gurobi]`
 * Cplex: `pip install feloopy[cplex]`
 * Xpress: `pip install feloopy[xpress]`
+* Xpress: `pip install feloopy[copt]`
+* Cylp: `pip install feloopy[cylp]` (might require installation of coin-or's optimization suite, visit [here](https://www.coin-or.org/download/binary/OptimizationSuite/) or [coin-or's GitHub page](https://github.com/coin-or/COIN-OR-OptimizationSuite))
 * Linux: `pip install feloopy[linux]` (better support for multi-objective optimization)
 
 For multi-objective optimization, you should use the linux command for installation. However, please note that the optional dependencies for Linux kernel might not work on some operating systems. As a workaround, you can use a Conda-based Python 3.10 interpreter to ensure that optional dependencies for multi-objective optimization are installed correctly.

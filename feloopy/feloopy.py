@@ -29,8 +29,6 @@ from tabulate import tabulate as tb
 from typing import List, Tuple, Optional
 import sys
 
-
-
 warnings.filterwarnings("ignore")
 
 avar = defaultdict()
@@ -72,7 +70,7 @@ class Model:
         self.dis = self.dis_var = self.display = self.show = self.print = self.display_variable = self.dis_variable
         self.status = self.show_status = self.dis_status
         self.objective_value = self.show_objective = self.display_objective = self.dis_obj
-            
+
         self.random = create_random_number_generator(key)
         self.avar = self.coll()
 
@@ -2667,14 +2665,54 @@ class Model:
         if self.features['interface_name'] == 'cplex_cp':
             return self.model.max(*args)
 
-    def set(self, *size):
+    def set(self, index='', bound=None, step=1, to_list=False):
         """
-        Set Definition
+        Python-based Set Definition
         ~~~~~~~~~~~~~~
-        To define a set.
+        To define a set. If bound is provided, the set will be a range from bound[0] to bound[1] with a step of step.
+        If index is provided, the set will be created using the label index. 
+
+        Parameters
+        ----------
+        index : str, optional
+            Label index to create the set.
+        bound : list of int, optional
+            Start and end values of the range. If provided, the set will be a range from bound[0] to bound[1].
+        step : int, default 1
+            Step size of the range.
+
+        Returns
+        -------
+        set
+            The created set.
         """
 
-        return range(*size)
+        if index == '':
+
+            if not to_list:
+
+                return set(range(bound[0],bound[1],step))
+
+            else:
+
+                return list(range(bound[0],bound[1],step))
+
+        if bound is not None:
+            if not to_list:
+
+                return set(f'{index}{i}' for i in range(bound[0], bound[1], step))
+            else:
+                return list([f'{index}{i}' for i in range(bound[0], bound[1], step)])
+
+        elif index:
+
+            if not to_list:
+                return set(f'{index}{i}' for i in range(0, len(index), step))
+            else:
+                return list([f'{index}{i}' for i in range(0, len(index), step)])
+
+        else:
+            raise ValueError('Either bound or index must be provided.')
 
     def ambiguity_set(self,*args,**kwds):
         """
@@ -2691,6 +2729,98 @@ class Model:
 
         return len(set)
 
+    def ppar(self, name, dim=0, bound=[0,10e9], source=None):
+
+        '''
+        Positive parameter definition
+        
+        If source not provided, it will be randomly generated.
+
+        (Numpy compatible)
+        '''
+
+        if not source:
+            dim = fix_dims(dim)
+            if dim == 0:
+                return self.random.uniform(low=bound[0], high=bound[1])
+            else:
+                return self.random.uniform(low=bound[0], high=bound[1], size=([len(i) for i in dim]))
+        else:
+            dim = np.shape(source)    
+            return source
+
+
+    def fpar(self, name, dim=0, bound=[-10e9,10e9], source=None):
+
+        '''
+        Real (Free) parameter definition
+        
+        If source not provided, it will be randomly generated.
+
+        (Numpy compatible)
+        '''
+
+        if not source:
+            dim = fix_dims(dim)
+            if dim == 0:
+                return self.random.uniform(low=bound[0], high=bound[1])
+            else:
+                return self.random.uniform(low=bound[0], high=bound[1], size=([len(i) for i in dim]))
+        else:
+            dim = np.shape(source)    
+            return source
+
+    def bpar(self, name, dim=0, bound=[0,1], source=None):
+
+        '''
+        Binary parameter definition
+        
+        If source not provided, it will be randomly generated.
+
+        (Numpy compatible)
+        '''
+
+        if not source:
+
+            dim = fix_dims(dim)
+
+            if dim == 0:
+                return self.random.integers(low=bound[0], high=bound[1])
+            else:
+                return self.random.integers(low=bound[0], high=bound[1], size=([len(i) for i in dim]))
+        
+        else:
+
+            dim = np.shape(source)    
+
+            return source
+        
+
+    def ipar(self, name, dim=0, bound=[0,10e9], source=None):
+
+        '''
+        Integer parameter definition
+        
+        If source not provided, it will be randomly generated.
+
+        (Numpy compatible)
+        '''
+
+        if not source:
+
+            dim = fix_dims(dim)
+
+            if dim == 0:
+                return self.random.integers(low=bound[0], high=bound[1])
+            else:
+                return self.random.integers(low=bound[0], high=bound[1], size=([len(i) for i in dim]))
+        
+        else:
+
+            dim = np.shape(source)    
+
+            return source
+        
     def uniform(self, lb, ub, parameter_dim=0):
         """
         Uniform Parameter Definition
@@ -2706,28 +2836,36 @@ class Model:
             return self.random.uniform(low=lb, high=ub, size=([len(i) for i in dim]))
 
     def uniformlist(self, lb_sample_size, ub_sample_size, candidate_set, parameter_dim=0, fixed_sample_size=None, replace=False, sorted=True):
+        """
+        Generate a list of uniformly distributed random samples from a candidate set within a specified sample size range.
+
+        Parameters:
+        - lb_sample_size (int): The lower bound of the sample size range.
+        - ub_sample_size (int): The upper bound of the sample size range.
+        - candidate_set (list): The candidate set from which to draw the random samples.
+        - parameter_dim (int, optional): The dimension of the parameter. Defaults to 0.
+        - fixed_sample_size (int, optional): The fixed sample size. Defaults to None.
+        - replace (bool, optional): Whether to allow sampling with replacement. Defaults to False.
+        - sorted (bool, optional): Whether to sort the generated samples. Defaults to True.
+
+        Returns:
+        - list: A list of uniformly distributed random samples from the candidate set.
+
+        """
 
         dim = fix_dims(parameter_dim)
 
-        if dim==0:
-            if fixed_sample_size==None:
-
+        if dim == 0:
+            if fixed_sample_size == None:
                 if sorted:
-
                     return np.sort(self.random.choice(candidate_set, self.random.integers(lb_sample_size, ub_sample_size), replace=replace))
-                
                 else:
-
                     return self.random.choice(candidate_set, self.random.integers(lb_sample_size, ub_sample_size), replace=replace)
         else:
-            if fixed_sample_size==None:
-
+            if fixed_sample_size == None:
                 if sorted:
-
                     return [np.sort(self.random.choice(candidate_set, self.random.integers(lb_sample_size, ub_sample_size), replace=replace)) for i in dim[0]]
-                
                 else:
-
                     return [self.random.choice(candidate_set, self.random.integers(lb_sample_size, ub_sample_size), replace=replace) for i in dim[0]]
 
 
@@ -2743,7 +2881,7 @@ class Model:
         if dim == 0:
             return self.random.integers(low=lb, high=ub)
         else:
-            return self.random.integers(low=lb, high=ub+1, size=([len(i) for i in dim]))
+            return self.random.integers(low=lb, high=ub, size=([len(i) for i in dim]))
 
     def abs(self, input):
 

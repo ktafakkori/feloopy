@@ -83,6 +83,11 @@ def generate_variable(interface_name, model_object, variable_type, variable_name
             from .variable import gurobi_variable_generator
             return gurobi_variable_generator.generate_variable(**inputs)
 
+        case 'copt':
+
+            from .variable import copt_variable_generator
+            return copt_variable_generator.generate_variable(**inputs)
+        
         case 'xpress':
 
             from .variable import xpress_variable_generator

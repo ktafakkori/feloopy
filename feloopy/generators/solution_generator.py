@@ -87,6 +87,12 @@ def generate_solution(features):
             ModelSolution = gurobi_solution_generator.generate_solution(
                 features)
 
+        case 'copt':
+
+            from .solution import copt_solution_generator
+            ModelSolution = copt_solution_generator.generate_solution(
+                features)
+
         case 'xpress':
 
             from .solution import xpress_solution_generator

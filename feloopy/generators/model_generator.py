@@ -78,6 +78,11 @@ def generate_model(features):
             from .model import gurobi_model_generator
             model_object = gurobi_model_generator.generate_model(features)
 
+        case 'copt':
+
+            from .model import copt_model_generator
+            model_object = copt_model_generator.generate_model(features)
+
         case 'xpress':
 
             from .model import xpress_model_generator
