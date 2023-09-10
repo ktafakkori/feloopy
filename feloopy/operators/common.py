@@ -71,9 +71,9 @@ def kvs_advanced(a, sort_order='increasing', sort_by='key', b=None, output='both
     if isinstance(a, np.ndarray):
         return enumerate(a)
     elif isinstance(a, dict):
-        if sort_by == 'key':
+        if sort_by == 'keys':
             sorted_items = sorted(a.items(), key=lambda x: x[0], reverse=(sort_order == 'decreasing'))
-        elif sort_by == 'value':
+        elif sort_by == 'values':
             sorted_items = sorted(a.items(), key=lambda x: x[1], reverse=(sort_order == 'decreasing'))
         elif sort_by == 'b' and b is not None:
             sorted_items = sorted(a.items(), key=lambda x: b[x[0]], reverse=(sort_order == 'decreasing'))
@@ -86,9 +86,9 @@ def kvs_advanced(a, sort_order='increasing', sort_by='key', b=None, output='both
         else:  # output == 'both'
             return sorted_items
     elif isinstance(a, pd.Series):
-        if sort_by == 'index':
+        if sort_by == 'keys':
             sorted_items = a.sort_index(ascending=(sort_order == 'increasing'))
-        elif sort_by == 'value':
+        elif sort_by == 'values':
             sorted_items = a.sort_values(ascending=(sort_order == 'increasing'))
         elif sort_by == 'b' and b is not None:
             sorted_items = a.sort_values(by=b, ascending=(sort_order == 'increasing'))
@@ -101,9 +101,9 @@ def kvs_advanced(a, sort_order='increasing', sort_by='key', b=None, output='both
         else:  # output == 'both'
             return zip(sorted_items.index, sorted_items.values)
     elif isinstance(a, list):
-        if sort_by == 'index':
+        if sort_by == 'keys':
             sorted_items = sorted(enumerate(a), key=lambda x: x[0], reverse=(sort_order == 'decreasing'))
-        elif sort_by == 'value':
+        elif sort_by == 'values':
             sorted_items = sorted(enumerate(a), key=lambda x: x[1], reverse=(sort_order == 'decreasing'))
         elif sort_by == 'b' and b is not None:
             sorted_items = sorted(enumerate(a), key=lambda x: b[x[0]], reverse=(sort_order == 'decreasing'))
