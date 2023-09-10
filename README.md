@@ -128,12 +128,12 @@ pip install feloopy
 FelooPy (v0.2.6) has a few optional dependencies that can be installed using the following commands:
 
 * All solvers: `pip install feloopy[all_solvers]`
-* Gurobi: `pip install feloopy[gurobi]`
-* Cplex: `pip install feloopy[cplex]`
-* Xpress: `pip install feloopy[xpress]`
-* Copt: `pip install feloopy[copt]`
-* Cylp: `pip install feloopy[cylp]` (might require installation of coin-or's optimization suite, visit [here](https://www.coin-or.org/download/binary/OptimizationSuite/) or [coin-or's GitHub page](https://github.com/coin-or/COIN-OR-OptimizationSuite))
-* Linux: `pip install feloopy[linux]` (better support for multi-objective optimization)
+* Gurobi: `pip install feloopy[gurobi]` [license help](https://support.gurobi.com/hc/en-us/articles/12684663118993-How-do-I-obtain-a-Gurobi-license-#:~:text=You%20will%20need%20a%20license%20in%20order%20to,our%20website%2C%20unless%20it%20is%20a%20client%20license.)
+* Cplex: `pip install feloopy[cplex]` [license help](https://mertbakir.gitlab.io/operations-research/how-to-install-cplex-ibm-academic-initiative/)
+* Xpress: `pip install feloopy[xpress]` [license help](https://www.fico.com/en/fico-xpress-trial-and-licensing-options)
+* Copt: `pip install feloopy[copt]` [license help](https://www.shanshu.ai/copt)
+* Cylp: `pip install feloopy[cylp]` (might require [coin-or's optimization suite](https://www.coin-or.org/download/binary/OptimizationSuite/))
+* Linux: `pip install feloopy[linux]` (support for some multi-objective optimization algorithms)
 
 For multi-objective optimization, you should use the linux command for installation. However, please note that the optional dependencies for Linux kernel might not work on some operating systems. As a workaround, you can use a Conda-based Python 3.10 interpreter to ensure that optional dependencies for multi-objective optimization are installed correctly.
 
