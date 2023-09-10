@@ -10,8 +10,8 @@
 
 from setuptools import setup, find_packages
 
-common = ['tabulate', 'numpy', 'matplotlib', 'infix', 'pandas', 'openpyxl', 'numba', 'plotly', 'psutil', 'py-cpuinfo', 'win-unicode-console', 'XlsxWriter']
-interfaces = ['gekko', 'ortools', 'pulp', 'pyomo', 'pymprog', 'picos', 'linopy', 'cvxpy', 'mip', 'mealpy', 'pyDecision','rsome', 'pymoo']
+common = ['tabulate', 'numpy', 'matplotlib', 'infix', 'pandas', 'openpyxl', 'numba', 'plotly', 'psutil', 'py-cpuinfo', 'win-unicode-console', 'xlsxwriter']
+interfaces = ['gekko', 'ortools', 'pulp', 'pyomo', 'pymprog', 'picos', 'linopy', 'cvxpy', 'mip', 'mealpy', 'pydecision','rsome', 'pymoo']
 solvers = ['cplex', 'docplex', 'xpress', 'gurobipy','cylp', 'coptpy']
 
 setup(
@@ -38,5 +38,6 @@ setup(
                     'copt': [solvers[5]],
                     'cylp': [solvers[4]],
                     'linux': ['pymultiobjective']},
+
     install_requires=[common+interfaces],
 )
