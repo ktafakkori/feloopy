@@ -37,14 +37,9 @@ def if_then(*conditions_and_values):
         raise ValueError("Number of conditions and values must be the same")
     return np.select(conditions, values)
 
-import numpy as np
 
 def dims(a):
     return np.ndindex(a.shape[1:])
-
-import numpy as np
-import pandas as pd
-
 
 def keys(a):
     if isinstance(a, np.ndarray):
@@ -59,10 +54,6 @@ def keys(a):
         return None
 ids = keys
 
-
-import numpy as np
-import pandas as pd
-
 def kvs(a):
     if isinstance(a, np.ndarray):
         return enumerate(a)
@@ -74,6 +65,61 @@ def kvs(a):
         return enumerate(a)
     else:
         return None
+
+
+def kvs_advanced(a, sort_order='increasing', sort_by='key', b=None, output='both'):
+    if isinstance(a, np.ndarray):
+        return enumerate(a)
+    elif isinstance(a, dict):
+        if sort_by == 'key':
+            sorted_items = sorted(a.items(), key=lambda x: x[0], reverse=(sort_order == 'decreasing'))
+        elif sort_by == 'value':
+            sorted_items = sorted(a.items(), key=lambda x: x[1], reverse=(sort_order == 'decreasing'))
+        elif sort_by == 'b' and b is not None:
+            sorted_items = sorted(a.items(), key=lambda x: b[x[0]], reverse=(sort_order == 'decreasing'))
+        else:
+            return None
+        if output == 'keys':
+            return [item[0] for item in sorted_items]
+        elif output == 'values':
+            return [item[1] for item in sorted_items]
+        else:  # output == 'both'
+            return sorted_items
+    elif isinstance(a, pd.Series):
+        if sort_by == 'index':
+            sorted_items = a.sort_index(ascending=(sort_order == 'increasing'))
+        elif sort_by == 'value':
+            sorted_items = a.sort_values(ascending=(sort_order == 'increasing'))
+        elif sort_by == 'b' and b is not None:
+            sorted_items = a.sort_values(by=b, ascending=(sort_order == 'increasing'))
+        else:
+            return None
+        if output == 'keys':
+            return sorted_items.index.tolist()
+        elif output == 'values':
+            return sorted_items.values.tolist()
+        else:  # output == 'both'
+            return zip(sorted_items.index, sorted_items.values)
+    elif isinstance(a, list):
+        if sort_by == 'index':
+            sorted_items = sorted(enumerate(a), key=lambda x: x[0], reverse=(sort_order == 'decreasing'))
+        elif sort_by == 'value':
+            sorted_items = sorted(enumerate(a), key=lambda x: x[1], reverse=(sort_order == 'decreasing'))
+        elif sort_by == 'b' and b is not None:
+            sorted_items = sorted(enumerate(a), key=lambda x: b[x[0]], reverse=(sort_order == 'decreasing'))
+        else:
+            return None
+        if output == 'keys':
+            return [item[0] for item in sorted_items]
+        elif output == 'values':
+            return [item[1] for item in sorted_items]
+        else:  # output == 'both'
+            return sorted_items
+    else:
+        return None
+
+
+    
 
 sets = it.product
 
