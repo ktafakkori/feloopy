@@ -23,6 +23,58 @@ from ..helpers.formatter import *
 
 from tabulate import tabulate as tb
 
+def if_then_else(*conditions_and_values):
+    conditions = conditions_and_values[::2]
+    values = conditions_and_values[1::2]
+    if len(conditions) != len(values) + 1:
+        raise ValueError("Number of conditions must be one more than the number of values")
+    return np.select(conditions[:-1], values, default=conditions[-1])
+
+def if_then(*conditions_and_values):
+    conditions = conditions_and_values[::2]
+    values = conditions_and_values[1::2]
+    if len(conditions) != len(values):
+        raise ValueError("Number of conditions and values must be the same")
+    return np.select(conditions, values)
+
+import numpy as np
+
+def dims(a):
+    return np.ndindex(a.shape[1:])
+
+import numpy as np
+import pandas as pd
+
+
+def keys(a):
+    if isinstance(a, np.ndarray):
+        return range(len(a))
+    elif isinstance(a, dict):
+        return list(a.keys())
+    elif isinstance(a, pd.Series):
+        return a.index.tolist()
+    elif isinstance(a, list):
+        return range(len(a))
+    else:
+        return None
+ids = keys
+
+
+import numpy as np
+import pandas as pd
+
+def kvs(a):
+    if isinstance(a, np.ndarray):
+        return enumerate(a)
+    elif isinstance(a, dict):
+        return a.items()
+    elif isinstance(a, pd.Series):
+        return zip(a.index, a.values)
+    elif isinstance(a, list):
+        return enumerate(a)
+    else:
+        return None
+
 sets = it.product
 
 
