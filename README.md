@@ -128,10 +128,10 @@ pip install feloopy
 FelooPy (v0.2.6) has a few optional dependencies that can be installed using the following commands:
 
 * All solvers: `pip install feloopy[all_solvers]`
-* Gurobi: `pip install feloopy[gurobi]` [license help](https://support.gurobi.com/hc/en-us/articles/12684663118993-How-do-I-obtain-a-Gurobi-license-#:~:text=You%20will%20need%20a%20license%20in%20order%20to,our%20website%2C%20unless%20it%20is%20a%20client%20license.)
-* Cplex: `pip install feloopy[cplex]` [license help](https://mertbakir.gitlab.io/operations-research/how-to-install-cplex-ibm-academic-initiative/)
-* Xpress: `pip install feloopy[xpress]` [license help](https://www.fico.com/en/fico-xpress-trial-and-licensing-options)
-* Copt: `pip install feloopy[copt]` [license help](https://www.shanshu.ai/copt)
+* Gurobi: `pip install feloopy[gurobi]` [license help](https://support.gurobi.com/hc/en-us/articles/12684663118993-How-do-I-obtain-a-Gurobi-license-#:~:text=You%20will%20need%20a%20license%20in%20order%20to,our%20website%2C%20unless%20it%20is%20a%20client%20license.) | [download page](https://www.gurobi.com/downloads/)
+* Cplex: `pip install feloopy[cplex]` [license help](https://mertbakir.gitlab.io/operations-research/how-to-install-cplex-ibm-academic-initiative/) | [download page](https://www.ibm.com/products/ilog-cplex-optimization-studio)
+* Xpress: `pip install feloopy[xpress]` [license help](https://www.fico.com/en/fico-xpress-trial-and-licensing-options) | [download page](https://www.fico.com/en/products/fico-xpress-optimization)
+* Copt: `pip install feloopy[copt]` [license help](https://www.shanshu.ai/copt) | [download page](https://www.shanshu.ai/copt)
 * Cylp: `pip install feloopy[cylp]` (might require [coin-or's optimization suite](https://www.coin-or.org/download/binary/OptimizationSuite/))
 * Linux: `pip install feloopy[linux]` (support for some multi-objective optimization algorithms)
 
