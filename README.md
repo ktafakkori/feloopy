@@ -143,7 +143,7 @@ FelooPy offers the following key features:
 
 * **Simplest optimization programming language**: Designed to be easy to use, even for those with little or no programming experience.
 * **Modeling, solving and analyzing optimization problems**: Provides a complete suite of tools for modeling, solving and analyzing a wide range of optimization problems.
-* **Exact optimization algorithms**: Supports *107* exact optimization algorithms that guarantee the optimal solution to your problem.
+* **Exact optimization algorithms**: Supports *108* exact optimization algorithms that guarantee the optimal solution to your problem.
 * **Heuristic optimization algorithms**: Supports *197* heuristic optimization algorithms that can find best possible solutions to complex problems.
 * **Convex optimization algorithms**: Supports *20* convex optimization algorithms that ease tensor- and matrix-form modeling, primarily for convex problems.
 * **Constraint optimization algorithms**: Supports *2* constraint optimization algorithms that can handle a wide range of complex constraints for operational and time-dependent decisions.
