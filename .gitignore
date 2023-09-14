@@ -21,7 +21,7 @@ parts/
 sdist/
 var/
 visualize.py
-*.gif
+
 wheels/
 share/python-wheels/
 *.vscode/

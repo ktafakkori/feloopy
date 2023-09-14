@@ -156,7 +156,7 @@ For multi-objective optimization, you should use the linux command for installat
 
 ### **Features**
 
-- start optimization with a single import!
+- Start optimization with a single import!
 
 ![start-optimization](miscellaneous/showcase/start_optimization.gif)
 
