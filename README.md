@@ -105,8 +105,10 @@ install('feloopy==0.2.6')
 <tr>
 <td> Git </td>
 <td>
-    
-`pip install -U git+https://github.com/ktafakkori/feloopy`
+
+```python
+!pip install -U git+https://github.com/ktafakkori/feloopy
+```
 </td>
 
 <td> Python >= 3.10 </td>
@@ -142,23 +144,49 @@ FelooPy (v0.2.6) has a few optional dependencies that can be installed using the
 
 For multi-objective optimization, you should use the linux command for installation. However, please note that the optional dependencies for Linux kernel might not work on some operating systems. As a workaround, you can use a Conda-based Python 3.10 interpreter to ensure that optional dependencies for multi-objective optimization are installed correctly.
 
-### **Features**
+## Features
 
-FelooPy offers the following key features:
+FelooPy offers a comprehensive set of features to simplify optimization and decision-making tasks:
 
-* **Simplest optimization programming language**: Designed to be easy to use, even for those with little or no programming experience.
-* **Modeling, solving and analyzing optimization problems**: Provides a complete suite of tools for modeling, solving and analyzing a wide range of optimization problems.
-* **Exact optimization algorithms**: Supports *108* exact optimization algorithms that guarantee the optimal solution to your problem.
-* **Heuristic optimization algorithms**: Supports *197* heuristic optimization algorithms that can find best possible solutions to complex problems.
-* **Convex optimization algorithms**: Supports *20* convex optimization algorithms that ease tensor- and matrix-form modeling, primarily for convex problems.
-* **Constraint optimization algorithms**: Supports *2* constraint optimization algorithms that can handle a wide range of complex constraints for operational and time-dependent decisions.
-* **Multi-objective optimization algorithms**: Supports *17* multi-objective optimization algorithms, in which objectives might be conflicting or with different numerical units.
-* **Multi-critera decision-making methods**: Supports *41* MCDM algorithms to solve decision problems with expert-based inputs without mathematical modeling.
-* **Solver configurations**: Lets you configure the solver to meet specific requirements.
-* **Auto-encoders for general purpose programming**: Provides auto-encoders to simplify general-purpose programming tasks.
-* **Auto-linearizers for linear programming conversions**: Provides auto-linearizers that can handle mixed-integer non-linear programming problems.
-* **Auto-logic for modeling special constraints**: Provides auto-logic to help you model and solve problems with special constraints.
-* **Auto-sensitivity for analyzing the impact of key parameters**: Provides auto-sensitivity tools to help you analyze the impact of key parameters on your optimization problem.
+### Ease of Use
+
+- **Simplest optimization programming language**: Designed for users of all levels, even those with limited programming experience.
+
+### Problem Handling
+
+- **Modeling, solving, and analyzing optimization problems**: Provides a complete suite of tools for various optimization tasks.
+
+### Optimization Algorithms
+
+- **Exact optimization algorithms**: Supports *108* algorithms that guarantee optimal solutions.
+
+- **Heuristic optimization algorithms**: Includes *197* heuristic algorithms for complex problem-solving.
+
+- **Convex optimization algorithms**: Offers *20* algorithms for tensor- and matrix-form modeling, primarily for convex problems.
+
+- **Constraint optimization algorithms**: Handles a wide range of complex constraints for operational and time-dependent decisions (*2* algorithms).
+
+- **Multi-objective optimization algorithms**: Supports *17* algorithms for handling conflicting or differently scaled objectives.
+
+### Decision-Making
+
+- **Multi-criteria decision-making methods**: Provides *41* MCDM algorithms for expert-based decision problems without mathematical modeling.
+
+### Customization
+
+- **Solver configurations**: Allows you to fine-tune the solver to meet specific requirements.
+
+### Programming Aids
+
+- **Auto-encoders for general-purpose programming**: Simplifies general-purpose programming tasks.
+
+- **Auto-linearizers for linear programming conversions**: Handles mixed-integer non-linear programming problems.
+
+- **Auto-logic for modeling special constraints**: Assists in modeling and solving problems with special constraints.
+
+### Analysis Tools
+
+- **Auto-sensitivity for analyzing parameter impact**: Provides tools to analyze the impact of key parameters on your optimization problem.
 
 ### **Documentation**
 
