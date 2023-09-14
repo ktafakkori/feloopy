@@ -8,47 +8,34 @@
 ### **Installation**
 
 FelooPy can be installed on Linux-based distributions, Windows, or macOS. It has a few dependencies that should work on all these platforms.
-
-<div align="left">
-
 <table>
-<tr>
-<td> Method </td> <td> Description </td> <td> Requirements </td>
-</tr>
-
-<tr>
-<td> Quick </td>
-<td>
-    
-`pip install --upgrade feloopy`
-</td>
-<td> Python >= 3.10 </td>
-</tr>
-
-<tr>
-<td> PyPI </td>
-<td>
-    
-`pip install feloopy==0.2.6`
-</td>
-<td> Python >= 3.10 </td>
-</tr>
-
-<tr>
-<td> Command </td>
-<td>
-    
-`!pip install feloopy==0.2.6`
-</td>
-<td> Python >= 3.10 </td>
-</tr>
-
-<tr>
-<td> Script </td>
-<td>
-    
-```python
-import pip
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Description</th>
+      <th>Requirements</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Quick</td>
+      <td><code>pip install --upgrade feloopy</code></td>
+      <td>Python >= 3.10</td>
+    </tr>
+    <tr>
+      <td>PyPI</td>
+      <td><code>pip install feloopy==0.2.6</code></td>
+      <td>Python >= 3.10</td>
+    </tr>
+    <tr>
+      <td>Command</td>
+      <td><code>!pip install feloopy==0.2.6</code></td>
+      <td>Python >= 3.10</td>
+    </tr>
+    <tr>
+      <td>Script</td>
+      <td>
+        <pre><code>import pip
 
 def install(package):
   if hasattr(pip, 'main'):
@@ -57,65 +44,47 @@ def install(package):
     pip._internal.main(['install','-U', package])
 
 install('feloopy==0.2.6')
-
-````
-</td>
-<td> Python >= 3.10 </td>
-</tr>
-
-<tr>
-<td> Local </td>
-<td>
-
-1. Download the [feloopy-0.2.6.zip][c] file.
-2. Extract it into a specific directory.
-3. Open a terminal in that directory.
-4. Type: `pip install .`
-
-</td>
-
-<td> Python >= 3.10 </td>
-
-</tr>
-
-<tr>
-<td> Colab </td>
-<td>
-
-1. Run this cell and reload (CTRL + R) (using `"py310"` or `"py311"`):
-
-```python
-!wget https://github.com/korakot/kora/releases/download/v0.10/py310.sh
+</code></pre>
+      </td>
+      <td>Python >= 3.10</td>
+    </tr>
+    <tr>
+      <td>Local</td>
+      <td>
+        <ol>
+          <li>Download the <a href="[feloopy-0.2.6.zip][c]">feloopy-0.2.6.zip</a> file.</li>
+          <li>Extract it into a specific directory.</li>
+          <li>Open a terminal in that directory.</li>
+          <li>Type: <code>pip install .</code></li>
+        </ol>
+      </td>
+      <td>Python >= 3.10</td>
+    </tr>
+    <tr>
+      <td>Colab</td>
+      <td>
+        <ol>
+          <li>Run this cell and reload (CTRL + R) (using "py310" or "py311"):</li>
+        </ol>
+        <pre><code>!wget https://github.com/korakot/kora/releases/download/v0.10/py310.sh
 !bash ./py310.sh -b -f -p /usr/local
 !python -m ipykernel install --name "py310" --user
-````
-
-2. Run this cell and reload (CTRL + R):
-
-```python
-!pip install feloopy==0.2.6
-```
-
-</td>
-
-<td> Python >= 3.10 </td>
-
-</tr>
-
-<tr>
-<td> Git </td>
-<td>
-    
-`pip install -U git+https://github.com/ktafakkori/feloopy`
-</td>
-
-<td> Python >= 3.10 </td>
-
-</tr>
-
+</code></pre>
+        <ol start="2">
+          <li>Run this cell and reload (CTRL + R):</li>
+        </ol>
+        <pre><code>!pip install feloopy==0.2.6</code></pre>
+      </td>
+      <td>Python >= 3.10</td>
+    </tr>
+    <tr>
+      <td>Git</td>
+      <td><code>pip install -U git+https://github.com/ktafakkori/feloopy</code></td>
+      <td>Python >= 3.10</td>
+    </tr>
+  </tbody>
 </table>
 
-</div>
 
 FelooPy requires Python 3.10 or later to be installed on your system. If you don't have Python installed, or if you have an older version, you can download it from the official website (https://www.python.org/downloads/) and follow the installation instructions. Alternatively, if you are using Anaconda, you can create a new environment with Python 3.10 or later and install FelooPy in that environment:
 
