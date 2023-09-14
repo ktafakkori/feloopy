@@ -8,34 +8,47 @@
 ### **Installation**
 
 FelooPy can be installed on Linux-based distributions, Windows, or macOS. It has a few dependencies that should work on all these platforms.
+
+<div align="left">
+
 <table>
-  <thead>
-    <tr>
-      <th>Method</th>
-      <th>Description</th>
-      <th>Requirements</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Quick</td>
-      <td><code>pip install --upgrade feloopy</code></td>
-      <td>Python >= 3.10</td>
-    </tr>
-    <tr>
-      <td>PyPI</td>
-      <td><code>pip install feloopy==0.2.6</code></td>
-      <td>Python >= 3.10</td>
-    </tr>
-    <tr>
-      <td>Command</td>
-      <td><code>!pip install feloopy==0.2.6</code></td>
-      <td>Python >= 3.10</td>
-    </tr>
-    <tr>
-      <td>Script</td>
-      <td>
-        <pre><code>import pip
+<tr>
+<td> Method </td> <td> Description </td> <td> Requirements </td>
+</tr>
+
+<tr>
+<td> Quick </td>
+<td>
+    
+`pip install --upgrade feloopy`
+</td>
+<td> Python >= 3.10 </td>
+</tr>
+
+<tr>
+<td> PyPI </td>
+<td>
+    
+`pip install feloopy==0.2.6`
+</td>
+<td> Python >= 3.10 </td>
+</tr>
+
+<tr>
+<td> Command </td>
+<td>
+    
+`!pip install feloopy==0.2.6`
+</td>
+<td> Python >= 3.10 </td>
+</tr>
+
+<tr>
+<td> Script </td>
+<td>
+    
+```python
+import pip
 
 def install(package):
   if hasattr(pip, 'main'):
@@ -44,47 +57,65 @@ def install(package):
     pip._internal.main(['install','-U', package])
 
 install('feloopy==0.2.6')
-</code></pre>
-      </td>
-      <td>Python >= 3.10</td>
-    </tr>
-    <tr>
-      <td>Local</td>
-      <td>
-        <ol>
-          <li>Download the <a href="[feloopy-0.2.6.zip][c]">feloopy-0.2.6.zip</a> file.</li>
-          <li>Extract it into a specific directory.</li>
-          <li>Open a terminal in that directory.</li>
-          <li>Type: <code>pip install .</code></li>
-        </ol>
-      </td>
-      <td>Python >= 3.10</td>
-    </tr>
-    <tr>
-      <td>Colab</td>
-      <td>
-        <ol>
-          <li>Run this cell and reload (CTRL + R) (using "py310" or "py311"):</li>
-        </ol>
-        <pre><code>!wget https://github.com/korakot/kora/releases/download/v0.10/py310.sh
+
+````
+</td>
+<td> Python >= 3.10 </td>
+</tr>
+
+<tr>
+<td> Local </td>
+<td>
+
+1. Download the [feloopy-0.2.6.zip][c] file.
+2. Extract it into a specific directory.
+3. Open a terminal in that directory.
+4. Type: `pip install .`
+
+</td>
+
+<td> Python >= 3.10 </td>
+
+</tr>
+
+<tr>
+<td> Colab </td>
+<td>
+
+1. Run this cell and reload (CTRL + R) (using `"py310"` or `"py311"`):
+
+```python
+!wget https://github.com/korakot/kora/releases/download/v0.10/py310.sh
 !bash ./py310.sh -b -f -p /usr/local
 !python -m ipykernel install --name "py310" --user
-</code></pre>
-        <ol start="2">
-          <li>Run this cell and reload (CTRL + R):</li>
-        </ol>
-        <pre><code>!pip install feloopy==0.2.6</code></pre>
-      </td>
-      <td>Python >= 3.10</td>
-    </tr>
-    <tr>
-      <td>Git</td>
-      <td><code>pip install -U git+https://github.com/ktafakkori/feloopy</code></td>
-      <td>Python >= 3.10</td>
-    </tr>
-  </tbody>
+````
+
+2. Run this cell and reload (CTRL + R):
+
+```python
+!pip install feloopy==0.2.6
+```
+
+</td>
+
+<td> Python >= 3.10 </td>
+
+</tr>
+
+<tr>
+<td> Git </td>
+<td>
+    
+`pip install -U git+https://github.com/ktafakkori/feloopy`
+</td>
+
+<td> Python >= 3.10 </td>
+
+</tr>
+
 </table>
 
+</div>
 
 FelooPy requires Python 3.10 or later to be installed on your system. If you don't have Python installed, or if you have an older version, you can download it from the official website (https://www.python.org/downloads/) and follow the installation instructions. Alternatively, if you are using Anaconda, you can create a new environment with Python 3.10 or later and install FelooPy in that environment:
 
@@ -96,13 +127,16 @@ pip install feloopy
 
 FelooPy (v0.2.6) has a few optional dependencies that can be installed using the following commands:
 
-* All solvers: `pip install feloopy[all_solvers]`
-* Gurobi: `pip install feloopy[gurobi]` [license help](https://support.gurobi.com/hc/en-us/articles/12684663118993-How-do-I-obtain-a-Gurobi-license-#:~:text=You%20will%20need%20a%20license%20in%20order%20to,our%20website%2C%20unless%20it%20is%20a%20client%20license.) | [download page](https://www.gurobi.com/downloads/)
-* Cplex: `pip install feloopy[cplex]` [license help](https://mertbakir.gitlab.io/operations-research/how-to-install-cplex-ibm-academic-initiative/) | [download page](https://www.ibm.com/products/ilog-cplex-optimization-studio)
-* Xpress: `pip install feloopy[xpress]` [license help](https://www.fico.com/en/fico-xpress-trial-and-licensing-options) | [download page](https://www.fico.com/en/products/fico-xpress-optimization)
-* Copt: `pip install feloopy[copt]` [license help](https://www.shanshu.ai/copt) | [download page](https://www.shanshu.ai/copt)
-* Cylp: `pip install feloopy[cylp]` (might require [coin-or's optimization suite](https://www.coin-or.org/download/binary/OptimizationSuite/))
-* Linux: `pip install feloopy[linux]` (support for some multi-objective optimization algorithms)
+| Dependency     | Installation Command                                           | License Help                                                                               | Download Page                                    |
+| -------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------- |
+| All solvers    | `pip install feloopy[all_solvers]`                            | -                                                                                          | -                                                 |
+| Gurobi         | `pip install feloopy[gurobi]`                                 | [License Help](https://support.gurobi.com/hc/en-us/articles/12684663118993-How-do-I-obtain-a-Gurobi-license-#:~:text=You%20will%20need%20a%20license%20in%20order%20to,our%20website%2C%20unless%20it%20is%20a%20client%20license.) | [Download Page](https://www.gurobi.com/downloads/) |
+| Cplex          | `pip install feloopy[cplex]`                                  | [License Help](https://mertbakir.gitlab.io/operations-research/how-to-install-cplex-ibm-academic-initiative/) | [Download Page](https://www.ibm.com/products/ilog-cplex-optimization-studio) |
+| Xpress         | `pip install feloopy[xpress]`                                 | [License Help](https://www.fico.com/en/fico-xpress-trial-and-licensing-options)          | [Download Page](https://www.fico.com/en/products/fico-xpress-optimization) |
+| Copt           | `pip install feloopy[copt]`                                   | [License Help](https://www.shanshu.ai/copt)                                              | [Download Page](https://www.shanshu.ai/copt)    |
+| Cylp           | `pip install feloopy[cylp]`                                   | (might require [coin-or's optimization suite](https://www.coin-or.org/download/binary/OptimizationSuite/)) | -                                                 |
+| Linux          | `pip install feloopy[linux]`                                  | -                                                                                          | -                                                 |
+
 
 For multi-objective optimization, you should use the linux command for installation. However, please note that the optional dependencies for Linux kernel might not work on some operating systems. As a workaround, you can use a Conda-based Python 3.10 interpreter to ensure that optional dependencies for multi-objective optimization are installed correctly.
 
