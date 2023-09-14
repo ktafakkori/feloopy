@@ -160,6 +160,10 @@ For multi-objective optimization, you should use the linux command for installat
 
 ![start-optimization](miscellaneous/showcase/start_optimization.gif)
 
+- Define modeling environment with ease!
+
+![start-modeling](miscellaneous/showcase/start_modeling.gif)
+
 
 
 FelooPy also offers the following key features:
