@@ -64,6 +64,7 @@ def generate_heuristic_variable(features, type, name, variable_dim, variable_bou
     else:
 
         spread = features['variable_spread'][name]
+
         if features['vectorized']:
             if variable_dim == 0:
                 if type == 'bvar' or type == 'ivar':
@@ -72,7 +73,7 @@ def generate_heuristic_variable(features, type, name, variable_dim, variable_bou
                 elif type == 'pvar' or type == 'fvar':
                     return variable_bound[0] + agent[:, spread[0]:spread[1]] * (variable_bound[1] - variable_bound[0])
                 else:
-                    return np.argsort(agent[:, spread[name][0]:spread[name][1]])
+                    return np.argsort(agent[:, spread[0]:spread[1]])
             else:
 
                 if type == 'bvar' or type == 'ivar':
@@ -91,7 +92,7 @@ def generate_heuristic_variable(features, type, name, variable_dim, variable_bou
 
                 else:
 
-                    return np.argsort(agent[:, spread[name][0]:spread[name][1]])
+                    return np.argsort(agent[:, spread[0]:spread[1]])
         else:
 
             if variable_dim == 0:
@@ -106,7 +107,7 @@ def generate_heuristic_variable(features, type, name, variable_dim, variable_bou
 
                 else:
 
-                    return np.argsort(agent[spread[name][0]:spread[name][1]])
+                    return np.argsort(agent[spread[0]:spread[1]])
 
             else:
 
@@ -120,4 +121,4 @@ def generate_heuristic_variable(features, type, name, variable_dim, variable_bou
 
                 else:
 
-                    return np.argsort(agent[spread[name][0]:spread[name][1]])
+                    return np.argsort(agent[spread[0]:spread[1]])

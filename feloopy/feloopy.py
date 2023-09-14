@@ -715,10 +715,13 @@ class Model:
             A sequential variable with the given name and length.
         """
         dim = fix_dims([length])
-        self.features = update_variable_features(name, dim, [0, 1], 'integer_variable_counter', self.features)
-        self.features['variable_type'][name] = 'svar'
-        return generate_heuristic_variable(self.features, 'svar', name, dim, [0, 1], self.agent, self.no_agents)
+        self.features = update_variable_features(name, dim, [0, 1], 'sequential_variable_counter', self.features)
+        match self.features['solution_method']:
 
+            case 'heuristic':
+                
+                return generate_heuristic_variable(self.features, 'svar', name, dim, [0, 1], self.agent,self.no_agents)
+        
     def csvar(self, name, indices, length=1):
         """
         Creates a dictionary of sequential variables with specific names and lengths.

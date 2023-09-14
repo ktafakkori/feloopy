@@ -18,11 +18,13 @@ N = m.set(10)
 U = m.set(9)
 
 #Dataset
-c = m.uniformint(1, 10, [N,N])
+c = m.uniformint(1, 11, [N,N])
 for i, j in sets(N, N):
     c[i][i] = 0
     c[i][j] = c[j][i]
 
+
+print(c)
 #Variables
 x = m.bvar('x', [N, N])
 u = m.ivar('u', [N])

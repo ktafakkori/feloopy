@@ -42,7 +42,7 @@ for j in J:
     m.con(sum(x[i, j] for i in I) == 1)
 
 # Solve
-m.sol(['min'], 'highs')
+m.sol(['min'], 'cbc')
 
 # Display
 m.report()
