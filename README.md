@@ -127,6 +127,8 @@ pip install feloopy
 
 FelooPy (v0.2.6) has a few optional dependencies that can be installed using the following commands:
 
+<div align="center">
+
 | Dependency     | Installation Command                                           | License Help                                                                               | Download Page                                    |
 | -------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------- |
 | All solvers    | `pip install feloopy[all_solvers]`                            | -                                                                                          | -                                                 |
@@ -136,7 +138,7 @@ FelooPy (v0.2.6) has a few optional dependencies that can be installed using the
 | Copt           | `pip install feloopy[copt]`                                   | [License](https://www.shanshu.ai/copt)                                              | [Download](https://www.shanshu.ai/copt)    |
 | Cylp           | `pip install feloopy[cylp]`                                   | [License](https://github.com/coin-or/CyLP) | [Download](https://www.coin-or.org/download/binary/OptimizationSuite/)                                                 |
 | Linux          | `pip install feloopy[linux]`                                  | -                                                                                          | -                                                 |
-
+</div>
 
 For multi-objective optimization, you should use the linux command for installation. However, please note that the optional dependencies for Linux kernel might not work on some operating systems. As a workaround, you can use a Conda-based Python 3.10 interpreter to ensure that optional dependencies for multi-objective optimization are installed correctly.
 
