@@ -156,7 +156,13 @@ For multi-objective optimization, you should use the linux command for installat
 
 ### **Features**
 
-FelooPy offers the following key features:
+- start optimization with a single import!
+
+![start-optimization](miscellaneous/showcase/start_optimization.gif)
+
+
+
+FelooPy also offers the following key features:
 
 * **Simplest optimization programming language**: Designed to be easy to use, even for those with little or no programming experience.
 * **Modeling, solving and analyzing optimization problems**: Provides a complete suite of tools for modeling, solving and analyzing a wide range of optimization problems.
