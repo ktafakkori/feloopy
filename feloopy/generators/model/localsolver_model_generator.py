@@ -1,12 +1,13 @@
 '''
- # @ Author: Keivan Tafakkori
- # @ Created: 2023-07-06
- # @ Modified: 2023-07-06
- # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
- # @ Github: https://github.com/ktafakkori
- # @ Website: https://ktafakkori.github.io/
- # @ Copyright: 2023. MIT License. All Rights Reserved.
- '''
++---------------------------------------------------------+
+|  Project: FelooPy (0.2.7)                               |
+|  Modified: Wednesday, 27th September 2023 09:04:02 pm   |
+|  Modified By: Keivan Tafakkori                          |
+|  Project: https://github.com/ktafakkori/feloopy         |
+|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
+|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
++---------------------------------------------------------+
+'''
 
 import sys
 import warnings
@@ -18,7 +19,6 @@ import localsolver as ls
 def generate_model(features):
 
     ls_env = ls.LocalSolver()
-
     model = ls_env.model
 
     return model
