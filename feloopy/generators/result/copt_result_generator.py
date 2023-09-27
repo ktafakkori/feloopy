@@ -1,12 +1,13 @@
 '''
- # @ Author: Keivan Tafakkori
- # @ Created: 2023-05-11
- # @ Modified: 2023-05-12
- # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
- # @ Github: https://github.com/ktafakkori
- # @ Website: https://ktafakkori.github.io/
- # @ Copyright: 2023. MIT License. All Rights Reserved.
- '''
++---------------------------------------------------------+
+|  Project: FelooPy (0.2.7)                               |
+|  Modified: Wednesday, 27th September 2023 10:06:52 pm   |
+|  Modified By: Keivan Tafakkori                          |
+|  Project: https://github.com/ktafakkori/feloopy         |
+|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
+|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
++---------------------------------------------------------+
+'''
 
 from coptpy import *
 
@@ -25,19 +26,15 @@ def Get(model_object, result, input1, input2=None):
     match input1:
 
         case 'variable':
-
             return input2.X
 
         case 'status':
-
             return copt_status_dict[model_object.status]
 
         case 'objective':
-
             return model_object.objval
 
         case 'time':
-
             return (result[1][1]-result[1][0])
 
         case 'dual':
@@ -45,13 +42,28 @@ def Get(model_object, result, input1, input2=None):
 
         case 'slack':
             return model_object.getConstrByName(input2).Slack
-        
+
+        case 'rc':
+            return input2.rc
+
         case 'iis':
             model_object.computeIIS()
-            for c in model_object.getConstrs():
-                if c.getUpperIIS()>0 or c.getLowerIIS():
-                    print("│" + " " + str(f"con: {c.constrName}").ljust(80-2) + " " + "│")
-            for v in model_object.getVars():
-                if v.getLowerIIS > 0 or v.getUpperIIS > 0:
-                    print("│" + " " + str(f"var: {v.varName}").ljust(80-2) + " " + "│")
+            
+            output = ''
+            
+            constrs = model_object.getConstrs()
+            vars = model_object.getVars()
+            
+            for i, c in enumerate(constrs):
+                if c.getUpperIIS() > 0 or c.getLowerIIS() > 0:
+                    output += "│" + " " + str(f"con: {c.getName()}").ljust(80-2) + " " + "│"
+                    if i != len(constrs) - 1 or i==0:
+                        output += "\n"
 
+            for i, v in enumerate(vars):
+                if v.getLowerIIS() > 0 or v.getUpperIIS() > 0:
+                    output += "│" + " " + str(f"var: {v.getName()}").ljust(80-2) + " " + "│"
+                    if i != len(vars) - 1 or i==0:
+                        output += "\n"
+
+            return output

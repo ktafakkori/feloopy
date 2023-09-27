@@ -1,12 +1,14 @@
 '''
- # @ Author: Keivan Tafakkori
- # @ Created: 2023-05-11
- # @ Modified: 2023-05-12
- # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
- # @ Github: https://github.com/ktafakkori
- # @ Website: https://ktafakkori.github.io/
- # @ Copyright: 2023. MIT License. All Rights Reserved.
- '''
++---------------------------------------------------------+
+|  Project: FelooPy (0.2.7)                               |
+|  Modified: Wednesday, 27th September 2023 11:30:23 pm   |
+|  Modified By: Keivan Tafakkori                          |
+|  Project: https://github.com/ktafakkori/feloopy         |
+|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
+|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
++---------------------------------------------------------+
+'''
+
 import sys
 
 import gurobipy as gurobi_interface
@@ -50,7 +52,10 @@ def Get(model_object, result, input1, input2=None):
 
         case 'slack':
             return model_object.getConstrByName(input2).Slack
-        
+
+        case 'rc':
+            return input2.rc
+         
         case 'iis':
             model_object.computeIIS()
             for c in model_object.getConstrs():

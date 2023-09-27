@@ -1,12 +1,14 @@
 '''
- # @ Author: Keivan Tafakkori
- # @ Created: 2023-05-11
- # @ Modified: 2023-05-12
- # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
- # @ Github: https://github.com/ktafakkori
- # @ Website: https://ktafakkori.github.io/
- # @ Copyright: 2023. MIT License. All Rights Reserved.
- '''
++---------------------------------------------------------+
+|  Project: FelooPy (0.2.7)                               |
+|  Modified: Wednesday, 27th September 2023 11:32:11 pm   |
+|  Modified By: Keivan Tafakkori                          |
+|  Project: https://github.com/ktafakkori/feloopy         |
+|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
+|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
++---------------------------------------------------------+
+'''
+
 
 import cvxpy as cvxpy_interface
 import timeit
@@ -59,10 +61,9 @@ def generate_solution(features):
 
     options = {'solver': cvxpy_solver_selector[solver_name], 'verbose': log,
                'scipy_options': solver_options.get('scipy_options', None)}
-
     constraint_dict = dict()
     if len(model_constraints)!=0:
-        if constraint_labels[0]!=None:
+        if any(constraint_labels)!=None:
             for i in range(len(model_constraints)):
                 constraint_dict[constraint_labels[i]] = model_constraints[i]
 

@@ -1,12 +1,13 @@
 '''
- # @ Author: Keivan Tafakkori
- # @ Created: 2023-05-11
- # @ Modified: 2023-05-12
- # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
- # @ Github: https://github.com/ktafakkori
- # @ Website: https://ktafakkori.github.io/
- # @ Copyright: 2023. MIT License. All Rights Reserved.
- '''
++---------------------------------------------------------+
+|  Project: FelooPy (0.2.7)                               |
+|  Modified: Wednesday, 27th September 2023 11:36:32 pm   |
+|  Modified By: Keivan Tafakkori                          |
+|  Project: https://github.com/ktafakkori/feloopy         |
+|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
+|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
++---------------------------------------------------------+
+'''
 
 
 def get(input, model_object, model_solution, Thing, variable_name_with_index):
@@ -17,7 +18,7 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
                  input['directions'],
                  input['objective_being_optimized']]
 
-    if indicator[0] == 'variable' or indicator[0] == 'dual' or indicator[0] == 'slack':
+    if indicator[0] == 'variable' or indicator[0] == 'dual' or indicator[0] == 'slack' or indicator[0] == 'rc' or indicator[0] == 'iis':
 
         match InterfaceName:
 

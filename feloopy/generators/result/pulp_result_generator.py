@@ -1,12 +1,14 @@
 '''
- # @ Author: Keivan Tafakkori
- # @ Created: 2023-05-11
- # @ Modified: 2023-05-12
- # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
- # @ Github: https://github.com/ktafakkori
- # @ Website: https://ktafakkori.github.io/
- # @ Copyright: 2023. MIT License. All Rights Reserved.
- '''
++---------------------------------------------------------+
+|  Project: FelooPy (0.2.7)                               |
+|  Modified: Wednesday, 27th September 2023 11:30:57 pm   |
+|  Modified By: Keivan Tafakkori                          |
+|  Project: https://github.com/ktafakkori/feloopy         |
+|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
+|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
++---------------------------------------------------------+
+'''
+
 
 import pulp as pulp_interface
 
@@ -37,8 +39,6 @@ def Get(model_object, result, input1, input2=None):
 
         case 'dual':
 
-            from pulp import LpConstraintEQ, LpConstraintLE, LpConstraintGE
-
             sense = dict(model_object.constraints).get(input2, None).sense
 
             if sense == pulp_interface.LpConstraintEQ:
@@ -63,4 +63,6 @@ def Get(model_object, result, input1, input2=None):
 
             return  abs(dict(model_object.constraints).get(input2).slack)
         
+        case 'rc':
+             return directions*input2.dj
 

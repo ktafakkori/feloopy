@@ -1,12 +1,13 @@
 '''
- # @ Author: Keivan Tafakkori
- # @ Created: 2023-05-11
- # @ Modified: 2023-05-12
- # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
- # @ Github: https://github.com/ktafakkori
- # @ Website: https://ktafakkori.github.io/
- # @ Copyright: 2023. MIT License. All Rights Reserved.
- '''
++---------------------------------------------------------+
+|  Project: FelooPy (0.2.7)                               |
+|  Modified: Wednesday, 27th September 2023 09:15:32 pm   |
+|  Modified By: Keivan Tafakkori                          |
+|  Project: https://github.com/ktafakkori/feloopy         |
+|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
+|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
++---------------------------------------------------------+
+'''
 
 from coptpy import *
 import timeit
@@ -81,8 +82,10 @@ def generate_solution(features):
                     model_object.setObjective(
                         model_objectives[objective_id], COPT.MAXIMIZE)
 
+            counter=0
             for constraint in model_constraints:
-                model_object.addConstr(constraint)
+                model_object.addConstr(constraint, name = constraint_labels[counter])
+                counter+=1
 
             if save_model != False:
 

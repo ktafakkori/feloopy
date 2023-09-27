@@ -1,12 +1,13 @@
 '''
- # @ Author: Keivan Tafakkori
- # @ Created: 2023-06-28
- # @ Modified: 2023-07-02
- # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
- # @ Github: https://github.com/ktafakkori
- # @ Website: https://ktafakkori.github.io/
- # @ Copyright: 2023. MIT License. All Rights Reserved.
- '''
++---------------------------------------------------------+
+|  Project: FelooPy (0.2.7)                               |
+|  Modified: Wednesday, 27th September 2023 11:38:36 pm   |
+|  Modified By: Keivan Tafakkori                          |
+|  Project: https://github.com/ktafakkori/feloopy         |
+|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
+|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
++---------------------------------------------------------+
+'''
 
 from .helpers.empty import *
 from .helpers.error import *
@@ -2270,9 +2271,9 @@ class Model:
         from .generators import result_generator
         return result_generator.get(self.features, self.model, self.solution, 'variable', variable_with_index)
 
-    def get_dual(self, constraint_label_with_index):
+    def get_rc(self, variable_with_index):
         from .generators import result_generator
-        return result_generator.get(self.features, self.model, self.solution, 'dual', constraint_label_with_index)
+        return result_generator.get(self.features, self.model, self.solution, 'rc', variable_with_index)
 
     def get_dual(self, constraint_label_with_index):
         from .generators import result_generator
@@ -2521,10 +2522,9 @@ class Model:
             tline_text("Debug")
             empty_line()
             try:
-                for conflict_str in  self.get_iis():
-                    left_align(conflict_str)               
+                print(self.get_iis())
             except:
-                ""
+                ''
             empty_line()
             bline()
 

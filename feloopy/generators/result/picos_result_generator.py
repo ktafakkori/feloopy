@@ -1,12 +1,14 @@
 '''
- # @ Author: Keivan Tafakkori
- # @ Created: 2023-05-11
- # @ Modified: 2023-05-12
- # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
- # @ Github: https://github.com/ktafakkori
- # @ Website: https://ktafakkori.github.io/
- # @ Copyright: 2023. MIT License. All Rights Reserved.
- '''
++---------------------------------------------------------+
+|  Project: FelooPy (0.2.7)                               |
+|  Modified: Wednesday, 27th September 2023 11:30:51 pm   |
+|  Modified By: Keivan Tafakkori                          |
+|  Project: https://github.com/ktafakkori/feloopy         |
+|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
+|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
++---------------------------------------------------------+
+'''
+
 
 import picos as picos_interface
 
@@ -23,7 +25,7 @@ def Get(model_object, result, input1, input2=None):
 
         case 'status':
 
-            return result[0].claimedStatus
+            return result[0][0].claimedStatus
 
         case 'objective':
 
@@ -32,3 +34,15 @@ def Get(model_object, result, input1, input2=None):
         case 'time':
 
             return (result[1][1]-result[1][0])
+
+        case 'dual':
+            dual_values = {}
+
+            for constraint_name in result[0][1].keys():
+                dual_value = model_object.constraints[result[0][1][constraint_name]].dual_value
+                dual_values[constraint_name] = dual_value
+            
+            for constraint_name, dual_value in dual_values.items():
+                if constraint_name == input2:
+                    return dual_value
+

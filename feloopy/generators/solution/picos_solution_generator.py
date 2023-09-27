@@ -1,12 +1,14 @@
 '''
- # @ Author: Keivan Tafakkori
- # @ Created: 2023-05-11
- # @ Modified: 2023-05-12
- # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
- # @ Github: https://github.com/ktafakkori
- # @ Website: https://ktafakkori.github.io/
- # @ Copyright: 2023. MIT License. All Rights Reserved.
- '''
++---------------------------------------------------------+
+|  Project: FelooPy (0.2.7)                               |
+|  Modified: Wednesday, 27th September 2023 11:33:15 pm   |
+|  Modified By: Keivan Tafakkori                          |
+|  Project: https://github.com/ktafakkori/feloopy         |
+|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
+|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
++---------------------------------------------------------+
+'''
+
 
 import picos as picos_interface
 import timeit
@@ -44,6 +46,12 @@ def generate_solution(features):
     max_iterations = features['max_iterations']
     solver_options = features['solver_options']
 
+    constraint_dict = dict()
+    if len(model_constraints)!=0:
+        if any(constraint_labels)!=None:
+            for i in range(len(model_constraints)):
+                constraint_dict[constraint_labels[i]] = model_constraints[i]
+
     if solver_name not in picos_solver_selector.keys():
         raise RuntimeError(
             "Using solver '%s' is not supported by 'picos'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
@@ -60,12 +68,14 @@ def generate_solution(features):
                     model_object.set_objective(
                         'max', model_objectives[objective_id])
 
+            counter=0
             for constraint in model_constraints:
-                model_object += constraint
+                model_object.add_constraint(constraint)
+                counter+=1
 
             time_solve_begin = timeit.default_timer()
             result = model_object.solve(solver=solver_name)
             time_solve_end = timeit.default_timer()
-            generated_solution = [result, [time_solve_begin, time_solve_end]]
+            generated_solution = [[result,constraint_dict], [time_solve_begin, time_solve_end]]
 
     return generated_solution

@@ -1,12 +1,14 @@
 '''
- # @ Author: Keivan Tafakkori
- # @ Created: 2023-05-11
- # @ Modified: 2023-05-12
- # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
- # @ Github: https://github.com/ktafakkori
- # @ Website: https://ktafakkori.github.io/
- # @ Copyright: 2023. MIT License. All Rights Reserved.
- '''
++---------------------------------------------------------+
+|  Project: FelooPy (0.2.7)                               |
+|  Modified: Wednesday, 27th September 2023 10:33:29 pm   |
+|  Modified By: Keivan Tafakkori                          |
+|  Project: https://github.com/ktafakkori/feloopy         |
+|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
+|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
++---------------------------------------------------------+
+'''
+
 
 
 def Get(model_object, result, input1, input2=None):
@@ -46,5 +48,15 @@ def Get(model_object, result, input1, input2=None):
                 return result[0][1][input2].dual_value
 
         case 'slack':
+            
+            print('Warning: Slacks are not supported. Expr value is returned.')
 
-            print('Not supported in cvxpy.')
+            #Needs to be corrected
+
+            if len(result[0][1][input2].dual_value)==1:
+
+                return result[0][1][input2].expr.value[0]
+            else:
+                
+                return result[0][1][input2].expr.value
+        
