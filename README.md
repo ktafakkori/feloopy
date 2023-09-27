@@ -7,17 +7,7 @@
 
 ### **Features ✨**
 
-- Start optimization with a single import!
-
-![start-optimization](miscellaneous/showcase/start_optimization.gif)
-
-- Define modeling environment with ease!
-
-![start-modeling](miscellaneous/showcase/start_modeling.gif)
-
-
-
-FelooPy also offers the following key features:
+FelooPy offers the following key features:
 
 * **Simplest optimization programming language**: Designed to be easy to use, even for those with little or no programming experience.
 * **Modeling, solving and analyzing optimization problems**: Provides a complete suite of tools for modeling, solving and analyzing a wide range of optimization problems.
@@ -158,7 +148,7 @@ install('feloopy==0.2.7')
 
 </div>
 
-FelooPy requires Python 3.10 or later to be installed on your system. If you don't have Python installed or a Python interpreter with the necessary version, you can download it from the [official website](https://www.python.org/downloads/) and follow the installation instructions. Alternatively, if you are using an[Anaconda](https://www.anaconda.com/download/) distribution, you can create a new environment with Python 3.10 or later and install FelooPy in that environment, as follows:
+FelooPy requires Python 3.10 or later to be installed on your system. If you don't have Python installed or a Python interpreter with the necessary version, you can download it from the [official website](https://www.python.org/downloads/) and follow the installation instructions. Alternatively, if you are using an [Anaconda](https://www.anaconda.com/download/) distribution, you can create a new environment with Python 3.10 or later and install FelooPy in that environment, as follows:
 
 ```
 conda create --name your_environment python=3.10
@@ -185,7 +175,7 @@ For multi-objective optimization, you should use the linux command for installat
 
 ### **Documentation 📚**
 
-Please refer to https://feloopy.readthedocs.io/en/latest/.
+Please refer to [the documentation website](https://feloopy.readthedocs.io/en/latest/).
 
 ### **Contributions 🙌**
 
