@@ -11,7 +11,6 @@
 
 from .feloopy import *
 from .operators import *
-from .algorithms.mcdm import *
 
 HEURISTIC_ALGORITHMS = [
 

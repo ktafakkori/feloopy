@@ -40,7 +40,7 @@ FelooPy offers the following key features:
 * 📘 Simplest optimization programming language: Designed for easy use.
 * 🔧 Comprehensive toolkit: For modeling, solving, and analyzing optimization problems.
 * 🎯 Extensive support for optimization algorithms: Including exact (107), heuristic (198), convex (20), constraint (2), and multi-objective (17).
-* 🧮 Multi-criteria decision-making methods: Supporting 41 MCDM algorithms.
+* 🧮 Multi-attribute decision-making methods: Supporting 41 MADM algorithms.
 * ⚙️ Customizable solver configurations: For specific requirements.
 * 🔄 General-purpose programming made easy: With auto-encoders.
 * 📐 Handles mixed-integer non-linear programming problems: With auto-linearizers.

@@ -7,6 +7,7 @@
  # @ Website: https://ktafakkori.github.io/
  # @ Copyright: 2023. MIT License. All Rights Reserved.
  '''
+import sys
 
 import gurobipy as gurobi_interface
 
@@ -29,23 +30,32 @@ gurobi_status_dict = {
 
 
 def Get(model_object, result, input1, input2=None):
-
     input1 = input1[0]
 
     match input1:
-
         case 'variable':
-
             return input2.X
 
         case 'status':
-
             return gurobi_status_dict[model_object.status]
 
         case 'objective':
-
             return model_object.ObjVal
 
         case 'time':
+            return (result[1][1] - result[1][0])
 
-            return (result[1][1]-result[1][0])
+        case 'dual':
+            return model_object.getConstrByName(input2).Pi
+
+        case 'slack':
+            return model_object.getConstrByName(input2).Slack
+        
+        case 'iis':
+            model_object.computeIIS()
+            for c in model_object.getConstrs():
+                if c.IISConstr:
+                    print("│" + " " + str(f"con: {c.constrName}").ljust(80-2) + " " + "│")
+            for v in model_object.getVars():
+                if v.IISLB > 0 or v.IISUB > 0:
+                    print("│" + " " + str(f"var: {v.varName}").ljust(80-2) + " " + "│")

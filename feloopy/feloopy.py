@@ -1383,7 +1383,6 @@ class Model:
         self.con(z >= integer - ub_integer * (1 - binary))
         return z
 
-
     def lin_prod_ip(self, integer, positive, ub_integer, ub_positive):
         """
         Linearizes a Integer * Positive product.
@@ -2258,11 +2257,12 @@ class Model:
 
     def healthy(self):
         try:
-            return True if 'optimal' or 'feasible' in self.get_status().lower() else False
+            status = self.get_status().lower()
+            return ('optimal' in status or 'feasible' in status) and 'infeasible' not in status
         except:
-            return True if 'feasible' or 'optimal' in self.get_status()[0].lower() else False
-            
-    
+            status = self.get_status()[0].lower()
+            return ('feasible' in status or 'optimal' in status) and 'infeasible' not in status
+        
     def get_variable(self, variable_with_index):
         from .generators import result_generator
         return result_generator.get(self.features, self.model, self.solution, 'variable', variable_with_index)
@@ -2270,6 +2270,14 @@ class Model:
     def get_dual(self, constraint_label_with_index):
         from .generators import result_generator
         return result_generator.get(self.features, self.model, self.solution, 'dual', constraint_label_with_index)
+
+    def get_dual(self, constraint_label_with_index):
+        from .generators import result_generator
+        return result_generator.get(self.features, self.model, self.solution, 'dual', constraint_label_with_index)
+
+    def get_iis(self):
+        from .generators import result_generator
+        return result_generator.get(self.features, self.model, self.solution, 'iis', '')
 
     def get_slack(self, constraint_label_with_index):
         from .generators import result_generator
@@ -2391,7 +2399,6 @@ class Model:
             from rsome import sumsqr
             return sumsqr(expr_or_1D_array_of_variables)
     
-
     def state_function(self):
         
         """
@@ -2507,19 +2514,33 @@ class Model:
             empty_line()
             bline()
 
+        if self.healthy() == False:
+            tline_text("Debug")
+            empty_line()
+            try:
+                for conflict_str in  self.get_iis():
+                    left_align(conflict_str)               
+            except:
+                ""
+            empty_line()
+            bline()
+
         if sol_info:
             tline_text("Solve")
             empty_line()
-            two_column(f"Method: {self.solution_method}", "Objective value")
-            status_row_print(self.objectives_directions, status)
-            if obj_values:
-                if len(self.objectives_directions) != 1:
-                    try:
-                        solution_print(self.objectives_directions, status, self.get_obj(), self.get_payoff())
-                    except:
-                        left_align("Nothing found.")
-                else:
-                    solution_print(self.objectives_directions, status, self.get_obj())
+            try:
+                two_column(f"Method: {self.solution_method}", "Objective value")
+                status_row_print(self.objectives_directions, status)
+                if obj_values:
+                    if len(self.objectives_directions) != 1:
+                        try:
+                            solution_print(self.objectives_directions, status, self.get_obj(), self.get_payoff())
+                        except:
+                            left_align("Nothing found.")
+                    else:
+                        solution_print(self.objectives_directions, status, self.get_obj())
+            except:
+                ""
             empty_line()
             bline()
 
@@ -2531,14 +2552,20 @@ class Model:
                 self.get_indicators(ideal_pareto=ideal_pareto, ideal_point=ideal_point)
             except:
                 pass
-            metrics_print(self.objectives_directions, all_metrics, self.get_obj(), self.calculated_indicators, length=self.get_time())
+            try:
+                metrics_print(self.objectives_directions, all_metrics, self.get_obj(), self.calculated_indicators, length=self.get_time())
+            except:
+                pass
             empty_line()
             bline()
 
         if dec_info:
             tline_text("Decision")
             empty_line()
-            self.decision_information_print(status, show_tensors, show_detailed_tensors)
+            try:
+                self.decision_information_print(status, show_tensors, show_detailed_tensors)
+            except:
+                ""
             empty_line()
             bline()
 
@@ -2658,9 +2685,7 @@ class Model:
                         for k in it.product(*tuple(fix_dims(self.maindims[j]))):
                             if self.get_start(self.mainvars[(i,j)][k])!=None:
                                 print(f"| {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "|")
-                    
-                             
-            
+                            
     # Methods to work with input and output data.
 
     def max(self, *args):
@@ -2752,7 +2777,6 @@ class Model:
             dim = np.shape(source)    
             return source
 
-
     def fpar(self, name, dim=0, bound=[-10e9,10e9], source=None):
 
         '''
@@ -2798,7 +2822,6 @@ class Model:
 
             return source
         
-
     def ipar(self, name, dim=0, bound=[0,10e9], source=None):
 
         '''
@@ -2870,7 +2893,6 @@ class Model:
                     return [np.sort(self.random.choice(candidate_set, self.random.integers(lb_sample_size, ub_sample_size), replace=replace)) for i in dim[0]]
                 else:
                     return [self.random.choice(candidate_set, self.random.integers(lb_sample_size, ub_sample_size), replace=replace) for i in dim[0]]
-
 
     def uniformint(self, lb, ub, parameter_dim=0):
         """
@@ -3139,7 +3161,6 @@ class Model:
 
             return input1 ** input2
 
-
     def kldive(self, input, emprical_rpob, ambiguity_constant):
 
         """
@@ -3164,8 +3185,6 @@ class Model:
 
             from rsome import entropy
             return entropy(input)
-    
-
 
     def log(self, input):
         """
@@ -3581,8 +3600,6 @@ class Implement:
             
 
             return status
-
-        
 
     def Check_Fitness(self, X):
 
@@ -4221,7 +4238,6 @@ class Implement:
                         case 'svar':
                             return np.argsort(self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])
 
-
     def dis_indicators(self, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], step: Optional[tuple] = (0.1,), epsilon: float = 0.01, p: float = 2.0, n_clusters: int = 5, save_path: Optional[str] = None, show_log: Optional[bool] = False):
 
         """
@@ -4312,8 +4328,7 @@ class Implement:
 
         print(f"cpu time [{self.interface_name}]: ", (self.end-self.start)*10 **
               6, '(microseconds)', "%02d:%02d:%02d" % (hour, min, sec), '(h, m, s)')
-
-        
+  
     def get_time(self):
         """
 
@@ -4334,9 +4349,7 @@ class Implement:
             print(str(input[0])+': ', self.get(input))
 
     def dis_obj(self):
-
         print('objective: ', self.BestReward)
-
 
     def get_bound(self, *args):
 
@@ -4592,12 +4605,12 @@ class Implement:
 
     def healthy(self):
         try:
-            return True if 'optimal' or 'feasible' in self.get_status().lower() else False
+            status = self.get_status().lower()
+            return ('optimal' in status or 'feasible' in status) and 'infeasible' not in status
         except:
-            return True if 'feasible' or 'optimal' in self.get_status()[0].lower() else False
-            
-            
-
+            status = self.get_status()[0].lower()
+            return ('feasible' in status or 'optimal' in status) and 'infeasible' not in status
+        
     def decision_information_print(self, status, show_tensors, show_detailed_tensors, box_width=80):
         
         
@@ -4655,11 +4668,999 @@ class Implement:
                                 left_align(" "*(len(f"{i} =")-1)+row)
                     else:
                         left_align(f"{i} = {numpy_var}")
-                            
-                        
+                                            
 # Alternatives for defining this class:
             
 construct = make_model = implementor = implement = Implement
 
+WEIGTHING_ALGORITHMS = [
+    ['ahp_method','pydecision'],
+    ['fuzzy_ahp_method','pydecision'],
+    ['bw_method','pydecision'],
+    ['cilos_method', 'pydecision'],
+    ['critic_method', 'pydecision'],
+    ['entropy_method', 'pydecision'],
+    ['idocriw_method', 'pydecision'],
+    ['merec_method', 'pydecision'],
+    ['lp_method', 'feloopy'],
+    ]
+
+RANKING_ALGORITHMS = [
+    ['aras_method', 'pydecision'],
+    ['fuzzy_aras_method', 'pydecision'],
+    ['borda_method', 'pydecision'],
+    ['cocoso_method', 'pydecision'],
+    ['codas_method', 'pydecision'],
+    ['copeland_method', 'pydecision'],
+    ['copras_method', 'pydecision'],
+    ['fuzzy_copras_method', 'pydecision'],
+    ['cradis_method', 'pydecision'],
+    ['edas_method', 'pydecision'],
+    ['fuzzy_edas_method', 'pydecision'],
+    ['gra_method', 'pydecision'],
+    ['mabac_method', 'pydecision'],
+    ['macbeth_method', 'pydecision'],
+    ['mairca_method', 'pydecision'],
+    ['marcos_method', 'pydecision'],
+    ['maut_method', 'pydecision'],
+    ['moora_method', 'pydecision'],
+    ['fuzzy_moora_method', 'pydecision'],
+    ['moosra_method', 'pydecision'],
+    ['multimoora_method', 'pydecision'],
+    ['ocra_method', 'pydecision'],
+    ['fuzzy_ocra_method', 'pydecision'],
+    ['oreste_method', 'pydecision'],
+    ['piv_method', 'pydecision'],
+    ['promethee_ii', 'pydecision'],
+    ['promethee_iv', 'pydecision'],
+    ['promethee_vi', 'pydecision'],
+    ['psi_method', 'pydecision'],
+    ['regime_method', 'pydecision'],
+    ['rov_method', 'pydecision'],
+    ['saw_method', 'pydecision'],
+    ['smart_method', 'pydecision'],
+    ['spotis_method', 'pydecision'],
+    ['todim_method', 'pydecision'],
+    ['topsis_method', 'pydecision'],
+    ['fuzzy_topsis_method', 'pydecision'],
+    ['vikor_method', 'pydecision'],
+    ['fuzzy_vikor_method', 'pydecision'],
+    ['waspas_method', 'pydecision'],
+    ['fuzzy_waspas_method', 'pydecision'],
+    ['la_method', 'feloopy'],
+    ]
+
+SPECIAL_ALGORITHMS = [
+    ['dematel_method', 'pydecision'],
+    ['fuzzy_dematel_method', 'pydecision'],
+    ['electre_i', 'pydecision'],
+    ['electre_i_s', 'pydecision'],
+    ['electre_i_v', 'pydecision'],
+    ['electre_ii', 'pydecision'],
+    ['electre_iii', 'pydecision'],
+    ['electre_iv', 'pydecision'],
+    ['electre_tri_b', 'pydecision'],
+    ['promethee_i', 'pydecision'],
+    ['promethee_iii', 'pydecision'],
+    ['promethee_v', 'pydecision'],
+    ['promethee_gaia', 'pydecision'],
+    ['wings_method', 'pydecision'],
+    ['cwdea_method', 'feloopy']
+]
+
+# Missing: SWOT, BOCR, ANP
+
+class MADM:
+
+    def __init__(self, solution_method, problem_name, interface_name):
+        """
+        Creates and returns the multi-criteria decision-making (madam) environment.
+
+        Args:
+            solution_method (str): Which method is used to solve the madam problem?
+            problem_name (str): What is the name of the madam problem?
+            interface_name (str): What is the name of the madam interface?
+        """
+
+        import importlib
+
+        self.model_name = problem_name
+        self.interface_name = 'pyDecision.algorithm' if interface_name == 'pydecision' else interface_name
+        self.madam_method = solution_method
+
+        if self.interface_name == 'pyDecision.algorithm':
+            if "_method" not in solution_method and 'auto' not in solution_method and 'electre' not in solution_method and 'promethee' not in solution_method:
+                self.madam_method = solution_method + "_method"
+                from pyDecision.algorithm import ranking
+
+            self.loaded_module = importlib.import_module(self.interface_name)
+
+        if self.interface_name == 'feloopy':
+            if "_method" not in solution_method and 'auto' not in solution_method and 'electre' not in solution_method and 'promethee' not in solution_method:
+                self.madam_method = solution_method + "_method"
+
+        if solution_method == 'auto':
+            self.madam_method = 'auto'
+
+        self.features = {}
+        self.solver_options = dict()
+
+        self.features['weights_found'] = False
+        self.features['ranks_found'] = False
+        self.features['inconsistency_found'] = False
+        self.features['dpr_found'] = False
+        self.features['dmr_found'] = False
+        self.features['rpc_found'] = False
+        self.features['rmc_found'] = False
+        self.features['concordance_found'] = False
+        self.features['discordance_found'] = False
+        self.features['dominance_found'] = False
+        self.features['kernel_found'] = False
+        self.features['dominated_found'] = False
+        self.features['global_concordance_found'] = False
+        self.features['credibility_found'] = False
+        self.features['dominance_s_found'] = False
+        self.features['dominance_w_found'] = False
+        self.features['d_rank_found'] = False
+        self.features['a_rank_found'] = False
+        self.features['n_rank_found'] = False
+        self.features['p_rank_found'] = False
+        self.features['classification_found'] = False
+        self.features['selection_found'] = False
+
+    def add_criteria_set(self, index='', bound=None, step=1, to_list=False):
+        """
+        Criteria Set Definition
+        -----------------------
+        Define a criteria set.
+
+        Parameters
+        ----------
+        index : str, optional
+            Label index to create the set.
+        bound : list of int, optional
+            Start and end values of the range. If provided, the set will be a range from bound[0] to bound[1].
+        step : int, default 1
+            Step size of the range.
+        to_list : bool, default False
+            Convert the set to a list if True.
+
+        Returns
+        -------
+        set or list
+            The created set or list if `to_list` is True.
+        """
+        if bound is None and not index:
+            raise ValueError('Either bound or index must be provided.')
+
+        start, end = bound if bound else (0, len(index))
+        criteria_set = [f'{index}{i}' for i in range(start, end, step)]
+
+        self.features['number_of_criteria'] = len(criteria_set)
+
+        return set(criteria_set) if not to_list else list(criteria_set)
+
+    def add_alternatives_set(self, index='', bound=None, step=1, to_list=False):
+        """
+        Alternatives Set Definition
+        ---------------------------
+        Define an alternatives set.
+
+        Parameters
+        ----------
+        index : str, optional
+            Label index to create the set.
+        bound : list of int, optional
+            Start and end values of the range. If provided, the set will be a range from bound[0] to bound[1].
+        step : int, default 1
+            Step size of the range.
+        to_list : bool, default False
+            Convert the set to a list if True.
+
+        Returns
+        -------
+        set or list
+            The created set or list if `to_list` is True.
+        """
+        if bound is None and not index:
+            raise ValueError('Either bound or index must be provided.')
+
+        start, end = bound if bound else (0, len(index))
+        alternatives_set = [f'{index}{i}' for i in range(start, end, step)]
+
+        self.features['number_of_alternatives'] = len(alternatives_set)
+        
+
+        return set(alternatives_set) if not to_list else list(alternatives_set)
+
+    def add_dm(self, data):
+
+        self.features['dm_defined'] = True
+        self.decision_matrix = np.array(data)
+        if self.madam_method != 'electre_tri_b':
+            self.solver_options['dataset'] = self.decision_matrix
+        else:
+            self.solver_options['performance_matrix'] = self.decision_matrix
+        
+    def add_cim(self, data):
+
+        self.features['cim_defined'] = True
+        self.influence_matrix = np.array(data)
+        self.solver_options['dataset'] = self.influence_matrix
+
+    def add_bocv(self, data):
+
+        self.features['bocv_defined'] = True
+        self.best_to_others = np.array(data)
+        self.solver_options['mic'] = self.best_to_others
+
+    def add_owcv(self,data):
+        
+        self.features['owcv_defined'] = True
+        self.others_to_worst = np.array(data)
+        self.solver_options['lic'] = self.others_to_worst
+
+    def add_fim(self, data):
+
+        self.features['fim_defined'] = True
+        self.fuzzy_influence_matrix = np.array(data)
+        self.solver_options['dataset'] = self.fuzzy_influence_matrix
+
+    def add_fdm(self, data):
+
+        self.features['fdm_defined'] = True
+        self.fuzzy_decision_matrix = np.array(data)
+        self.solver_options['dataset'] = self.fuzzy_decision_matrix
+
+    def add_wv_lb(self,data):
+        self.features['wv_lb_defined'] = True
+        self.solver_options['W_lower'] = np.array(data).tolist()
+
+    def add_wv_ub(self,data):
+        self.features['wv_ub_defined'] = True
+        self.solver_options['W_upper'] = np.array(data)
+
+    def add_wv(self,data):
+
+        self.features['wv_defined'] = True
+        self.weights = np.array(data)
+        if self.madam_method not in ['electre_i','electre_i_s', 'electre_i_v', 'electre_ii', 'electre_iii', 'electre_tri_b', 'promethee_i','promethee_ii','promethee_iii', 'promethee_iv', 'promethee_v', 'promethee_gaia']:
+            self.solver_options['weights'] = self.weights
+        else:
+            self.solver_options['W'] = self.weights
+
+    def add_fwv(self,data):
+
+        self.features['fwv_defined'] = True
+        self.fuzzy_weights = data
+        self.solver_options['weights'] = self.fuzzy_weights
+
+    def add_bt(self, data):
+
+        self.features['b_threshold_defined'] = True
+        self.b_threshold = np.array(data).tolist()
+        self.solver_options['B'] = self.b_threshold
+
+    def add_grades(self, data):
+        self.solver_options['grades'] = np.array(data)
+
+    def add_lbt(self,data):
+
+        self.features['lb_threshold_defined'] = True
+        self.lb_threshold =  np.array(data) 
+        if self.madam_method not in ['spotis_method']:
+            self.solver_options['lower'] = self.lb_threshold
+        if self.madam_method in ['spotis_method']:
+            self.solver_options['s_min'] = self.lb_threshold
+        
+    def add_ubt(self,data):
+
+        self.features['ub_threshold_defined'] = True
+        self.ub_threshold =  np.array(data) 
+        if self.madam_method not in ['spotis_method']:
+            self.solver_options['upper'] = self.ub_threshold
+        if self.madam_method in ['spotis_method']:
+            self.solver_options['s_max'] = self.ub_threshold
+
+    def add_qt(self,data):
+
+        self.features['q_threshold_defined'] = True
+        self.q_threshold =  np.array(data) 
+        self.solver_options['Q'] = self.q_threshold
+
+    def add_pt(self,data):
+
+        self.features['p_threshold_defined'] = True
+        self.p_threshold =  np.array(data) 
+        self.solver_options['P'] = self.p_threshold
+
+    def add_st(self,data):
+
+        self.features['s_threshold_defined'] = True
+        self.s_threshold =  np.array(data) 
+        self.solver_options['S'] = self.s_threshold
+
+    def add_vt(self,data):
+
+        self.features['v_threshold_defined'] = True
+        self.v_threshold =  np.array(data) 
+        self.solver_options['V'] = self.v_threshold
+
+    def add_uf(self,data):
+
+        self.features['uf_defined'] = True
+        self.utility_functions = data 
+        if self.madam_method not in ['promethee_i', 'promethee_ii', 'promethee_iii', 'promethee_iv', 'promethee_v', 'promethee_vi', 'promethee_gaia']:
+            self.solver_options['utility_functions'] = self.utility_functions
+        else:
+            self.solver_options['F'] = self.utility_functions
+
+    def add_cpcm(self,data):
+
+        self.features['cpm_defined'] = True
+        self.criteria_pairwise_comparison_matrix = np.array(data)
+        self.solver_options['dataset'] = self.criteria_pairwise_comparison_matrix
+
+    def add_fcpcm(self,data):
+
+        self.features['fcpcm_defined'] = True
+        self.fuzzy_criteria_pairwise_comparison_matrix = np.array(data)
+        self.solver_options['dataset'] = self.fuzzy_criteria_pairwise_comparison_matrix
+
+    def add_apcm(self,data):
+
+        self.features['apcm_defined'] = True
+        self.alternatives_pairwise_comparison_matrix = np.array(data)
+        self.solver_options['dataset'] = self.alternatives_pairwise_comparison_matrix
+
+    def add_fapcm(self,data):
+
+        self.features['fapm_defined'] = True
+        self.fuzzy_alternatives_pairwise_comparison_matrix = np.array(data)
+        self.solver_options['dataset'] = self.fuzzy_alternatives_pairwise_comparison_matrix
+
+    def add_con_max_criteria(self,data):
+
+        self.solver_options['criteria'] = data
+
+    def add_con_cost_budget(self,cost, budget):
+
+        self.solver_options['cost'] = cost
+        self.solver_options['budget'] = budget
+
+    def add_con_forbid_selection(self,selections):
+        self.solver_options['forbidden'] = selections
+
+    def sol(self, criteria_directions = [], solver_options=dict(), show_graph=None, show_log=None):
+
+        if self.madam_method =='bw_method':
+            self.solver_options['dataset'] = [self.best_to_others]
+
+        if self.madam_method in ['promethee_ii', 'promethee_iv', 'promethee_vi']:
+            self.solver_options['sort'] = False
+
+        if self.madam_method in ['waspas_method']:
+            if 'lambda_value' not in self.solver_options.keys():
+                self.solver_options['lambda_value'] = 0.5
+        
+        import time
+
+        if self.interface_name == 'pyDecision.algorithm':
+            self.madam_algorithm = getattr(self.loaded_module, self.madam_method)
+        else:
+
+            if self.madam_method == 'cwdea_method':
+                self.madam_algorithm = cwdea_method 
+
+            if self.madam_method == 'lp_method':
+                self.madam_algorithm = lp_method 
+
+            if self.madam_method == 'la_method':
+                self.madam_algorithm = la_method 
+
+        self.solver_options.update(solver_options)
+
+        if len(criteria_directions)!=0:
+        
+            self.solver_options['criterion_type'] = criteria_directions
+            self.criteria_directions = criteria_directions
+
+        self.auxiliary_solver_options = dict()
+        if show_graph:
+            self.auxiliary_solver_options['graph'] = show_graph
+        else:
+            self.auxiliary_solver_options['graph'] = False
+        if show_log: 
+            self.auxiliary_solver_options['verbose'] = show_log
+
+        self.start = time.time()
+        try:
+            self.result =  self.madam_algorithm(**{**self.solver_options, **self.auxiliary_solver_options})
+        except:
+            self.result =  self.madam_algorithm(**self.solver_options)
+            
+        self.finish = time.time()
+        self.status = 'feasible (solved)'
+
+        if  self.madam_method in np.array(WEIGTHING_ALGORITHMS)[:,0]:
+
+            self.features['weights_found'] = True
+            
+            try:
+                self.features['number_of_criteria'] = len(self.result[0])
+            except:
+                self.features['number_of_criteria'] = len(self.result)
+                self.weights = self.result
+
+            if self.madam_method in ['lp_method']:
+
+                self.features['inconsistency_found'] = True
+                self.weights = self.result[0]
+                self.inconsistency = self.result[1]
+                
+            if self.madam_method in ['ahp_method']:
+
+                self.features['inconsistency_found'] = True
+                self.weights = self.result[0]
+                self.inconsistency = self.result[1]
+
+            if self.madam_method in ['fuzzy_ahp_method']:
+
+                self.fuzzy_weights = self.result[0]
+                self.weights = self.result[2]
+                self.inconsistency = self.result[3]
 
 
+        if  self.madam_method in np.array(RANKING_ALGORITHMS)[:,0]:
+
+            self.features['ranks_found'] = True
+            self.features['number_of_criteria'] = self.solver_options['dataset'].shape[1]
+            self.features['number_of_alternatives'] = self.solver_options['dataset'].shape[0]
+            self.ranks = self.result
+
+            if self.madam_method in ['promethee_vi']:
+                self.features['ranks_found'] = True
+
+            if self.madam_method in ['multimoora_method', 'waspas_method', 'fuzzy_waspas_method']:
+                self.ranks = self.result[2]
+
+            if self.madam_method in ['vikor_method', 'fuzzy_vikor_method']:
+                self.ranks = self.result[3]
+
+            if self.madam_method not in ['promethee_vi']:
+                self.ranks = self.get_ranks()
+            else:
+                self.ranks = self.result[1]
+                self.middle_ranks = self.get_ranks()
+                self.ranks = self.result[2]
+                self.upper_ranks =  self.get_ranks()
+                self.ranks = self.result[0]
+                self.lower_ranks =  self.get_ranks()
+  
+                self.ranks = np.array([self.lower_ranks, self.middle_ranks, self.upper_ranks ]).T
+
+        if self.madam_method in np.array(SPECIAL_ALGORITHMS)[:,0]:
+
+            if self.madam_method == 'cwdea_method':
+
+                self.features['number_of_criteria'] = self.solver_options['dataset'].shape[1]
+                self.features['number_of_alternatives'] = self.solver_options['dataset'].shape[0]
+                self.features['weights_found'] = True
+                self.features['ranks_found'] = True
+                self.ranks, self.weights = self.result
+                self.ranks = self.get_ranks()
+
+            if 'dematel' in self.madam_method:
+                self.features['number_of_criteria'] = self.solver_options['dataset'].shape[1]
+
+                self.features['weights_found'] = True
+                self.features['dpr_found'] = True
+                self.features['dmr_found'] = True
+                self.D_plus_R, self.D_minus_R, self.weights = self.result
+
+            if  self.madam_method in ['electre_i', 'electre_i_v']:
+                self.features['number_of_criteria'] = self.solver_options['dataset'].shape[1]
+                self.features['number_of_alternatives'] = self.solver_options['dataset'].shape[0]
+                self.concordance, self.discordance, self.dominance, self.kernel, self.dominated = self.result
+                self.kernel = [int(''.join(filter(str.isdigit, s)))-1 for s in self.kernel]
+                self.dominated = [int(''.join(filter(str.isdigit, s)))-1 for s in self.dominated]
+                self.features['concordance_found'] = True
+                self.features['discordance_found'] = True
+                self.features['dominance_found'] = True
+                self.features['kernel_found'] = True
+                self.features['dominated_found'] = True
+
+            if self.madam_method == 'electre_i_s':
+                self.features['number_of_criteria'] = self.solver_options['dataset'].shape[1]
+                self.features['number_of_alternatives'] = self.solver_options['dataset'].shape[0]
+                self.global_concordance, self.discordance, self.kernel, self.credibility, self.dominated = self.result
+                self.kernel = [int(''.join(filter(str.isdigit, s)))-1 for s in self.kernel]
+                self.dominated = [int(''.join(filter(str.isdigit, s)))-1 for s in self.dominated]
+                self.features['global_concordance_found'] = True
+                self.features['discordance_found'] = True
+                self.features['kernel_found'] = True
+                self.features['credibility_found'] = True
+                self.features['dominated_found'] = True
+
+            if self.madam_method == 'electre_ii':
+                self.features['number_of_criteria'] = self.solver_options['dataset'].shape[1]
+                self.features['number_of_alternatives'] = self.solver_options['dataset'].shape[0]
+                self.concordance, self.discordance, self.dominance_s, self.dominance_w, self.rank_D, self.rank_A, self.rank_N, self.rank_P = self.result
+                self.features['concordance_found'] = True
+                self.features['discordance_found'] = True
+                self.features['dominance_s_found'] = True
+                self.features['dominance_w_found'] = True
+                self.features['d_rank_found'] = True
+                self.features['a_rank_found'] = True
+                self.features['n_rank_found'] = True
+                self.features['p_rank_found'] = True
+
+                self.rank_D = [[int(''.join(filter(str.isdigit, s)))-1 for s in sd] for sd in self.rank_D]
+                self.rank_A = [[int(''.join(filter(str.isdigit, s)))-1 for s in sd] for sd in self.rank_A]
+
+            if self.madam_method == 'electre_iii':
+                self.features['number_of_criteria'] = self.solver_options['dataset'].shape[1]
+                self.features['number_of_alternatives'] = self.solver_options['dataset'].shape[0]
+                self.global_concordance, self.credibility, self.rank_D, self.rank_A, self.rank_N, self.rank_P = self.result
+                self.features['global_concordance_found'] = True
+                self.features['credibility_found'] = True
+                self.features['d_rank_found'] = True
+                self.features['a_rank_found'] = True
+                self.features['n_rank_found'] = True
+                self.features['p_rank_found'] = True
+
+                self.rank_D = [
+                    int(item[1:]) if ';' not in item else [int(sub_item[1:]) for sub_item in item.split('; ')]
+                    for item in  self.rank_D
+                ]
+
+                self.rank_A = [
+                    int(item[1:]) if ';' not in item else [int(sub_item[1:]) for sub_item in item.split('; ')]
+                    for item in  self.rank_A
+                ]
+
+            if self.madam_method == 'electre_iv':
+                self.features['number_of_criteria'] = self.solver_options['dataset'].shape[1]
+                self.features['number_of_alternatives'] = self.solver_options['dataset'].shape[0]
+                self.credibility, self.rank_D, self.rank_A, self.rank_N, self.rank_P = self.result
+                self.features['credibility_found'] = True
+                self.features['d_rank_found'] = True
+                self.features['a_rank_found'] = True
+                self.features['n_rank_found'] = True
+                self.features['p_rank_found'] = True
+
+                self.rank_D = [
+                    int(item[1:]) if ';' not in item else [int(sub_item[1:]) for sub_item in item.split('; ')]
+                    for item in  self.rank_D
+                ]
+
+                self.rank_A = [
+                    int(item[1:]) if ';' not in item else [int(sub_item[1:]) for sub_item in item.split('; ')]
+                    for item in  self.rank_A
+                ]
+
+            if self.madam_method == 'electre_tri_b':
+                self.features['number_of_criteria'] = self.solver_options['performance_matrix'].shape[1]
+                self.features['number_of_alternatives'] = self.solver_options['performance_matrix'].shape[0]
+                self.classification = self.result
+                self.features['classification_found'] = True
+
+            if self.madam_method == 'promethee_v':
+                self.features['number_of_criteria'] = self.solver_options['dataset'].shape[1]
+                self.features['number_of_alternatives'] = self.solver_options['dataset'].shape[0]
+                self.selection = self.result
+                self.features['selection_found'] = True
+
+            if self.madam_method in ['promethee_i', 'promethee_iii']:
+                self.features['number_of_criteria'] = self.solver_options['dataset'].shape[1]
+                self.features['number_of_alternatives'] = self.solver_options['dataset'].shape[0]
+                self.rank_P = self.result
+                self.features['p_rank_found'] = True
+            
+            if self.madam_method in ['wings_method']:
+                self.features['number_of_criteria'] = self.solver_options['dataset'].shape[1]
+                self.features['weights_found'] = True
+                self.features['rpc_found'] = True
+                self.features['rmc_found'] = True
+
+                self.R_plus_C, self.R_minus_C, self.weights = self.result
+            
+    def _generate_decision_info(self):
+
+        tline_text('Decision')
+        empty_line()
+
+        if not self.show_tensor:
+
+            if self.features['weights_found']:
+
+                for i in range(self.features['number_of_criteria']):
+
+                    if self.madam_method in ['fuzzy_ahp_method']:
+                        self.display_as_tensor(f'fw[{i}]', np.round(self.fuzzy_weights[i],self.output_decimals), self.show_detailed_tensors)
+                    else:
+                        self.display_as_tensor(f'w[{i}]', np.round(self.weights[i],self.output_decimals), self.show_detailed_tensors)
+
+            if self.features['rpc_found']:
+                for i in range(self.features['number_of_criteria']):
+                    self.display_as_tensor(f'rpc[{i}]', np.round(self.R_plus_C[i],self.output_decimals), self.show_detailed_tensors)
+
+            if self.features['rmc_found']:
+                for i in range(self.features['number_of_criteria']):
+                    self.display_as_tensor(f'rmc[{i}]', np.round(self.R_minus_C[i],self.output_decimals), self.show_detailed_tensors)
+
+            if self.features['ranks_found']:
+
+                for i in range(len(self.ranks)):
+                    self.display_as_tensor(f'r[{i}]', np.round(self.ranks[i],self.output_decimals), self.show_detailed_tensors)
+
+            if self.features['classification_found']:
+
+                for i in range(self.features['number_of_alternatives']):
+                    self.display_as_tensor(f'c[{i}]', np.round(self.classification[i],self.output_decimals), self.show_detailed_tensors)
+
+            if self.features['selection_found']:
+
+                for i in range(self.features['number_of_alternatives']):
+                    if self.selection[i,2] == 1:
+                        self.display_as_tensor(f's[{int(self.selection[i,0])}]', np.round(self.selection[i,1],self.output_decimals), self.show_detailed_tensors)
+
+            if self.features['dpr_found']:
+
+                for i in range(self.features['number_of_criteria']):
+                    self.display_as_tensor(f'dpr[{i}]', np.round(self.D_plus_R[i],self.output_decimals), self.show_detailed_tensors)
+
+            if self.features['dmr_found']:
+
+                for i in range(self.features['number_of_criteria']):
+                    self.display_as_tensor(f'dmr[{i}]', np.round(self.D_minus_R[i],self.output_decimals), self.show_detailed_tensors)
+
+            if self.features['d_rank_found']:
+                for i in range(len(self.rank_D)):
+                    self.display_as_tensor(f'd_r[{i}]', self.rank_D[i], self.show_detailed_tensors)
+
+            if self.features['a_rank_found']:
+                for i in range(len(self.rank_A)):
+                    self.display_as_tensor(f'a_r[{i}]', self.rank_A[i], self.show_detailed_tensors)
+
+            if self.features['p_rank_found']:
+                for i in range(len(self.rank_P)):
+                    self.display_as_tensor(f'p_r[{i}]', self.rank_P[i], self.show_detailed_tensors)
+        else:
+
+            if self.features['weights_found']:
+
+                if self.madam_method in ['fuzzy_ahp_method']:
+                    self.display_as_tensor('fwv', np.round(self.fuzzy_weights,self.output_decimals), self.show_detailed_tensors)
+                else:
+                    self.display_as_tensor('wv', np.round(self.fuzzy_weights,self.output_decimals), self.show_detailed_tensors)
+
+            if self.features['ranks_found']:
+
+                if self.madam_method in ['fuzzy_aras_method']:
+                    self.display_as_tensor('frv', np.round(self.fuzzy_ranks,self.output_decimals), self.show_detailed_tensors)
+                else:
+                    self.display_as_tensor('rv', np.round(self.ranks,self.output_decimals), self.show_detailed_tensors)
+
+            if self.features['classification_found']:
+
+                self.display_as_tensor(f'c', np.round(self.classification,self.output_decimals), self.show_detailed_tensors)
+
+            if self.features['d_rank_found']:
+                self.display_as_tensor(f'd_rv', self.rank_D, self.show_detailed_tensors)
+
+            if self.features['a_rank_found']:
+                self.display_as_tensor(f'a_rv', self.rank_A, self.show_detailed_tensors)
+
+            if self.features['p_rank_found']:
+                self.display_as_tensor(f'p_rv', self.rank_P, self.show_detailed_tensors)
+
+
+        if self.features['global_concordance_found']:
+            self.display_as_tensor('gcm', np.round(self.global_concordance,self.output_decimals), self.show_detailed_tensors)
+
+        if self.features['concordance_found']:
+            self.display_as_tensor('ccm', np.round(self.concordance,self.output_decimals), self.show_detailed_tensors)
+
+        if self.features['discordance_found']:
+            self.display_as_tensor('dcm', np.round(self.discordance,self.output_decimals), self.show_detailed_tensors)
+
+        if self.features['credibility_found']:
+            self.display_as_tensor('crm', np.round(self.credibility,self.output_decimals), self.show_detailed_tensors)
+
+        if self.features['dominance_found']:
+            self.display_as_tensor('dmm', np.round(self.dominance,self.output_decimals), self.show_detailed_tensors)
+
+        if self.features['kernel_found']:
+            self.display_as_tensor('kernel',  self.kernel, self.show_detailed_tensors)
+            
+        if self.features['dominated_found']:
+            self.display_as_tensor('dominated', self.dominated, self.show_detailed_tensors)
+
+        if self.features['dominance_s_found']:
+            self.display_as_tensor('dmm_s', self.dominance_s, self.show_detailed_tensors)
+
+        if self.features['dominance_w_found']:
+            self.display_as_tensor('dmm_w', self.dominance_w, self.show_detailed_tensors)
+
+
+
+        self.features['dominance_s_found'] = False
+        self.features['dominance_w_found'] = False
+        self.features['d_rank_found'] = False
+        self.features['a_rank_found'] = False
+        self.features['n_rank_found'] = False
+        self.features['p_rank_found'] = False
+
+
+        empty_line()
+        bline()
+
+    def _generate_metric_info(self):
+        tline_text("Metric")
+        empty_line()
+
+        if self.features['inconsistency_found']:
+            two_column('Inconsistency:', str(np.round(self.inconsistency,self.output_decimals)))
+        
+        import time
+        elapsed_time_seconds = self.finish - self.start
+        elapsed_time_microseconds = int(elapsed_time_seconds * 1_000_000)
+        elapsed_time_formatted = time.strftime('%H:%M:%S', time.gmtime(elapsed_time_seconds))
+
+        two_column('CPT (microseconds):', str(elapsed_time_microseconds))
+        two_column('CPT (hour:min:sec):', elapsed_time_formatted)
+
+        empty_line()
+        bline()
+
+    def get_numpy_var(self, input):
+
+        if input == 'frv':
+            return self.ranks
+        
+        if input == 'rv':
+            return self.ranks
+
+        if input == 'wv':
+            return self.weights
+
+        if input == 'fwv':
+            return self.fuzzy_weights
+
+        if input == 'dmrv':
+            return self.D_minus_R
+
+        if input == 'dprv':
+            return self.D_plus_R
+
+        if input == 'rmcv':
+            return self.R_minus_C
+
+        if input == 'rpcv':
+            return self.R_plus_C
+          
+        if input in ['dominated']:
+            return self.dominated
+        
+        if input in ['concordance', 'cmm']:
+            return self.concordance
+
+        if input in ['discordance', 'dcm']:
+            return self.discordance
+
+        if input in ['kernel']:
+            return self.kernel
+        
+        if input in ['dominance', 'dmm']:
+            return self.dominance
+        
+        if input in ['dominance_s', 'dmm_s']:
+            return self.dominance_s
+
+        if input in ['dominance_w', 'dmm_w']:
+            return self.dominance_w
+         
+        if input in ['global_concordance', 'gcm']:
+            return self.global_concordance
+
+        if input in ['credibility', 'crm']:
+            return self.credibility
+    
+        if input in ['rank_d', 'd_rv']:
+            return self.rank_D
+
+        if input in ['rank_a', 'a_rv']:
+            return self.rank_A
+
+        if input in ['classification', 'class', 'c']:
+            return self.classification     
+          
+    def get_ranks_base(self):
+        
+        try:
+            return np.array(self.ranks)[:,1]
+        except: 
+            return np.array(self.ranks)
+        
+    def get_ranks(self):
+
+        if self.madam_method not in ['la_method']:
+
+            if self.madam_method not in ['vikor_method', 'fuzzy_vikor_method']:
+
+                try:
+                    if self.madam_method not in ['borda_method', 'cradis_method', 'mairca_method', 'oreste_method', 'piv_method', 'spotis_method']:
+
+                        return np.argsort(np.array(self.ranks)[:,1])[::-1]
+
+                    else:
+                        return np.argsort(np.array(self.ranks)[:,1])
+
+                except:
+                    if self.madam_method not in ['borda_method','cradis_method', 'mairca_method', 'oreste_method', 'piv_method', 'spotis_method']:
+                        return np.argsort(np.array(self.ranks))[::-1]
+                    else:
+                        return np.argsort(np.array(self.ranks))
+
+            else:
+
+                return np.int64(np.array(self.ranks)[:,0])
+            
+        else:
+            return self.ranks
+        
+    def get_status(self):
+        return self.status
+
+    def get_inconsistency(self):
+        return self.inconsistency
+
+    def get_weights(self):
+
+        return self.weights
+        
+    def get_fuzzy_weights(self):
+
+        return self.fuzzy_weights
+        
+    def get_crisp_weights(self):
+
+        return self.crisp_weights
+        
+    def get_normalized_weights(self):
+        
+        return self.normalized_weights
+    
+    def report(self, all_metrics=False, feloopy_info=True, sys_info=False,
+                        model_info=True, sol_info=True, metric_info=True,
+                        ideal_pareto=None, ideal_point=None, show_tensors=False,
+                        show_detailed_tensors=False, save=None, decimals = 4):
+
+        self.show_tensor = show_tensors
+        self.show_detailed_tensors = show_detailed_tensors
+
+        self.output_decimals = 4
+
+        if feloopy_info:
+            self._generate_feloopy_info()
+
+        if sys_info:
+            self._generate_sys_info()
+
+        if model_info:
+            self._generate_model_info()
+
+        if sol_info:
+            self._generate_sol_info()
+
+        if metric_info:
+            self._generate_metric_info()
+
+        self._generate_decision_info()
+
+    def display_as_tensor(self, name, numpy_var, detailed):
+        if detailed:
+            np.set_printoptions(threshold=np.inf)
+
+        if isinstance(numpy_var, np.ndarray):
+            tensor_str = np.array2string(numpy_var, separator=', ', prefix='| ', style=str)
+            rows = tensor_str.split('\n')
+            first_row_len = len(rows[0])
+            for k, row in enumerate(rows):
+                if k == 0:
+                    left_align(f"{name} = {row}")
+                else:
+                    left_align(" " * (len(f"{name} =") - 1) + row)
+        else:
+            left_align(f"{name} = {numpy_var}")
+
+    def _generate_feloopy_info(self):
+
+        import datetime
+        now = datetime.datetime.now()
+        date_str = now.strftime("Date: %Y-%m-%d")
+        time_str = now.strftime("Time: %H:%M:%S")
+
+        tline_text("FelooPy v0.2.7")
+        empty_line()
+        two_column(date_str, time_str)
+
+        if 'pydecision' in self.interface_name.lower():
+            interface = 'pydecision'
+            two_column(f"Interface: {interface}", f"Solver: {self.madam_method}")
+
+        empty_line()
+        bline()
+
+    def _generate_sys_info(self):
+        try:
+            import psutil
+            import cpuinfo
+            tline_text("System")
+            empty_line()
+            cpu_info = cpuinfo.get_cpu_info()["brand_raw"]
+            cpu_cores = psutil.cpu_count(logical=False)
+            cpu_threads = psutil.cpu_count(logical=True)
+            ram_info = psutil.virtual_memory()
+            ram_total = ram_info.total
+            os_info = platform.system()
+            os_version = platform.version()
+            left_align(f"OS: {os_version} ({os_info})")
+            left_align(f"CPU   Model: {cpu_info}")
+            left_align(f"CPU   Cores: {cpu_cores}")
+            left_align(f"CPU Threads: {cpu_threads}")
+
+            try:
+                import GPUtil
+                gpus = GPUtil.getGPUs()
+                for gpu in gpus:
+                    left_align(f"GPU   Model: {gpu.name}")
+                    left_align(f"GPU    VRAM: {gpu.memoryTotal / 1024:.2f} GB")
+            except:
+                pass
+
+            left_align(f"SYSTEM  RAM: {ram_total / (1024 ** 3):.2f} GB")
+        except:
+            pass
+
+        empty_line()
+        bline()
+
+    def _generate_model_info(self):
+        tline_text("Model")
+        empty_line()
+        left_align(f"Name: {self.model_name}")
+        for i in self.features.keys():
+            if 'defined' in i:
+                left_align(i)
+
+        for i in self.features.keys():
+            if 'found' in i and self.features[i]=='True':
+                left_align(i)
+
+        try:
+            two_column("Number of criteria:", str(self.features['number_of_criteria']))
+        except:
+            ""
+
+        try:
+            two_column("Number of alternatives:", str(self.features['number_of_alternatives']))
+        except:
+            ""
+
+        empty_line()
+        bline()
+
+    def _generate_sol_info(self):
+
+    
+        tline_text("Solve")
+        empty_line()
+        left_align(f"Method: {self.madam_method}")
+        left_align(f"Status: {self.status}")
+
+        empty_line()
+        bline()
+    
+madm = MADM

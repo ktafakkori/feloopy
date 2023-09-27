@@ -1,6 +1,6 @@
 ### **Introduction**
 
-| FelooPy | [![Version](https://img.shields.io/badge/version-0.2.6-darkgreen.svg)](https://github.com/ktafakkori/feloopy/releases) [![Release Date](https://img.shields.io/github/release-date/ktafakkori/feloopy?color=blue)](https://github.com/ktafakkori/feloopy/releases) [![Downloads](https://static.pepy.tech/badge/feloopy?&left_text=users)](https://pepy.tech/project/feloopy?&left_text=users) [![License](https://img.shields.io/badge/license-MIT-darkred.svg)](https://opensource.org/licenses/MIT) |
+| FelooPy | [![Version](https://img.shields.io/badge/version-0.2.6-darkgreen.svg)](https://github.com/ktafakkori/feloopy/releases) [![Release Date](https://img.shields.io/github/release-date/ktafakkori/feloopy?color=blue)](https://github.com/ktafakkori/feloopy/releases) [![Downloads](https://static.pepy.tech/badge/feloopy?&left_text=users)](https://pepy.tech/project/feloopy?&left_text=users) [![GitHub stars](https://img.shields.io/github/stars/ktafakkori/feloopy?color=blue)](https://github.com/ktafakkori/feloopy) [![License](https://img.shields.io/badge/license-MIT-darkred.svg)](https://opensource.org/licenses/MIT) |
 | :--- | :--- |
 | ![FelooPy Logo](miscellaneous/logo/logo1.png) | **FelooPy** (pronounced /fɛlupaɪ/) is a free and open-source Python library for automated operations research. It serves as both a hyper-optimization interface and an integrated optimization environment. The name "FelooPy" reflects the idea of suggesting practical solutions for various systems, industries, and supply chains. It emphasizes the importance of loops in programming and algorithm development, drawing similarities to the name "Floppy" to highlight memory efficiency. FelooPy helps operations research scientists achieve their goals with a range of models and tools. In simple words, FelooPy is a unified framework for optimization algorithms, decision-making methods, modeling, and analysis. |
 | **News** | 🎉 Version 0.2.6 is out: Robustness and Stability! 🎉 |
@@ -175,7 +175,7 @@ FelooPy also offers the following key features:
 * **Convex optimization algorithms**: Supports *20* convex optimization algorithms that ease tensor- and matrix-form modeling, primarily for convex problems.
 * **Constraint optimization algorithms**: Supports *2* constraint optimization algorithms that can handle a wide range of complex constraints for operational and time-dependent decisions.
 * **Multi-objective optimization algorithms**: Supports *17* multi-objective optimization algorithms, in which objectives might be conflicting or with different numerical units.
-* **Multi-critera decision-making methods**: Supports *41* MCDM algorithms to solve decision problems with expert-based inputs without mathematical modeling.
+* **Multi-critera decision-making methods**: Supports *41* madam algorithms to solve decision problems with expert-based inputs without mathematical modeling.
 * **Solver configurations**: Lets you configure the solver to meet specific requirements.
 * **Auto-encoders for general purpose programming**: Provides auto-encoders to simplify general-purpose programming tasks.
 * **Auto-linearizers for linear programming conversions**: Provides auto-linearizers that can handle mixed-integer non-linear programming problems.

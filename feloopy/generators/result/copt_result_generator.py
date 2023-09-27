@@ -18,7 +18,6 @@ copt_status_dict = {
     COPT.INTERRUPTED: 'interrupted',
 }
 
-
 def Get(model_object, result, input1, input2=None):
 
     input1 = input1[0]
@@ -40,3 +39,19 @@ def Get(model_object, result, input1, input2=None):
         case 'time':
 
             return (result[1][1]-result[1][0])
+
+        case 'dual':
+            return model_object.getConstrByName(input2).Pi
+
+        case 'slack':
+            return model_object.getConstrByName(input2).Slack
+        
+        case 'iis':
+            model_object.computeIIS()
+            for c in model_object.getConstrs():
+                if c.getUpperIIS()>0 or c.getLowerIIS():
+                    print("│" + " " + str(f"con: {c.constrName}").ljust(80-2) + " " + "│")
+            for v in model_object.getVars():
+                if v.getLowerIIS > 0 or v.getUpperIIS > 0:
+                    print("│" + " " + str(f"var: {v.varName}").ljust(80-2) + " " + "│")
+
