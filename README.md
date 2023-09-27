@@ -5,6 +5,35 @@
 | ![FelooPy Logo](miscellaneous/logo/logo1.png) |  **FelooPy** (pronounced /fɛlupaɪ/) is a comprehensive Python library that automates operations research. It serves as a hyper-optimization interface and an integrated optimization environment. FelooPy offers practical solutions for various systems, industries, and supply chains, focusing on finding feasible solutions, logical decisions, and optimal outcomes using Python. The name is a nod to "loops" in programming and algorithm development and "floppy" disk in computing and memory efficiency. FelooPy helps operations research scientists achieve their goals by providing various models and algorithms. In summary, FelooPy is a comprehensive framework for single- and multi-criteria decision-making methods, mathematical modeling, optimization algorithms, and analytics. |
 | **News** | 🎉 Version 0.2.7 is out: Comprehensivity! 🎉 |
 
+### **Features**
+
+- Start optimization with a single import!
+
+![start-optimization](miscellaneous/showcase/start_optimization.gif)
+
+- Define modeling environment with ease!
+
+![start-modeling](miscellaneous/showcase/start_modeling.gif)
+
+
+
+FelooPy also offers the following key features:
+
+* **Simplest optimization programming language**: Designed to be easy to use, even for those with little or no programming experience.
+* **Modeling, solving and analyzing optimization problems**: Provides a complete suite of tools for modeling, solving and analyzing a wide range of optimization problems.
+* **Exact optimization algorithms**: Supports *108* exact optimization algorithms that guarantee the optimal solution to your problem.
+* **Heuristic optimization algorithms**: Supports *197* heuristic optimization algorithms that can find best possible solutions to complex problems.
+* **Convex optimization algorithms**: Supports *20* convex optimization algorithms that ease tensor- and matrix-form modeling, primarily for convex problems.
+* **Constraint optimization algorithms**: Supports *2* constraint optimization algorithms that can handle a wide range of complex constraints for operational and time-dependent decisions.
+* **Multi-objective optimization algorithms**: Supports *17* multi-objective optimization algorithms, in which objectives might be conflicting or with different numerical units.
+* **Multi-attribute decision-making methods**: Supports *63* MADM algorithms to solve decision problems with expert-based inputs without mathematical modeling.
+* **Solver configurations**: Lets you configure the solver to meet specific requirements.
+* **Auto-encoders for general purpose programming**: Provides auto-encoders to simplify general-purpose programming tasks.
+* **Auto-linearizers for linear programming conversions**: Provides auto-linearizers that can handle mixed-integer non-linear programming problems.
+* **Auto-logic for modeling special constraints**: Provides auto-logic to help you model and solve problems with special constraints.
+* **Auto-sensitivity for analyzing the impact of key parameters**: Provides auto-sensitivity tools to help you analyze the impact of key parameters on your optimization problem.
+
+
 ### **Installation**
 
 FelooPy can be installed on Linux-based distributions, Windows, or macOS. It has a few dependencies that should work on all these platforms.
@@ -129,7 +158,7 @@ install('feloopy==0.2.7')
 
 </div>
 
-FelooPy requires Python 3.10 or later to be installed on your system. If you don't have Python installed, or if you have an older version, you can download it from the [official website](https://www.python.org/downloads/) and follow the installation instructions. Alternatively, if you are using [Anaconda](https://www.anaconda.com/download/), you can create a new environment with Python 3.10 or later and install FelooPy in that environment:
+FelooPy requires Python 3.10 or later to be installed on your system. If you don't have Python installed or a Python interpreter with the necessary version, you can download it from the [official website](https://www.python.org/downloads/) and follow the installation instructions. Alternatively, if you are using an[Anaconda](https://www.anaconda.com/download/) distribution, you can create a new environment with Python 3.10 or later and install FelooPy in that environment, as follows:
 
 ```
 conda create --name your_environment python=3.10
@@ -137,7 +166,7 @@ conda activate your_environment
 pip install feloopy
 ```
 
-FelooPy (v0.2.7) has a few optional dependencies that can be installed using the following commands:
+FelooPy (v0.2.7) has a few optional dependencies that can be installed using the following commands (recommended to install if possible):
 
 <div align="center">
 
@@ -153,34 +182,6 @@ FelooPy (v0.2.7) has a few optional dependencies that can be installed using the
 </div>
 
 For multi-objective optimization, you should use the linux command for installation. However, please note that the optional dependencies for Linux kernel might not work on some operating systems. As a workaround, you can use a Conda-based Python 3.10 interpreter to ensure that optional dependencies for multi-objective optimization are installed correctly.
-
-### **Features**
-
-- Start optimization with a single import!
-
-![start-optimization](miscellaneous/showcase/start_optimization.gif)
-
-- Define modeling environment with ease!
-
-![start-modeling](miscellaneous/showcase/start_modeling.gif)
-
-
-
-FelooPy also offers the following key features:
-
-* **Simplest optimization programming language**: Designed to be easy to use, even for those with little or no programming experience.
-* **Modeling, solving and analyzing optimization problems**: Provides a complete suite of tools for modeling, solving and analyzing a wide range of optimization problems.
-* **Exact optimization algorithms**: Supports *108* exact optimization algorithms that guarantee the optimal solution to your problem.
-* **Heuristic optimization algorithms**: Supports *197* heuristic optimization algorithms that can find best possible solutions to complex problems.
-* **Convex optimization algorithms**: Supports *20* convex optimization algorithms that ease tensor- and matrix-form modeling, primarily for convex problems.
-* **Constraint optimization algorithms**: Supports *2* constraint optimization algorithms that can handle a wide range of complex constraints for operational and time-dependent decisions.
-* **Multi-objective optimization algorithms**: Supports *17* multi-objective optimization algorithms, in which objectives might be conflicting or with different numerical units.
-* **Multi-critera decision-making methods**: Supports *41* madam algorithms to solve decision problems with expert-based inputs without mathematical modeling.
-* **Solver configurations**: Lets you configure the solver to meet specific requirements.
-* **Auto-encoders for general purpose programming**: Provides auto-encoders to simplify general-purpose programming tasks.
-* **Auto-linearizers for linear programming conversions**: Provides auto-linearizers that can handle mixed-integer non-linear programming problems.
-* **Auto-logic for modeling special constraints**: Provides auto-logic to help you model and solve problems with special constraints.
-* **Auto-sensitivity for analyzing the impact of key parameters**: Provides auto-sensitivity tools to help you analyze the impact of key parameters on your optimization problem.
 
 ### **Documentation**
 
@@ -206,7 +207,7 @@ If you use the facilities of this GitHub repository or the Python library in you
 - APA 7:
 
 ```text
-Tafakkori, K. (2022). FelooPy: An integrated optimization environment for AutoOR in Python [Python Library]. https://github.com/ktafakkori/feloopy (Original work published September 2022)
+Tafakkori, K. (2022). FelooPy: An integrated optimization environment for AutoOR in Python [Python Library]. Retrieved from https://github.com/ktafakkori/feloopy (Original work published September 2022).
 ```
 
 - LaTeX:
