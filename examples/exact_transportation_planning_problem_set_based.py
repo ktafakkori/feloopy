@@ -14,8 +14,8 @@ from feloopy import *
 m = target_model('exact', 'transportation planning problem', 'pymprog', key=0)
 
 #Sets
-I = m.set(5) # set of loactions
-L = m.set(2) # set of capacity levels
+I = range(5) # set of loactions
+L = range(2) # set of capacity levels
 
 #Dataset
 dc = load_from_excel('data_exact_transportation_planning_problem.xlsx', [I,I], [1,1], ['i', 'j'], 'driver_cost') # pairwise driver cost

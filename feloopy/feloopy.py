@@ -2264,9 +2264,11 @@ class Model:
             status = self.get_status().lower()
             return ('optimal' in status or 'feasible' in status) and 'infeasible' not in status
         except:
-            status = self.get_status()[0].lower()
-            return ('feasible' in status or 'optimal' in status) and 'infeasible' not in status
-        
+            try:
+                status = self.get_status()[0].lower()
+                return ('feasible' in status or 'optimal' in status) and 'infeasible' not in status
+            except:
+                return True
     def get_variable(self, variable_with_index):
         from .generators import result_generator
         return result_generator.get(self.features, self.model, self.solution, 'variable', variable_with_index)

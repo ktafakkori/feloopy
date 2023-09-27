@@ -19,7 +19,7 @@ a = np.array([[1, 2, 2], [2, 3, 3], [3, 4, 5], [4, 5, 6], [5, 7, 8]])  # Feature
 b = np.array([1, 2, 3, 4, 5])  # Target
 
 # Sets
-U = m.set(np.shape(a)[1])  # Features
+U = range(np.shape(a)[1])  # Features
 T = range(np.shape(a)[0])  # Observations
 
 # Preprocessing Dataset

@@ -30,10 +30,10 @@ d = [[0, 22, 53, 53],
 d = np.array(d)
 
 #Sets
-I = m.set(m.card(w))  # Set of assignees
+I = range(m.card(w))  # Set of assignees
 K = I
 
-J = m.set(m.card(w[0]))  # Set of assignments
+J = range(m.card(w[0]))  # Set of assignments
 L = J
 
 a = {(i, j, k, l): w[i, k]*d[j, l] for i, j, k, l in sets(I, J, K, L)}  # Relative cost matrix

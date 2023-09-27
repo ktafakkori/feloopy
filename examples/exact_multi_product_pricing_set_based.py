@@ -20,7 +20,7 @@ b = [2   , 3  , 4  ]
 cost = [2, 3, 5]
 
 #Set
-I = m.set(len(a))
+I = range(len(a))
 
 #Variable
 q = m.pvar('q', [I])

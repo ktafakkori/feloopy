@@ -16,8 +16,9 @@ from feloopy import *
 m = target_model('constraint', 'flexible_job_shop_scheduling', 'cplex_cp', key=1)
 
 # Sets for jobs and machines
-J = m.set(5)
-K = m.set(3)
+J = range(5)
+K = range(3)
+
 
 # Random job operations and task-machine pairs
 J_O = m.uniformint(1,3,[J])

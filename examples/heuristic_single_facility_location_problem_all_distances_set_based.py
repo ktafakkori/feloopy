@@ -20,8 +20,8 @@ w = np.array([5, 22, 41, 60, 34])
 
 def instance(X):
     m = representor_model(solution_method, 'Rectangular distance', interface, X)
-    I = m.set(len(coords))
-    J = m.set(2)
+    I = range(len(coords))
+    J = range(2)
     x = m.pvar('x', [J], [0, 100])
     m.obj(sum(w[i] * (((x[:, 0] - coords[i][0])**2) + ((x[:, 1] - coords[i][1])**2))**0.5 for i in I))
     m.sol(['min'], 'ga')
@@ -33,8 +33,8 @@ m.report()
 
 def instance(X):
     m = representor_model(solution_method, 'Euclidean distance', interface, X)
-    I = m.set(len(coords))
-    J = m.set(2)
+    I = range(len(coords))
+    J = range(2)
     x = m.pvar('x', [J], [0, 100])
     m.obj(sum(w[i] * (((x[:, 0] - coords[i][0])**2) + ((x[:, 1] - coords[i][1])**2))**0.5 for i in I))
     m.sol(['min'], 'ga')
@@ -46,8 +46,8 @@ m.report()
 
 def instance(X):
     m = representor_model(solution_method, 'Squared Euclidean distance', interface, X)
-    I = m.set(len(coords))
-    J = m.set(2)
+    I = range(len(coords))
+    J = range(2)
     x = m.pvar('x', [J], [0, 100])
     m.obj(sum(w[i] * ((x[:, 0] - coords[i][0])**2) for i in I) + sum(w[i] * ((x[:, 1] - coords[i][1])**2) for i in I))
     m.sol(['min'], 'ga')
@@ -59,8 +59,8 @@ m.report()
 
 def instance(X):
     m = representor_model(solution_method, 'Minkowski distance', interface, X)
-    I = m.set(len(coords))
-    J = m.set(2)
+    I = range(len(coords))
+    J = range(2)
     x = m.pvar('x', [J], [0, 100])
     p = 50
     m.obj(sum(w[i] * ((x[:,0] - coords[i][0])**p + (x[:,1] - coords[i][1])**p )**(1/p) for i in I))

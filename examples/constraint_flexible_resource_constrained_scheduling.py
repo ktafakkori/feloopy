@@ -22,8 +22,8 @@ R = range(3) #Set of resource types required
 
 operations_for_each_job = m.uniformlist(len(C)-3, len(C), C, [J])
 class_of_operation = m.uniformint(0,len(C)-1,[O])
-job_due_date  = m.uniformint(2000, 3000, [J])
-capacity_of_resource = m.uniformint(20,32, [R])
+job_due_date  = m.uniformint(2000, 2100, [J])
+capacity_of_resource = m.uniformint(20,1000, [R])
 operation_requires_resource = m.uniformint(0,4, [O,R])
 batch_size_of_operation = m.uniformint(2,5,[O])
 duration_of_each_operation_class = m.uniformint(10,40,[C])

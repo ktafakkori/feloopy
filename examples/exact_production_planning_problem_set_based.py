@@ -15,8 +15,8 @@ from feloopy import *
 m = target_model('exact', 'production planning problem', 'pyomo', key=0)
 
 #Sets
-I  = m.set(10)
-R  = m.set(3) 
+I  = range(10)
+R  = range(3) 
 
 #Dataset
 p = load_from_excel('data_exact_production_planning_problem.xlsx', [I], [1], ['i'], 'profit') 
@@ -34,7 +34,7 @@ for r in R:
     m.con(sum(a[i,r]*x[i] for i in I) <= b[r])
 
 #Solve
-m.sol(['max'],'glpk')
+m.sol(['max'],'cbc')
 
 # Display
 m.report()

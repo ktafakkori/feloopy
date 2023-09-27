@@ -15,8 +15,8 @@ from feloopy import *
 m = target_model('exact', 'traveling salesperson problem', 'ortools', key=0)
 
 #Sets
-N = m.set(10)
-U = m.set(9)
+N = range(10)
+U = range(9)
 
 #Dataset
 c = m.uniformint(1, 11, [N,N])

@@ -23,8 +23,8 @@ c = np.array(cost_matrix)
 m = target_model('exact', 'assignment_problem', 'pulp', key=0)
 
 # Sets
-I = m.set(3)  # Agents
-J = m.set(3)  # Tasks
+I = range(3)  # Agents
+J = range(3)  # Tasks
 
 # Variables
 x = m.bvar('x', [I, J])

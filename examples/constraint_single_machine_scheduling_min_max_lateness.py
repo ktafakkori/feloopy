@@ -15,7 +15,7 @@ from feloopy import *
 
 m = target_model('constraint', 'single_machine_scheduling', 'cplex_cp', key=0)
 
-J = m.set(10)
+J = range(10)
 
 due_date = m.uniform(75, 200, [J])
 release_time = m.uniform(1,50, [J])

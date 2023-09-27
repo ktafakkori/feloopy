@@ -15,11 +15,11 @@ from feloopy import *
 m = target_model('exact', 'distribution_planning_problem', 'pyomo', key=0)
 
 # Data
-I = m.set(2)  # Number of suppliers
-J = m.set(2)  # Number of warehouses
-K = m.set(3)  # Number of customers
-P = m.set(3)  # Type of products
-T = m.set(4)  # Time periods
+I = range(2)  # Number of suppliers
+J = range(2)  # Number of warehouses
+K = range(3)  # Number of customers
+P = range(3)  # Type of products
+T = range(4)  # Time periods
 
 # Dataset
 dk = m.uniformint(10, 20, [K, P, T])      # Customer demand
