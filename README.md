@@ -193,13 +193,19 @@ We welcome your contributions to this project, such as reporting bugs, submittin
 
 ### **Support FelooPy 🌟**
 
-We are committed to continuing the development of FelooPy and would greatly appreciate your support. You can help us by:
+**Warning: Maintenance Notice** ⚠️
 
-* Starring the project on GitHub: Your stars motivate us to keep improving FelooPy. You can star the project here: https://github.com/ktafakkori/feloopy/stargazers
+We are committed to continuing the development of FelooPy, but ongoing maintenance and improvements depend on the support of our community. Your assistance is invaluable in keeping FelooPy active and thriving.
 
-* Forking the project on GitHub: You can also contribute to FelooPy by forking the project here: https://github.com/ktafakkori/feloopy/network/members
+Here's how you can contribute:
 
-* Making a donation: Your donations help to sustain and maintain the project and add new features. If you would like to support us, please visit our website at https://ktafakkori.github.io/support/.
+- **Star the project on GitHub:** Your stars motivate us to keep improving FelooPy. You can give a star to the project [here](https://github.com/ktafakkori/feloopy/stargazers).
+
+- **Fork the project on GitHub:** You can actively contribute to its development by forking it. You can fork the project [here](https://github.com/ktafakkori/feloopy/network/members).
+
+- **Donate:** Your donations help us sustain and maintain the project while adding new features. If you'd like to support us financially, please visit our [support page](https://ktafakkori.github.io/support/).
+
+Your support is vital to FelooPy's future, and we sincerely appreciate your contribution! Thank you for being part of our community.
 
 ### **Citation 📖**
 
