@@ -1,9 +1,9 @@
 ### **Introduction**
 
-| FelooPy | [![Version](https://img.shields.io/badge/version-0.2.6-darkgreen.svg)](https://github.com/ktafakkori/feloopy/releases) [![Release Date](https://img.shields.io/github/release-date/ktafakkori/feloopy?color=blue)](https://github.com/ktafakkori/feloopy/releases) [![Downloads](https://static.pepy.tech/badge/feloopy?&left_text=users)](https://pepy.tech/project/feloopy?&left_text=users) [![GitHub stars](https://img.shields.io/github/stars/ktafakkori/feloopy?color=blue)](https://github.com/ktafakkori/feloopy) [![License](https://img.shields.io/badge/license-MIT-darkred.svg)](https://opensource.org/licenses/MIT) |
+| FelooPy | [![Version](https://img.shields.io/badge/version-0.2.7-darkgreen.svg)](https://github.com/ktafakkori/feloopy/releases) [![Release Date](https://img.shields.io/github/release-date/ktafakkori/feloopy?color=blue)](https://github.com/ktafakkori/feloopy/releases) [![Downloads](https://static.pepy.tech/badge/feloopy?&left_text=users)](https://pepy.tech/project/feloopy?&left_text=users) [![GitHub stars](https://img.shields.io/github/stars/ktafakkori/feloopy?color=blue)](https://github.com/ktafakkori/feloopy) [![License](https://img.shields.io/badge/license-MIT-darkred.svg)](https://opensource.org/licenses/MIT) |
 | :--- | :--- |
 | ![FelooPy Logo](miscellaneous/logo/logo1.png) | **FelooPy** (pronounced /fɛlupaɪ/) is a free and open-source Python library for automated operations research. It serves as both a hyper-optimization interface and an integrated optimization environment. The name "FelooPy" reflects the idea of suggesting practical solutions for various systems, industries, and supply chains. It emphasizes the importance of loops in programming and algorithm development, drawing similarities to the name "Floppy" to highlight memory efficiency. FelooPy helps operations research scientists achieve their goals with a range of models and tools. In simple words, FelooPy is a unified framework for optimization algorithms, decision-making methods, modeling, and analysis. |
-| **News** | 🎉 Version 0.2.6 is out: Robustness and Stability! 🎉 |
+| **News** | 🎉 Version 0.2.7 is out: Comprehensivity! 🎉 |
 
 ### **Installation**
 
@@ -34,7 +34,7 @@ pip install --upgrade feloopy
     
 
 ```python
-pip install feloopy==0.2.6
+pip install feloopy==0.2.7
 ```
 
 </td>
@@ -46,7 +46,7 @@ pip install feloopy==0.2.6
 <td>
     
 ```python
-!pip install feloopy==0.2.6
+!pip install feloopy==0.2.7
 ```
 
 </td>
@@ -66,7 +66,7 @@ def install(package):
   else:
     pip._internal.main(['install','-U', package])
 
-install('feloopy==0.2.6')
+install('feloopy==0.2.7')
 ````
 
 </td>
@@ -77,7 +77,7 @@ install('feloopy==0.2.6')
 <td> Local </td>
 <td>
 
-1. Download the [feloopy-0.2.6.zip][c] file.
+1. Download the [feloopy-0.2.7.zip][c] file.
 2. Extract it into a specific directory.
 3. Open a terminal in that directory.
 4. Type: `pip install .`
@@ -103,7 +103,7 @@ install('feloopy==0.2.6')
 2. Run this cell and reload (CTRL + R):
 
 ```python
-!pip install feloopy==0.2.6
+!pip install feloopy==0.2.7
 ```
 
 </td>
@@ -137,7 +137,7 @@ conda activate feloopy
 pip install feloopy
 ```
 
-FelooPy (v0.2.6) has a few optional dependencies that can be installed using the following commands:
+FelooPy (v0.2.7) has a few optional dependencies that can be installed using the following commands:
 
 <div align="center">
 
