@@ -1,20 +1,18 @@
 '''
- # @ Author: Keivan Tafakkori
- # @ Created: 2023-05-11
- # @ Modified: 2023-07-06
- # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
- # @ Github: https://github.com/ktafakkori
- # @ Website: https://ktafakkori.github.io/
- # @ Copyright: 2023. MIT License. All Rights Reserved.
- '''
-
-
++---------------------------------------------------------+
+|  Project: FelooPy (0.2.7)                               |
+|  Modified: Wednesday, 27th September 2023 08:27:26 pm   |
+|  Modified By: Keivan Tafakkori                          |
+|  Project: https://github.com/ktafakkori/feloopy         |
+|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
+|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
++---------------------------------------------------------+
+'''
 
 import numpy as np
 import warnings as wn
 
 wn.filterwarnings("ignore")
-
 
 class DE:
 
@@ -59,10 +57,8 @@ class DE:
 
         self.pie = self.evaluate(self.pie)
         if self.r == 0:
-            self.pie[:, self.old_features_cols[0]:self.old_features_cols[1]] = np.where(np.reshape(self.d[0]*self.pie[:, self.new_reward_col[0]] > self.d[0]*self.pie[:, self.old_reward_col[0]], [
-                                                                                        self.t, 1]), self.pie[:, self.new_features_cols[0]:self.new_features_cols[1]], self.pie[:, self.old_features_cols[0]:self.old_features_cols[1]])
-            self.pie[:, self.old_reward_col[0]] = np.where(self.d[0]*self.pie[:, self.new_reward_col[0]] > self.d[0] *
-                                                           self.pie[:, self.old_reward_col[0]], self.pie[:, self.new_reward_col[0]], self.pie[:, self.old_reward_col[0]])
+            self.pie[:, self.old_features_cols[0]:self.old_features_cols[1]] = np.where(np.reshape(self.d[0]*self.pie[:, self.new_reward_col[0]] > self.d[0]*self.pie[:, self.old_reward_col[0]], [self.t, 1]), self.pie[:, self.new_features_cols[0]:self.new_features_cols[1]], self.pie[:, self.old_features_cols[0]:self.old_features_cols[1]])
+            self.pie[:, self.old_reward_col[0]] = np.where(self.d[0]*self.pie[:, self.new_reward_col[0]] > self.d[0] * self.pie[:, self.old_reward_col[0]], self.pie[:, self.new_reward_col[0]], self.pie[:, self.old_reward_col[0]])
             self.pie = self.pie[np.argsort(
                 self.pie[:, self.old_reward_col[0]])]
             if self.d[0]*self.pie[self.best_index][self.old_reward_col[0]] > self.d[0]*self.best[self.old_reward_col[0]]:
@@ -70,8 +66,7 @@ class DE:
 
     def vary(self):
 
-        indices = np.array([np.random.randint(0, self.t, 3)
-                           for t in range(self.t)])
+        indices = np.array([np.random.randint(0, self.t, 3) for t in range(self.t)])
         self.pie[:, :self.f] = np.where(np.random.rand(self.f) < self.cr, np.clip(self.pie[indices[:, 0], :self.f] + self.mu * (
             self.pie[indices[:, 1], :self.f] - self.pie[indices[:, 2], :self.f]), 0, 1), self.pie[:, :self.f])
 

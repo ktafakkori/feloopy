@@ -1,0 +1,15 @@
+from feloopy import *
+
+m = madm('psi_method','psi_model', 'pydecision')
+
+m.add_dm([
+        [250,  16,  12,  5],
+        [200,  16,  8 ,  3],
+        [300,  32,  16,  4],
+        [275,  32,  8 ,  4],
+        [225,  16,  16,  2]
+        ])
+
+m.sol( ['min', 'max', 'max', 'max'], show_graph=False)
+
+m.report(show_tensors=True)
