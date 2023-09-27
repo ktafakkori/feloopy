@@ -21,6 +21,9 @@ from .operators.epsilon import *
 from .operators.metric_operators import *
 from collections import defaultdict
 
+import time
+import platform
+import importlib
 import warnings
 import itertools as it
 import math as mt
@@ -3523,7 +3526,10 @@ class Implement:
 
         obtained_pareto = self.BestReward
 
-        from pyMultiobjective.util import graphs
+        try:
+            from pyMultiobjective.util import graphs
+        except:
+            ""
         ObjectivesDirections = [-1 if direction =='max' else 1 for direction in self.objectives_directions]
         def f1(X): return ObjectivesDirections[0]*self.Fitness(np.array(X))[0]
         def f2(X): return ObjectivesDirections[1]*self.Fitness(np.array(X))[1]
@@ -4267,7 +4273,10 @@ class Implement:
         if len(self.get_obj())!=0:
 
             obtained_pareto = self.BestReward
-            from pyMultiobjective.util import indicators
+            try:
+                from pyMultiobjective.util import indicators
+            except:
+                ""
 
             ObjectivesDirections = [-1 if direction =='max' else 1 for direction in self.objectives_directions]
 
@@ -4754,16 +4763,16 @@ class MADM:
 
     def __init__(self, solution_method, problem_name, interface_name):
         """
-        Creates and returns the multi-criteria decision-making (madam) environment.
+        Initializes an instance of MADM.
 
-        Args:
-            solution_method (str): Which method is used to solve the madam problem?
-            problem_name (str): What is the name of the madam problem?
-            interface_name (str): What is the name of the madam interface?
+        Parameters:
+        solution_method (str): The solution method to use.
+        problem_name (str): The name of the problem.
+        interface_name (str): The name of the interface.
+
+        Returns:
+        None
         """
-
-        import importlib
-
         self.model_name = problem_name
         self.interface_name = 'pyDecision.algorithm' if interface_name == 'pydecision' else interface_name
         self.madam_method = solution_method
@@ -4782,53 +4791,45 @@ class MADM:
         if solution_method == 'auto':
             self.madam_method = 'auto'
 
-        self.features = {}
         self.solver_options = dict()
 
-        self.features['weights_found'] = False
-        self.features['ranks_found'] = False
-        self.features['inconsistency_found'] = False
-        self.features['dpr_found'] = False
-        self.features['dmr_found'] = False
-        self.features['rpc_found'] = False
-        self.features['rmc_found'] = False
-        self.features['concordance_found'] = False
-        self.features['discordance_found'] = False
-        self.features['dominance_found'] = False
-        self.features['kernel_found'] = False
-        self.features['dominated_found'] = False
-        self.features['global_concordance_found'] = False
-        self.features['credibility_found'] = False
-        self.features['dominance_s_found'] = False
-        self.features['dominance_w_found'] = False
-        self.features['d_rank_found'] = False
-        self.features['a_rank_found'] = False
-        self.features['n_rank_found'] = False
-        self.features['p_rank_found'] = False
-        self.features['classification_found'] = False
-        self.features['selection_found'] = False
+        self.features = {
+            'weights_found': False,
+            'ranks_found': False,
+            'inconsistency_found': False,
+            'dpr_found': False,
+            'dmr_found': False,
+            'rpc_found': False,
+            'rmc_found': False,
+            'concordance_found': False,
+            'discordance_found': False,
+            'dominance_found': False,
+            'kernel_found': False,
+            'dominated_found': False,
+            'global_concordance_found': False,
+            'credibility_found': False,
+            'dominance_s_found': False,
+            'dominance_w_found': False,
+            'd_rank_found': False,
+            'a_rank_found': False,
+            'n_rank_found': False,
+            'p_rank_found': False,
+            'classification_found': False,
+            'selection_found': False
+        }
 
     def add_criteria_set(self, index='', bound=None, step=1, to_list=False):
         """
-        Criteria Set Definition
-        -----------------------
-        Define a criteria set.
+        Adds a criteria set.
 
-        Parameters
-        ----------
-        index : str, optional
-            Label index to create the set.
-        bound : list of int, optional
-            Start and end values of the range. If provided, the set will be a range from bound[0] to bound[1].
-        step : int, default 1
-            Step size of the range.
-        to_list : bool, default False
-            Convert the set to a list if True.
+        Parameters:
+        index (str): The index of the criteria set.
+        bound (tuple): The range of the criteria set.
+        step (int): The step size for the criteria set.
+        to_list (bool): Whether to return the criteria set as a list or a set.
 
-        Returns
-        -------
-        set or list
-            The created set or list if `to_list` is True.
+        Returns:
+        set or list: The criteria set.
         """
         if bound is None and not index:
             raise ValueError('Either bound or index must be provided.')
@@ -4836,31 +4837,20 @@ class MADM:
         start, end = bound if bound else (0, len(index))
         criteria_set = [f'{index}{i}' for i in range(start, end, step)]
 
-        self.features['number_of_criteria'] = len(criteria_set)
-
         return set(criteria_set) if not to_list else list(criteria_set)
 
     def add_alternatives_set(self, index='', bound=None, step=1, to_list=False):
         """
-        Alternatives Set Definition
-        ---------------------------
-        Define an alternatives set.
+        Adds an alternatives set.
 
-        Parameters
-        ----------
-        index : str, optional
-            Label index to create the set.
-        bound : list of int, optional
-            Start and end values of the range. If provided, the set will be a range from bound[0] to bound[1].
-        step : int, default 1
-            Step size of the range.
-        to_list : bool, default False
-            Convert the set to a list if True.
+        Parameters:
+        index (str): The index of the alternatives set.
+        bound (tuple): The range of the alternatives set.
+        step (int): The step size for the alternatives set.
+        to_list (bool): Whether to return the alternatives set as a list or a set.
 
-        Returns
-        -------
-        set or list
-            The created set or list if `to_list` is True.
+        Returns:
+        set or list: The alternatives set.
         """
         if bound is None and not index:
             raise ValueError('Either bound or index must be provided.')
@@ -4870,18 +4860,24 @@ class MADM:
 
         self.features['number_of_alternatives'] = len(alternatives_set)
         
-
         return set(alternatives_set) if not to_list else list(alternatives_set)
 
     def add_dm(self, data):
 
         self.features['dm_defined'] = True
         self.decision_matrix = np.array(data)
+
         if self.madam_method != 'electre_tri_b':
             self.solver_options['dataset'] = self.decision_matrix
         else:
             self.solver_options['performance_matrix'] = self.decision_matrix
-        
+
+    def add_fcim(self, data):
+
+        self.features['cim_defined'] = True
+        self.influence_matrix = np.array(data)
+        self.solver_options['dataset'] = self.influence_matrix
+
     def add_cim(self, data):
 
         self.features['cim_defined'] = True
@@ -4889,22 +4885,22 @@ class MADM:
         self.solver_options['dataset'] = self.influence_matrix
 
     def add_bocv(self, data):
-
+        
         self.features['bocv_defined'] = True
         self.best_to_others = np.array(data)
         self.solver_options['mic'] = self.best_to_others
 
-    def add_owcv(self,data):
-        
+    def add_owcv(self, data):
+
         self.features['owcv_defined'] = True
         self.others_to_worst = np.array(data)
         self.solver_options['lic'] = self.others_to_worst
 
     def add_fim(self, data):
-
         self.features['fim_defined'] = True
         self.fuzzy_influence_matrix = np.array(data)
         self.solver_options['dataset'] = self.fuzzy_influence_matrix
+
 
     def add_fdm(self, data):
 
@@ -5042,8 +5038,6 @@ class MADM:
         if self.madam_method in ['waspas_method']:
             if 'lambda_value' not in self.solver_options.keys():
                 self.solver_options['lambda_value'] = 0.5
-        
-        import time
 
         if self.interface_name == 'pyDecision.algorithm':
             self.madam_algorithm = getattr(self.loaded_module, self.madam_method)
@@ -5073,13 +5067,16 @@ class MADM:
         if show_log: 
             self.auxiliary_solver_options['verbose'] = show_log
 
-        self.start = time.time()
+        
         try:
+            self.start = time.time()
             self.result =  self.madam_algorithm(**{**self.solver_options, **self.auxiliary_solver_options})
+            self.finish = time.time()
         except:
+            self.start = time.time()
             self.result =  self.madam_algorithm(**self.solver_options)
-            
-        self.finish = time.time()
+            self.finish = time.time()
+        
         self.status = 'feasible (solved)'
 
         if  self.madam_method in np.array(WEIGTHING_ALGORITHMS)[:,0]:
@@ -5383,16 +5380,12 @@ class MADM:
         if self.features['dominance_w_found']:
             self.display_as_tensor('dmm_w', self.dominance_w, self.show_detailed_tensors)
 
-
-
         self.features['dominance_s_found'] = False
         self.features['dominance_w_found'] = False
         self.features['d_rank_found'] = False
         self.features['a_rank_found'] = False
         self.features['n_rank_found'] = False
         self.features['p_rank_found'] = False
-
-
         empty_line()
         bline()
 
@@ -5654,7 +5647,6 @@ class MADM:
 
     def _generate_sol_info(self):
 
-    
         tline_text("Solve")
         empty_line()
         left_align(f"Method: {self.madam_method}")
