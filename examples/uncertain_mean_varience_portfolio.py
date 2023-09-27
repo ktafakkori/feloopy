@@ -1,16 +1,17 @@
 '''
- # @ Author: Keivan Tafakkori
- # @ Created: 2023-06-20
- # @ Modified: 2023-07-06
- # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
- # @ Github: https://github.com/ktafakkori
- # @ Website: https://ktafakkori.github.io/
- # @ Copyright: 2023. MIT License. All Rights Reserved.
- '''
++---------------------------------------------------------+
+|  Project: FelooPy (0.2.7)                               |
+|  Modified: Wednesday, 27th September 2023 08:50:18 pm   |
+|  Modified By: Keivan Tafakkori                          |
+|  Project: https://github.com/ktafakkori/feloopy         |
+|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
+|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
++---------------------------------------------------------+
+'''
+
+# Example credit: https://xiongpengnus.github.io/rsome/
 
 from feloopy import *
-
-# Credit: https://xiongpengnus.github.io/rsome/
 
 m = target_model('exact', 'mean_varience_portfolio', 'rsome_ro')
 
