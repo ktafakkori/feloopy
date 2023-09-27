@@ -5,7 +5,7 @@
 | ![FelooPy Logo](miscellaneous/logo/logo1.png) |  **FelooPy** (pronounced /fɛlupaɪ/) is a comprehensive Python library that automates operations research. It serves as a hyper-optimization interface and an integrated optimization environment. FelooPy offers practical solutions for various systems, industries, and supply chains, focusing on finding feasible solutions, logical decisions, and optimal outcomes using Python. The name is a nod to "loops" in programming and algorithm development and "floppy" disk in computing and memory efficiency. FelooPy helps operations research scientists achieve their goals by providing various models and algorithms. In summary, FelooPy is a comprehensive framework for single- and multi-criteria decision-making methods, mathematical modeling, optimization algorithms, and analytics. |
 | **News** | 🎉 Version 0.2.7 is out: Comprehensivity! 🎉 |
 
-### **Features**
+### **Features ✨**
 
 - Start optimization with a single import!
 
@@ -34,7 +34,7 @@ FelooPy also offers the following key features:
 * **Auto-sensitivity for analyzing the impact of key parameters**: Provides auto-sensitivity tools to help you analyze the impact of key parameters on your optimization problem.
 
 
-### **Installation**
+### **Installation 🚀**
 
 FelooPy can be installed on Linux-based distributions, Windows, or macOS. It has a few dependencies that should work on all these platforms.
 
@@ -183,14 +183,15 @@ FelooPy (v0.2.7) has a few optional dependencies that can be installed using the
 
 For multi-objective optimization, you should use the linux command for installation. However, please note that the optional dependencies for Linux kernel might not work on some operating systems. As a workaround, you can use a Conda-based Python 3.10 interpreter to ensure that optional dependencies for multi-objective optimization are installed correctly.
 
-### **Documentation**
+### **Documentation 📚**
 
 Please refer to https://feloopy.readthedocs.io/en/latest/.
 
-### **Contributions**
+### **Contributions 🙌**
 
 We welcome your contributions to this project, such as reporting bugs, submitting pull requests, testing changes, providing examples, and so on.
-### **Support FelooPy**
+
+### **Support FelooPy 🌟**
 
 We are committed to continuing the development of FelooPy and would greatly appreciate your support. You can help us by:
 
@@ -200,7 +201,7 @@ We are committed to continuing the development of FelooPy and would greatly appr
 
 * Making a donation: Your donations help to sustain and maintain the project and add new features. If you would like to support us, please visit our website at https://ktafakkori.github.io/support/.
 
-### **Citation**
+### **Citation 📖**
 
 If you use the facilities of this GitHub repository or the Python library in your work, we recommend citing it to help others reproduce the results of your research. You may also provide the specific version of the Python library used in your research or project for accuracy and reproducibility. Thank you for your consideration.
 
@@ -226,13 +227,13 @@ Tafakkori, K. (2022). FelooPy: An integrated optimization environment for AutoOR
 [c]: https://github.com/ktafakkori/feloopy/releases
 [support]: https://ktafakkori.github.io/support/
 
-### **License**
+### **License 📜**
 
 FelooPy is completely free and open-source and licensed under the [MIT][08] license.
 
 [08]: https://github.com/ktafakkori/feloopy/blob/main/LICENSE
 
-### **Learn more**
+### **Learn more 🌐**
 
 <div align="center">
 
