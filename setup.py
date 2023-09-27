@@ -1,16 +1,17 @@
 '''
- # @ Author: Keivan Tafakkori
- # @ Created: 2023-05-11
- # @ Modified: 2023-05-12
- # @ Contact: https://www.linkedin.com/in/keivan-tafakkori/
- # @ Github: https://github.com/ktafakkori
- # @ Website: https://ktafakkori.github.io/
- # @ Copyright: 2023. MIT License. All Rights Reserved.
- '''
++---------------------------------------------------------+
+|  Project: FelooPy (0.2.7)                               |
+|  Modified: Wednesday, 27th September 2023 08:05:25 pm   |
+|  Modified By: Keivan Tafakkori                          |
+|  Project: https://github.com/ktafakkori/feloopy         |
+|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
+|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
++---------------------------------------------------------+
+'''
 
 from setuptools import setup, find_packages
 
-common = ['tabulate', 'numpy', 'matplotlib', 'infix', 'pandas', 'openpyxl', 'numba', 'plotly', 'psutil', 'py-cpuinfo', 'win-unicode-console', 'xlsxwriter']
+common = ['tabulate', 'numpy', 'matplotlib', 'infix', 'pandas', 'openpyxl', 'numba', 'plotly', 'psutil', 'py-cpuinfo', 'win-unicode-console', 'xlsxwriter', 'gputil']
 interfaces = ['gekko', 'ortools', 'pulp', 'pyomo', 'pymprog', 'picos', 'linopy', 'cvxpy', 'mip', 'mealpy', 'pydecision','rsome', 'pymoo']
 solvers = ['cplex', 'docplex', 'xpress', 'gurobipy','cylp', 'coptpy']
 
@@ -32,12 +33,11 @@ setup(
     license='MIT',
     python_requires='>=3.10',
     extras_require={'all_solvers': solvers,
-                     'gurobi': [solvers[3]],
+                    'gurobi': [solvers[3]],
                     'cplex': [solvers[0], solvers[1]],
                     'xpress': [solvers[2]],
                     'copt': [solvers[5]],
                     'cylp': [solvers[4]],
                     'linux': ['pymultiobjective']},
-
     install_requires=[common+interfaces],
 )
