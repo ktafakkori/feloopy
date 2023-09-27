@@ -209,9 +209,9 @@ If you use the facilities of this GitHub repository or the Python library in you
 
 - APA 7:
 
-<pre>
+<div style="white-space: pre-wrap;">
 Tafakkori, K. (2022). FelooPy: An integrated optimization environment for AutoOR in Python [Python Library]. Retrieved from https://github.com/ktafakkori/feloopy (Original work published September 2022).
-</pre>
+</div>
 
 - LaTeX:
 
