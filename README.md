@@ -171,7 +171,13 @@ FelooPy (v0.2.7) has a few optional dependencies that can be installed using the
 | Linux          | `pip install feloopy[linux]`                                  | -                                                                                          | -                                                 |
 </div>
 
-For multi-objective optimization, you should use the linux command for installation. However, please note that the optional dependencies for Linux kernel might not work on some operating systems. As a workaround, you can use a Conda-based Python 3.10 interpreter to ensure that optional dependencies for multi-objective optimization are installed correctly.
+For multi-objective optimization, you should use the linux command for installation. However, please note that the optional dependencies for the Linux kernel might not work on some operating systems. As a workaround, before using the linux command, you can use an Anaconda-based interpreter to install sub-dependencies for multi-objective optimization. For instance, one of such dependencies is the `pygmo` package, which is easier to be installed by the `conda` package manager as follows (see the [official website](https://esa.github.io/pygmo2/install.html) for more details):
+
+```
+conda config --add channels conda-forge
+conda config --set channel_priority strict
+conda install pygmo
+```
 
 ### **Documentation 📚**
 
@@ -203,13 +209,13 @@ If you use the facilities of this GitHub repository or the Python library in you
 
 - APA 7:
 
-```text
+<pre>
 Tafakkori, K. (2022). FelooPy: An integrated optimization environment for AutoOR in Python [Python Library]. Retrieved from https://github.com/ktafakkori/feloopy (Original work published September 2022).
-```
+</pre>
 
 - LaTeX:
 
-```text
+<pre>
 @software{ktafakkori2022Sep,
   author       = {Keivan Tafakkori},
   title        = {{FelooPy: An integrated optimization environment for AutoOR in Python}},
@@ -218,7 +224,8 @@ Tafakkori, K. (2022). FelooPy: An integrated optimization environment for AutoOR
   publisher    = {GitHub},
   url          = {https://github.com/ktafakkori/feloopy/}
 }
-```
+</pre>
+
 
 [c]: https://github.com/ktafakkori/feloopy/releases
 [support]: https://ktafakkori.github.io/support/
