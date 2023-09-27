@@ -211,11 +211,13 @@ If you use the facilities of this GitHub repository or the Python library in you
 
 <div style="white-space: pre-wrap;">
 Tafakkori, K. (2022). FelooPy: An integrated optimization environment for AutoOR in Python [Python Library]. Retrieved from https://github.com/ktafakkori/feloopy (Original work published September 2022).
+
 </div>
 
 - LaTeX:
 
 <pre>
+
 @software{ktafakkori2022Sep,
   author       = {Keivan Tafakkori},
   title        = {{FelooPy: An integrated optimization environment for AutoOR in Python}},
