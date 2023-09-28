@@ -81,7 +81,10 @@ def generate_solution(features):
 
             counter= 0
             for constraint in model_constraints:
-                model_object.addConstr(constraint, name = constraint_labels[counter])
+                if constraint_labels[counter]:
+                    model_object.addConstr(constraint, name = constraint_labels[counter])
+                else:
+                    model_object.addConstr(constraint)
                 counter+=1
 
             if save_model != False:

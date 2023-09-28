@@ -24,8 +24,6 @@ for i, j in sets(N, N):
     c[i][i] = 0
     c[i][j] = c[j][i]
 
-
-print(c)
 #Variables
 x = m.bvar('x', [N, N])
 u = m.ivar('u', [N])
