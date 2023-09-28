@@ -289,6 +289,9 @@ EXACT_ALGORITHMS = [
     # cplex
     ['cplex', 'cplex'],
 
+    # copt
+    ['copt', 'copt'],
+
     # linopy
     ['linopy', 'cbc'],
     ['linopy', 'glpk'],
