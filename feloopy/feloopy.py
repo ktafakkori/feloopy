@@ -5062,14 +5062,13 @@ class MADM:
             self.criteria_directions = criteria_directions
 
         self.auxiliary_solver_options = dict()
-        if show_graph:
+        if show_graph!=None:
             self.auxiliary_solver_options['graph'] = show_graph
         else:
             self.auxiliary_solver_options['graph'] = False
-        if show_log: 
+        if show_log!=None: 
             self.auxiliary_solver_options['verbose'] = show_log
 
-        
         try:
             self.start = time.time()
             self.result =  self.madam_algorithm(**{**self.solver_options, **self.auxiliary_solver_options})
