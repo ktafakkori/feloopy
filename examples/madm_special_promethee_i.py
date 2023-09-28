@@ -30,7 +30,6 @@ m.add_pt([ 0.5,  0.5,  0.5,  0.5])
 m.add_wv([9.00, 8.24, 5.98, 8.48])
 m.add_uf(['t5', 't5', 't5', 't5'])
 
-
 m.sol(show_graph=False)
 
 m.report(show_tensors=False)
