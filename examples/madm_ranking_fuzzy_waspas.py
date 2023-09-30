@@ -24,6 +24,6 @@ m.add_fdm([
 
 m.add_fwv([[(  0.1,   0.2,   0.3), (  0.7,   0.8,   0.9), (  0.3,   0.5,   0.8)]])
 
-m.sol( ['max', 'max', 'min'],show_graph=True)
+m.sol(['max', 'max', 'min'], show_graph=True)
 
 m.report(show_tensors=False)
