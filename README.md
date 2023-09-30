@@ -5,6 +5,13 @@
 | ![FelooPy Logo](miscellaneous/logo/logo1.png) |  **FelooPy** (pronounced /fɛlupaɪ/) is a comprehensive Python library that automates operations research. It serves as a hyper-optimization interface and an integrated optimization environment. FelooPy offers practical solutions for various systems, industries, and supply chains, focusing on finding feasible solutions, logical decisions, and optimal outcomes using Python. The name is a nod to "loops" in programming and algorithm development and "floppy" disk in computing and memory efficiency. FelooPy helps operations research scientists achieve their goals by providing various models and algorithms. In summary, FelooPy is a comprehensive framework for single- and multi-criteria decision-making methods, mathematical modeling, optimization algorithms, and analytics. |
 | **News** | 🎉 Version 0.2.7 is out: Comprehensivity! 🎉 |
 
+### **Release 🔄**
+
+<div align="center">
+
+![FelooPy Logo](miscellaneous/showcase/0.2.7-release.png)
+
+</div>
 ### **Features ✨**
 
 FelooPy offers the following key features:

@@ -21,7 +21,6 @@ __pycache__/
 *.lp
 *.manifest
 *.mo
-*.png
 *.pot
 *.py,cover
 *.py[cod]
