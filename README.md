@@ -32,6 +32,9 @@ FelooPy offers the following key features:
 * **Auto-logic for modeling special constraints**: Provides auto-logic to help you model and solve problems with special constraints.
 * **Auto-sensitivity for analyzing the impact of key parameters**: Provides auto-sensitivity tools to help you analyze the impact of key parameters on your optimization problem.
 
+![FelooPy Interpretation](miscellaneous/showcase/what-is-feloopy.png)
+
+In summary, FelooPy acts as a supply chain hub that seamlessly connects you with optimization interfaces and solvers. With its user-friendly syntax, it's akin to having a personal assistant who simplifies the process of accessing and utilizing existing optimization and analytical tools.
 
 ### **Installation 🚀**
 

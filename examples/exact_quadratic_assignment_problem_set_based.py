@@ -52,7 +52,7 @@ for i in I:
     m.con(sum(x[i, j] for j in J if j!=i) == 1)
 
 #Solve
-m.sol(['min'], 'apopt')
+m.sol(['min'], 'apopt',show_log=True)
 
 #Display
 m.report()
