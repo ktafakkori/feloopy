@@ -4684,7 +4684,7 @@ class Implement:
             
 construct = make_model = implementor = implement = Implement
 
-WEIGTHING_ALGORITHMS = [
+WEIGHTING_ALGORITHMS = [
     ['ahp_method','pydecision'],
     ['fuzzy_ahp_method','pydecision'],
     ['bw_method','pydecision'],
@@ -5080,7 +5080,7 @@ class MADM:
         
         self.status = 'feasible (solved)'
 
-        if  self.madam_method in np.array(WEIGTHING_ALGORITHMS)[:,0]:
+        if  self.madam_method in np.array(WEIGHTING_ALGORITHMS)[:,0]:
 
             self.features['weights_found'] = True
             

@@ -262,3 +262,8 @@ FelooPy is completely free and open-source and licensed under the [MIT][08] lice
 | Telegram Channel (Language: FA) | [Join Channel](https://t.me/feloop_channel) |
 
 </div>
+
+
+### **Supported interfaces and solvers 🔍**
+
+![FelooPy Interfaces and Solvers](miscellaneous/showcase/supported-interfaces-solvers.png)
