@@ -25,6 +25,8 @@ __pycache__/
 *.py,cover
 *.py[cod]
 *.so
+app.py
+test*.py
 *.spec
 *.vscode/
 *$py.class
@@ -56,8 +58,6 @@ sdist/
 share/python-wheels/
 target/
 tempCodeRunnerFile.python
-test.py
 var/
 visualize.py
-test2.py
 wheels/
