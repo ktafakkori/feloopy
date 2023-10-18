@@ -25,7 +25,8 @@ __pycache__/
 *.py,cover
 *.py[cod]
 *.so
-app.py
+app*.py
+canvas*.py
 test*.py
 *.spec
 *.vscode/
