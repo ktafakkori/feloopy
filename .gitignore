@@ -28,6 +28,8 @@ __pycache__/
 app*.py
 canvas*.py
 test*.py
+test*.ipynb
+*ipynb
 *.spec
 *.vscode/
 *$py.class
@@ -62,3 +64,4 @@ tempCodeRunnerFile.python
 var/
 visualize.py
 wheels/
+*.gif
