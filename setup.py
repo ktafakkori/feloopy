@@ -17,7 +17,7 @@ solvers = ['cplex', 'docplex', 'xpress', 'gurobipy','cylp', 'coptpy']
 
 setup(
     name='feloopy',
-    version='0.2.7',
+    version='0.2.8',
     description='FelooPy: An integrated optimization environment for automated operations research in Python.',
     packages=find_packages(include=['feloopy', 'feloopy.*']),
     long_description=open('README.md', encoding="utf8").read(),

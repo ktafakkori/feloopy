@@ -29,7 +29,6 @@ def instance(X):
     #Selection
     x = m.bvar('x', [J])
 
-
     # Objective
     m.obj(sum(p[j]*x[j] for j in J) )
 
@@ -37,12 +36,10 @@ def instance(X):
     m.con(sum(w[j]*x[j] for j in J) |l| 100)
 
     # Solve
-    m.sol(['max'], 'base-ga', {'epoch': 100})
+    m.sol(['max'], 'base-ga')
 
     return m[X]
 
 m = make_model(instance)
-
 m.sol(penalty_coefficient=10)
-
 m.report()
