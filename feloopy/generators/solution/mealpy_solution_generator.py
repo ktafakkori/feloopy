@@ -40,14 +40,15 @@ def generate_solution(model_object, fitness_function, total_features, objectives
         
         if termination!=None:
             time_solve_begin = timeit.default_timer()
-            best_agent, best_reward = model_object.solve(problem,termination=termination)
+            g_best = model_object.solve(problem,termination=termination)
             time_solve_end = timeit.default_timer()
+            best_agent, best_reward = g_best.solution, g_best.target.fitness
         else:
             time_solve_begin = timeit.default_timer()
-            best_agent, best_reward = model_object.solve(problem)
+            g_best = model_object.solve(problem)
             time_solve_end = timeit.default_timer()
+            best_agent, best_reward = g_best.solution, g_best.target.fitness
         
-
         if show_plots:
             
             export_convergence_chart(model_object.history.list_global_best_fit, title='Global Best fitness_function')
@@ -75,8 +76,9 @@ def generate_solution(model_object, fitness_function, total_features, objectives
 
         for i in range(number_of_times):
             time_solve_begin.append(timeit.default_timer())
-            best_agent, best_reward = model_object.solve(problem)
+            g_best = model_object.solve(problem)
             time_solve_end.append(timeit.default_timer())
+            best_agent, best_reward = g_best.solution, g_best.target.fitness
             Result = [best_agent, best_reward]
             Result[1] = np.asarray(Result[1])
             Result[1] = Result[1].item()
