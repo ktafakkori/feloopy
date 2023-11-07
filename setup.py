@@ -12,7 +12,7 @@
 from setuptools import setup, find_packages
 
 common = ['tabulate', 'numpy', 'matplotlib', 'infix', 'pandas', 'openpyxl', 'numba', 'plotly', 'psutil', 'py-cpuinfo', 'win-unicode-console', 'xlsxwriter', 'gputil']
-interfaces = ['gekko', 'ortools', 'pulp', 'pyomo', 'pymprog', 'picos', 'linopy', 'cvxpy', 'mip', 'mealpy', 'pydecision','rsome', 'pymoo']
+interfaces = ['gekko', 'ortools', 'pulp', 'pyomo', 'pymprog', 'picos', 'linopy', 'cvxpy', 'mip', 'mealpy', 'pydecision','rsome', 'pymoo', 'niapy', 'pygad']
 solvers = ['cplex', 'docplex', 'xpress', 'gurobipy','cylp', 'coptpy']
 
 setup(

@@ -7,6 +7,8 @@ __pycache__/
 .installed.cfg
 .ipynb_checkpoints
 .nox/
+data.py
+data.xlsx
 .pybuilder/
 .pytest_cache/
 .Python

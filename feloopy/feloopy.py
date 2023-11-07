@@ -2026,7 +2026,7 @@ class Model:
         """
 
         if self.no_agents!=None:
-            if self.features['interface_name'] in ['mealpy' , 'feloopy']:
+            if self.features['interface_name'] in ['mealpy' , 'feloopy', 'niapy', 'pygad']:
                 solver_options['pop_size'] = self.no_agents
         
         if len(self.features['objectives']) !=0 and len(directions)!=len(self.features['objectives']):
@@ -3450,6 +3450,16 @@ class Implement:
                 self.ModelObject = mealpy_model_generator.generate_model(
                     self.solver_name, self.AlgOptions)
 
+            case 'niapy':
+
+                from .generators.model import niapy_model_generator
+                self.ModelObject = niapy_model_generator.generate_model(
+                    self.solver_name, self.AlgOptions)
+
+            case 'pygad':
+
+                self.ModelObject = None
+
             case 'pymultiobjective':
 
                 self.ModelObject = None
@@ -3479,6 +3489,18 @@ class Implement:
 
                 from .generators.solution import mealpy_solution_generator
                 self.BestAgent, self.BestReward, self.start, self.end = mealpy_solution_generator.generate_solution(
+                    self.ModelObject, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots,show_log, self.AlgOptions)
+
+            case 'niapy':
+
+                from .generators.solution import niapy_solution_generator
+                self.BestAgent, self.BestReward, self.start, self.end = niapy_solution_generator.generate_solution(
+                    self.ModelObject, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots,show_log, self.AlgOptions)
+
+            case 'pygad':
+
+                from .generators.solution import pygad_solution_generator
+                self.BestAgent, self.BestReward, self.start, self.end = pygad_solution_generator.generate_solution(
                     self.ModelObject, self.Fitness, self.tot_counter, self.objectives_directions, self.ObjectiveBeingOptimized, number_of_times, show_plots, save_plots,show_log, self.AlgOptions)
 
             case 'pymultiobjective':
@@ -3579,7 +3601,7 @@ class Implement:
 
         if len(self.objectives_directions)==1:
 
-            if self.interface_name == 'mealpy':
+            if self.interface_name in ['mealpy', 'niapy', 'pygad']:
 
                 return self.Check_Fitness(self.BestAgent)
         
@@ -4056,7 +4078,7 @@ class Implement:
     def get(self, *args):
         if self.obj_counter[0] == 1:
             match self.interface_name:
-                case 'mealpy':
+                case _ if self.interface_name in ['mealpy', 'niapy', 'pygad']:
                     for i in args:
                         if len(i) >= 2:
                             match self.VariablesType[i[0]]:

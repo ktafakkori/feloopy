@@ -14,17 +14,16 @@ import numpy as np
 import timeit
 from tabulate import tabulate as tb
 from mealpy.utils.visualize import *
+from mealpy import FloatVar
 
 def generate_solution(model_object, fitness_function, total_features, objectives_directions, objective_number, number_of_times, show_plots, save_plots,show_log, solver_options):
 
     problem = {
         "fit_func": fitness_function,
-        "lb": [0, ] * total_features[1],
-        "ub": [1, ] * total_features[1],
+        "bounds": FloatVar(lb=(0, )* total_features[1], ub=(1, )*total_features[1]),
         "minmax": objectives_directions[objective_number],
-        "log_to": None,
+        "log_to": "console" if show_log else None,
         "save_population": False,
-        "verbose": show_log
     }
     if solver_options.get("mode", None)!=None:
 

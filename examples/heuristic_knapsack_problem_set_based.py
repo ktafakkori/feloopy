@@ -25,21 +25,24 @@ def instance(X):
     p = [40, 60, 10, 10, 3, 20, 60]  # Value of the items
 
     # Variables
+
+    #Selection
     x = m.bvar('x', [J])
 
+
     # Objective
-    m.obj(sum(p[j]*x[j] for j in J))
+    m.obj(sum(p[j]*x[j] for j in J) )
 
     # Constraints
-    m.con(sum(w[j]*x[j] for j in J) |l| W)
+    m.con(sum(w[j]*x[j] for j in J) |l| 100)
 
     # Solve
-    m.sol(['max'], 'sa-de', {'epoch':10})
+    m.sol(['max'], 'base-ga', {'epoch': 100})
 
     return m[X]
 
 m = make_model(instance)
 
-m.sol(penalty_coefficient=0.1,show_log=True)
+m.sol(penalty_coefficient=10)
 
 m.report()
