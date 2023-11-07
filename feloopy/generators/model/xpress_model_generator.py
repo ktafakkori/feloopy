@@ -1,6 +1,6 @@
 '''
 +---------------------------------------------------------+
-|  Project: FelooPy (0.2.7)                               |
+|  Project: FelooPy (0.2.8)                               |
 |  Modified: Wednesday, 27th September 2023 09:09:15 pm   |
 |  Modified By: Keivan Tafakkori                          |
 |  Project: https://github.com/ktafakkori/feloopy         |

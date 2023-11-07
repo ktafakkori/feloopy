@@ -13,19 +13,29 @@
 
 from feloopy import *
 
-m = target_model('exact', 'mean_varience_portfolio', 'rsome_ro')
+m = target_model('exact', 'max_volume_box', 'rsome_ro')
 
-n = 150                                     
-i = np.arange(1, n+1)                       
-p = 1.15 + i*0.05/150                       
-sigma = 0.05/450 * (2*i*n*(n+1))**0.5      
-phi = 5                                    
-Q = np.diag(sigma**2)                        
+A_wall = 200
+A_floor = 150
+alpha, beta = 0.8, 1.5
+gamma, delta = 0.8, 1.5
 
-x = m.ptvar('x', [n])                       
+x = m.pvar('x')
+y = m.pvar('y')
+z = m.pvar('z')
+a = m.pvar('a')
+b = m.pvar('b')
 
-m.obj(p@x - phi*m.quad(x, Q))   
-m.con(x.sum() == 1)             
+m.obj(x + y + z)
+
+m.st(m.exponent(x + y) <= a)
+m.st(m.exponent(z + y) <= b)
+m.st(2 * (a+b) <= A_wall)
+m.st(m.exponent(x + z) <= A_floor)
+m.st(m.exponent(x - y) <= alpha)
+m.st(m.exponent(y - x) <= beta)
+m.st(m.exponent(x - z) <= gamma)
+m.st(m.exponent(z - x) <= delta)
 
 m.sol(['max'], 'ecos')
 m.report()
