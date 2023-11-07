@@ -14,7 +14,6 @@ def generate_model(solver_name, solver_options):
     module_mappings = {
 
         # Evolution-Inspired Heuristic Optimization Algorithms
-
         'orig-ep': ('mealpy.evolutionary_based', 'EP', 'OriginalEP'),
         'levy-ep': ('mealpy.evolutionary_based', 'EP', 'LevyEP'),
         'orig-es': ('mealpy.evolutionary_based', 'ES', 'OriginalES'),

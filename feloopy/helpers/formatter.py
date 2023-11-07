@@ -1,11 +1,11 @@
 '''
 +---------------------------------------------------------+
-|  Project: FelooPy (0.2.7)                               |
-|  Modified: Wednesday, 27th September 2023 11:37:09 pm   |
-|  Modified By: Keivan Tafakkori                          |
-|  Project: https://github.com/ktafakkori/feloopy         |
-|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
-|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
+│  Project: FelooPy (0.2.7)                               │
+│  Modified: Wednesday, 27th September 2023 11:37:09 pm   │
+│  Modified By: Keivan Tafakkori                          │
+│  Project: https://github.com/ktafakkori/feloopy         │
+│  Contact: https://www.linkedin.com/in/keivan-tafakkori/ │
+│  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         │
 +---------------------------------------------------------+
 '''
 
@@ -18,7 +18,7 @@ def format_string(input):
         return "{:.2f}".format(input)
     
 def center(input, box_width=80):
-    print("|" + " " + str(input).center(box_width-2) + " " + "|")
+    print("│" + " " + str(input).center(box_width-2) + " " + "│")
 
 def tline(box_width=80):
     print("╭" + "─"*box_width + "╮")
@@ -81,6 +81,14 @@ def list_three_column(input_list, box_width=80, underline=False):
                 input2 = f"\033[4m{input2}\033[0m"
                 input3 = f"\033[4m{input3}\033[0m"
             print(f"│ {input1:<{column1_width}}{padding1 * ' '}{input2:<{column2_width}}{padding2 * ' '}{input3:<{column3_width}} │")
+
+def boxed(text, box_width=80):
+    
+    import textwrap
+    lines = textwrap.wrap(text, width=box_width - 4)
+    for line in lines:
+        left_align(line,box_width)
+
 
 def left_align(input, box_width=80):
     print("│" + " " + input.ljust(box_width-2) + " " + "│")

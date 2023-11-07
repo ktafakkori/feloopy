@@ -12,7 +12,7 @@
 from feloopy import *
 
 # Environment
-m = learner_model('exact', 'linear_regression_problem', 'cvxpy', key=0)
+m = learner_model('exact', 'linear_regression_problem', 'cvxpy')
 
 # Dataset
 a = np.array([[1, 2, 2], [2, 3, 3], [3, 4, 5], [4, 5, 6], [5, 7, 8]])  # Features

@@ -1,11 +1,11 @@
 '''
 +---------------------------------------------------------+
-|  Project: FelooPy (0.2.7)                               |
-|  Modified: Wednesday, 27th September 2023 11:38:36 pm   |
-|  Modified By: Keivan Tafakkori                          |
-|  Project: https://github.com/ktafakkori/feloopy         |
-|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
-|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
+│  Project: FelooPy (0.2.7)                               │
+│  Modified: Wednesday, 27th September 2023 11:38:36 pm   │
+│  Modified By: Keivan Tafakkori                          │
+│  Project: https://github.com/ktafakkori/feloopy         │
+│  Contact: https://www.linkedin.com/in/keivan-tafakkori/ │
+│  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         │
 +---------------------------------------------------------+
 '''
 
@@ -30,77 +30,73 @@ import itertools as it
 import math as mt
 import numpy as np
 from tabulate import tabulate as tb
-from typing import List, Tuple, Optional
+from typing import Literal, List, Tuple, Union, Optional
 import sys
 
 warnings.filterwarnings("ignore")
 
 avar = defaultdict()
 
+class SpecialObject:
+    pass
+
+class Data:
+
+    def __init__(self, 
+                 input: Optional[SpecialObject] = None, 
+                 key: Optional[int] = 0):
+
+        """
+        Definition
+        ----------
+        creates and returns the data handling environment.
+        
+        """
+        self.key = key  
+        self.object = input if input else None
+
+    def create_collector(self):
+        self.avar = self.coll()
+        return self.avar
+
 class Model:
 
-    def __init__(self, solution_method, model_name, interface_name, agent=None, scens=1, no_agents= None, key=None):
-
+    def __init__(self, 
+                 solution_method: Literal['exact', 'heuristic', 'constraint', 'convex'], 
+                 model_name: str, 
+                 interface_name: Literal['copt', 'cplex', 'cvxpy', 'cylp', 'gekko', 'gurobi', 'linopy', 'mip', 'ortools', 'picos', 'pulp', 'pymprog', 'pyomo', 'rsome_ro', 'rsome_dro' 'xpress'], 
+                 agent: Optional[Union[SpecialObject, None]] = None, 
+                 scens: Optional[int]=1, 
+                 no_agents: Optional[int]=None,
+                 ) -> None:
+        
         """
-        Creates and returns the modeling environment.
+        Definition
+        ----------
+        Creates and initializes the modeling environment.
 
-        Args:
-            solution_method (str): Desired solution (optimization) method.
-            model_name (str): Name of this model.
-            interface_name (str): Desired interface name.
-            agent (X, optional): Input of the representor model. Default: None. 
-            scens (int, optional): Number of uncertainty scenarios, which can also be an array containing scenario indices. Default: 1.
-            key (number, optional): Key for the random number generator. Default: None.
+        Parameters
+        ----------
+        solution_method : Literal['exact', 'heuristic', 'constraint', 'convex']
+            Select or type the desired solution method.
+        model_name : str
+            Type the name of the model.
+        interface_name : str
+            Select or type the desired solver interface.
+        agent : Optional[Union[SpecialObject, None]] (default=None)
+            Put the search agent object. 
+        scens : Optional[int] (default=1)
+            Determine the number of scenarios.
+        no_agents : Optional[int] (default=None)
+            Determine the number of search agents.
         """
-
-        self.binary_variable = self.binary = self.bool = self.add_bool = self.add_binary = self.add_binary_variable = self.boolean_variable = self.add_boolean_variable = self.bvar
-        self.positive_variable = self.positive = self.add_positive = self.add_positive_variable = self.pvar
-        self.integer_variable = self.integer = self.add_integer =  self.add_integer_variable = self.ivar
-        self.free_variable = self.free = self.float = self.add_free = self.add_float = self.real = self.add_real = self.add_free_variable = self.fvar
-        self.sequential_variable = self.sequence = self.sequential = self.add_sequence = self.add_sequential = self.add_sequential_variable = self.svar
-        self.positive_tensor_variable = self.positive_tensor = self.add_positive_tensor = self.add_positive_tensor_variable = self.ptvar
-        self.binary_tensor_variable = self.binary_tensor = self.add_binary_tensor = self.add_binary_tensor_variable = self.add_boolean_tensor_variable = self.boolean_tensor_variable = self.btvar
-        self.integer_tensor_variable = self.integer_tensor = self.add_integer_tensor = self.add_integer_tensor_variable = self.itvar
-        self.free_tensor_variable = self.free_tensor = self.float_tensor = self.add_free_tensor = self.add_float_tensor = self.add_free_tensor_variable = self.ftvar
-        self.random_variable = self.add_random_variable = self.rvar
-        self.random_tensor_variable = self.add_random_tensor_variable = self.rtvar
-        self.dependent_variable = self.array = self.add_array = self.add_dependent_variable = self.dvar
-        self.objective = self.reward = self.hypothesis = self.fitness = self.goal = self.add_objective = self.loss = self.gain = self.obj 
-        self.constraint = self.equation = self.add_constraint = self.add_equation = self.st = self.subject_to = self.cb = self.computed_by = self.penalize = self.pen = self.eq = self.con
-        self.solve = self.implement = self.run = self.optimize = self.sol
-        self.get_obj = self.get_objective
-        self.get_stat = self.get_status
-        self.get_var = self.value = self.get = self.get_variable
-        self.dis = self.dis_var = self.display = self.show = self.print = self.display_variable = self.dis_variable
-        self.status = self.show_status = self.dis_status
-        self.objective_value = self.show_objective = self.display_objective = self.dis_obj
-
-        self.random = create_random_number_generator(key)
-        self.avar = self.coll()
 
         self.no_agents = no_agents
-
-        if interface_name == 'rsome_ro':
-            from rsome import ro as robust_tools
-        
-        if interface_name == 'rsome_dro':
-            from rsome import dro as robust_tools
-
         if solution_method == 'constraint':
-
-            if interface_name == 'cplex_cp':
-                import docplex.cp.model as constraint_tools
-            if interface_name == 'ortools_cp':
-                import ortools.sat.python.cp_model as constraint_tools
             self.solution_method_was = 'constraint'
             solution_method = 'exact'
 
         elif solution_method == 'convex':
-
-            if interface_name == 'cvxpy':
-                import cvxpy as convex_tools
-            if interface_name == 'gurobi':
-                import gurobipy as convex_tools
             self.solution_method_was = 'convex'
             solution_method = 'exact'
         else:
@@ -162,13 +158,48 @@ class Model:
             self.model = model_generator.generate_model(self.features)
             self.sm = self.link_to_interface = self.lti = self.model
 
-    def __getitem__(self, agent):
+        # Alias methods
 
+        self.binary_variable   = self.binary   = self.bool = self.add_bool = self.add_binary = self.add_binary_variable = self.boolean_variable = self.add_boolean_variable = self.bvar
+        self.positive_variable = self.positive = self.add_positive = self.add_positive_variable = self.pvar
+        self.integer_variable = self.integer = self.add_integer =  self.add_integer_variable = self.ivar
+        self.free_variable = self.free = self.float = self.add_free = self.add_float = self.real = self.add_real = self.add_free_variable = self.fvar
+        self.sequential_variable = self.sequence = self.sequential = self.add_sequence = self.add_sequential = self.add_sequential_variable = self.svar
+        self.positive_tensor_variable = self.positive_tensor = self.add_positive_tensor = self.add_positive_tensor_variable = self.ptvar
+        self.binary_tensor_variable = self.binary_tensor = self.add_binary_tensor = self.add_binary_tensor_variable = self.add_boolean_tensor_variable = self.boolean_tensor_variable = self.btvar
+        self.integer_tensor_variable = self.integer_tensor = self.add_integer_tensor = self.add_integer_tensor_variable = self.itvar
+        self.free_tensor_variable = self.free_tensor = self.float_tensor = self.add_free_tensor = self.add_float_tensor = self.add_free_tensor_variable = self.ftvar
+        self.random_variable = self.add_random_variable = self.rvar
+        self.random_tensor_variable = self.add_random_tensor_variable = self.rtvar
+        self.dependent_variable = self.array = self.add_array = self.add_dependent_variable = self.dvar
+        self.objective = self.reward = self.hypothesis = self.fitness = self.goal = self.add_objective = self.loss = self.gain = self.obj 
+        self.constraint = self.equation = self.add_constraint = self.add_equation = self.st = self.subject_to = self.cb = self.computed_by = self.penalize = self.pen = self.eq = self.con
+        self.solve = self.implement = self.run = self.optimize = self.sol
+        self.get_obj = self.get_objective
+        self.get_stat = self.get_status
+        self.get_var = self.value = self.get = self.get_variable
+
+    def __getitem__(self, agent: SpecialObject) -> any:
+        
         """
-        Returns the required features of the model object.
+        Retrieve the required features of the model object.
 
-        Args:
-            agent (X): Input of the representor model/instance.
+        Parameters
+        ----------
+        agent : SpecialObject
+            The search agent object used to determine the feature retrieval method.
+
+        Returns
+        -------
+        Any
+            The requested features or the model object itself based on the agent's status.
+
+        Notes
+        -----
+        - If the agent's status is 'idle', the method returns the model object.
+        - If the agent's status is 'feasibility_check', the method invokes `_feasibility_check()` and returns its result.
+        - For other statuses, the method calls `_get_result(vectorized, interface_name)` and returns the result.
+
         """
 
         agent_status = self.features['agent_status']
@@ -178,38 +209,40 @@ class Model:
         if agent_status == 'idle':
             return self
         elif agent_status == 'feasibility_check':
-            return self.feasibility_check()
+            return self._feasibility_check()
         else:
-            return self.get_result(vectorized, interface_name)
+            return self._get_result(vectorized, interface_name)
 
-    def feasibility_check(self):
-
+    def _feasibility_check(self):
+        """
+        Private method
+        """
         if self.features['penalty_coefficient'] == 0:
             return 'feasible (unconstrained)'
         else:
             return 'infeasible (constrained)' if self.penalty > 0 else 'feasible (constrained)'
 
-    def get_result(self, vectorized, interface_name):
-
+    def _get_result(self, vectorized, interface_name):
+        """
+        Private method
+        """
         if vectorized:
             return self.agent if interface_name == 'feloopy' else self.sing_result
         else:
             return self.response
 
-    # Methods for variables definitions.
+    # Collection definer
 
     def coll(dim):
 
         """
-
         Creates and returns an empty collection (dictionary) of variables.
-
         """
 
         from collections import defaultdict
         return defaultdict()
 
-    #Tensors
+    # Tensors
 
     def ftvar(self, name, shape=0, bound=[None, None]):
         """
@@ -266,7 +299,7 @@ class Model:
             self.mainvars[("itvar", name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'itvar', name, bound, dim)
             self.maindims[name] = dim
             return self.mainvars[("itvar", name)]
-              
+
     def btvar(self, name, shape=0, bound=[0, 1]):
         """
         Creates and returns a tensor-like binary variable.
@@ -282,6 +315,20 @@ class Model:
             self.mainvars[("btvar", name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'btvar', name, bound, dim)
             self.maindims[name] = dim
             return self.mainvars[("btvar", name)]
+
+    def rtvar(self, name, shape=0):
+
+        """
+        Creates and returns a tensor-like random variable.
+
+        Args:
+            name (str): Name of this variable.
+            shape (list, optional): Shape of this variable. Default: 0.
+        """
+
+        dim = fix_dims(shape)
+        from .generators import variable_generator
+        return variable_generator.generate_variable(self.features['interface_name'], self.model, 'rtvar', name, [None, None], dim)
 
     # Tensor collections
 
@@ -352,8 +399,25 @@ class Model:
         if type(bound)!=dict: bound = {i: bound for i in indices}
         if type(shape)!=dict: shape = {i: shape for i in indices}
         return {i: self.btvar(name+f"[{i}]".replace("(", "").replace(")", ""), shape=shape[i], bound=bound[i]) for i in indices}
-       
-    # Normal variables
+
+    def crtvar(self, name, indices, shape=0):
+
+        """
+        Creates a dictionary of tensor-like random variables with specific names and shapes.
+
+        Args:
+            name (str): Base name for the variables.
+            indices (list): Indices for the variables.
+            shape (dict, optional): Shapes for the variables. Defaults to None.
+
+        Returns:
+            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a tensor-like random variable with the name derived from 'name' and the index, and shape specified by 'shape'.
+        """
+
+        if type(shape)!=dict: shape = {i: shape for i in indices}
+        return {i: self.rtvar(name+f"[{i}]".replace("(", "").replace(")", ""), shape =shape[i]) for i in indices}
+
+    # Variables
 
     def fvar(self, name, dim=0, bound=[None, None]):
 
@@ -385,7 +449,7 @@ class Model:
             case 'heuristic':
                 
                 return generate_heuristic_variable(self.features, 'fvar', name, dim, bound, self.agent,self.no_agents)
-            
+
     def pvar(self, name, dim=0, bound=[0, None]):
 
         """
@@ -472,7 +536,7 @@ class Model:
 
             case 'heuristic':
                 return generate_heuristic_variable(self.features, 'ivar', name, dim, bound, self.agent,self.no_agents)
-                   
+
     def bvar(self, name, dim=0, bound=[0, 1]):
 
         """
@@ -509,7 +573,143 @@ class Model:
 
         elif self.features['solution_method'] == 'heuristic':
             return generate_heuristic_variable(self.features, 'bvar', name, dim, bound, self.agent,self.no_agents)
-    
+
+    def svar(self, name, length=1):
+        """
+        Creates and returns a sequential variable.
+
+        Args:
+            name (str): Name of this variable.
+            length (int, optional): Length of this variable. Default: 1.
+            
+        Returns:
+            A sequential variable with the given name and length.
+        """
+        dim = fix_dims([length])
+        self.features = update_variable_features(name, dim, [0, 1], 'sequential_variable_counter', self.features)
+        match self.features['solution_method']:
+
+            case 'heuristic':
+                
+                return generate_heuristic_variable(self.features, 'svar', name, dim, [0, 1], self.agent,self.no_agents)
+
+    def rvar(self, name, dim=0):
+        """
+        Creates and returns a random variable.
+
+        Args:
+            name (str): Name of this variable.
+            dim (list, optional): Dimensions of this variable. Default: 0.
+        """
+        dim = fix_dims(dim)
+        from .generators import variable_generator
+        return variable_generator.generate_variable(self.features['interface_name'], self.model, 'rvar', name, [None, None], dim)
+
+    def evar(self, name, interval=[None, None, None], dim=0, optional=False):
+
+        """        
+        Creates and returns an event (interval) variable.
+
+        Args:
+            name: Name of this variable.
+            interval: [size, start, end]. 
+            dim (list, optional): Dimensions of this variable. Default: 0.
+        """
+
+        self.features = update_variable_features(name, dim, None, 'event_variable_counter', self.features)
+
+        if len(interval) == 1: interval = [interval[0], None, None]
+
+        if dim == 0:
+
+            if self.features['interface_name'] == 'cplex_cp':
+
+                self.mainvars[("evar",name)] = self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=name, optional=optional)
+                self.maindims[name] = dim
+
+                return self.mainvars[("evar",name)]
+            
+            if self.features['interface_name'] == 'ortools_cp':
+                self.mainvars[("evar",name)] = self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=name, is_present=optional)
+                self.maindims[name] = dim
+
+                return self.mainvars[("evar",name)]
+        else:
+
+            if self.features['interface_name'] == 'cplex_cp':
+
+                if len(dim) == 1:
+                    self.mainvars[("evar",name)] = {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=optional) for key in dim[0]}
+                    self.maindims[name] = dim
+                    return self.mainvars[("evar",name)] 
+                
+                else:
+                    self.mainvars[("evar",name)]  = {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=optional) for key in sets(*dim)}
+                    self.maindims[name] = dim
+                    return  self.mainvars[("evar",name)] 
+
+            if self.features['interface_name'] == 'ortools_cp':
+
+                if len(dim) == 1:
+                    self.mainvars[("evar",name)] = {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=optional) for key in dim[0]}
+                    self.maindims[name] = dim
+                    return self.mainvars[("evar",name)]
+                
+                else:
+                    self.mainvars[("evar",name)]  = {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=optional) for key in sets(*dim)}
+                    self.maindims[name] = dim
+                    return self.mainvars[("evar",name)] 
+
+    def dvar(self, name, dim=0):
+        
+        """
+        Creates and returns a dependent variable.
+
+        Args:
+            name (str): Name of this variable.
+            dim (list, optional): Dimensions of this variable. Default: 0.
+        """
+
+        dim = fix_dims(dim)
+
+        if self.no_agents!=None:
+            default_pop= self.no_agents
+        else:
+            default_pop = 100
+
+        match self.features['solution_method']:
+
+            case 'exact':
+
+                return np.zeros([len(dims) for dims in dim])
+            
+            case 'heuristic':
+
+                if self.features['agent_status'] == 'idle':
+                    if self.features['vectorized']:
+                        if dim == 0:
+                            return 0
+                        else:
+                            return np.random.rand(*tuple([default_pop]+[len(dims) for dims in dim]))
+                    else:
+                        if dim == 0:
+                            return 0
+                        else:
+                            return np.zeros([len(dims) for dims in dim])
+                else:
+                    if self.features['vectorized']:
+                        if dim == 0:
+                            return np.zeros(self.features['pop_size'])
+                        else:
+                            return np.zeros([self.features['pop_size']]+[len(dims) for dims in dim])
+                    else:
+                        if dim == 0:
+                            return 0
+                        else:
+                            return np.zeros([len(dims) for dims in dim])
+
+    # Variable collections
+
     def cfvar(self, name, indices, dim=0, bound=[None, None]):
 
         """
@@ -586,80 +786,20 @@ class Model:
         if type(dim)!=dict: dim = {i: dim for i in indices}
         return {i: self.bvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =dim[i], bound=bound[i]) for i in indices}
 
-    def dvar(self, name, dim=0):
-        
+    def csvar(self, name, indices, length=1):
         """
-        Creates and returns a dependent variable.
+        Creates a dictionary of sequential variables with specific names and lengths.
 
         Args:
-            name (str): Name of this variable.
-            dim (list, optional): Dimensions of this variable. Default: 0.
-        """
-
-        dim = fix_dims(dim)
-
-        if self.no_agents!=None:
-            default_pop= self.no_agents
-        else:
-            default_pop = 100
-
-        match self.features['solution_method']:
-
-            case 'exact':
-
-                return np.zeros([len(dims) for dims in dim])
-            
-            case 'heuristic':
-
-                if self.features['agent_status'] == 'idle':
-                    if self.features['vectorized']:
-                        if dim == 0:
-                            return 0
-                        else:
-                            return np.random.rand(*tuple([default_pop]+[len(dims) for dims in dim]))
-                    else:
-                        if dim == 0:
-                            return 0
-                        else:
-                            return np.zeros([len(dims) for dims in dim])
-                else:
-                    if self.features['vectorized']:
-                        if dim == 0:
-                            return np.zeros(self.features['pop_size'])
-                        else:
-                            return np.zeros([self.features['pop_size']]+[len(dims) for dims in dim])
-                    else:
-                        if dim == 0:
-                            return 0
-                        else:
-                            return np.zeros([len(dims) for dims in dim])
-
-    def cdvar(self, name, indices, dim = 0):
-        """
-        This method creates a dictionary of dependent variables with specific names and dimensions.
-
-        Parameters:
-            name (str): The base name for the variables.
-            indices (list): The indices for the variables.
-            dim (dict, optional): The dimensions for the variables. Defaults to 0 for all indices if not provided as a dictionary.
+            name (str): Base name for the variables.
+            indices (list): Indices for the variables.
+            length (dict, optional): Lengths for the variables. Defaults to None.
 
         Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a dependent variable with the name derived from 'name' and the index, and dimensions specified by 'dim'.
+            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a sequential variable with the name derived from 'name' and the index, and length specified by 'length'.
         """
-        if type(dim)!=dict: dim = {i: dim for i in indices}
-        return {i: self.dvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =dim[i]) for i in indices}
-
-    def rvar(self, name, dim=0):
-        """
-        Creates and returns a random variable.
-
-        Args:
-            name (str): Name of this variable.
-            dim (list, optional): Dimensions of this variable. Default: 0.
-        """
-        dim = fix_dims(dim)
-        from .generators import variable_generator
-        return variable_generator.generate_variable(self.features['interface_name'], self.model, 'rvar', name, [None, None], dim)
+        if type(length)!=dict: length = {i: length for i in indices}
+        return {i: self.svar(name+f"[{i}]".replace("(", "").replace(")", ""), length =length[i]) for i in indices}
 
     def crvar(self, name, indices, dim=0):
         """
@@ -676,134 +816,29 @@ class Model:
         if type(dim)!=dict: dim = {i: dim for i in indices}
         return {i: self.rvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =dim[i]) for i in indices}
 
-    def rtvar(self, name, shape=0):
-
-        """
-        Creates and returns a tensor-like random variable.
-
-        Args:
-            name (str): Name of this variable.
-            shape (list, optional): Shape of this variable. Default: 0.
-        """
-
-        dim = fix_dims(shape)
-        from .generators import variable_generator
-        return variable_generator.generate_variable(self.features['interface_name'], self.model, 'rtvar', name, [None, None], dim)
-        
-    def crtvar(self, name, indices, shape=0):
-
-        """
-        Creates a dictionary of tensor-like random variables with specific names and shapes.
-
-        Args:
-            name (str): Base name for the variables.
-            indices (list): Indices for the variables.
-            shape (dict, optional): Shapes for the variables. Defaults to None.
-
-        Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a tensor-like random variable with the name derived from 'name' and the index, and shape specified by 'shape'.
-        """
-
-        if type(shape)!=dict: shape = {i: shape for i in indices}
-        return {i: self.rtvar(name+f"[{i}]".replace("(", "").replace(")", ""), shape =shape[i]) for i in indices}
-
-    def svar(self, name, length=1):
-        """
-        Creates and returns a sequential variable.
-
-        Args:
-            name (str): Name of this variable.
-            length (int, optional): Length of this variable. Default: 1.
-            
-        Returns:
-            A sequential variable with the given name and length.
-        """
-        dim = fix_dims([length])
-        self.features = update_variable_features(name, dim, [0, 1], 'sequential_variable_counter', self.features)
-        match self.features['solution_method']:
-
-            case 'heuristic':
-                
-                return generate_heuristic_variable(self.features, 'svar', name, dim, [0, 1], self.agent,self.no_agents)
-        
-    def csvar(self, name, indices, length=1):
-        """
-        Creates a dictionary of sequential variables with specific names and lengths.
-
-        Args:
-            name (str): Base name for the variables.
-            indices (list): Indices for the variables.
-            length (dict, optional): Lengths for the variables. Defaults to None.
-
-        Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a sequential variable with the name derived from 'name' and the index, and length specified by 'length'.
-        """
-        if type(length)!=dict: length = {i: length for i in indices}
-        return {i: self.svar(name+f"[{i}]".replace("(", "").replace(")", ""), length =length[i]) for i in indices}
-
-    def evar(self, name, interval=[None, None, None], dim=0, optional=False):
-
-        """        
-        Creates and returns an event (interval) variable.
-
-        Args:
-            name: Name of this variable.
-            interval: [size, start, end]. 
-            dim (list, optional): Dimensions of this variable. Default: 0.
-        """
-
-        self.features = update_variable_features(name, dim, None, 'event_variable_counter', self.features)
-
-        if len(interval) == 1: interval = [interval[0], None, None]
-
-        if dim == 0:
-
-            if self.features['interface_name'] == 'cplex_cp':
-
-                self.mainvars[("evar",name)] = self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=name, optional=optional)
-                self.maindims[name] = dim
-
-                return self.mainvars[("evar",name)]
-            
-            if self.features['interface_name'] == 'ortools_cp':
-                self.mainvars[("evar",name)] = self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=name, is_present=optional)
-                self.maindims[name] = dim
-
-                return self.mainvars[("evar",name)]
-        else:
-
-            if self.features['interface_name'] == 'cplex_cp':
-
-                if len(dim) == 1:
-                    self.mainvars[("evar",name)] = {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=optional) for key in dim[0]}
-                    self.maindims[name] = dim
-                    return self.mainvars[("evar",name)] 
-                
-                else:
-                    self.mainvars[("evar",name)]  = {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=optional) for key in sets(*dim)}
-                    self.maindims[name] = dim
-                    return  self.mainvars[("evar",name)] 
-
-            if self.features['interface_name'] == 'ortools_cp':
-
-                if len(dim) == 1:
-                    self.mainvars[("evar",name)] = {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=optional) for key in dim[0]}
-                    self.maindims[name] = dim
-                    return self.mainvars[("evar",name)]
-                
-                else:
-                    self.mainvars[("evar",name)]  = {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=optional) for key in sets(*dim)}
-                    self.maindims[name] = dim
-                    return self.mainvars[("evar",name)] 
-
     def cevar(self, name, indices, interval=[None, None, None], dim=0, optional=False):
 
         if type(interval)!=dict: interval = {i: interval for i in indices}
         if type(dim)!=dict: dim = {i: dim for i in indices}
         if type(optional)!=dict: optional = {i: optional for i in indices}
         return {i: self.evar(name+f"[{i}]".replace("(", "").replace(")", ""), interval=interval[i], dim=dim[i], optional=optional[i]) for i in indices}
-                
-    # Methods for handling special automation operations
+
+    def cdvar(self, name, indices, dim = 0):
+        """
+        This method creates a dictionary of dependent variables with specific names and dimensions.
+
+        Parameters:
+            name (str): The base name for the variables.
+            indices (list): The indices for the variables.
+            dim (dict, optional): The dimensions for the variables. Defaults to 0 for all indices if not provided as a dictionary.
+
+        Returns:
+            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a dependent variable with the name derived from 'name' and the index, and dimensions specified by 'dim'.
+        """
+        if type(dim)!=dict: dim = {i: dim for i in indices}
+        return {i: self.dvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =dim[i]) for i in indices}
+
+    # Special constraints
     
     def scon_exactly_one_one(self, list_of_binary_variables):
         """
@@ -1096,7 +1131,7 @@ class Model:
 
     def scon_abs_leq(self, expr, rhs):
         """
-        Linearizes a constraint like |a| <= b.
+        Linearizes a constraint like │a│ <= b.
         """
 
         self.con(expr >= -1*rhs)
@@ -1104,7 +1139,7 @@ class Model:
 
     def scon_lin_abs_geq(self, expr, rhs, big_m=10e9):
         """
-        Linearizes a constraint like |a| >= b.
+        Linearizes a constraint like │a│ >= b.
         """
 
         try:
@@ -1120,6 +1155,8 @@ class Model:
 
         self.con(expr >= rhs-z*big_m)
         self.con(expr <= -1*rhs+(1-z)*big_m)
+
+    # Linearizers
 
     def lin_piecewise(self, slopes, intercepts, breakpoints):
         """
@@ -1173,7 +1210,7 @@ class Model:
     
     def lin_abs_in_obj(self, expr, method=0, dir_obj=None):
         """
-        Linearizes an |a| expression inside the objective function.
+        Linearizes an │a│ expression inside the objective function.
 
         Parameters:
             expr: The absolute value expression to be linearized.
@@ -1449,7 +1486,7 @@ class Model:
 
         return sum(2**i * z[i] for i in range(mt.ceil(mt.log2(ub_integer1 + 1))))
 
-    # Methods for constraint programming
+    # Constraint programming
 
     def start_of(self, interval_variable, absent_value=None):
         """
@@ -1933,7 +1970,7 @@ class Model:
         if self.features['interface_name'] == 'ortools_cp':
             return self.model.Add(expr1 > expr2)
 
-    # Methods for modeling and solving.
+    # Modeling & Solving
 
     def obj(self, expression=0, direction=None, label=None):
         """
@@ -2269,6 +2306,9 @@ class Model:
                 return ('feasible' in status or 'optimal' in status) and 'infeasible' not in status
             except:
                 return True
+
+    # Get values
+
     def get_variable(self, variable_with_index):
         from .generators import result_generator
         return result_generator.get(self.features, self.model, self.solution, 'variable', variable_with_index)
@@ -2324,39 +2364,6 @@ class Model:
             return self.solution[0].get_var_solution(invterval_variable).get_end()
         if self.features['interface_name'] == 'ortools_cp':
             ""
-
-    def dis_variable(self, *variables_with_index):
-        for i in variables_with_index:
-            print(str(i)+'*:', self.get_variable(i))
-
-    def dis_status(self):
-        print('status: ', self.get_status())
-
-    def dis_obj(self):
-        print('objective: ', self.get_objective())
-
-    def dis_model(self):
-
-        print('~~~~~~~~~~')
-        print('MODEL INFO')
-        print('~~~~~~~~~~')
-        print('name:', self.features['model_name'])
-        obdirs = 0
-        for objective in self.features['objectives']:
-            print(
-                f"objective: {self.features['directions'][obdirs]}", objective)
-            obdirs += 1
-        print('subject to:')
-        if self.features['constraint_labels'][0] != None:
-            for constraint in sorted(zip(self.features['constraint_labels'], self.features['constraints']), key=lambda x: x[0]):
-                print(f"constraint {constraint[0]}:", constraint[1])
-        else:
-            counter = 0
-            for constraint in self.features['constraints']:
-                print(f"constraint {counter}:", constraint)
-                counter += 1
-        print('~~~~~~~~~~')
-        print()
 
     def dis_time(self):
 
@@ -2415,7 +2422,7 @@ class Model:
 
         return self.model.state_function()
 
-    def report(self, all_metrics: bool = False, feloopy_info: bool = True, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], show_tensors = False, show_detailed_tensors=False, save=None):
+    def report(self, all_metrics: bool = False, feloopy_info: bool = True, math_info: bool = False, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], show_tensors = False, show_detailed_tensors=False, save=None):
 
 
         if not self.healthy():
@@ -2520,6 +2527,32 @@ class Model:
             empty_line()
             bline()
 
+        if math_info:
+            try:
+                import textwrap
+                tline_text('Math', box_width=80)
+                empty_line()
+                obdirs = 0
+                for objective in self.features['objectives']:
+                    wrapped_objective = textwrap.fill(str(objective), width=80)
+                    boxed(str(f"obj: {self.features['directions'][obdirs]} {wrapped_objective}"))
+                    obdirs += 1
+                left_align('s.t.')
+                if self.features['constraint_labels'][0] != None:
+                    for constraint in sorted(zip(self.features['constraint_labels'], self.features['constraints']), key=lambda x: x[0]):
+                        wrapped_constraint = textwrap.fill(str(constraint[1]), width=80)
+                        boxed(str(f"con {constraint[0]}: {wrapped_constraint}"))
+                else:
+                    counter = 0
+                    for constraint in self.features['constraints']:
+                        wrapped_constraint = textwrap.fill(str(constraint), width=80)
+                        boxed(str(f"con {counter}: {wrapped_constraint}"))
+                        counter += 1
+                empty_line()
+                bline()
+            except:
+                ""
+
         if self.healthy() == False:
             tline_text("Debug")
             empty_line()
@@ -2614,43 +2647,43 @@ class Model:
 
                         if self.get(self.mainvars[(i,j)]) not in [0, None]:
 
-                            print(f"| {j} =", self.get(self.mainvars[(i,j)]), " "* (box_width-(len(f"| {j} =") + len(str(self.get(self.mainvars[(i,j)]))))-1) + "|")
+                            print(f"│ {j} =", self.get(self.mainvars[(i,j)]), " "* (box_width-(len(f"│ {j} =") + len(str(self.get(self.mainvars[(i,j)]))))-1) + "│")
 
                     elif len(self.maindims[j])==1:
                         try:
                             for k in fix_dims(self.maindims[j])[0]:
                                 if self.get(self.mainvars[(i,j)][k]) not in [0, None]:
-                                    print(f"| {j}[{k}] =", self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"| {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "|")
+                                    print(f"│ {j}[{k}] =", self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"│ {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "│")
                         except:
                             for k in fix_dims(self.maindims[j])[0]:
                                 if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
-                                    print(f"| {j}[{k}] =", self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"| {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "|")
+                                    print(f"│ {j}[{k}] =", self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"│ {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "│")
                     else:
                         try:
                             for k in it.product(*tuple(fix_dims(self.maindims[j]))):
                                 if self.get(self.mainvars[(i,j)][k]) not in [0, None]:
-                                    print(f"| {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"| {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "|")
+                                    print(f"│ {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"│ {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "│")
                         except:
                             for k in it.product(*tuple(fix_dims(self.maindims[j]))):
                                 if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
-                                    print(f"| {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"| {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "|")
+                                    print(f"│ {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"│ {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "│")
 
                 else:
 
                     if self.maindims[j] == 0:
                             if self.get_start(self.mainvars[(i,j)])!=None:
-                                print(f"| {j} =", [self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])])))-1) + "|")
+                                print(f"│ {j} =", [self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])])))-1) + "│")
 
 
                     elif len(self.maindims[j])==1:                    
                         for k in fix_dims(self.maindims[j])[0]:
                             if self.get_start(self.mainvars[(i,j)][k])!=None:
-                                print(f"| {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "|")
+                                print(f"│ {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "│")
 
                     else:                    
                         for k in it.product(*tuple(fix_dims(self.maindims[j]))):
                             if self.get_start(self.mainvars[(i,j)][k])!=None:
-                                print(f"| {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "|")
+                                print(f"│ {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "│")
                     
         else:
             
@@ -2664,7 +2697,7 @@ class Model:
 
                     if type(numpy_var)==np.ndarray:
 
-                        numpy_str = np.array2string(numpy_var, separator=', ', prefix='| ', style=str)
+                        numpy_str = np.array2string(numpy_var, separator=', ', prefix='│ ', style=str)
                         rows = numpy_str.split('\n')
                         first_row_len = len(rows[0])
                         for i, row in enumerate(rows):
@@ -2679,17 +2712,17 @@ class Model:
 
                     if self.maindims[j] == 0:
                             if self.get_start(self.mainvars[(i,j)])!=None:
-                                print(f"| {j} =", [self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])])))-1) + "|")
+                                print(f"│ {j} =", [self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])])))-1) + "│")
 
                     elif len(self.maindims[j])==1:                    
                         for k in fix_dims(self.maindims[j])[0]:
                             if self.get_start(self.mainvars[(i,j)][k])!=None:
-                                print(f"| {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "|")
+                                print(f"│ {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "│")
 
                     else:                    
                         for k in it.product(*tuple(fix_dims(self.maindims[j]))):
                             if self.get_start(self.mainvars[(i,j)][k])!=None:
-                                print(f"| {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"| {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "|")
+                                print(f"│ {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "│")
                             
     # Methods to work with input and output data.
 
@@ -4655,29 +4688,29 @@ class Implement:
                 for i in self.VariablesDim.keys():
                     if self.VariablesDim[i] == 0:
                         if self.get([i, (0,)]) != 0:
-                            print(f"| {i} =", self.get([i, (0,)]), " " * (box_width - (len(f"| {i} =") + len(str(self.get([i, (0,)])))) - 1) + "|")
+                            print(f"│ {i} =", self.get([i, (0,)]), " " * (box_width - (len(f"│ {i} =") + len(str(self.get([i, (0,)])))) - 1) + "│")
 
                     elif len(self.VariablesDim[i]) == 1:
                         for k in fix_dims(self.VariablesDim[i])[0]:
                             if self.get([i, (k,)]) != 0:
-                                print(f"| {i}[{k}] =", self.get([i, (k,)]), " " * (box_width - (len(f"| {i}[{k}] =") + len(str(self.get([i, (k,)])))) - 1) + "|")
+                                print(f"│ {i}[{k}] =", self.get([i, (k,)]), " " * (box_width - (len(f"│ {i}[{k}] =") + len(str(self.get([i, (k,)])))) - 1) + "│")
                     else:
                         for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
                             if self.get([i, (*k,)]) != 0:
-                                print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get([i, (*k,)]), " " * (box_width - (len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get([i, (*k,)])))) - 1) + "|")
+                                print(f"│ {i}[{k}] =".replace("(", "").replace(")", ""), self.get([i, (*k,)]), " " * (box_width - (len(f"│ {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get([i, (*k,)])))) - 1) + "│")
             else:
                 for i in self.VariablesDim.keys():
                     if self.VariablesDim[i] == 0:
                         if self.get_bound([i, (0,)])!=[0,0]:
-                            print(f"| {i} =", self.get_bound([i, (0,)]), " " * (box_width - (len(f"| {i} =") + len(str(self.get_bound([i, (0,)])))) - 1) + "|")
+                            print(f"│ {i} =", self.get_bound([i, (0,)]), " " * (box_width - (len(f"│ {i} =") + len(str(self.get_bound([i, (0,)])))) - 1) + "│")
                     elif len(self.VariablesDim[i]) == 1:
                         for k in fix_dims(self.VariablesDim[i])[0]:
                             if self.get_bound([i, (k,)])!= [0,0]:
-                                print(f"| {i}[{k}] =", self.get_bound([i, (k,)]), " " * (box_width - (len(f"| {i}[{k}] =") + len(str(self.get_bound([i, (k,)])))) - 1) + "|")
+                                print(f"│ {i}[{k}] =", self.get_bound([i, (k,)]), " " * (box_width - (len(f"│ {i}[{k}] =") + len(str(self.get_bound([i, (k,)])))) - 1) + "│")
                     else:
                         for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
                             if self.get_bound([i, (*k,)]) != [0,0]:
-                                print(f"| {i}[{k}] =".replace("(", "").replace(")", ""), self.get_bound([i, (*k,)]), " " * (box_width - (len(f"| {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get_bound([i, (*k,)])))) - 1) + "|")
+                                print(f"│ {i}[{k}] =".replace("(", "").replace(")", ""), self.get_bound([i, (*k,)]), " " * (box_width - (len(f"│ {i}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get_bound([i, (*k,)])))) - 1) + "│")
     
         else:
         
@@ -4691,7 +4724,7 @@ class Implement:
 
                     if type(numpy_var)==np.ndarray:
 
-                        numpy_str = np.array2string(numpy_var, separator=', ', prefix='| ', style=str)
+                        numpy_str = np.array2string(numpy_var, separator=', ', prefix='│ ', style=str)
                         rows = numpy_str.split('\n')
                         first_row_len = len(rows[0])
                         for i, row in enumerate(rows):
@@ -5580,7 +5613,7 @@ class MADM:
             np.set_printoptions(threshold=np.inf)
 
         if isinstance(numpy_var, np.ndarray):
-            tensor_str = np.array2string(numpy_var, separator=', ', prefix='| ', style=str)
+            tensor_str = np.array2string(numpy_var, separator=', ', prefix='│ ', style=str)
             rows = tensor_str.split('\n')
             first_row_len = len(rows[0])
             for k, row in enumerate(rows):
