@@ -16,6 +16,7 @@ from .operators.set_operators import *
 from .operators.math_operators import *
 from .operators.update_operators import *
 from .operators.random_operators import *
+from .operators.data_handler import *
 from .operators.heuristic_operators import *
 from .operators.fix_operators import *
 from .operators.epsilon import *
@@ -54,10 +55,6 @@ class Data:
         """
         self.key = key  
         self.object = input if input else None
-
-    def create_collector(self):
-        self.avar = self.coll()
-        return self.avar
 
 class Model:
 
@@ -2794,158 +2791,7 @@ class Model:
         """
 
         return len(set)
-
-    def ppar(self, name, dim=0, bound=[0,10e9], source=None):
-
-        '''
-        Positive parameter definition
-        
-        If source not provided, it will be randomly generated.
-
-        (Numpy compatible)
-        '''
-
-        if not source:
-            dim = fix_dims(dim)
-            if dim == 0:
-                return self.random.uniform(low=bound[0], high=bound[1])
-            else:
-                return self.random.uniform(low=bound[0], high=bound[1], size=([len(i) for i in dim]))
-        else:
-            dim = np.shape(source)    
-            return source
-
-    def fpar(self, name, dim=0, bound=[-10e9,10e9], source=None):
-
-        '''
-        Real (Free) parameter definition
-        
-        If source not provided, it will be randomly generated.
-
-        (Numpy compatible)
-        '''
-
-        if not source:
-            dim = fix_dims(dim)
-            if dim == 0:
-                return self.random.uniform(low=bound[0], high=bound[1])
-            else:
-                return self.random.uniform(low=bound[0], high=bound[1], size=([len(i) for i in dim]))
-        else:
-            dim = np.shape(source)    
-            return source
-
-    def bpar(self, name, dim=0, bound=[0,1], source=None):
-
-        '''
-        Binary parameter definition
-        
-        If source not provided, it will be randomly generated.
-
-        (Numpy compatible)
-        '''
-
-        if not source:
-
-            dim = fix_dims(dim)
-
-            if dim == 0:
-                return self.random.integers(low=bound[0], high=bound[1])
-            else:
-                return self.random.integers(low=bound[0], high=bound[1], size=([len(i) for i in dim]))
-        
-        else:
-
-            dim = np.shape(source)    
-
-            return source
-        
-    def ipar(self, name, dim=0, bound=[0,10e9], source=None):
-
-        '''
-        Integer parameter definition
-        
-        If source not provided, it will be randomly generated.
-
-        (Numpy compatible)
-        '''
-
-        if not source:
-
-            dim = fix_dims(dim)
-
-            if dim == 0:
-                return self.random.integers(low=bound[0], high=bound[1])
-            else:
-                return self.random.integers(low=bound[0], high=bound[1], size=([len(i) for i in dim]))
-        
-        else:
-
-            dim = np.shape(source)    
-
-            return source
-        
-    def uniform(self, lb, ub, parameter_dim=0):
-        """
-        Uniform Parameter Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        To generate a real-valued parameter using uniform distribution inside a range.
-        """
-
-        dim = fix_dims(parameter_dim)
-
-        if dim == 0:
-            return self.random.uniform(low=lb, high=ub)
-        else:
-            return self.random.uniform(low=lb, high=ub, size=([len(i) for i in dim]))
-
-    def uniformlist(self, lb_sample_size, ub_sample_size, candidate_set, parameter_dim=0, fixed_sample_size=None, replace=False, sorted=True):
-        """
-        Generate a list of uniformly distributed random samples from a candidate set within a specified sample size range.
-
-        Parameters:
-        - lb_sample_size (int): The lower bound of the sample size range.
-        - ub_sample_size (int): The upper bound of the sample size range.
-        - candidate_set (list): The candidate set from which to draw the random samples.
-        - parameter_dim (int, optional): The dimension of the parameter. Defaults to 0.
-        - fixed_sample_size (int, optional): The fixed sample size. Defaults to None.
-        - replace (bool, optional): Whether to allow sampling with replacement. Defaults to False.
-        - sorted (bool, optional): Whether to sort the generated samples. Defaults to True.
-
-        Returns:
-        - list: A list of uniformly distributed random samples from the candidate set.
-
-        """
-
-        dim = fix_dims(parameter_dim)
-
-        if dim == 0:
-            if fixed_sample_size == None:
-                if sorted:
-                    return np.sort(self.random.choice(candidate_set, self.random.integers(lb_sample_size, ub_sample_size), replace=replace))
-                else:
-                    return self.random.choice(candidate_set, self.random.integers(lb_sample_size, ub_sample_size), replace=replace)
-        else:
-            if fixed_sample_size == None:
-                if sorted:
-                    return [np.sort(self.random.choice(candidate_set, self.random.integers(lb_sample_size, ub_sample_size), replace=replace)) for i in dim[0]]
-                else:
-                    return [self.random.choice(candidate_set, self.random.integers(lb_sample_size, ub_sample_size), replace=replace) for i in dim[0]]
-
-    def uniformint(self, lb, ub, parameter_dim=0):
-        """
-        Uniform Integer Parameter Definition
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        To generate an integer parameter using uniform distribution inside a range.
-        """
-
-        dim = fix_dims(parameter_dim)
-
-        if dim == 0:
-            return self.random.integers(low=lb, high=ub)
-        else:
-            return self.random.integers(low=lb, high=ub, size=([len(i) for i in dim]))
-
+    
     def abs(self, input):
 
         if self.features['interface_name'] in ['cplex_cp', 'gekko']:
@@ -3399,39 +3245,6 @@ class Model:
         else:
 
             return np.round(x)
-
-    # Methods to visualize data.
-
-    def show_gantt(interval_variables, names, colors='lightblue'):
-        """
-        This function visualizes a Gantt chart of interval variables using the IBM DOcplex library.
-        
-        Parameters:
-        interval_variables: A list of interval variables. Each interval variable represents a task.
-        names: A list of strings. Each string is a name corresponding to an interval variable.
-        colors: Either a list of colors (one for each interval variable) or a single color string. 
-                If a single color string is provided, it will be used for all interval variables. 
-                If a list of colors is provided, it should have the same length as interval_variables and names.
-        
-        Returns:
-        None. A Gantt chart is displayed as output.
-        """
-        
-        import docplex.cp.utils_visu as visu
-        import matplotlib.pyplot as plt
-
-        if isinstance(colors, str):
-            colors = [colors] * len(interval_variables)
-        elif len(colors) != len(interval_variables):
-            raise ValueError("Length of colors list must match length of interval_variables list")
-
-        if len(interval_variables) != len(names):
-            raise ValueError("Length of interval_variables list must match length of names list")
-
-        for i, interval in enumerate(interval_variables):
-            visu.interval(interval, colors[i], names[i])
-            
-        visu.show()
 
 # Alternatives for defining this class:
 
