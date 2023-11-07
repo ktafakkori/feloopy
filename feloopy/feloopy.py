@@ -146,6 +146,11 @@ class Model:
 
                 self.agent = self.agent[1].copy()
 
+            if self.features['agent_status']!='idle':
+                self.access = True
+            else:
+                self.access = False
+
         if solution_method == 'exact':
 
             self.mainvars = self.coll()

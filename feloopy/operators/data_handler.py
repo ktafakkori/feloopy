@@ -11,7 +11,7 @@
 
 import numpy as np
 
-class Data:
+class DataToolkit:
 
     def __init__(self, data_structure='numpy', key=None):
         """
@@ -148,7 +148,7 @@ class Data:
             self.data[name] = np.zeros(1)
             return self.data[name]
         else:
-            self.data[name] = np.zeros(dim)
+            self.data[name] = np.zeros(tuple(len(i) for i in dim))
             return self.data[name]
 
     def ones(self, name, dim=0):
@@ -168,7 +168,7 @@ class Data:
             self.data[name] = np.ones(1)
             return self.data[name]
         else:
-            self.data[name] = np.ones(dim)
+            self.data[name] = np.ones(tuple(len(i) for i in dim))
             return self.data[name]
 
     def uniform(self, name, dim=0, bound=[0, 1]):

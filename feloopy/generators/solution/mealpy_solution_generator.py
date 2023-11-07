@@ -36,16 +36,20 @@ def generate_solution(model_object, fitness_function, total_features, objectives
         termination=None
         
     if number_of_times == 1:
-
         
+        if solver_options.get("process_mode")!=None:
+            solver_inputs = {'problem': problem, 'mode': solver_options.get("process_mode"), 'n_workers': solver_options.get("n_workers")}
+        else:
+            solver_inputs = {'problem': problem}
+
         if termination!=None:
             time_solve_begin = timeit.default_timer()
-            g_best = model_object.solve(problem,termination=termination)
+            g_best = model_object.solve(**solver_inputs, termination=termination)
             time_solve_end = timeit.default_timer()
             best_agent, best_reward = g_best.solution, g_best.target.fitness
         else:
             time_solve_begin = timeit.default_timer()
-            g_best = model_object.solve(problem)
+            g_best = model_object.solve(**solver_inputs)
             time_solve_end = timeit.default_timer()
             best_agent, best_reward = g_best.solution, g_best.target.fitness
         
@@ -76,7 +80,7 @@ def generate_solution(model_object, fitness_function, total_features, objectives
 
         for i in range(number_of_times):
             time_solve_begin.append(timeit.default_timer())
-            g_best = model_object.solve(problem)
+            g_best = model_object.solve(**solver_inputs)
             time_solve_end.append(timeit.default_timer())
             best_agent, best_reward = g_best.solution, g_best.target.fitness
             Result = [best_agent, best_reward]

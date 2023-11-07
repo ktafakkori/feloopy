@@ -41,3 +41,4 @@ def instance(X):
 m = make_model(instance)
 m.sol(penalty_coefficient=10)
 m.report()
+
