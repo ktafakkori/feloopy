@@ -15,6 +15,7 @@ from .operators import *
 from .algorithms import *
 
 HEURISTIC_ALGORITHMS = [
+    
     ['feloopy', 'de'],
     ['feloopy', 'ga'],
     ['feloopy', 'gwo'],
@@ -32,7 +33,7 @@ HEURISTIC_ALGORITHMS = [
     ['mealpy', 'base-efo'], 
     ['mealpy', 'base-fbio'], 
     ['mealpy', 'base-foa'], 
-    ['mealpy', 'base-ga'], 
+
     ['mealpy', 'base-gco'], 
     ['mealpy', 'base-gska'], 
     ['mealpy', 'base-hs'],
@@ -47,19 +48,38 @@ HEURISTIC_ALGORITHMS = [
     ['mealpy', 'base-sma'], 
     ['mealpy', 'base-ssa'], 
     ['mealpy', 'base-tlo'], 
-    ['mealpy', 'base-vcs'], 
+    ['mealpy', 'base-vcs'],
+
+    # Swarm MealPy PSO
     ['mealpy', 'c-pso'], 
     ['mealpy', 'cl-pso'], 
+    ['mealpy', 'h-pso-tvac'],  
+    ['mealpy', 'cl-pso'], 
+    ['mealpy', 'h-pso-tvac'],
+    ['mealpy', 'p-pso'],
+    ['mealpy', 'orig-pso'],
+
+    # Evolutionary MealPy GA
+    ['mealpy', 'base-ga'],
+    ['mealpy', 'single-ga'],
+    ['mealpy', 'multi-ga'], 
+    ['mealpy', 'elite-multi-ga'], 
+    ['mealpy', 'elite-single-ga'],
+
+
+    ['mealpy', 'orig-abc'],
+
+
     ['mealpy', 'cma-es'], 
     ['mealpy', 'dev-dmoa'], 
     ['mealpy', 'dev-soa'], 
     ['mealpy', 'dev-spbo'], 
-    ['mealpy', 'elite-multi-ga'], 
-    ['mealpy', 'elite-single-ga'], 
+
+
+
     ['mealpy', 'enha-aeo'], 
     ['mealpy', 'enha-two'], 
     ['mealpy', 'gwo-woa'], 
-    ['mealpy', 'h-pso-tvac'], 
     ['mealpy', 'hi-woa'], 
     ['mealpy', 'impr-aeo'], 
     ['mealpy', 'impr-bso'], 
@@ -83,11 +103,11 @@ HEURISTIC_ALGORITHMS = [
     ['mealpy', 'modi-slo'], 
     ['mealpy', 'modi101-gto'], 
     ['mealpy', 'modi102-gto'], 
-    ['mealpy', 'multi-ga'], 
+    
     ['mealpy', 'o-cro'], 
     ['mealpy', 'oppo-qsa'], 
     ['mealpy', 'oppo-two'], 
-    ['mealpy', 'orig-abc'], 
+     
     ['mealpy', 'orig-acor'], 
     ['mealpy', 'orig-aeo'], 
     ['mealpy', 'orig-agto'], 
@@ -98,7 +118,7 @@ HEURISTIC_ALGORITHMS = [
     ['mealpy', 'orig-aso'], 
     ['mealpy', 'orig-avoa'], 
     ['mealpy', 'orig-ba'], 
-    ['mealpy', 'orig-bboa'], 
+    ['mealpy', 'orig-bbo'], 
     ['mealpy', 'orig-beesa'], 
     ['mealpy', 'orig-beesa'], 
     ['mealpy', 'orig-bes'], 
@@ -164,7 +184,7 @@ HEURISTIC_ALGORITHMS = [
     ['mealpy', 'orig-nmra'], 
     ['mealpy', 'orig-nro'], 
     ['mealpy', 'orig-pfa'], 
-    ['mealpy', 'orig-pso'], 
+     
     ['mealpy', 'orig-pss'], 
     ['mealpy', 'orig-qsa'], 
     ['mealpy', 'orig-rime'], 
@@ -197,8 +217,7 @@ HEURISTIC_ALGORITHMS = [
     ['mealpy', 'orig-wca'], 
     ['mealpy', 'orig-wdo'], 
     ['mealpy', 'orig-who'], 
-    ['mealpy', 'orig-woa'], 
-    ['mealpy', 'p-pso'], 
+    ['mealpy', 'orig-woa'],  
     ['mealpy', 'prob-beesa'], 
     ['mealpy', 'ql-sca'], 
     ['mealpy', 'rw-gwo'], 
@@ -207,8 +226,7 @@ HEURISTIC_ALGORITHMS = [
     ['mealpy', 'sea-ho'], 
     ['mealpy', 'selec-aro'], 
     ['mealpy', 'sha-de'], 
-    ['mealpy', 'simp-cma-es'], 
-    ['mealpy', 'single-ga'], 
+    ['mealpy', 'simp-cma-es'],  
     ['mealpy', 'swarm-hc'], 
     ['mealpy', 'whale-foa'], 
     ['mealpy', 'wmqi-mrfo'], 

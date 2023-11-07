@@ -20,11 +20,14 @@ def generate_model(solver_name, solver_options):
         'orig-es': ('mealpy.evolutionary_based', 'ES', 'OriginalES'),
         'levy-es': ('mealpy.evolutionary_based', 'ES', 'LevyES'),
         'orig-ma': ('mealpy.evolutionary_based', 'MA', 'OriginalMA'),
+
+        # Evolutionary MealPy GA
         'base-ga': ('mealpy.evolutionary_based', 'GA', 'BaseGA'),
         'single-ga': ('mealpy.evolutionary_based', 'GA', 'SingleGA'),
         'multi-ga': ('mealpy.evolutionary_based', 'GA', 'MultiGA'),
         'elite-single-ga': ('mealpy.evolutionary_based', 'GA', 'EliteSingleGA'),
         'elite-multi-ga': ('mealpy.evolutionary_based', 'GA', 'EliteMultiGA'),
+
         'base-de': ('mealpy.evolutionary_based', 'DE', 'BaseDE'),
         'ja-de': ('mealpy.evolutionary_based', 'DE', 'JADE'),
         'sa-de': ('mealpy.evolutionary_based', 'DE', 'SADE'),
@@ -39,18 +42,26 @@ def generate_model(solver_name, solver_options):
 
         # Swarm-Inspired Heuristic Optimization Algorithms
 
+        # Swarm MealPy PSO
         'orig-pso': ('mealpy.swarm_based', 'PSO', 'OriginalPSO'),
-        'p-pso': ('mealpy.swarm_based', 'PSO', 'PPSO'),
+        'ldw-pso': ('mealpy.swarm_based', 'PSO', 'LDW_PSO'),
+        'aiw-pso': ('mealpy.swarm_based', 'PSO', 'AIW_PSO'),
+        'p-pso': ('mealpy.swarm_based', 'PSO', 'P_PSO'),
         'h-pso-tvac': ('mealpy.swarm_based', 'PSO', 'HPSO_TVAC'),
         'c-pso': ('mealpy.swarm_based', 'PSO', 'C_PSO'),
         'cl-pso': ('mealpy.swarm_based', 'PSO', 'CL_PSO'),
+
+
         'orig-bfo': ('mealpy.swarm_based', 'BFO', 'OriginalBFO'),
         'orig-beesa': ('mealpy.swarm_based', 'BeesA', 'OriginalBeesA'),
         'a-bfo': ('mealpy.swarm_based', 'BFO', 'OriginalBFO'),
         'prob-beesa': ('mealpy.swarm_based', 'BeesA', 'ProbBeesA'),
         'orig-cso': ('mealpy.swarm_based', 'CSO', 'OriginalCSO'),
+
+        # Swarm MealPy ABC
         'orig-abc': ('mealpy.swarm_based', 'ABC', 'OriginalABC'),
-        'orig-acor': ('mealpy.swarm_based', 'ACOR', 'orig_acor'),
+
+        'orig-acor': ('mealpy.swarm_based', 'ACOR', 'OriginalACOR'),
         'orig-csa': ('mealpy.swarm_based', 'CSA', 'OriginalCSA'),
         'orig-ffa': ('mealpy.swarm_based', 'FFA', 'OriginalFFA'),
         'orig-fa': ('mealpy.swarm_based', 'FA', 'OriginalFA'),
@@ -66,6 +77,7 @@ def generate_model(solver_name, solver_options):
         'rw-gwo': ('mealpy.swarm_based', 'GWO', 'RW_GWO'),
         'orig-sspidera': ('mealpy.swarm_based', 'SSpiderA', 'OriginalSSpiderA'),
         'orig-alo': ('mealpy.swarm_based', 'ALO', 'OriginalALO'),
+        'dev-alo': ('mealpy.swarm_based', 'ALO', 'DevALO'),
         'base-alo': ('mealpy.swarm_based', 'ALO', 'BaseALO'),
         'orig-mfo': ('mealpy.swarm_based', 'MFO', 'OriginalMFO'),
         'base-mfo': ('mealpy.swarm_based', 'MFO', 'BaseMFO'),
@@ -104,7 +116,11 @@ def generate_model(solver_name, solver_options):
         'orig-scso': ('mealpy.swarm_based', 'SCSO', 'OriginalSCSO'),
         'orig-tso': ('mealpy.swarm_based', 'TSO', 'OriginalTSO'),
         'orig-avoa': ('mealpy.swarm_based', 'AVOA', 'OriginalAVOA'),
+
+
         'orig-agto': ('mealpy.swarm_based', 'AGTO', 'OriginalAGTO'),
+        'mgto': ('mealpy.swarm_based', 'AGTO', 'MGTO'),
+
         'orig-aro': ('mealpy.swarm_based', 'ARO', 'OriginalARO'),
         'levy-aro': ('mealpy.swarm_based', 'ARO', 'LARO'),
         'selec-aro': ('mealpy.swarm_based', 'ARO', 'IARO'),
@@ -181,7 +197,7 @@ def generate_model(solver_name, solver_options):
         # Bio-Inspired Heuristic Optimization Algorithms
 
         'orig-iwo': ('mealpy.bio_based', 'IWO', 'OriginalIWO'),
-        'orig-bboa': ('mealpy.bio_based', 'BBO', 'OriginalBBO'),
+        'orig-bbo': ('mealpy.bio_based', 'BBO', 'OriginalBBO'),
         'base-bbo': ('mealpy.bio_based', 'BBO', 'BaseBBO'),
         'orig-vcs': ('mealpy.bio_based', 'VCS', 'OriginalVCS'),
         'base-vcs': ('mealpy.bio_based', 'VCS', 'BaseVCS'),
