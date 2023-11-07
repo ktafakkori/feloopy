@@ -25,8 +25,6 @@ def instance(X):
     p = [40, 60, 10, 10, 3, 20, 60]  # Value of the items
 
     # Variables
-
-    #Selection
     x = m.bvar('x', [J])
 
     # Objective
