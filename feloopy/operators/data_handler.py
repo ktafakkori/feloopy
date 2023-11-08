@@ -10,6 +10,13 @@
 '''
 
 import numpy as np
+import pandas as pd
+import os
+import sys
+import json
+import csv
+import itertools as it
+import sqlite3
 
 class DataToolkit:
 
@@ -272,3 +279,136 @@ class DataToolkit:
                         self.data[j].append(values_of_criteria[counter])
                 counter += 1
             xcounter += 1
+
+    def load_from_excel(self, data_file: str, data_dimension: list, shape: list, indices_list: None, sheet_name: str, path=None):
+
+        """
+        Load data from an Excel file with multiple dimensions.
+
+        Parameters:
+        - data_file (str): Name of the dataset file (e.g., data.xlsx).
+        - data_dimension (list): Dimensions of the dataset.
+        - shape (list): Number of indices that exist in each row and column.
+        - indices_list (None or list): The string which accompanies index counter (e.g., if row0, row1, and col0, col1, then index is ['row', 'col']).
+        - sheet_name (str): Name of the excel sheet containing the parameter.
+        - path (None or str): Specify the directory of the dataset file (if not provided, the dataset file should exist in the same directory as the code).
+
+        Returns:
+        - NumPy array containing the loaded data.
+        """
+
+        if path == None:
+            data_file = os.path.join(sys.path[0], data_file)
+        else:
+            data_file = path
+        if len(shape) == 2:
+            if (shape[0] == 1 and shape[1] == 1) or (shape[0] == 1 and shape[1] == 0) or (shape[0] == 0 and shape[1] == 0) or (shape[0] == 0 and shape[1] == 1):
+                return pd.read_excel(data_file, index_col=0, sheet_name=sheet_name).to_numpy()
+            else:
+                parameter = pd.read_excel(data_file, header=[i for i in range(shape[1])], index_col=[i for i in range(shape[0])], sheet_name=sheet_name)
+                created_par = np.zeros(shape=([len(i) for i in data_dimension]))
+                for keys in it.product(*data_dimension):
+                    try:
+                        created_par[keys] = parameter.loc[tuple([indices_list[i]+str(keys[i]) for i in range(shape[0])]), tuple([indices_list[i]+str(keys[i]) for i in range(shape[0], len(indices_list))])]
+                    except:
+                        created_par[keys] = None
+                return created_par
+        else:
+            par = pd.read_excel(data_file, index_col=0,sheet_name=sheet_name).to_numpy()
+            return par.reshape(par.shape[0],)
+        
+    def load_from_csv(self, data_file: str, csv_delimiter=',', path=None):
+        """
+        Load data from a CSV file with multiple dimensions.
+
+        Parameters:
+        - data_file (str): Name of the CSV dataset file (e.g., data.csv).
+        - data_dimension (list): Dimensions of the dataset.
+        - indices_list (None or list): The string which accompanies index counter (e.g., if row0, row1, and col0, col1, then index is ['row', 'col']).
+        - delimiter (str): The delimiter used in the CSV file (default is ',').
+        - path (None or str): Specify the directory of the CSV dataset file (if not provided, the CSV file should exist in the same directory as the code).
+
+        Returns:
+        - NumPy array containing the loaded data.
+        """
+        if path is None:
+            data_file = os.path.join(os.getcwd(), data_file)
+        else:
+            data_file = os.path.join(path, data_file)
+
+        data = np.genfromtxt(data_file, delimiter=csv_delimiter, dtype=float, skip_header=1)
+        
+        return data[:,1:]
+    
+    def load_from_json(self, data_file: str, json_key=None, path=None):
+        """
+        Load data from a JSON file.
+
+        Parameters:
+        - data_file (str): Name of the JSON dataset file (e.g., data.json).
+        - path (None or str): Specify the directory of the JSON dataset file (if not provided, the JSON file should exist in the same directory as the code).
+
+        Returns:
+        - Python dictionary containing the loaded data.
+        """
+        if path is None:
+            data_file = os.path.join(os.getcwd(), data_file)
+        else:
+            data_file = os.path.join(path, data_file)
+
+        with open(data_file, 'r') as file:
+            data = json.load(file)
+        
+        if json_key != None:
+            return data[json_key]
+        else:
+            return data
+        
+    def load_from_sqlite(self, db_file: str, table_name: str):
+        """
+        Load data from an SQLite database table.
+
+        Parameters:
+        - db_file (str): Name of the SQLite database file.
+        - table_name (str): Name of the table to retrieve data from.
+
+        Returns:
+        - List of tuples containing the loaded data rows.
+        """
+        connection = sqlite3.connect(db_file)
+        cursor = connection.cursor()
+
+        cursor.execute(f"SELECT * FROM {table_name}")
+        data = cursor.fetchall()
+
+        connection.close()
+
+        return data
+    
+    def load(self, file_name: str, excel_dim=None, excel_struct=None, excel_indices=None, excel_sheet=None, csv_delimiter=',', json_key=None, sql_table=None, path=None):
+
+        file_extension = os.path.splitext(file_name)[1].lower()
+        
+        if file_extension == '.xlsx':
+            if excel_dim is not None and excel_struct is not None:
+                if excel_indices is not None and excel_sheet is not None:
+                    return self.load_from_excel(file_name, excel_dim, excel_struct, excel_indices, excel_sheet, path)
+                else:
+                    return self.load_from_excel(file_name, excel_dim, excel_struct, path=path)
+            else:
+                return self.load_from_excel(file_name, excel_dim, shape=[0, 0], indices_list=[], sheet_name=excel_sheet, path=path)
+        
+        elif file_extension == '.csv':
+            return self.load_from_csv(file_name, csv_delimiter, path=path)
+
+        elif file_extension == '.json':
+            return self.load_from_json(file_name, json_key, path=path)
+
+        elif file_extension in ['.sqlite', '.db']:
+            if sql_table is not None:
+                return self.load_from_sqlite(file_name, sql_table)
+            else:
+                raise ValueError("For SQLite files, you must specify the table name (sql_table).")
+        
+        else:
+            raise ValueError(f"Unsupported file format: {file_extension}")

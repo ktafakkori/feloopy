@@ -254,58 +254,6 @@ def end_timer(show=False):
               "%02d:%02d:%02d" % (hour, min, sec))
     return EndTime
 
-def load_from_excel(data_file: str, data_dimension: list, shape: list, indices_list: None, sheet_name: str, path=None):
-    """
-    Load data from an Excel file with multiple dimensions.
-
-    Parameters:
-    - data_file (str): Name of the dataset file (e.g., data.xlsx).
-    - data_dimension (list): Dimensions of the dataset.
-    - shape (list): Number of indices that exist in each row and column.
-    - indices_list (None or list): The string which accompanies index counter (e.g., if row0, row1, and col0, col1, then index is ['row', 'col']).
-    - sheet_name (str): Name of the excel sheet containing the parameter.
-    - path (None or str): Specify the directory of the dataset file (if not provided, the dataset file should exist in the same directory as the code).
-
-    Returns:
-    - NumPy array containing the loaded data.
-    """
-
-    if path == None:
-        data_file = os.path.join(sys.path[0], data_file)
-    else:
-        data_file = path
-
-    if len(shape) == 2:
-
-        if (shape[0] == 1 and shape[1] == 1) or (shape[0] == 1 and shape[1] == 0) or (shape[0] == 0 and shape[1] == 0) or (shape[0] == 0 and shape[1] == 1):
-
-            return pd.read_excel(data_file, index_col=0, sheet_name=sheet_name).to_numpy()
-
-        else:
-
-            parameter = pd.read_excel(data_file, header=[i for i in range(shape[1])], index_col=[
-                                      i for i in range(shape[0])], sheet_name=sheet_name)
-
-            created_par = np.zeros(shape=([len(i) for i in data_dimension]))
-
-            for keys in it.product(*data_dimension):
-
-                try:
-
-                    created_par[keys] = parameter.loc[tuple([indices_list[i]+str(keys[i]) for i in range(
-                        shape[0])]), tuple([indices_list[i]+str(keys[i]) for i in range(shape[0], len(indices_list))])]
-
-                except:
-
-                    created_par[keys] = None
-
-            return created_par
-    else:
-        par = pd.read_excel(data_file, index_col=0,
-                            sheet_name=sheet_name).to_numpy()
-
-        return par.reshape(par.shape[0],)
-
 def save_to_excel(data_array, data_file: str, sheet_name: str, indices: list = None, path=None):
     
     """
@@ -386,34 +334,6 @@ import os
 import csv
 import numpy as np
 
-
-def load_from_csv(data_file: str, data_dimension: list, indices_list=None, delimiter=',', path=None):
-    """
-    Load data from a CSV file with multiple dimensions.
-
-    Parameters:
-    - data_file (str): Name of the CSV dataset file (e.g., data.csv).
-    - data_dimension (list): Dimensions of the dataset.
-    - indices_list (None or list): The string which accompanies index counter (e.g., if row0, row1, and col0, col1, then index is ['row', 'col']).
-    - delimiter (str): The delimiter used in the CSV file (default is ',').
-    - path (None or str): Specify the directory of the CSV dataset file (if not provided, the CSV file should exist in the same directory as the code).
-
-    Returns:
-    - NumPy array containing the loaded data.
-    """
-    if path is None:
-        data_file = os.path.join(os.getcwd(), data_file)
-    else:
-        data_file = os.path.join(path, data_file)
-
-    if indices_list is None:
-        indices_list = ['']  
-        
-    data = np.genfromtxt(data_file, delimiter=delimiter, dtype=float, skip_header=1)
-    
-    return data[:,1:]
-
-
 def save_to_csv(data_array, data_file: str, indices: list = None, delimiter=',', path=None):
     """
     Save NumPy array data to a CSV file.
@@ -459,27 +379,6 @@ def save_to_csv(data_array, data_file: str, indices: list = None, delimiter=',',
 import json
 import os
 
-def load_from_json(data_file: str, path=None):
-    """
-    Load data from a JSON file.
-
-    Parameters:
-    - data_file (str): Name of the JSON dataset file (e.g., data.json).
-    - path (None or str): Specify the directory of the JSON dataset file (if not provided, the JSON file should exist in the same directory as the code).
-
-    Returns:
-    - Python dictionary containing the loaded data.
-    """
-    if path is None:
-        data_file = os.path.join(os.getcwd(), data_file)
-    else:
-        data_file = os.path.join(path, data_file)
-
-    with open(data_file, 'r') as file:
-        data = json.load(file)
-    
-    return data
-
 def save_to_json(data_dict, data_file: str, path=None):
     """
     Save data as a JSON file.
@@ -506,8 +405,6 @@ def save_to_json(data_dict, data_file: str, path=None):
 
     with open(data_file, 'w') as file:
         json.dump(data_dict, file)
-
-import sqlite3
 
 def save_to_sqlite(data_list, db_file: str, table_name: str, columns: dict, primary_key=None):
     """
@@ -536,29 +433,6 @@ def save_to_sqlite(data_list, db_file: str, table_name: str, columns: dict, prim
 
     connection.commit()
     connection.close()
-
-
-def load_from_sqlite(db_file: str, table_name: str):
-    """
-    Load data from an SQLite database table.
-
-    Parameters:
-    - db_file (str): Name of the SQLite database file.
-    - table_name (str): Name of the table to retrieve data from.
-
-    Returns:
-    - List of tuples containing the loaded data rows.
-    """
-    connection = sqlite3.connect(db_file)
-    cursor = connection.cursor()
-
-    cursor.execute(f"SELECT * FROM {table_name}")
-    data = cursor.fetchall()
-
-    connection.close()
-
-    return data
-
 
 def version(INPUT):
 
