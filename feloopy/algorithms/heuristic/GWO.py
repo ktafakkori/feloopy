@@ -46,27 +46,27 @@ class GWO:
             self.pie[:, self.status_col] = 0
             self.bad_status = -1
             self.best_index = -1*(1+self.d[0])//2
-        self.alpha, self.beta, self.delta = np.copy(
-            self.pie[-1]), np.copy(self.pie[-2]), np.copy(self.pie[-3])
+        self.alpha, self.beta, self.delta = np.copy(self.pie[-1]), np.copy(self.pie[-2]), np.copy(self.pie[-3])
         self.best = self.pie[-1].copy()
 
     def update(self):
 
         self.pie = self.evaluate(self.pie)
+
         if self.r == 0:
             self.pie = self.pie[np.argsort(self.pie[:, self.reward_col[0]])]
             if self.d[0]*self.pie[self.best_index][-1] > self.d[0]*self.best[-1]:
                 self.best = self.pie[self.best_index].copy()
             self.alpha = self.pie[:, -1].copy()
-            self.beta = self.pie[:, -2].copy()
+            self.beta  = self.pie[:, -2].copy()
             self.delta = self.pie[:, -3].copy()
 
     def vary(self):
 
         a = 2*(1 - self.it_no/self.it)*(2*np.random.rand(self.t, self.f, 3)-1)
         c = 2*np.random.rand(self.t, self.f, 3)
-        self.pie[:, :self.f] = np.clip((self.alpha[:self.f] - a[:, :, 0] * abs(c[:, :, 0] * self.alpha[:self.f] - self.pie[:, :self.f]))/3 + (self.beta[:self.f] - a[:, :, 1] * abs(
-            c[:, :, 1] * self.beta[:self.f] - self.pie[:, :self.f]))/3 + (self.delta[:self.f] - a[:, :, 2] * abs(c[:, :, 2] * self.delta[:self.f] - self.pie[:, :self.f]))/3, 0, 1)
+        self.pie[:, :self.f] = np.clip((self.alpha[:self.f] - a[:, :, 0] * abs(c[:, :, 0] * self.alpha[:self.f] - self.pie[:, :self.f]))/3 + (self.beta[:self.f] - a[:, :, 1] * abs(c[:, :, 1] * self.beta[:self.f] - self.pie[:, :self.f]))/3 + (self.delta[:self.f] - a[:, :, 2] * abs(c[:, :, 2] * self.delta[:self.f] - self.pie[:, :self.f]))/3, 0, 1)
+        
 
     def report(self):
 

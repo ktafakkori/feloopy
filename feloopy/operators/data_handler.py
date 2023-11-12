@@ -412,3 +412,5 @@ class DataToolkit:
         
         else:
             raise ValueError(f"Unsupported file format: {file_extension}")
+        
+data_toolkit = data_utils = data_manager = data_frame = DataToolkit
