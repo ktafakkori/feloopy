@@ -13,10 +13,10 @@
 
 from feloopy import *
 
-m = madm('bw','bw_model', 'pydecision')
+m = madm('fuzzy_bw','fuzzy_bw_model', 'pydecision')
 
-m.add_bocv([1, 3, 4, 7])
-m.add_owcv([7, 5, 5, 1])
+m.add_fbocv([ (2/3, 1, 3/2), ( 1, 1, 1), (3/2, 2, 5/2 ), (2/3, 1, 3/2), (7/2, 4, 9/2) ])
+m.add_fowcv([ (3/2, 2, 5/2), (7/2, 4, 9/2), (3/2, 2, 5/2) , (2/3, 1, 3/2), ( 1, 1, 1) ])
 
 m.sol()
 

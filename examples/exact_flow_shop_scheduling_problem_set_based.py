@@ -23,7 +23,7 @@ J = range(len(I))  # Set of positions
 K = range(len(p))  # Set of machines
 
 # Environment
-m = target_model('exact', 'flow shop scheduling', 'pulp', key=0)
+m = target_model('exact', 'flow shop scheduling', 'pulp')
 
 # Variables
 x = m.bvar('x', [I, J])
@@ -66,4 +66,4 @@ for j in J:
 m.sol(['min'], 'cbc')
 
 # Display
-m.report(sys_info=True)
+m.report(sys_info=True, math_info=True)

@@ -13,7 +13,7 @@
 
 from feloopy import *
 
-m = madm('fuzzy_ahp','fuzzy_ahp_model', 'pydecision')
+m = madm('fuzzy_bw','fuzzy_ahp_model', 'pydecision')
 
 m.add_fcpcm([
     [ (  1,   1,   1), (  4,   5,   6), (  3,   4,   5), (  6,   7,   8) ],   

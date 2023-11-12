@@ -2473,7 +2473,7 @@ class Model:
             now = datetime.datetime.now()
             date_str = now.strftime("Date: %Y-%m-%d")
             time_str = now.strftime("Time: %H:%M:%S")
-            tline_text("FelooPy v0.2.7")
+            tline_text("FelooPy v0.2.8")
             empty_line()
             two_column(date_str, time_str)
             two_column(f"Interface: {self.interface_name}", f"Solver: {self.solver_name}")
@@ -4368,7 +4368,7 @@ class Implement:
             now = datetime.datetime.now()
             date_str = now.strftime("Date: %Y-%m-%d")
             time_str = now.strftime("Time: %H:%M:%S")
-            tline_text("FelooPy v0.2.7")
+            tline_text("FelooPy v0.2.8")
             empty_line()
             two_column(date_str, time_str)
             two_column(f"Interface: {self.interface_name}", f"Solver: {self.solver_name}")
@@ -4561,6 +4561,7 @@ WEIGHTING_ALGORITHMS = [
     ['ahp_method','pydecision'],
     ['fuzzy_ahp_method','pydecision'],
     ['bw_method','pydecision'],
+    ['fuzzy_bw_method','pydecision'],
     ['cilos_method', 'pydecision'],
     ['critic_method', 'pydecision'],
     ['entropy_method', 'pydecision'],
@@ -4771,11 +4772,22 @@ class MADM:
         self.others_to_worst = np.array(data)
         self.solver_options['lic'] = self.others_to_worst
 
+    def add_fbocv(self, data):
+        
+        self.features['fbocv_defined'] = True
+        self.best_to_others = data
+        self.solver_options['mic'] = self.best_to_others
+
+    def add_fowcv(self, data):
+
+        self.features['fowcv_defined'] = True
+        self.others_to_worst = data
+        self.solver_options['lic'] = self.others_to_worst
+
     def add_fim(self, data):
         self.features['fim_defined'] = True
         self.fuzzy_influence_matrix = np.array(data)
         self.solver_options['dataset'] = self.fuzzy_influence_matrix
-
 
     def add_fdm(self, data):
 
@@ -4904,9 +4916,6 @@ class MADM:
 
     def sol(self, criteria_directions = [], solver_options=dict(), show_graph=None, show_log=None):
 
-        if self.madam_method =='bw_method':
-            self.solver_options['dataset'] = [self.best_to_others]
-
         if self.madam_method in ['promethee_ii', 'promethee_iv', 'promethee_vi']:
             self.solver_options['sort'] = False
 
@@ -4947,10 +4956,15 @@ class MADM:
             self.result =  self.madam_algorithm(**{**self.solver_options, **self.auxiliary_solver_options})
             self.finish = time.time()
         except:
-            self.start = time.time()
-            self.result =  self.madam_algorithm(**self.solver_options)
-            self.finish = time.time()
-        
+            try:
+                self.start = time.time()
+                self.result =  self.madam_algorithm(**self.solver_options)
+                self.finish = time.time()
+            except:
+                self.start = time.time()
+                self.result =  self.madam_algorithm(**self.solver_options)
+                self.finish = time.time()
+
         self.status = 'feasible (solved)'
 
         if  self.madam_method in np.array(WEIGHTING_ALGORITHMS)[:,0]:
@@ -4980,6 +4994,15 @@ class MADM:
                 self.fuzzy_weights = self.result[0]
                 self.weights = self.result[2]
                 self.inconsistency = self.result[3]
+
+            if self.madam_method in ['fuzzy_bw_method']:
+
+                self.features['number_of_criteria'] = len(self.result[2])
+                self.fuzzy_weights = self.result[2]
+                self.weights = self.result[3]
+                self.inconsistency = self.result[1]
+                self.epsilon = self.result[0]
+                self.features['inconsistency_found'] = True
 
 
         if  self.madam_method in np.array(RANKING_ALGORITHMS)[:,0]:
@@ -5147,9 +5170,13 @@ class MADM:
 
                 for i in range(self.features['number_of_criteria']):
 
-                    if self.madam_method in ['fuzzy_ahp_method']:
+                    if self.madam_method in ['fuzzy_ahp_method', 'fuzzy_bw_method']:
                         self.display_as_tensor(f'fw[{i}]', np.round(self.fuzzy_weights[i],self.output_decimals), self.show_detailed_tensors)
                     else:
+                        self.display_as_tensor(f'w[{i}]', np.round(self.weights[i],self.output_decimals), self.show_detailed_tensors)
+
+                if self.madam_method in ['fuzzy_bw_method']:
+                    for i in range(self.features['number_of_criteria']):
                         self.display_as_tensor(f'w[{i}]', np.round(self.weights[i],self.output_decimals), self.show_detailed_tensors)
 
             if self.features['rpc_found']:
@@ -5449,7 +5476,7 @@ class MADM:
         date_str = now.strftime("Date: %Y-%m-%d")
         time_str = now.strftime("Time: %H:%M:%S")
 
-        tline_text("FelooPy v0.2.7")
+        tline_text("FelooPy v0.2.8")
         empty_line()
         two_column(date_str, time_str)
 
