@@ -13,7 +13,7 @@
 
 from feloopy import *
 
-m = madm('electre_i_s','electre_i_model', 'pydecision')
+m = madm('electre_i','electre_i_model', 'pydecision')
 
 m.add_dm([
         [1, 2, 1, 5, 2, 2, 4],   
