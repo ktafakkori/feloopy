@@ -5458,7 +5458,7 @@ class MADM:
             np.set_printoptions(threshold=np.inf)
 
         if isinstance(numpy_var, np.ndarray):
-            tensor_str = np.array2string(numpy_var, separator=', ', prefix='│ ', style=str)
+            tensor_str = np.array2string(numpy_var, separator=', ', prefix='│ ') #Style argument deprecated.
             rows = tensor_str.split('\n')
             first_row_len = len(rows[0])
             for k, row in enumerate(rows):
