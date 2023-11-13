@@ -27,7 +27,7 @@ Learn more:
 
 ## Features
 
-FelooPy supports the following classification of optimization problems based on their mathematical structure:
+FelooPy handles the solution process for the following _mathematical structure-based_ classification of optimization problems:
 
  - Linear Programming (LP)
  - Non-Linear Programming (NLP)
