@@ -31,6 +31,7 @@ FelooPy supports the following _mathematical structure-based_ classification of 
 
 <details>
 <summary>Show as a list</summary>
+
  - Linear Programming (LP)
    - [Unconstrained] Linear Programming (ULP, or LP)
    - [Constrained] Linear Programming (CLP, or LP)
@@ -66,10 +67,12 @@ FelooPy supports the following _mathematical structure-based_ classification of 
       - with non-linear constraints
       - with non-linear objectives and constraints
          - General Mixed Integer Non-Linear Programming (GMINLP, or GMIP)
+
 </details>
 
 <details>
 <summary>Show as a graph</summary>
+
 ```mermaid
 graph LR 
  CLASS["FelooPy"] --> A["LP"]
