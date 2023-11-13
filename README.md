@@ -36,10 +36,12 @@ FelooPy supports the following _mathematical structure-based_ classification of 
 - Integer Programming (IP)
    - Pure Integer Linear Programming (PILP)
    - Pure Integer Non-Linear Programming (PINLP)
-      - Non-linear objectives
-      - Non-linear constraints
+      - with non-linear objectives
+      - with non-linear constraints
+      - with non-linear objectives and constraints
  - Mixed Integer Programming (MIP)
    - Mixed Integer Linear Programming (MILP)
    - Mixed Integer Non-Linear Programming (MINLP)
-      - Non-linear objectives
-      - Non-linear constraints
+      - with non-linear objectives
+      - with non-linear constraints
+      - with non-linear objectives and constraints
