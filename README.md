@@ -287,7 +287,7 @@ To cite or give credit to FelooPy in publications, projects, presentations, web 
 
 - In-text:
 
-   FelooPy (v0.2.7) was used in conjunction with <Interface x> (v0.0.0) (if required or differed from 'feloopy') as the optimization interface and <solver y> (v0.0.0) as the optimization solver.
+   FelooPy (v0.2.7) was used in conjunction with [Interface x] (v0.0.0) (except 'feloopy') as the optimization interface and [solver y] (v0.0.0) as the optimization solver.
 
 ## License
 
