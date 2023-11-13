@@ -66,32 +66,32 @@ FelooPy supports the following _mathematical structure-based_ classification of 
          - General Mixed Integer Non-Linear Programming (GMINLP)
 
 ```mermaid
-graph TB
- A[Linear Programming (LP)]
- B[Unconstrained Linear Programming (ULP, or LP)]
- C[Constrained Linear Programming (CLP, or LP)]
- D[Non-Linear Programming (NLP)]
- E[Integer Programming (IP)]
- F[Pure Integer Linear Programming (PILP)]
- G[Unconstrained Pure Integer Linear Programming (UPILP, or PILP)]
- H[Constrained Pure Integer Linear Programming (CPILP, or PILP)]
- I[Pure Integer Non-Linear Programming (PINLP)]
- J[General Pure Integer Non-Linear Programming (GPINLP)]
- K[Mixed Integer Programming (MIP)]
- L[Mixed Integer Linear Programming (MILP)]
- M[Unconstrained Mixed Integer Linear Programming (UMILP, or MILP)]
- N[Constrained Mixed Integer Linear Programming (CMILP, or MILP)]
- O[Mixed Integer Non-Linear Programming (MINLP)]
- A --> B
- A --> C
- D --> E
- E --> F
- F --> G
- E --> H
- E --> I
- I --> J
- K --> L
- L --> M
- M --> N
- N --> O
+graph TD;
+   A[Linear Programming (LP)];
+   B[Unconstrained Linear Programming (ULP, or LP)];
+   C[Constrained Linear Programming (CLP, or LP)];
+   D[Non-Linear Programming (NLP)];
+   E[Integer Programming (IP)];
+   F[Pure Integer Linear Programming (PILP)];
+   G[Unconstrained Pure Integer Linear Programming (UPILP, or PILP)];
+   H[Constrained Pure Integer Linear Programming (CPILP, or PILP)];
+   I[Pure Integer Non-Linear Programming (PINLP)];
+   J[General Pure Integer Non-Linear Programming (GPINLP)];
+   K[Mixed Integer Programming (MIP)];
+   L[Mixed Integer Linear Programming (MILP)];
+   M[Unconstrained Mixed Integer Linear Programming (UMILP, or MILP)];
+   N[Constrained Mixed Integer Linear Programming (CMILP, or MILP)];
+   O[Mixed Integer Non-Linear Programming (MINLP)];
+   A --> B;
+   A --> C;
+   D --> E;
+   E --> F;
+   F --> G;
+   E --> H;
+   E --> I;
+   I --> J;
+   K --> L;
+   L --> M;
+   M --> N;
+   N --> O;
 ```
