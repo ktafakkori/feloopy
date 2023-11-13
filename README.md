@@ -5,6 +5,7 @@
 </p>
 
 
+<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Package.png" alt="Package" width="10" height="10" />
 
 ## Introduction
 
