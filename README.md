@@ -291,5 +291,5 @@ To cite or give credit to FelooPy in publications, projects, presentations, web 
 
 ## License
 
-     Copyright K. Tafakkori, 2022-2023
-     See the LICENSE file for copyright information.
+      Copyright K. Tafakkori, 2022-2023
+      See the LICENSE file for copyright information.
