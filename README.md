@@ -51,8 +51,8 @@ FelooPy supports the following _mathematical structure-based_ classification of 
       - with non-linear objectives
          - [Unconstrained] Integer Quadratic Programming (UIQP, IQP, or QUIO)
          - [Unconstrained] Binary Quadratic Programming (UBQP, BQP, or QUBO)
-         - [Constrained] Integer Quadratic Programming (CIQP, CIQP, or QUIO)
-         - [Constrained] Binary Quadratic Programming (CBQP, CBQP, or QUBO)
+         - [Constrained] Integer Quadratic Programming (CIQP, IQP, or QUIO)
+         - [Constrained] Binary Quadratic Programming (CBQP, BQP, or QUBO)
       - with non-linear constraints
       - with non-linear objectives and constraints
          - General Pure Integer Non-Linear Programming (GPINLP)
@@ -97,8 +97,8 @@ graph LR
  C2["PINLP"] --> C21["NLO"]
  C21["NLO"] --> C211["UIQP, IQP, or UQIO"]
  C21["NLO"] --> C212["UBQP, BQP, or UBIO"]
- C21["NLO"] --> C213["CIQP, CQP, or CQIO"]
- C21["NLO"] --> C214["CBQP, CQP, or CBIO"]
+ C21["NLO"] --> C213["CIQP, IQP, or CQIO"]
+ C21["NLO"] --> C214["CBQP, BQP, or CBIO"]
  C2["PINLP"] --> C22["NLC"]
  C2["PINLP"] --> C23["NLOC"]
  C23["NLOC"] --> C231["GPINLP"]
