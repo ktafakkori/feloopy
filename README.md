@@ -136,10 +136,6 @@ _Credit: Keivan Tafakkori_
    - `pico` variant:
 
       ```terminal
-      pip install -U feloopy
-      ```
-      or
-      ```terminal
       pip install -U feloopy[pico]
       ```
 
