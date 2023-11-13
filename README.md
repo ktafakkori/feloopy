@@ -26,7 +26,7 @@ Learn more:
 
 ## Features
 
-FelooPy supports the following _mathematical structure-based_ classification of optimization problems:
+FelooPy supports the following _mathematical structure-based_ classification of numerical and combinatorial optimization problems:
 
 <details>
 <summary>Display as a list</summary>
