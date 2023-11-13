@@ -32,16 +32,19 @@ FelooPy supports the following _mathematical structure-based_ classification of 
  - Linear Programming (LP)
  - Non-Linear Programming (NLP)
    - Non-linear objectives
+      - Quadratic Programming (QP)
    - Non-linear constraints
 - Integer Programming (IP)
    - Pure Integer Linear Programming (PILP)
    - Pure Integer Non-Linear Programming (PINLP)
       - with non-linear objectives
+         - Unconstrained Binary Quadratic Programming (UBQP)
       - with non-linear constraints
       - with non-linear objectives and constraints
  - Mixed Integer Programming (MIP)
    - Mixed Integer Linear Programming (MILP)
    - Mixed Integer Non-Linear Programming (MINLP)
       - with non-linear objectives
+         - Mixed Integer Quadratic Programming (MIQP)
       - with non-linear constraints
       - with non-linear objectives and constraints
