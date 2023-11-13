@@ -24,3 +24,20 @@ Learn more:
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn%20Group%20-blue?&color=darkblue&label=join)](https://www.linkedin.com/groups/12881077/) [![Telegram](https://img.shields.io/badge/Telegram%20Group%20-blue?&color=darkblue&label=join)](https://t.me/feloop_group)
 [![Telegram](https://img.shields.io/badge/Instagram%20Page%20-blue?&color=darkblue&label=follow)](https://instagram.com/feloop_page)
+
+## Features
+
+ - Linear Programming (LP)
+ - Non-Linear Programming (NLP)
+   - Non-linear objectives
+   - Non-linear constraints
+- Integer Programming (IP)
+   - Pure Integer Linear Programming (PILP)
+   - Pure Integer Non-Linear Programming (PINLP)
+      - Non-linear objectives
+      - Non-linear constraints
+ - Mixed Integer Programming (MIP)
+   - Mixed Integer Linear Programming (MILP)
+   - Mixed Integer Non-Linear Programming (MINLP)
+      - Non-linear objectives
+      - Non-linear constraints
