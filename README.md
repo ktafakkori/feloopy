@@ -125,7 +125,7 @@ _Credit: Keivan Tafakkori_
 
 ## Installation
 
-For a quick installation, you may use the `pip` (refer to this [link](https://pip.pypa.io/en/stable/installation/)) package manager as follows:
+For a quick installation, you may use the `pip` (please refer to this [link](https://pip.pypa.io/en/stable/installation/)) package manager as follows:
    
    ```terminal
    pip install -U feloopy[stock]
@@ -241,7 +241,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    `plus_cylp` variant:
 
-   This variant includes the CyLP solver. It requires a valid CyLP license.
+   This variant includes the CyLP solver. It requires a valid CyLP installation. Refer to this [link](https://github.com/coin-or/CyLP) for more information.
 
    ```terminal
    pip install -U feloopy[plus_cylp]
