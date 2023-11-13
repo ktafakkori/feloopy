@@ -127,6 +127,8 @@ _Credit: Keivan Tafakkori_
 
 - Basic variant:
 
+   This variant installs the base package without any additional features.
+
    ```terminal
    pip install -U feloopy
    ```
@@ -135,11 +137,15 @@ _Credit: Keivan Tafakkori_
 
    - `pico` variant:
 
+      This variant installs the base package without any additional features.
+
       ```terminal
       pip install -U feloopy[pico]
       ```
 
    - `nano` variant:
+
+      This variant includes a small set of additional features.
 
       ```terminal
       pip install -U feloopy[nano]
@@ -147,29 +153,39 @@ _Credit: Keivan Tafakkori_
 
    - `micro` variant:
 
+      This variant includes a moderate set of additional features.
+
       ```terminal
       pip install -U feloopy[micro]
       ```
 
    - `mini` variant:
 
+      This variant includes a large set of additional features.
+
       ```terminal
       pip install -U feloopy[mini]
       ```   
 
    - `full` variant:
+
+      This variant includes all available features.
       
       ```terminal
       pip install -U feloopy[full]
       ```
-      
+
    - `stock` variant:
+
+      This variant includes all interface packages.
 
       ```terminal
       pip install -U feloopy[stock]
       ```
 
    - `hyper` variant:
+
+      This variant includes all interface and solver packages.
 
       ```terminal
       pip install -U feloopy[hyper]
@@ -179,11 +195,15 @@ _Credit: Keivan Tafakkori_
 
    `plus_gurobi` variant:
 
+   This variant includes the Gurobi solver.
+
    ```terminal
    pip install -U feloopy[plus_gurobi]
    ```
 
    `plus_cplex` variant:
+
+   This variant includes the CPLEX solver.
 
    ```terminal
    pip install -U feloopy[plus_cplex]
@@ -191,17 +211,23 @@ _Credit: Keivan Tafakkori_
 
    `plus_xpress` variant:
 
+   This variant includes the Xpress solver.
+
    ```terminal
    pip install -U feloopy[plus_xpress]
    ```
 
    `plus_copt` variant:
 
+   This variant includes the COPT solver.
+
    ```terminal
    pip install -U feloopy[plus_copt]
    ```
 
    `plus_cylp` variant:
+
+   This variant includes the CyLP solver.
 
    ```terminal
    pip install -U feloopy[plus_cylp]
@@ -210,6 +236,8 @@ _Credit: Keivan Tafakkori_
  - Special varients
 
    `plus_linux` variant:
+
+   This variant includes additional features for Linux-based distros.
 
    ```terminal
    pip install -U feloopy[plus_linux]
