@@ -159,9 +159,10 @@ _Credit: Keivan Tafakkori_
 
    - `full` variant:
       
-         ```terminal
-         pip install -U feloopy[full]
-         ```
+      ```terminal
+      pip install -U feloopy[full]
+      ```
+      
    - `stock` variant:
 
       ```terminal
