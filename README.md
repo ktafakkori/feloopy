@@ -264,7 +264,7 @@ _Credit: Keivan Tafakkori_
 </details>
 
 ## Citation
-To cite FelooPy in publications, please use the following entries:
+To cite or give credit to FelooPy in publications, projects, web pages, blog posts, etc. please use the following entries:
 
 LaTeX:
 ```bibtex
