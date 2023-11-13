@@ -33,6 +33,7 @@ FelooPy supports the following _mathematical structure-based_ classification of 
  - Non-Linear Programming (NLP)
    - with non-linear objectives
       - [Unconstrained] Quadratic Programming (UQP, or QP)
+      - [Constrained] Quadratic Programming (CQP, or QP)
    - with non-linear constraints
       - Second Order Cone Programming (SOCP)
    - with non-linear objectives and constraints
@@ -42,12 +43,15 @@ FelooPy supports the following _mathematical structure-based_ classification of 
       - with non-linear objectives
          - [Unconstrained] Integer Quadratic Programming (UIQP, IQP, or QUIO)
          - [Unconstrained] Binary Quadratic Programming (UBQP, BQP, or QUBO)
+         - [Constrained] Integer Quadratic Programming (CIQP, CIQP, or QUIO)
+         - [Constrained] Binary Quadratic Programming (CBQP, CBQP, or QUBO)
       - with non-linear constraints
       - with non-linear objectives and constraints
  - Mixed Integer Programming (MIP)
    - Mixed Integer Linear Programming (MILP)
    - Mixed Integer Non-Linear Programming (MINLP)
       - with non-linear objectives
-         - Mixed Integer Quadratic Programming (MIQP)
+         - [Unconstrained] Mixed Integer Quadratic Programming (UMIQP, or MIQP)
+         - [Constrained] Mixed Integer Quadratic Programming (CMIQP, or MIQP)
       - with non-linear constraints
       - with non-linear objectives and constraints
