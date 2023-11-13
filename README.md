@@ -125,6 +125,14 @@ _Credit: Keivan Tafakkori_
 
 ## Installation
 
+For a quick installation, you may use `pip` package manager as follows:
+   
+   ```terminal
+   pip install -U feloopy[stock]
+   ```
+
+However, as some users might prefer a dedicated version, the following lists the available variants of FelooPy:
+
 <details>
 <summary>Basic variant</summary>
 
