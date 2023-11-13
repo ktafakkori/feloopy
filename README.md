@@ -1,7 +1,7 @@
 
 [![Version](https://img.shields.io/static/v1?label=version&message=0.2.7&color=darkgreen)](https://github.com/ktafakkori/feloopy/releases)
 [![Release Date](https://img.shields.io/github/release-date/ktafakkori/feloopy?label=release%20date&color=blue)](https://github.com/ktafakkori/feloopy/releases)
-[![Downloads](https://static.pepy.tech/personalized-badge/feloopy?period=total&units=international_system&left_color=black&right_color=orange&left_text=users)](https://pepy.tech/project/feloopy?&left_text=users)
+[![Downloads](https://static.pepy.tech/personalized-badge/feloopy?period=total&units=international_system&left_color=grey&right_color=orange&left_text=users)](https://pepy.tech/project/feloopy?&left_text=users)
 [![GitHub stars](https://img.shields.io/github/stars/ktafakkori/feloopy?label=stars&color=blue)](https://github.com/ktafakkori/feloopy)
 [![License](https://img.shields.io/static/v1?label=license&message=MIT&color=darkred)](https://opensource.org/licenses/MIT)
 
