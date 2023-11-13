@@ -66,7 +66,8 @@ FelooPy supports the following _mathematical structure-based_ classification of 
          - General Mixed Integer Non-Linear Programming (GMINLP)
 
 ```mermaid
-graph TD
+graph LR 
+ CLASS["FelooPy"]
  A["LP"]
  B["ULP, or LP"]
  C["CLP, or LP"]
@@ -96,14 +97,16 @@ graph TD
  AA["with NLC"]
  AB["with NLOC"]
  AC["GMINLP"]
+ CLASS-->A
+ CLASS-->D
+ CLASS-->I
+ CLASS-->S
  A --> B
  A --> C
- A --> D
  D --> E
  D --> F
  F --> G
  D --> H
- D --> I
  I --> J
  J --> K
  J --> L
@@ -113,7 +116,6 @@ graph TD
  O --> P
  O --> Q
  I --> R
- I --> S
  S --> T
  T --> U
  T --> V
