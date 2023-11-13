@@ -1,6 +1,9 @@
 
 
-<center><img src="miscellaneous/logo/logo4.png" width="30%"></center>
+<p align="center">
+   <img src="miscellaneous/logo/logo4.png" width="30%">
+</p>
+
 
 
 ## Introduction
