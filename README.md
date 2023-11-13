@@ -67,6 +67,14 @@ FelooPy supports the following _mathematical structure-based_ classification of 
 
 ```mermaid
 graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+
+```mermaid
+graph TD;
    A[Linear Programming (LP)];
    B[Unconstrained Linear Programming (ULP, or LP)];
    C[Constrained Linear Programming (CLP, or LP)];
