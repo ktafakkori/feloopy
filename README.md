@@ -279,7 +279,7 @@ LaTeX:
 }
 ```
 
-APA: 
+APA:
 
 <div style="white-space: pre-wrap;">
 Tafakkori, K. (2022). FelooPy: An integrated optimization environment for AutoOR in Python [Python Library]. Retrieved from https://github.com/ktafakkori/feloopy (Original work published September 2022).
