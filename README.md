@@ -30,6 +30,8 @@ Learn more:
 FelooPy supports the following _mathematical structure-based_ classification of optimization problems:
 
  - Linear Programming (LP)
+   - [Unconstrained] Linear Programming (ULP)
+   - [Constrained] Linear Programming (CLP)
  - Non-Linear Programming (NLP)
    - with non-linear objectives
       - [Unconstrained] Quadratic Programming (UQP, or QP)
