@@ -32,7 +32,7 @@ FelooPy supports the following _mathematical structure-based_ classification of 
  - Linear Programming (LP)
  - Non-Linear Programming (NLP)
    - with non-linear objectives
-      - Quadratic Programming (QP)
+      - [Unconstrained] Quadratic Programming (UQP, or QP)
    - with non-linear constraints
       - Second Order Cone Programming (SOCP)
    - with non-linear objectives and constraints
