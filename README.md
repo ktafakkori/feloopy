@@ -30,8 +30,8 @@ Learn more:
 FelooPy supports the following _mathematical structure-based_ classification of optimization problems:
 
  - Linear Programming (LP)
-   - [Unconstrained] Linear Programming (ULP)
-   - [Constrained] Linear Programming (CLP)
+   - [Unconstrained] Linear Programming (ULP, or LP)
+   - [Constrained] Linear Programming (CLP, or LP)
  - Non-Linear Programming (NLP)
    - with non-linear objectives
       - [Unconstrained] Quadratic Programming (UQP, or QP)
@@ -42,6 +42,8 @@ FelooPy supports the following _mathematical structure-based_ classification of 
       - General Non-Linear Programming (GNLP)
 - Integer Programming (IP)
    - Pure Integer Linear Programming (PILP)
+      - [Unconstrained] Pure Integer Linear Programming (UPILP, or PILP)
+      - [Constrained] Pure Integer Linear Programming (CPILP, or PILP)
    - Pure Integer Non-Linear Programming (PINLP)
       - with non-linear objectives
          - [Unconstrained] Integer Quadratic Programming (UIQP, IQP, or QUIO)
@@ -53,6 +55,8 @@ FelooPy supports the following _mathematical structure-based_ classification of 
          - General Pure Integer Non-Linear Programming (GPINLP)
  - Mixed Integer Programming (MIP)
    - Mixed Integer Linear Programming (MILP)
+      - [Unconstrained] Mixed Integer Linear Programming (UMILP, or MILP)
+      - [Constrained] Mixed Integer Linear Programming (CMILP, or MILP)
    - Mixed Integer Non-Linear Programming (MINLP)
       - with non-linear objectives
          - [Unconstrained] Mixed Integer Quadratic Programming (UMIQP, or MIQP)
