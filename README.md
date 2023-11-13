@@ -125,7 +125,7 @@ _Credit: Keivan Tafakkori_
 
 ## Installation
 
-For a quick installation, you may use `pip` package manager as follows:
+For a quick installation, you may use the `pip` (refer to this [link](https://pip.pypa.io/en/stable/installation/)) package manager as follows:
    
    ```terminal
    pip install -U feloopy[stock]
