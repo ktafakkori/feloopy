@@ -81,9 +81,9 @@ _Credit: Keivan Tafakkori_
 graph LR 
  CLASS["FelooPy"] --> SUBCLASS1["Numerical Optimization"]
  CLASS["FelooPy"] --> SUBCLASS2["Combinatorial Optimization"]
- SUBCLASS1["Numerical Optimization"] --> D["LP"]
- SUBCLASS1["Numerical Optimization"] --> D["NLP"]
- SUBCLASS2["Combinatorial Optimization"] --> D["IP"]
+ SUBCLASS1["Numerical Optimization"] --> A["LP"]
+ SUBCLASS1["Numerical Optimization"] --> B["NLP"]
+ SUBCLASS2["Combinatorial Optimization"] --> C["IP"]
  SUBCLASS2["Combinatorial Optimization"] --> D["MIP"]
  A["LP"] --> A1["ULP, or LP"]
  A["LP"] --> A2["CLP, or LP"]
