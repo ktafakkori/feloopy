@@ -66,62 +66,32 @@ FelooPy supports the following _mathematical structure-based_ classification of 
          - General Mixed Integer Non-Linear Programming (GMINLP)
 
 ```mermaid
-graph LR
+graph TB
  A[Linear Programming (LP)]
  B[Unconstrained Linear Programming (ULP, or LP)]
  C[Constrained Linear Programming (CLP, or LP)]
  D[Non-Linear Programming (NLP)]
- E[with non-linear objectives]
- F[Quadratic Programming (QP)]
- G[with non-linear constraints]
- H[General Non-Linear Programming (GNLP)]
- I[Integer Programming (IP)]
- J[Pure Integer Linear Programming (PILP)]
- K[Unconstrained Pure Integer Linear Programming (UPILP, or PILP)]
- L[Constrained Pure Integer Linear Programming (CPILP, or PILP)]
- M[Pure Integer Non-Linear Programming (PINLP)]
- N[with non-linear objectives]
- O[Integer Quadratic Programming (UIQP, IQP, or QUIO)]
- P[with non-linear constraints]
- Q[with non-linear objectives and constraints]
- R[General Pure Integer Non-Linear Programming (GPINLP)]
- S[Mixed Integer Programming (MIP)]
- T[Mixed Integer Linear Programming (MILP)]
- U[Unconstrained Mixed Integer Linear Programming (UMILP, or MILP)]
- V[Constrained Mixed Integer Linear Programming (CMILP, or MILP)]
- W[Mixed Integer Non-Linear Programming (MINLP)]
- X[with non-linear objectives]
- Y[Mixed Integer Quadratic Programming (UMIQP, or MIQP)]
- Z[Constrained Mixed Integer Quadratic Programming (CMIQP, or MIQP)]
- AA[with non-linear constraints]
- AB[with non-linear objectives and constraints]
- AC[General Mixed Integer Non-Linear Programming (GMINLP)]
+ E[Integer Programming (IP)]
+ F[Pure Integer Linear Programming (PILP)]
+ G[Unconstrained Pure Integer Linear Programming (UPILP, or PILP)]
+ H[Constrained Pure Integer Linear Programming (CPILP, or PILP)]
+ I[Pure Integer Non-Linear Programming (PINLP)]
+ J[General Pure Integer Non-Linear Programming (GPINLP)]
+ K[Mixed Integer Programming (MIP)]
+ L[Mixed Integer Linear Programming (MILP)]
+ M[Unconstrained Mixed Integer Linear Programming (UMILP, or MILP)]
+ N[Constrained Mixed Integer Linear Programming (CMILP, or MILP)]
+ O[Mixed Integer Non-Linear Programming (MINLP)]
  A --> B
  A --> C
- A --> D
  D --> E
- D --> F
+ E --> F
  F --> G
- D --> H
- D --> I
+ E --> H
+ E --> I
  I --> J
- J --> K
- J --> L
- I --> M
+ K --> L
+ L --> M
  M --> N
- M --> O
- O --> P
- O --> Q
- I --> R
- I --> S
- S --> T
- T --> U
- T --> V
- S --> W
- W --> X
- W --> Y
- Y --> Z
- Z --> AA
- Z --> AB
- S --> AC
+ N --> O
 ```
