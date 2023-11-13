@@ -84,7 +84,7 @@ graph LR
  CLASS["FelooPy"] --> D["MIP"]
  A["LP"] --> A1["ULP, or LP"]
  A["LP"] --> A2["CLP, or LP"]
- A["LP"] --> A2["GLP, or LP"]
+ A["LP"] --> A3["GLP, or LP"]
  B["NLP"] --> B1["NLO"]
  B1["NLO"] --> B11["UQP, or QP"]
  B1["NLO"] --> B12["CQP, or QP"]
