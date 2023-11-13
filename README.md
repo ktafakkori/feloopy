@@ -282,5 +282,7 @@ Tafakkori, K. (2022). FelooPy: An integrated optimization environment for AutoOR
 
 </div>
 
+## License
+
      Copyright K. Tafakkori, 2022-2023
      See the LICENSE file for copyright information.
