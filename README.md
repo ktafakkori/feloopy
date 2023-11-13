@@ -30,7 +30,7 @@ Learn more:
 FelooPy supports the following _mathematical structure-based_ classification of optimization problems:
 
 <details>
-<summary>Show as a list</summary>
+<summary>Display as a list</summary>
 
  - Linear Programming (LP)
    - [Unconstrained] Linear Programming (ULP, or LP)
@@ -68,10 +68,12 @@ FelooPy supports the following _mathematical structure-based_ classification of 
       - with non-linear objectives and constraints
          - General Mixed Integer Non-Linear Programming (GMINLP, or GMIP)
 
+_Credit: Keivan Tafakkori_
+
 </details>
 
 <details>
-<summary>Show as a graph</summary>
+<summary>Display as a graph</summary>
 
 ```mermaid
 graph LR 
@@ -111,5 +113,8 @@ graph LR
  D2["MINLP"] --> D23["NLOC"]
  D23["NLOC"] --> D231["GMINLP, or GMIP"]
 ```
+
+_Credit: Keivan Tafakkori_
+
 </details>
 
