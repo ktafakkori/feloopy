@@ -1,7 +1,7 @@
 
 
 <p align="center">
-   <img src="miscellaneous/logo/logo1.png" width="20%">
+   <img src="miscellaneous/logo/feloopy.gif" width="20%">
 </p>
 
 
