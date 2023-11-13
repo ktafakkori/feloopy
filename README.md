@@ -125,15 +125,18 @@ _Credit: Keivan Tafakkori_
 
 ## Installation
 
-- Basic variant:
+<details>
+<summary>Basic variant</summary>
 
    This variant installs the base package without any additional features.
 
    ```terminal
    pip install -U feloopy
    ```
+</details>
 
-- Normal variants
+<details>
+<summary>Free variants</summary>
 
    - `pico` variant:
 
@@ -191,7 +194,10 @@ _Credit: Keivan Tafakkori_
       pip install -U feloopy[hyper]
       ```
 
-- Commercial solvers variants:
+</details>
+
+<details>
+<summary>Commercial variants</summary>
 
    `plus_gurobi` variant:
 
@@ -233,7 +239,7 @@ _Credit: Keivan Tafakkori_
    pip install -U feloopy[plus_cylp]
    ```
 
- - Special varients
+ - Special variants
 
    `plus_linux` variant:
 
@@ -243,7 +249,10 @@ _Credit: Keivan Tafakkori_
    pip install -U feloopy[plus_linux]
    ```
 
-- Dev variant:
+</details>
+
+<details>
+<summary>Dev variant</summary>
 
    To support the developer with pull requests, and to get the latest updates, you can install a development variant as follows:
 
