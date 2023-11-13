@@ -33,13 +33,13 @@ setup(
     license='MIT',
     python_requires='>=3.10',
     extras_require={
-                    'pico': [], #bare minimum, original developments of FelooPy
-                    'nano': ['pymprog'], #including some LP, IP, MIP solvers
-                    'micro': ['pymprog', 'gekko', 'mealpy'], #including some of the most-used LP, IP, NLP, MIP solvers
-                    'mini': ['pymprog', 'gekko', 'mealpy', 'ortools', 'cvxpy'], #including some of the most-used LP, IP, NLP, MIP, and convex and constraint solvers
-                    'full': ['pymprog', 'gekko', 'mealpy', 'ortools', 'cvxpy', 'pymoo', 'pydecision'], # including mcdm support
-                    'stock': [interfaces], #Including all open-source interfaces
-                    'hyper': [interfaces+solvers], #Including all open-source and commercial interfaces
+                    'pico': [],
+                    'nano': ['pymprog'],
+                    'micro': ['pymprog', 'gekko', 'mealpy'], 
+                    'mini': ['pymprog', 'gekko', 'mealpy', 'ortools', 'cvxpy'], 
+                    'full': ['pymprog', 'gekko', 'mealpy', 'ortools', 'cvxpy', 'pymoo', 'pydecision'], 
+                    'stock': [interfaces],
+                    'hyper': [interfaces+solvers],
                     'plus_gurobi': [solvers[3]],
                     'plus_cplex': [solvers[0], solvers[1]],
                     'plus_xpress': [solvers[2]],
