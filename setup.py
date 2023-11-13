@@ -32,12 +32,19 @@ setup(
     download_url='https://github.com/ktafakkori/feloopy/releases',
     license='MIT',
     python_requires='>=3.10',
-    extras_require={'all_solvers': solvers,
-                    'gurobi': [solvers[3]],
-                    'cplex': [solvers[0], solvers[1]],
-                    'xpress': [solvers[2]],
-                    'copt': [solvers[5]],
-                    'cylp': [solvers[4]],
-                    'linux': ['pymultiobjective']},
-    install_requires=[common+interfaces],
+    extras_require={
+                    'pico': [], #bare minimum, original developments of FelooPy
+                    'nano': ['pymprog'], #including some LP, IP, MIP solvers
+                    'micro': ['pymprog', 'gekko', 'mealpy'], #including some of the most-used LP, IP, NLP, MIP solvers
+                    'mini': ['pymprog', 'gekko', 'mealpy', 'ortools', 'cvxpy'], #including some of the most-used LP, IP, NLP, MIP, and convex and constraint solvers
+                    'full': ['pymprog', 'gekko', 'mealpy', 'ortools', 'cvxpy', 'pymoo', 'pydecision'], # including mcdm support
+                    'stock': [interfaces], #Including all open-source interfaces
+                    'hyper': [interfaces+solvers], #Including all open-source and commercial interfaces
+                    'plus_gurobi': [solvers[3]],
+                    'plus_cplex': [solvers[0], solvers[1]],
+                    'plus_xpress': [solvers[2]],
+                    'plus_copt': [solvers[5]],
+                    'plus_cylp': [solvers[4]],
+                    'plus_linux': ['pymultiobjective']},
+    install_requires=[common],
 )

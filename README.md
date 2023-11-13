@@ -123,3 +123,9 @@ _Credit: Keivan Tafakkori_
 
 </details>
 
+## Installation
+
+- `pico` variant: (using PyPi's package manager `pip`):
+   ```terminal
+   pip install -U feloopy
+   ```
