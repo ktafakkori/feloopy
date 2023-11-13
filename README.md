@@ -31,42 +31,44 @@ FelooPy supports the following _mathematical structure-based_ classification of 
 <details>
 <summary>Display as a list</summary>
 
- - Linear Programming (LP)
-   - [Unconstrained] Linear Programming (ULP, or LP)
-   - [Constrained] Linear Programming (CLP, or LP)
-   - General Linear Programming (GLP, or LP)
- - Non-Linear Programming (NLP)
-   - with non-linear objectives
-      - [Unconstrained] Quadratic Programming (UQP, or QP)
-      - [Constrained] Quadratic Programming (CQP, or QP)
-   - with non-linear constraints
-      - Second Order Cone Programming (SOCP)
-   - with non-linear objectives and constraints
-      - General Non-Linear Programming (GNLP)
-- Integer Programming (IP)
-   - Pure Integer Linear Programming (PILP)
-      - [Unconstrained] Pure Integer Linear Programming (UPILP, or PILP)
-      - [Constrained] Pure Integer Linear Programming (CPILP, or PILP)
-   - Pure Integer Non-Linear Programming (PINLP)
+- Numerical optimization
+   - Linear Programming (LP)
+      - [Unconstrained] Linear Programming (ULP, or LP)
+      - [Constrained] Linear Programming (CLP, or LP)
+      - General Linear Programming (GLP, or LP)
+   - Non-Linear Programming (NLP)
       - with non-linear objectives
-         - [Unconstrained] Integer Quadratic Programming (UIQP, IQP, or QUIO)
-         - [Unconstrained] Binary Quadratic Programming (UBQP, BQP, or QUBO)
-         - [Constrained] Integer Quadratic Programming (CIQP, IQP, or QUIO)
-         - [Constrained] Binary Quadratic Programming (CBQP, BQP, or QUBO)
+         - [Unconstrained] Quadratic Programming (UQP, or QP)
+         - [Constrained] Quadratic Programming (CQP, or QP)
       - with non-linear constraints
+         - Second Order Cone Programming (SOCP)
       - with non-linear objectives and constraints
-         - General Pure Integer Non-Linear Programming (GPINLP)
- - Mixed Integer Programming (MIP)
-   - Mixed Integer Linear Programming (MILP)
-      - [Unconstrained] Mixed Integer Linear Programming (UMILP, or MILP)
-      - [Constrained] Mixed Integer Linear Programming (CMILP, or MILP)
-   - Mixed Integer Non-Linear Programming (MINLP)
-      - with non-linear objectives
-         - [Unconstrained] Mixed Integer Quadratic Programming (UMIQP, or MIQP)
-         - [Constrained] Mixed Integer Quadratic Programming (CMIQP, or MIQP)
-      - with non-linear constraints
-      - with non-linear objectives and constraints
-         - General Mixed Integer Non-Linear Programming (GMINLP, or GMIP)
+         - General Non-Linear Programming (GNLP)
+- Combinatorial optimization
+   - Integer Programming (IP)
+      - Pure Integer Linear Programming (PILP)
+         - [Unconstrained] Pure Integer Linear Programming (UPILP, or PILP)
+         - [Constrained] Pure Integer Linear Programming (CPILP, or PILP)
+      - Pure Integer Non-Linear Programming (PINLP)
+         - with non-linear objectives
+            - [Unconstrained] Integer Quadratic Programming (UIQP, IQP, or QUIO)
+            - [Unconstrained] Binary Quadratic Programming (UBQP, BQP, or QUBO)
+            - [Constrained] Integer Quadratic Programming (CIQP, IQP, or QUIO)
+            - [Constrained] Binary Quadratic Programming (CBQP, BQP, or QUBO)
+         - with non-linear constraints
+         - with non-linear objectives and constraints
+            - General Pure Integer Non-Linear Programming (GPINLP)
+   - Mixed Integer Programming (MIP)
+      - Mixed Integer Linear Programming (MILP)
+         - [Unconstrained] Mixed Integer Linear Programming (UMILP, or MILP)
+         - [Constrained] Mixed Integer Linear Programming (CMILP, or MILP)
+      - Mixed Integer Non-Linear Programming (MINLP)
+         - with non-linear objectives
+            - [Unconstrained] Mixed Integer Quadratic Programming (UMIQP, or MIQP)
+            - [Constrained] Mixed Integer Quadratic Programming (CMIQP, or MIQP)
+         - with non-linear constraints
+         - with non-linear objectives and constraints
+            - General Mixed Integer Non-Linear Programming (GMINLP, or GMIP)
 
 _Credit: Keivan Tafakkori_
 
@@ -77,10 +79,12 @@ _Credit: Keivan Tafakkori_
 
 ```mermaid
 graph LR 
- CLASS["FelooPy"] --> A["LP"]
- CLASS["FelooPy"] --> B["NLP"]
- CLASS["FelooPy"] --> C["IP"]
- CLASS["FelooPy"] --> D["MIP"]
+ CLASS["FelooPy"] --> SUBCLASS1["Numerical Optimization"]
+ CLASS["FelooPy"] --> SUBCLASS2["Combinatorial Optimization"]
+ SUBCLASS1["Numerical Optimization"] --> D["LP"]
+ SUBCLASS1["Numerical Optimization"] --> D["NLP"]
+ SUBCLASS2["Combinatorial Optimization"] --> D["IP"]
+ SUBCLASS2["Combinatorial Optimization"] --> D["MIP"]
  A["LP"] --> A1["ULP, or LP"]
  A["LP"] --> A2["CLP, or LP"]
  A["LP"] --> A3["GLP, or LP"]
