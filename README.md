@@ -123,6 +123,46 @@ _Credit: Keivan Tafakkori_
 
 </details>
 
+from setuptools import setup, find_packages
+
+common = ['tabulate', 'numpy', 'matplotlib', 'infix', 'pandas', 'openpyxl', 'numba', 'plotly', 'psutil', 'py-cpuinfo', 'win-unicode-console', 'xlsxwriter', 'gputil']
+interfaces = ['gekko', 'ortools', 'pulp', 'pyomo', 'pymprog', 'picos', 'linopy', 'cvxpy', 'mip', 'mealpy', 'pydecision','rsome', 'pymoo', 'niapy', 'pygad']
+solvers = ['cplex', 'docplex', 'xpress', 'gurobipy','cylp', 'coptpy']
+
+setup(
+    name='feloopy',
+    version='0.2.8',
+    description='FelooPy: An integrated optimization environment for automated operations research in Python.',
+    packages=find_packages(include=['feloopy', 'feloopy.*']),
+    long_description=open('README.md', encoding="utf8").read(),
+    long_description_content_type='text/markdown',
+    keywords=['optimization', 'machine learning', 'simulation', 'operations research', 'computer science',
+              'data science', 'management science', 'industrial engineering', 'supply chain', 'operations management'],
+    author='Keivan Tafakkori',
+    author_email='k.tafakkori@gmail.com',
+    maintainer='Keivan Tafakkori',
+    maintainer_email='k.tafakkori@gmail.com',
+    url='https://github.com/ktafakkori/feloopy',
+    download_url='https://github.com/ktafakkori/feloopy/releases',
+    license='MIT',
+    python_requires='>=3.10',
+    extras_require={
+                    'pico': [],
+                    'nano': ['pymprog'],
+                    'micro': ['pymprog', 'gekko', 'mealpy'], 
+                    'mini': ['pymprog', 'gekko', 'mealpy', 'ortools', 'cvxpy'], 
+                    'full': ['pymprog', 'gekko', 'mealpy', 'ortools', 'cvxpy', 'pymoo', 'pydecision'], 
+                    'stock': [interfaces],
+                    'hyper': [interfaces+solvers],
+                    'plus_gurobi': [solvers[3]],
+                    'plus_cplex': [solvers[0], solvers[1]],
+                    'plus_xpress': [solvers[2]],
+                    'plus_copt': [solvers[5]],
+                    'plus_cylp': [solvers[4]],
+                    'plus_linux': ['pymultiobjective']},
+    install_requires=[common],
+)
+
 ## Installation
 
 - Basic variant:
@@ -137,7 +177,7 @@ _Credit: Keivan Tafakkori_
 
    - `pico` variant:
 
-      This variant installs the base package without any additional features.
+      This variant installs the base package without any additional features. It is the same as the basic variant. It installes FelooPy with its common dependecnies.
 
       ```terminal
       pip install -U feloopy[pico]
@@ -145,7 +185,7 @@ _Credit: Keivan Tafakkori_
 
    - `nano` variant:
 
-      This variant includes a small set of additional features.
+      This variant includes a small set of additional features. It installes FelooPy with its common dependecnies and the `pymprog` package. 
 
       ```terminal
       pip install -U feloopy[nano]
@@ -153,7 +193,7 @@ _Credit: Keivan Tafakkori_
 
    - `micro` variant:
 
-      This variant includes a moderate set of additional features.
+      This variant includes a moderate set of additional features. It installes FelooPy with its common dependecnies and the `pymprog`, `gekko`, and `mealpy` packages.
 
       ```terminal
       pip install -U feloopy[micro]
@@ -161,7 +201,7 @@ _Credit: Keivan Tafakkori_
 
    - `mini` variant:
 
-      This variant includes a large set of additional features.
+      This variant includes a large set of additional features. It installes FelooPy with its common dependecnies and the `pymprog`, `gekko`, `mealpy`, `ortools`, and `cvxpy` packages.
 
       ```terminal
       pip install -U feloopy[mini]
@@ -169,7 +209,7 @@ _Credit: Keivan Tafakkori_
 
    - `full` variant:
 
-      This variant includes all available features.
+      This variant includes all available features. It installes FelooPy with its common dependecnies and the `pymprog`, `gekko`, `mealpy`, `ortools`, `cvxpy`, `pymoo`, and `pydecision` packages.
       
       ```terminal
       pip install -U feloopy[full]
@@ -177,7 +217,7 @@ _Credit: Keivan Tafakkori_
 
    - `stock` variant:
 
-      This variant includes all interface packages.
+      This variant includes all interface packages. It installes FelooPy with its common dependecnies and the `gekko`, `ortools`, `pulp`, `pyomo`, `pymprog`, `picos`, `linopy`, `cvxpy`, `mip`, `mealpy`, `pydecision`, `rsome`, `pymoo`, `niapy`, and `pygad` packages.
 
       ```terminal
       pip install -U feloopy[stock]
@@ -185,7 +225,7 @@ _Credit: Keivan Tafakkori_
 
    - `hyper` variant:
 
-      This variant includes all interface and solver packages.
+      This variant includes all interface and solver packages. It installes FelooPy with its common dependecnies and the `gekko`, `ortools`, `pulp`, `pyomo`, `pymprog`, `picos`, `linopy`, `cvxpy`, `mip`, `mealpy`, `pydecision`, `rsome`, `pymoo`, `niapy`, `pygad`, `cplex`, `docplex`, `xpress`, `gurobipy`, `cylp`, and `coptpy` packages.
 
       ```terminal
       pip install -U feloopy[hyper]
@@ -195,7 +235,7 @@ _Credit: Keivan Tafakkori_
 
    `plus_gurobi` variant:
 
-   This variant includes the Gurobi solver.
+   This variant includes the Gurobi solver. It requires a valid Gurobi license. 
 
    ```terminal
    pip install -U feloopy[plus_gurobi]
@@ -203,7 +243,7 @@ _Credit: Keivan Tafakkori_
 
    `plus_cplex` variant:
 
-   This variant includes the CPLEX solver.
+   This variant includes the CPLEX solver. It requires a valid CPLEX license.
 
    ```terminal
    pip install -U feloopy[plus_cplex]
@@ -211,7 +251,7 @@ _Credit: Keivan Tafakkori_
 
    `plus_xpress` variant:
 
-   This variant includes the Xpress solver.
+   This variant includes the Xpress solver. It requires a valid Xpress license.
 
    ```terminal
    pip install -U feloopy[plus_xpress]
@@ -219,7 +259,7 @@ _Credit: Keivan Tafakkori_
 
    `plus_copt` variant:
 
-   This variant includes the COPT solver.
+   This variant includes the COPT solver. It requires a valid COPT license.
 
    ```terminal
    pip install -U feloopy[plus_copt]
@@ -227,7 +267,7 @@ _Credit: Keivan Tafakkori_
 
    `plus_cylp` variant:
 
-   This variant includes the CyLP solver.
+   This variant includes the CyLP solver. It requires a valid CyLP license.
 
    ```terminal
    pip install -U feloopy[plus_cylp]
@@ -237,8 +277,18 @@ _Credit: Keivan Tafakkori_
 
    `plus_linux` variant:
 
-   This variant includes additional features for Linux-based distros.
+   This variant includes additional features for Linux-based distros. It installes FelooPy with its common dependecnies and the `pymultiobjective` package.
 
    ```terminal
    pip install -U feloopy[plus_linux]
    ```
+
+- Dev variant:
+
+   To support the developer with pull requests, and to get the latest updates, you can install a development variant as follows:
+
+      ```terminal
+      pip install -U git+https://github.com/ktafakkori/feloopy.git#egg=feloopy[variant_name]
+      ```
+
+      where `variant_name` is one of the above variants.
