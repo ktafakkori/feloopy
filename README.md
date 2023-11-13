@@ -287,8 +287,8 @@ setup(
 
    To support the developer with pull requests, and to get the latest updates, you can install a development variant as follows:
 
-      ```terminal
-      pip install -U git+https://github.com/ktafakkori/feloopy.git#egg=feloopy[variant_name]
-      ```
+   ```terminal
+   pip install -U git+https://github.com/ktafakkori/feloopy.git#egg=feloopy[variant_name]
+   ```
 
-      where `variant_name` is one of the above variants.
+   where `variant_name` is one of the above variants.
