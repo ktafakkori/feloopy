@@ -266,6 +266,7 @@ _Credit: Keivan Tafakkori_
 ## Citation
 To cite FelooPy in publications, please use the following entries:
 
+LaTeX:
 ```bibtex
 @software{ktafakkori2022Sep,
   author       = {Keivan Tafakkori},
@@ -277,6 +278,7 @@ To cite FelooPy in publications, please use the following entries:
 }
 ```
 
+APA: 
 <div style="white-space: pre-wrap;">
 Tafakkori, K. (2022). FelooPy: An integrated optimization environment for AutoOR in Python [Python Library]. Retrieved from https://github.com/ktafakkori/feloopy (Original work published September 2022).
 
