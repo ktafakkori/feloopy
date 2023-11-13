@@ -31,10 +31,11 @@ FelooPy supports the following _mathematical structure-based_ classification of 
 
  - Linear Programming (LP)
  - Non-Linear Programming (NLP)
-   - Non-linear objectives
+   - with non-linear objectives
       - Quadratic Programming (QP)
-   - Non-linear constraints
+   - with non-linear constraints
       - Second Order Cone Programming (SOCP)
+   - with non-linear objectives and constraints
 - Integer Programming (IP)
    - Pure Integer Linear Programming (PILP)
    - Pure Integer Non-Linear Programming (PINLP)
