@@ -37,6 +37,7 @@ FelooPy supports the following _mathematical structure-based_ classification of 
    - with non-linear constraints
       - Second Order Cone Programming (SOCP)
    - with non-linear objectives and constraints
+      - General Non-Linear Programming (GNLP)
 - Integer Programming (IP)
    - Pure Integer Linear Programming (PILP)
    - Pure Integer Non-Linear Programming (PINLP)
@@ -47,6 +48,7 @@ FelooPy supports the following _mathematical structure-based_ classification of 
          - [Constrained] Binary Quadratic Programming (CBQP, CBQP, or QUBO)
       - with non-linear constraints
       - with non-linear objectives and constraints
+         - General Pure Integer Non-Linear Programming (GPINLP)
  - Mixed Integer Programming (MIP)
    - Mixed Integer Linear Programming (MILP)
    - Mixed Integer Non-Linear Programming (MINLP)
@@ -55,3 +57,4 @@ FelooPy supports the following _mathematical structure-based_ classification of 
          - [Constrained] Mixed Integer Quadratic Programming (CMIQP, or MIQP)
       - with non-linear constraints
       - with non-linear objectives and constraints
+         - General Mixed Integer Non-Linear Programming (GMINLP)
