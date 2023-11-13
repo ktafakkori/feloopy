@@ -125,7 +125,95 @@ _Credit: Keivan Tafakkori_
 
 ## Installation
 
-- `pico` variant: (using PyPi's package manager `pip`):
+- Basic variant:
+
    ```terminal
    pip install -U feloopy
+   ```
+
+- Normal variants
+
+   - `pico` variant:
+
+      ```terminal
+      pip install -U feloopy
+      ```
+      or
+      ```terminal
+      pip install -U feloopy[pico]
+      ```
+
+   - `nano` variant:
+
+      ```terminal
+      pip install -U feloopy[nano]
+      ```
+
+   - `micro` variant:
+
+      ```terminal
+      pip install -U feloopy[micro]
+      ```
+
+   - `mini` variant:
+
+      ```terminal
+      pip install -U feloopy[mini]
+      ```   
+
+   - `full` variant:
+      
+         ```terminal
+         pip install -U feloopy[full]
+         ```
+   - `stock` variant:
+
+      ```terminal
+      pip install -U feloopy[stock]
+      ```
+
+   - `hyper` variant:
+
+      ```terminal
+      pip install -U feloopy[hyper]
+      ```
+
+- Commercial solvers variants:
+
+   `plus_gurobi` variant:
+
+   ```terminal
+   pip install -U feloopy[plus_gurobi]
+   ```
+
+   `plus_cplex` variant:
+
+   ```terminal
+   pip install -U feloopy[plus_cplex]
+   ```
+
+   `plus_xpress` variant:
+
+   ```terminal
+   pip install -U feloopy[plus_xpress]
+   ```
+
+   `plus_copt` variant:
+
+   ```terminal
+   pip install -U feloopy[plus_copt]
+   ```
+
+   `plus_cylp` variant:
+
+   ```terminal
+   pip install -U feloopy[plus_cylp]
+   ```
+
+ - Special varients
+
+   `plus_linux` variant:
+
+   ```terminal
+   pip install -U feloopy[plus_linux]
    ```
