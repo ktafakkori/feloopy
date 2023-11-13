@@ -64,3 +64,64 @@ FelooPy supports the following _mathematical structure-based_ classification of 
       - with non-linear constraints
       - with non-linear objectives and constraints
          - General Mixed Integer Non-Linear Programming (GMINLP)
+
+```mermaid
+graph LR
+ A[Linear Programming (LP)]
+ B[Unconstrained Linear Programming (ULP, or LP)]
+ C[Constrained Linear Programming (CLP, or LP)]
+ D[Non-Linear Programming (NLP)]
+ E[with non-linear objectives]
+ F[Quadratic Programming (QP)]
+ G[with non-linear constraints]
+ H[General Non-Linear Programming (GNLP)]
+ I[Integer Programming (IP)]
+ J[Pure Integer Linear Programming (PILP)]
+ K[Unconstrained Pure Integer Linear Programming (UPILP, or PILP)]
+ L[Constrained Pure Integer Linear Programming (CPILP, or PILP)]
+ M[Pure Integer Non-Linear Programming (PINLP)]
+ N[with non-linear objectives]
+ O[Integer Quadratic Programming (UIQP, IQP, or QUIO)]
+ P[with non-linear constraints]
+ Q[with non-linear objectives and constraints]
+ R[General Pure Integer Non-Linear Programming (GPINLP)]
+ S[Mixed Integer Programming (MIP)]
+ T[Mixed Integer Linear Programming (MILP)]
+ U[Unconstrained Mixed Integer Linear Programming (UMILP, or MILP)]
+ V[Constrained Mixed Integer Linear Programming (CMILP, or MILP)]
+ W[Mixed Integer Non-Linear Programming (MINLP)]
+ X[with non-linear objectives]
+ Y[Mixed Integer Quadratic Programming (UMIQP, or MIQP)]
+ Z[Constrained Mixed Integer Quadratic Programming (CMIQP, or MIQP)]
+ AA[with non-linear constraints]
+ AB[with non-linear objectives and constraints]
+ AC[General Mixed Integer Non-Linear Programming (GMINLP)]
+ A --> B
+ A --> C
+ A --> D
+ D --> E
+ D --> F
+ F --> G
+ D --> H
+ D --> I
+ I --> J
+ J --> K
+ J --> L
+ I --> M
+ M --> N
+ M --> O
+ O --> P
+ O --> Q
+ I --> R
+ I --> S
+ S --> T
+ T --> U
+ T --> V
+ S --> W
+ W --> X
+ W --> Y
+ Y --> Z
+ Z --> AA
+ Z --> AB
+ S --> AC
+```
