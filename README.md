@@ -63,67 +63,43 @@ FelooPy supports the following _mathematical structure-based_ classification of 
          - [Constrained] Mixed Integer Quadratic Programming (CMIQP, or MIQP)
       - with non-linear constraints
       - with non-linear objectives and constraints
-         - General Mixed Integer Non-Linear Programming (GMINLP)
+         - General Mixed Integer Non-Linear Programming (GMINLP, or GMIP)
 
 ```mermaid
 graph LR 
- CLASS["FelooPy"]
- A["LP"]
- B["ULP, or LP"]
- C["CLP, or LP"]
- D["NLP"]
- E["with NLO"]
- F["QP"]
- G["with NLC"]
- H["GNLP"]
- I["IP"]
- J["PILP"]
- K["UPILP, or PILP"]
- L["CPILP, or PILP"]
- M["PINLP"]
- N["with NLO"]
- O["UIQP, IQP, or QUIO"]
- P["with NLC"]
- Q["with NLOC"]
- R["GPINLP"]
- S["MIP"]
- T["MILP"]
- U["UMILP, or MILP"]
- V["CMILP, or MILP"]
- W["MINLP"]
- X["with NLO"]
- Y["UMIQP, or MIQP"]
- Z["CMIQP, or MIQP"]
- AA["with NLC"]
- AB["with NLOC"]
- AC["GMINLP"]
- CLASS-->A
- CLASS-->D
- CLASS-->I
- CLASS-->S
- A --> B
- A --> C
- D --> E
- D --> F
- F --> G
- D --> H
- I --> J
- J --> K
- J --> L
- I --> M
- M --> N
- M --> O
- O --> P
- O --> Q
- I --> R
- S --> T
- T --> U
- T --> V
- S --> W
- W --> X
- W --> Y
- Y --> Z
- Z --> AA
- Z --> AB
- S --> AC
+ CLASS["FelooPy"] --> A["LP"]
+ CLASS["FelooPy"] --> B["NLP"]
+ CLASS["FelooPy"] --> C["IP"]
+ CLASS["FelooPy"] --> D["MIP"]
+ A["LP"] --> A1["ULP, or LP"]
+ A["LP"] --> A2["CLP, or LP"]
+ B["NLP"] --> B1["NLO"]
+ B1["NLO"] --> B11["UQP, or QP"]
+ B1["NLO"] --> B12["CQP, or QP"]
+ B["NLP"] --> B2["NLC"]
+ B2["NLC"] --> B21["SOCP"]
+ B["NLP"] --> B3["NLOC"]
+ B3["NLOC"] --> B31["GNLP"]
+ C["IP"] --> C1["PILP"]
+ C1["PLIP"] --> C11["UPILP, or PILP"]
+ C1["PLIP"] --> C12["CPILP, or PILP"]
+ C["IP"] --> C2["PINLP"]
+ C2["PINLP"] --> C21["NLO"]
+ C21["NLO"] --> C211["UIQP, IQP, or UQIO"]
+ C21["NLO"] --> C212["UBQP, BQP, or UBIO"]
+ C21["NLO"] --> C213["CIQP, CQP, or CQIO"]
+ C21["NLO"] --> C214["CBQP, CQP, or CBIO"]
+ C2["PINLP"] --> C22["NLC"]
+ C2["PINLP"] --> C23["NLOC"]
+ C23["NLOC"] --> C231["GPINLP"]
+ D["MIP"] --> D1["MILP"]  
+ D1["MILP"] --> D11["UMILP, or MILP"]
+ D1["MILP"] --> D12["CMILP, or MILP"]
+ D["MIP"] --> D2["MINLP"]  
+ D2["MINLP"] --> D21["NLO"]
+ D21["NLO"] --> D211["UMIQP"]
+ D21["NLO"] --> D212["CMIQP"]
+ D2["MINLP"] --> D22["NLC"]
+ D2["MINLP"] --> D23["NLOC"]
+ D23["NLOC"] --> D231["GMINLP or GMIP"]
 ```
