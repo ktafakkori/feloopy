@@ -35,6 +35,7 @@ FelooPy supports the following _mathematical structure-based_ classification of 
  - Linear Programming (LP)
    - [Unconstrained] Linear Programming (ULP, or LP)
    - [Constrained] Linear Programming (CLP, or LP)
+   - General Linear Programming (GLP, or LP)
  - Non-Linear Programming (NLP)
    - with non-linear objectives
       - [Unconstrained] Quadratic Programming (UQP, or QP)
@@ -83,6 +84,7 @@ graph LR
  CLASS["FelooPy"] --> D["MIP"]
  A["LP"] --> A1["ULP, or LP"]
  A["LP"] --> A2["CLP, or LP"]
+ A["LP"] --> A2["GLP, or LP"]
  B["NLP"] --> B1["NLO"]
  B1["NLO"] --> B11["UQP, or QP"]
  B1["NLO"] --> B12["CQP, or QP"]
