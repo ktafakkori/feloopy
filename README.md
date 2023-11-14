@@ -144,6 +144,8 @@ FelooPy supports the following _expert-based_ classification of decision-making 
          
 - Group Decision-Making (GDM)
 
+_Credit: Keivan Tafakkori_
+
 </details>
 
 <details>
