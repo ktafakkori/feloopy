@@ -285,19 +285,19 @@ However, as some users might prefer a dedicated version, the following lists the
    pip install -U feloopy[plus_copt]
    ```
 
-   `plus_cylp` variant:
+</details>
+
+
+<details>
+<summary>Non-compatible variants</summary>
+
+   `only_cylp` variant:
 
    This variant includes the CyLP solver. It requires a valid CyLP installation. Refer to this [link](https://github.com/coin-or/CyLP) for more information.
 
    ```terminal
    pip install -U feloopy[plus_cylp]
    ```
-
-</details>
-
-
-<details>
-<summary>Non-compatible variants</summary>
 
    `only_linux` variant:
 
