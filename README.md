@@ -96,8 +96,8 @@ graph LR
  B["NLP"] --> B3["NLOC"]
  B3["NLOC"] --> B31["GNLP"]
  C["IP"] --> C1["PILP"]
- C1["PLIP"] --> C11["UPILP, or PILP"]
- C1["PLIP"] --> C12["CPILP, or PILP"]
+ C1["PILP"] --> C11["UPILP, or PILP"]
+ C1["PILP"] --> C12["CPILP, or PILP"]
  C["IP"] --> C2["PINLP"]
  C2["PINLP"] --> C21["NLO"]
  C21["NLO"] --> C211["UIQP, IQP, or UQIO"]
@@ -136,7 +136,7 @@ However, as some users might prefer a dedicated version, the following lists the
 <details>
 <summary>Basic variant</summary>
 
-   This variant installs the base package without any additional features. It is the same as the basic variant. It installs FelooPy with its common dependencies.
+   This variant installs the base package without any additional features. It is the core variant. It installs FelooPy with its common dependencies.
 
    ```terminal
    pip install -U feloopy
