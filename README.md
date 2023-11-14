@@ -126,9 +126,49 @@ _Credit: Keivan Tafakkori_
 
 FelooPy supports the following _expert-based_ classification of decision-making problems:
 
-- Multi Attribute Decision Making (MADM)
+<details>
+<summary>Display as a list</summary>
 
+
+- Multi-Attribute Decision Making (MADM)
+   - Weighting methods
+      - without a decision-making matrix
+      - with a decision-making matrix
+   - Ranking methods
+      - Compensatory methods
+         - Scoring methods
+         - Compromising methods
+      - Non-compensatory methods 
+         - Conjunctive satisfying methods
+         - Lexicographic methods
+         - Outranking methods
+         
 - Group Decision Making (GDM)
+
+</details>
+
+<details>
+<summary>Display as a graph</summary>
+
+```mermaid
+graph LR 
+ CLASS["FelooPy"] --> SUBCLASS1["MADM"]
+ CLASS["FelooPy"] --> SUBCLASS2["GDM"]
+ SUBCLASS1["MADM"] --> A["Weighting"]
+ SUBCLASS1["MADM"] --> B["Ranking"]
+ A["Weighting"] --> A1["without decision matrix"]
+ A["Weighting"] --> A2["with decision matrix"]
+ B["Ranking"] --> B1["Compensatory"]
+ B["Ranking"] --> B2["Non-compensatory"]
+ B1["Compensatory"] --> B11["Scoring"]
+ B1["Compensatory"] --> B12["Compromising"]
+ B2["Non-compensatory"] --> B21["Conjunctive satisfying"]
+ B2["Non-compensatory"] --> B22["Lexicographic"]
+ B2["Non-compensatory"] --> B23["Outranking"]
+```
+_Credit: Keivan Tafakkori_
+
+</details>
 
 ## Installation
 
