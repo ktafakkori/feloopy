@@ -123,6 +123,16 @@ _Credit: Keivan Tafakkori_
 
 </details>
 
+
+FelooPy supports the following _expert-based_ classification of decision-making problems:
+
+- Single Criteria Decision Making
+
+- Multi-Criteria Decision Making
+
+- Group Decision Making
+
+
 ## Installation
 
 For a quick installation with a classic support of interfaces and solvers, you may use the `pip` (please refer to this [link](https://pip.pypa.io/en/stable/installation/)) package manager as follows:
@@ -134,9 +144,9 @@ For a quick installation with a classic support of interfaces and solvers, you m
 However, as some users might prefer a dedicated version, the following lists the available variants of FelooPy:
 
 <details>
-<summary>Basic variant</summary>
+<summary>Core variant</summary>
 
-   This variant installs the base package without any additional features. It is the core variant. It installs FelooPy with its common dependencies.
+   This variant installs the base package without any additional features. It installs FelooPy with its common dependencies.
 
    ```terminal
    pip install -U feloopy
