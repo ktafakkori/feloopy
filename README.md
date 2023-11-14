@@ -173,7 +173,7 @@ _Credit: Keivan Tafakkori_
 
 ## Installation
 
-For a quick installation with a classic support of interfaces and solvers, you may use the `pip package manager (please refer to this [link](https://pip.pypa.io/en/stable/installation/) to install, update, or get one) as follows:
+For a quick installation with a classic support of interfaces and solvers, you may use the `pip` package manager (please refer to this [link](https://pip.pypa.io/en/stable/installation/) to install, update, or get one) as follows:
    
    ```terminal
    pip install -U feloopy[stock]
