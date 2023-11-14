@@ -155,7 +155,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    - `pico` variant:
 
-      This variant installs the base package without any additional features. It is the same as the basic variant. It installs FelooPy with its common dependencies.
+      This variant installs the base package without any additional features. It is the same as the core variant. It installs FelooPy with its common dependencies.
 
       ```terminal
       pip install -U feloopy[pico]
