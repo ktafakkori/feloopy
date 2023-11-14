@@ -171,7 +171,7 @@ _Credit: Keivan Tafakkori_
 
 ## Installation
 
-For a quick installation with a classic support of interfaces and solvers, you may use the `pip` (please refer to this [link](https://pip.pypa.io/en/stable/installation/)) package manager as follows:
+For a quick installation with a classic support of interfaces and solvers, you may use the `pip package manager (please refer to this [link](https://pip.pypa.io/en/stable/installation/) to install, update, or get one) as follows:
    
    ```terminal
    pip install -U feloopy[stock]
@@ -318,7 +318,8 @@ However, as some users might prefer a dedicated version, the following lists the
    pip install -U git+https://github.com/ktafakkori/feloopy.git#egg=feloopy[variant_name]
    ```
 
-   where `variant_name` is one of the above variants.
+   where `variant_name` is one of the above variants. (please refer to this [link](https://git-scm.com/downloads) to install, update, or get git.)
+
 </details>
 
 ## Citation
