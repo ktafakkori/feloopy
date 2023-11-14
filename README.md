@@ -126,12 +126,9 @@ _Credit: Keivan Tafakkori_
 
 FelooPy supports the following _expert-based_ classification of decision-making problems:
 
-- Single Criteria Decision Making
+- Multi Attribute Decision Making (MADM)
 
-- Multi Criteria Decision Making
-
-- Group Decision Making
-
+- Group Decision Making (GDM)
 
 ## Installation
 
