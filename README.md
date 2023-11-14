@@ -128,7 +128,7 @@ FelooPy supports the following _expert-based_ classification of decision-making 
 
 - Single Criteria Decision Making
 
-- Multi-Criteria Decision Making
+- Multi Criteria Decision Making
 
 - Group Decision Making
 
