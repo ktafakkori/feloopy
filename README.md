@@ -130,7 +130,7 @@ FelooPy supports the following _expert-based_ classification of decision-making 
 <summary>Display as a list</summary>
 
 
-- Multi-Attribute Decision Making (MADM)
+- Multi-Attribute Decision-Making (MADM)
    - Weighting methods
       - without a decision-making matrix
       - with a decision-making matrix
