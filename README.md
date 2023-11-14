@@ -293,20 +293,24 @@ However, as some users might prefer a dedicated version, the following lists the
    pip install -U feloopy[plus_cylp]
    ```
 
- - Special variants
+</details>
 
-   `plus_linux` variant:
+
+<details>
+<summary>Non-compatible variants</summary>
+
+   `only_linux` variant:
 
    This variant includes additional features for Linux-based distros. It installs FelooPy with its common dependencies and the `pymultiobjective` package.
 
    ```terminal
-   pip install -U feloopy[plus_linux]
+   pip install -U feloopy[only_linux]
    ```
-
 </details>
 
+
 <details>
-<summary>Dev variant</summary>
+<summary>Dev variants</summary>
 
    To contribute to the project, support the developer with pull requests, and to get the latest updates, you can install a development variant as follows:
 

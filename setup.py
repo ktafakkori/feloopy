@@ -45,6 +45,6 @@ setup(
                     'plus_xpress': [solvers[2]],
                     'plus_copt': [solvers[5]],
                     'plus_cylp': [solvers[4]],
-                    'plus_linux': ['pymultiobjective']},
+                    'only_linux': ['pymultiobjective']},
     install_requires=[common],
 )
