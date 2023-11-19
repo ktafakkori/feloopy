@@ -2,7 +2,6 @@
 
 import numpy as np
 import warnings as wn
-import matplotlib.pyplot as plt
 
 wn.filterwarnings("ignore")
 
