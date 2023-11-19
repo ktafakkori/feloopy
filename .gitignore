@@ -70,3 +70,4 @@ visualize.py
 wheels/
 *.gif
 optimization/
+tests/
