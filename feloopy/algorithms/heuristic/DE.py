@@ -11,6 +11,7 @@
 
 import numpy as np
 import warnings as wn
+from pprint import pprint
 
 wn.filterwarnings("ignore")
 
@@ -45,30 +46,31 @@ class DE:
     def initialize(self):
 
         if self.r == 0:
-            self.pie = np.random.rand(self.t, self.single_objective_tot)
-            self.pie[:, self.new_reward_col] = - np.inf * self.d
-            self.pie[:, self.old_reward_col] = - np.inf * self.d
-            self.pie[:, self.status_col] = 0
-            self.best_index = -1*(1+self.d[0])//2
+            self.pi = np.random.rand(self.t, self.single_objective_tot)
+            self.pi[:, self.new_reward_col] = - np.inf * self.d
+            self.pi[:, self.old_reward_col] = - np.inf * self.d
+            self.pi[:, self.status_col] = 0
             self.bad_status = -1
-        self.best = self.pie[-1].copy()
+            self.best_index = -1*(1+self.d[0])//2
+        self.best = self.pi[-1].copy()
 
     def update(self):
 
-        self.pie = self.evaluate(self.pie)
+        self.pi = self.evaluate(self.pi)
+
         if self.r == 0:
-            self.pie[:, self.old_features_cols[0]:self.old_features_cols[1]] = np.where(np.reshape(self.d[0]*self.pie[:, self.new_reward_col[0]] > self.d[0]*self.pie[:, self.old_reward_col[0]], [self.t, 1]), self.pie[:, self.new_features_cols[0]:self.new_features_cols[1]], self.pie[:, self.old_features_cols[0]:self.old_features_cols[1]])
-            self.pie[:, self.old_reward_col[0]] = np.where(self.d[0]*self.pie[:, self.new_reward_col[0]] > self.d[0] * self.pie[:, self.old_reward_col[0]], self.pie[:, self.new_reward_col[0]], self.pie[:, self.old_reward_col[0]])
-            self.pie = self.pie[np.argsort(
-                self.pie[:, self.old_reward_col[0]])]
-            if self.d[0]*self.pie[self.best_index][self.old_reward_col[0]] > self.d[0]*self.best[self.old_reward_col[0]]:
-                self.best = self.pie[self.best_index].copy()
+
+            self.pi[:, self.old_features_cols[0]:self.old_features_cols[1]] = np.where(np.reshape(self.d[0]*self.pi[:, self.new_reward_col[0]] > self.d[0]*self.pi[:, self.old_reward_col[0]], [self.t, 1]), self.pi[:, self.new_features_cols[0]:self.new_features_cols[1]], self.pi[:, self.old_features_cols[0]:self.old_features_cols[1]])
+            self.pi[:, self.old_reward_col[0]] = np.where(self.d[0]*self.pi[:, self.new_reward_col[0]] > self.d[0] * self.pi[:, self.old_reward_col[0]], self.pi[:, self.new_reward_col[0]], self.pi[:, self.old_reward_col[0]])
+            self.pi = self.pi[np.argsort(self.pi[:, self.old_reward_col[0]])]
+            if self.d[0]*self.pi[self.best_index][self.old_reward_col[0]] > self.d[0]*self.best[self.old_reward_col[0]]: self.best = self.pi[self.best_index].copy()
 
     def vary(self):
 
         indices = np.array([np.random.randint(0, self.t, 3) for t in range(self.t)])
-        self.pie[:, :self.f] = np.where(np.random.rand(self.f) < self.cr, np.clip(self.pie[indices[:, 0], :self.f] + self.mu * (
-            self.pie[indices[:, 1], :self.f] - self.pie[indices[:, 2], :self.f]), 0, 1), self.pie[:, :self.f])
+        mask = np.random.rand(self.t) < self.cr
+        print(len(mask))
+        self.pi[mask, :self.f] = np.clip(self.pi[indices[mask, 0], :self.f] + self.mu * (self.pi[indices[mask, 1], :self.f] - self.pi[indices[mask, 2], :self.f]), 0, 1)
 
     def report(self):
 

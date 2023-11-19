@@ -47,34 +47,34 @@ class SA:
     def initialize(self):
 
         if self.r == 0:
-            self.pie = np.random.rand(1, self.single_objective_tot)
-            self.pie[:, self.new_reward_col] = - np.inf * self.d
-            self.pie[:, self.old_reward_col] = - np.inf * self.d
-            self.pie[:, self.status_col] = 0
+            self.pi = np.random.rand(1, self.single_objective_tot)
+            self.pi[:, self.new_reward_col] = - np.inf * self.d
+            self.pi[:, self.old_reward_col] = - np.inf * self.d
+            self.pi[:, self.status_col] = 0
             self.best_index = -1*(1+self.d[0])//2
             self.bad_status = -1
-        self.best = self.pie[-1].copy()
+        self.best = self.pi[-1].copy()
 
     def update(self):
 
-        self.pie = self.evaluate(self.pie)
+        self.pi = self.evaluate(self.pi)
         Accept = np.random.rand()
         if self.r == 0:
-            self.pie[:, self.new_features_cols[0]:self.new_features_cols[1]] = np.where(self.d[0]*self.pie[:, self.new_reward_col[0]] > self.d[0]*self.pie[:, self.old_reward_col[0]] or Accept < np.exp(-abs(
-                self.pie[:, self.old_reward_col[0]] - self.pie[:, self.new_reward_col[0]])/(((self.s-self.it_no)/self.s)*self.mt)), self.pie[:, self.new_features_cols[0]:self.new_features_cols[1]], self.pie[:, self.old_features_cols[0]:self.old_features_cols[1]])
-            self.pie[:, self.new_reward_col[0]] = np.where(self.d[0]*self.pie[:, self.new_reward_col[0]] > self.d[0]*self.pie[:, self.old_reward_col[0]] or Accept < np.exp(-abs(
-                self.pie[:, self.old_reward_col[0]] - self.pie[:, self.new_reward_col[0]])/(((self.s-self.it_no)/self.s)*self.mt)), self.pie[:, self.new_reward_col[0]], self.pie[:, self.old_reward_col[0]])
-            self.pie[:, self.old_features_cols[0]:self.old_features_cols[1]] = np.where(self.d[0]*self.pie[:, self.new_reward_col[0]] > self.d[0]*self.pie[:, self.old_reward_col[0]] or Accept < np.exp(-abs(
-                self.pie[:, self.old_reward_col[0]] - self.pie[:, self.new_reward_col[0]])/(((self.s-self.it_no)/self.s)*self.mt)), self.pie[:, self.new_features_cols[0]:self.new_features_cols[1]], self.pie[:, self.old_features_cols[0]:self.old_features_cols[1]])
-            self.pie[:, self.old_reward_col[0]] = np.where(self.d[0]*self.pie[:, self.new_reward_col[0]] > self.d[0]*self.pie[:, self.old_reward_col[0]] or Accept < np.exp(-abs(
-                self.pie[:, self.old_reward_col[0]] - self.pie[:, self.new_reward_col[0]])/(((self.s-self.it_no)/self.s)*self.mt)), self.pie[:, self.new_reward_col[0]], self.pie[:, self.old_reward_col[0]])
-            if self.d[0]*self.pie[self.best_index][self.old_reward_col[0]] > self.d[0]*self.best[self.old_reward_col[0]]:
-                self.best = self.pie[self.best_index].copy()
+            self.pi[:, self.new_features_cols[0]:self.new_features_cols[1]] = np.where(self.d[0]*self.pi[:, self.new_reward_col[0]] > self.d[0]*self.pi[:, self.old_reward_col[0]] or Accept < np.exp(-abs(
+                self.pi[:, self.old_reward_col[0]] - self.pi[:, self.new_reward_col[0]])/(((self.s-self.it_no)/self.s)*self.mt)), self.pi[:, self.new_features_cols[0]:self.new_features_cols[1]], self.pi[:, self.old_features_cols[0]:self.old_features_cols[1]])
+            self.pi[:, self.new_reward_col[0]] = np.where(self.d[0]*self.pi[:, self.new_reward_col[0]] > self.d[0]*self.pi[:, self.old_reward_col[0]] or Accept < np.exp(-abs(
+                self.pi[:, self.old_reward_col[0]] - self.pi[:, self.new_reward_col[0]])/(((self.s-self.it_no)/self.s)*self.mt)), self.pi[:, self.new_reward_col[0]], self.pi[:, self.old_reward_col[0]])
+            self.pi[:, self.old_features_cols[0]:self.old_features_cols[1]] = np.where(self.d[0]*self.pi[:, self.new_reward_col[0]] > self.d[0]*self.pi[:, self.old_reward_col[0]] or Accept < np.exp(-abs(
+                self.pi[:, self.old_reward_col[0]] - self.pi[:, self.new_reward_col[0]])/(((self.s-self.it_no)/self.s)*self.mt)), self.pi[:, self.new_features_cols[0]:self.new_features_cols[1]], self.pi[:, self.old_features_cols[0]:self.old_features_cols[1]])
+            self.pi[:, self.old_reward_col[0]] = np.where(self.d[0]*self.pi[:, self.new_reward_col[0]] > self.d[0]*self.pi[:, self.old_reward_col[0]] or Accept < np.exp(-abs(
+                self.pi[:, self.old_reward_col[0]] - self.pi[:, self.new_reward_col[0]])/(((self.s-self.it_no)/self.s)*self.mt)), self.pi[:, self.new_reward_col[0]], self.pi[:, self.old_reward_col[0]])
+            if self.d[0]*self.pi[self.best_index][self.old_reward_col[0]] > self.d[0]*self.best[self.old_reward_col[0]]:
+                self.best = self.pi[self.best_index].copy()
 
     def vary(self):
 
-        self.pie[:, :self.f] = np.clip(
-            self.pie[:, :self.f] + 2*np.random.rand(self.f)-1, 0, 1)
+        self.pi[:, :self.f] = np.clip(
+            self.pi[:, :self.f] + 2*np.random.rand(self.f)-1, 0, 1)
 
     def report(self):
 

@@ -1,16 +1,8 @@
-'''
-+---------------------------------------------------------+
-|  Project: FelooPy (0.2.8)                               |
-|  Modified: Wednesday, 27th September 2023 08:28:18 pm   |
-|  Modified By: Keivan Tafakkori                          |
-|  Project: https://github.com/ktafakkori/feloopy         |
-|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
-|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
-+---------------------------------------------------------+
-'''
+
 
 import numpy as np
 import warnings as wn
+import matplotlib.pyplot as plt
 
 wn.filterwarnings("ignore")
 
@@ -41,32 +33,30 @@ class GWO:
     def initialize(self):
 
         if self.r == 0:
-            self.pie = np.random.rand(self.t, self.single_objective_tot)
-            self.pie[:, self.reward_col] = - np.inf * self.d
-            self.pie[:, self.status_col] = 0
+            self.pi = np.random.rand(self.t, self.single_objective_tot)
+            self.pi[:, self.reward_col] = - np.inf * self.d
+            self.pi[:, self.status_col] = 0
             self.bad_status = -1
             self.best_index = -1*(1+self.d[0])//2
-        self.alpha, self.beta, self.delta = np.copy(self.pie[-1]), np.copy(self.pie[-2]), np.copy(self.pie[-3])
-        self.best = self.pie[-1].copy()
+        self.best = self.pi[-1].copy()
+        self.alpha, self.beta, self.delta = np.copy(self.pi[-1]), np.copy(self.pi[-2]), np.copy(self.pi[-3])
 
     def update(self):
 
-        self.pie = self.evaluate(self.pie)
-
+        self.pi = self.evaluate(self.pi)
         if self.r == 0:
-            self.pie = self.pie[np.argsort(self.pie[:, self.reward_col[0]])]
-            if self.d[0]*self.pie[self.best_index][-1] > self.d[0]*self.best[-1]:
-                self.best = self.pie[self.best_index].copy()
-            self.alpha = self.pie[:, -1].copy()
-            self.beta  = self.pie[:, -2].copy()
-            self.delta = self.pie[:, -3].copy()
+            self.pi = self.pi[np.argsort(self.pi[:, self.reward_col[0]])]
+            if self.d[0]*self.pi[self.best_index][-1] > self.d[0]*self.best[-1]: 
+                self.best = self.pi[self.best_index].copy()
+            self.alpha = self.pi[self.best_index].copy()
+            self.beta  = self.pi[self.best_index-1*self.d[0]].copy()
+            self.delta = self.pi[self.best_index-2*self.d[0]].copy()
 
     def vary(self):
 
         a = 2*(1 - self.it_no/self.it)*(2*np.random.rand(self.t, self.f, 3)-1)
         c = 2*np.random.rand(self.t, self.f, 3)
-        self.pie[:, :self.f] = np.clip((self.alpha[:self.f] - a[:, :, 0] * abs(c[:, :, 0] * self.alpha[:self.f] - self.pie[:, :self.f]))/3 + (self.beta[:self.f] - a[:, :, 1] * abs(c[:, :, 1] * self.beta[:self.f] - self.pie[:, :self.f]))/3 + (self.delta[:self.f] - a[:, :, 2] * abs(c[:, :, 2] * self.delta[:self.f] - self.pie[:, :self.f]))/3, 0, 1)
-        
+        self.pi[:, :self.f] = np.clip((self.alpha[:self.f] - a[:, :, 0] * np.abs(c[:, :, 0] * self.alpha[:self.f] - self.pi[:, :self.f]))/3 + (self.beta[:self.f] - a[:, :, 1] * np.abs(c[:, :, 1] * self.beta[:self.f] - self.pi[:, :self.f]))/3 + (self.delta[:self.f] - a[:, :, 2] * np.abs(c[:, :, 2] * self.delta[:self.f] - self.pi[:, :self.f]))/3, 0, 1)
 
     def report(self):
 

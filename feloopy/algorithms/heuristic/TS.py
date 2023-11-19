@@ -43,28 +43,28 @@ class TS:
     def initialize(self):
 
         if self.r == 0:
-            self.pie = np.random.rand(1, self.single_objective_tot)
-            self.pie[:, self.reward_col] = - np.inf * self.d
-            self.pie[:, self.status_col] = 0
+            self.pi = np.random.rand(1, self.single_objective_tot)
+            self.pi[:, self.reward_col] = - np.inf * self.d
+            self.pi[:, self.status_col] = 0
             self.best_index = -1*(1+self.d[0])//2
             self.bad_status = -1
             self.tabu_list = []
-        self.best = self.pie[-1].copy()
+        self.best = self.pi[-1].copy()
 
     def update(self):
 
-        newpie = self.evaluate(self.pie)
+        newpie = self.evaluate(self.pi)
         if self.r == 0:
             if self.d[0]*newpie[self.best_index][self.reward_col[0]] > self.d[0]*self.best[self.reward_col[0]]:
                 self.best = newpie[self.best_index].copy()
             if self.it_no == 0:
                 self.tabu_list.append(newpie)
-                self.pie = newpie.copy()
+                self.pi = newpie.copy()
 
     def vary(self):
 
-        self.pie[:, :self.f] = np.clip(
-            self.pie[:, :self.f] + 2*np.random.rand(self.f)-1, 0, 1)
+        self.pi[:, :self.f] = np.clip(
+            self.pi[:, :self.f] + 2*np.random.rand(self.f)-1, 0, 1)
 
     def report(self):
 
