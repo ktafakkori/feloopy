@@ -1,9 +1,7 @@
 
-
 <p align="center">
    <img src="miscellaneous/logo/logo1.png" width="20%">
 </p>
-
 
 ## Introduction
 
@@ -32,43 +30,43 @@ FelooPy supports the following _mathematical structure-based_ classification of 
 <summary>Display as a list</summary>
 
 - Numerical optimization
-   - Linear Programming (LP)
-      - [Unconstrained] Linear Programming (ULP, or LP)
-      - [Constrained] Linear Programming (CLP, or LP)
-      - General Linear Programming (GLP, or LP)
-   - Non-Linear Programming (NLP)
-      - with non-linear objectives
-         - [Unconstrained] Quadratic Programming (UQP, or QP)
-         - [Constrained] Quadratic Programming (CQP, or QP)
-      - with non-linear constraints
-         - Second Order Cone Programming (SOCP)
-      - with non-linear objectives and constraints
-         - General Non-Linear Programming (GNLP)
+  - Linear Programming (LP)
+    - [Unconstrained] Linear Programming (ULP, or LP)
+    - [Constrained] Linear Programming (CLP, or LP)
+    - General Linear Programming (GLP, or LP)
+  - Non-Linear Programming (NLP)
+    - with non-linear objectives
+      - [Unconstrained] Quadratic Programming (UQP, or QP)
+      - [Constrained] Quadratic Programming (CQP, or QP)
+    - with non-linear constraints
+      - Second Order Cone Programming (SOCP)
+    - with non-linear objectives and constraints
+      - General Non-Linear Programming (GNLP)
 - Combinatorial optimization
-   - Integer Programming (IP)
-      - Pure Integer Linear Programming (PILP)
-         - [Unconstrained] Pure Integer Linear Programming (UPILP, or PILP)
-         - [Constrained] Pure Integer Linear Programming (CPILP, or PILP)
-      - Pure Integer Non-Linear Programming (PINLP)
-         - with non-linear objectives
-            - [Unconstrained] Integer Quadratic Programming (UIQP, IQP, or QUIO)
-            - [Unconstrained] Binary Quadratic Programming (UBQP, BQP, or QUBO)
-            - [Constrained] Integer Quadratic Programming (CIQP, IQP, or QUIO)
-            - [Constrained] Binary Quadratic Programming (CBQP, BQP, or QUBO)
-         - with non-linear constraints
-         - with non-linear objectives and constraints
-            - General Pure Integer Non-Linear Programming (GPINLP)
-   - Mixed Integer Programming (MIP)
-      - Mixed Integer Linear Programming (MILP)
-         - [Unconstrained] Mixed Integer Linear Programming (UMILP, or MILP)
-         - [Constrained] Mixed Integer Linear Programming (CMILP, or MILP)
-      - Mixed Integer Non-Linear Programming (MINLP)
-         - with non-linear objectives
-            - [Unconstrained] Mixed Integer Quadratic Programming (UMIQP, or MIQP)
-            - [Constrained] Mixed Integer Quadratic Programming (CMIQP, or MIQP)
-         - with non-linear constraints
-         - with non-linear objectives and constraints
-            - General Mixed Integer Non-Linear Programming (GMINLP, or GMIP)
+  - Integer Programming (IP)
+    - Pure Integer Linear Programming (PILP)
+      - [Unconstrained] Pure Integer Linear Programming (UPILP, or PILP)
+      - [Constrained] Pure Integer Linear Programming (CPILP, or PILP)
+    - Pure Integer Non-Linear Programming (PINLP)
+      - with non-linear objectives
+        - [Unconstrained] Integer Quadratic Programming (UIQP, IQP, or QUIO)
+        - [Unconstrained] Binary Quadratic Programming (UBQP, BQP, or QUBO)
+        - [Constrained] Integer Quadratic Programming (CIQP, IQP, or QUIO)
+        - [Constrained] Binary Quadratic Programming (CBQP, BQP, or QUBO)
+      - with non-linear constraints
+      - with non-linear objectives and constraints
+        - General Pure Integer Non-Linear Programming (GPINLP)
+  - Mixed Integer Programming (MIP)
+    - Mixed Integer Linear Programming (MILP)
+      - [Unconstrained] Mixed Integer Linear Programming (UMILP, or MILP)
+      - [Constrained] Mixed Integer Linear Programming (CMILP, or MILP)
+    - Mixed Integer Non-Linear Programming (MINLP)
+      - with non-linear objectives
+        - [Unconstrained] Mixed Integer Quadratic Programming (UMIQP, or MIQP)
+        - [Constrained] Mixed Integer Quadratic Programming (CMIQP, or MIQP)
+      - with non-linear constraints
+      - with non-linear objectives and constraints
+        - General Mixed Integer Non-Linear Programming (GMINLP, or GMIP)
 
 _Credit: Keivan Tafakkori_
 
@@ -123,25 +121,24 @@ _Credit: Keivan Tafakkori_
 
 </details>
 
-
 FelooPy supports the following _expert-based_ classification of decision-making problems:
 
 <details>
 <summary>Display as a list</summary>
 
 - Multi-Attribute Decision-Making (MADM)
-   - Weighting methods
-      - without a decision-making matrix
-      - with a decision-making matrix
-   - Ranking methods
-      - Compensatory methods
-         - Scoring methods
-         - Compromising methods
-      - Non-compensatory methods 
-         - Conjunctive satisfying methods
-         - Lexicographic methods
-         - Outranking methods
-         
+  - Weighting methods
+    - without a decision-making matrix
+    - with a decision-making matrix
+  - Ranking methods
+    - Compensatory methods
+      - Scoring methods
+      - Compromising methods
+    - Non-compensatory methods
+      - Conjunctive satisfying methods
+      - Lexicographic methods
+      - Outranking methods
+
 - Group Decision-Making (GDM)
 
 _Credit: Keivan Tafakkori_
@@ -167,6 +164,7 @@ graph LR
  B2["Non-compensatory"] --> B22["Lexicographic"]
  B2["Non-compensatory"] --> B23["Outranking"]
 ```
+
 _Credit: Keivan Tafakkori_
 
 </details>
@@ -174,7 +172,7 @@ _Credit: Keivan Tafakkori_
 ## Installation
 
 For a quick installation with a classic support of interfaces and solvers, you may use the `pip` package manager (please refer to this [link](https://pip.pypa.io/en/stable/installation/) to install, update, or get one) as follows:
-   
+
    ```terminal
    pip install -U feloopy[stock]
    ```
@@ -189,12 +187,13 @@ However, as some users might prefer a dedicated version, the following lists the
    ```terminal
    pip install -U feloopy
    ```
+
 </details>
 
 <details>
 <summary>Free variants</summary>
 
-   - `pico` variant:
+- `pico` variant:
 
       This variant installs the base package without any additional features. It is the same as the core variant. It installs FelooPy with its common dependencies.
 
@@ -202,15 +201,15 @@ However, as some users might prefer a dedicated version, the following lists the
       pip install -U feloopy[pico]
       ```
 
-   - `nano` variant:
+- `nano` variant:
 
-      This variant includes a small set of additional features. It installs FelooPy with its common dependencies and the `pymprog` package. 
+      This variant includes a small set of additional features. It installs FelooPy with its common dependencies and the `pymprog` package.
 
       ```terminal
       pip install -U feloopy[nano]
       ```
 
-   - `micro` variant:
+- `micro` variant:
 
       This variant includes a moderate set of additional features. It installs FelooPy with its common dependencies and the `pymprog`, `gekko`, and `mealpy` packages.
 
@@ -218,23 +217,23 @@ However, as some users might prefer a dedicated version, the following lists the
       pip install -U feloopy[micro]
       ```
 
-   - `mini` variant:
+- `mini` variant:
 
       This variant includes a large set of additional features. It installs FelooPy with its common dependencies and the `pymprog`, `gekko`, `mealpy`, `ortools`, and `cvxpy` packages.
 
       ```terminal
       pip install -U feloopy[mini]
-      ```   
+      ```
 
-   - `full` variant:
+- `full` variant:
 
       This variant includes all available features. It installs FelooPy with its common dependencies and the `pymprog`, `gekko`, `mealpy`, `ortools`, `cvxpy`, `pymoo`, and `pydecision` packages.
-      
+
       ```terminal
       pip install -U feloopy[full]
       ```
 
-   - `stock` variant:
+- `stock` variant:
 
       This variant includes all interface packages. It installs FelooPy with its common dependencies and the `gekko`, `ortools`, `pulp`, `pyomo`, `pymprog`, `picos`, `linopy`, `cvxpy`, `mip`, `mealpy`, `pydecision`, `rsome`, `pymoo`, `niapy`, and `pygad` packages.
 
@@ -242,7 +241,7 @@ However, as some users might prefer a dedicated version, the following lists the
       pip install -U feloopy[stock]
       ```
 
-   - `hyper` variant:
+- `hyper` variant:
 
       This variant includes all interface and solver packages. It installs FelooPy with its common dependencies and the `gekko`, `ortools`, `pulp`, `pyomo`, `pymprog`, `picos`, `linopy`, `cvxpy`, `mip`, `mealpy`, `pydecision`, `rsome`, `pymoo`, `niapy`, `pygad`, `cplex`, `docplex`, `xpress`, `gurobipy`, `cylp`, and `coptpy` packages.
 
@@ -289,7 +288,6 @@ However, as some users might prefer a dedicated version, the following lists the
 
 </details>
 
-
 <details>
 <summary>Non-compatible variants</summary>
 
@@ -308,8 +306,8 @@ However, as some users might prefer a dedicated version, the following lists the
    ```terminal
    pip install -U feloopy[only_linux]
    ```
-</details>
 
+</details>
 
 <details>
 <summary>Dev variants</summary>
@@ -325,6 +323,7 @@ However, as some users might prefer a dedicated version, the following lists the
 </details>
 
 ## Citation
+
 To cite or give credit to FelooPy in publications, projects, presentations, web pages, blog posts, etc. please use the following entries:
 
 - LaTeX:
