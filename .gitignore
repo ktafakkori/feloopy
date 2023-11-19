@@ -69,3 +69,4 @@ var/
 visualize.py
 wheels/
 *.gif
+optimization/
