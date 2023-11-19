@@ -11,7 +11,6 @@
 
 import numpy as np
 import warnings as wn
-from pprint import pprint
 
 wn.filterwarnings("ignore")
 
@@ -69,7 +68,6 @@ class DE:
 
         indices = np.array([np.random.randint(0, self.t, 3) for t in range(self.t)])
         mask = np.random.rand(self.t) < self.cr
-        print(len(mask))
         self.pi[mask, :self.f] = np.clip(self.pi[indices[mask, 0], :self.f] + self.mu * (self.pi[indices[mask, 1], :self.f] - self.pi[indices[mask, 2], :self.f]), 0, 1)
 
     def report(self):
