@@ -250,8 +250,7 @@ However, as some users might prefer a dedicated version, the following lists the
       pip install -U feloopy[hyper]
       ```
 
-   <details>
-   <summary>Optional installations</summary>
+   ### Optional installations
 
       In what follows, installation scripts for open-source optimization solvers to be used with FelooPy is provided (currently for Linux-based distros):
 
@@ -283,8 +282,6 @@ However, as some users might prefer a dedicated version, the following lists the
       ```
 
       where `variant_name` is one of the above variants. (please refer to this [link](https://git-scm.com/downloads) to install, update, or get `git`.)
-
-   </details>
 
 
 </details>
