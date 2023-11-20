@@ -250,6 +250,43 @@ However, as some users might prefer a dedicated version, the following lists the
       pip install -U feloopy[hyper]
       ```
 
+   <details>
+   <summary>Optional installations</summary>
+
+      In what follows, installation scripts for open-source optimization solvers to be used with FelooPy is provided (currently for Linux-based distros):
+
+      ```bash
+
+      VERSION=5.0
+
+      rm -rf glpk-${VERSION}
+      rm -rf glpk-${VERSION}.tar.gz
+
+      wget https://ftp.gnu.org/gnu/glpk/glpk-${VERSION}.tar.gz
+      tar -xzvf glpk-${VERSION}.tar.gz
+      cd glpk-${VERSION}
+      export DIR=$HOME/solvers/glpk-${VERSION}
+      ./configure --prefix=$DIR
+      make
+      sudo make install
+      cd ..
+
+      rm -rf glpk-${VERSION}
+      rm -rf glpk-${VERSION}.tar.gz
+
+      echo "" >>~/.profile
+      echo "export PATH=\$PATH:$DIR/bin" >> ~/.profile
+      echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$DIR/lib" >> ~/.profile
+      source ~/.profile
+
+      glpsol --version
+      ```
+
+      where `variant_name` is one of the above variants. (please refer to this [link](https://git-scm.com/downloads) to install, update, or get `git`.)
+
+   </details>
+
+
 </details>
 
 <details>
@@ -323,6 +360,7 @@ However, as some users might prefer a dedicated version, the following lists the
    where `variant_name` is one of the above variants. (please refer to this [link](https://git-scm.com/downloads) to install, update, or get `git`.)
 
 </details>
+
 
 ## Citation
 To cite or give credit to FelooPy in publications, projects, presentations, web pages, blog posts, etc. please use the following entries:
