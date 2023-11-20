@@ -283,6 +283,11 @@ However, as some users might prefer a dedicated version, the following lists the
          glpsol --version
          ```
 
+         _Credit: Keivan Tafakkori_
+         
+         More info: [GLPK](https://www.gnu.org/software/glpk/)
+
+
       where `variant_name` is one of the above variants. (please refer to this [link](https://git-scm.com/downloads) to install, update, or get `git`.)
 
 
