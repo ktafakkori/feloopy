@@ -250,8 +250,8 @@ However, as some users might prefer a dedicated version, the following lists the
       pip install -U feloopy[hyper]
       ```
 
-   ### Optional installations
-
+      ### Optional installations
+      
       In what follows, installation scripts for open-source optimization solvers to be used with FelooPy is provided (currently for Linux-based distros):
 
       ```bash
