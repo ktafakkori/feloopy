@@ -289,7 +289,6 @@ However, as some users might prefer a dedicated version, the following lists the
 
 </details>
 
-
 <details>
 <summary>Non-compatible variants</summary>
 
