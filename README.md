@@ -254,32 +254,34 @@ However, as some users might prefer a dedicated version, the following lists the
       
       In what follows, installation scripts for open-source optimization solvers to be used with FelooPy is provided (currently for Linux-based distros):
 
-      ```bash
+      * GLPK:
 
-      VERSION=5.0
+         ```bash
 
-      rm -rf glpk-${VERSION}
-      rm -rf glpk-${VERSION}.tar.gz
+         VERSION=5.0
 
-      wget https://ftp.gnu.org/gnu/glpk/glpk-${VERSION}.tar.gz
-      tar -xzvf glpk-${VERSION}.tar.gz
-      cd glpk-${VERSION}
-      export DIR=$HOME/solvers/glpk-${VERSION}
-      ./configure --prefix=$DIR
-      make
-      sudo make install
-      cd ..
+         rm -rf glpk-${VERSION}
+         rm -rf glpk-${VERSION}.tar.gz
 
-      rm -rf glpk-${VERSION}
-      rm -rf glpk-${VERSION}.tar.gz
+         wget https://ftp.gnu.org/gnu/glpk/glpk-${VERSION}.tar.gz
+         tar -xzvf glpk-${VERSION}.tar.gz
+         cd glpk-${VERSION}
+         export DIR=$HOME/solvers/glpk-${VERSION}
+         ./configure --prefix=$DIR
+         make
+         sudo make install
+         cd ..
 
-      echo "" >>~/.profile
-      echo "export PATH=\$PATH:$DIR/bin" >> ~/.profile
-      echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$DIR/lib" >> ~/.profile
-      source ~/.profile
+         rm -rf glpk-${VERSION}
+         rm -rf glpk-${VERSION}.tar.gz
 
-      glpsol --version
-      ```
+         echo "" >>~/.profile
+         echo "export PATH=\$PATH:$DIR/bin" >> ~/.profile
+         echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$DIR/lib" >> ~/.profile
+         source ~/.profile
+
+         glpsol --version
+         ```
 
       where `variant_name` is one of the above variants. (please refer to this [link](https://git-scm.com/downloads) to install, update, or get `git`.)
 
