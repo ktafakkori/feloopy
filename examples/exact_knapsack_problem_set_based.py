@@ -12,7 +12,7 @@
 from feloopy import *
 
 #Environment
-m = target_model('exact', 'knaspack problem', 'ortools', key=0)
+m = target_model('exact', 'knapsack problem', 'ortools', key=0)
 
 #Sets
 J = range(7)  # Set of the items

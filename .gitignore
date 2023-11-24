@@ -71,3 +71,4 @@ wheels/
 *.gif
 optimization/
 tests/
+*.sh
