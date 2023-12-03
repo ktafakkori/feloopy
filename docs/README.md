@@ -628,6 +628,181 @@ However, as some users might prefer a dedicated version, the following lists the
    </details>
    </details>
 
+
+   <details>
+   <summary>Multi-objective optimization</summary>
+
+   * _Note_ : Implementing this example at least requires installing the `feloopy[full]` variant.
+
+   ```python
+   from feloopy import *
+
+   def instance(X):
+      
+      m = model('heuristic','representor_model_name','pymoo', X)
+      
+      x = m.pvar(name = 'x', dim = [2], bound = [-1000,1000])
+      
+      m.obj(x[...,0]**2 + x[...,1]**2)
+      m.obj((x[...,0]-2)**2 + (x[...,1]-2)**2)
+      
+      m.sol(['min','min'], 'ns-ga-ii', {'n_gen': 100}, obj_id='all')
+
+      return m[X]
+
+   m = make_model(instance)
+   m.sol()
+   m.report()
+   ```
+
+   <details>
+   <summary style="color:green">Display the output</summary>
+
+   ```terminal
+   ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Date: 2023-12-04                                                Time: 00:00:00 │
+   │ Interface: pymoo                                              Solver: ns-ga-ii │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Model ────────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Name: representor_model_name                                                   │
+   │ Feature:                                Class:                        Total:   │
+   │ Positive variable                       1                             2        │
+   │ Total variables                         1                             2        │
+   │ Objective                               -                             2        │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Solve ────────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Method: heuristic                                              Objective value │
+   │ Status:                                                          min       min │
+   │ feasible (unconstrained)                                        0.00      7.83 │
+   │ feasible (unconstrained)                                        7.94      0.00 │
+   │ feasible (unconstrained)                                        0.00      7.70 │
+   │ feasible (unconstrained)                                        0.08      6.82 │
+   │ feasible (unconstrained)                                        2.50      1.57 │
+   │ feasible (unconstrained)                                        3.53      0.91 │
+   │ feasible (unconstrained)                                        0.70      4.01 │
+   │ feasible (unconstrained)                                        0.30      5.26 │
+   │ feasible (unconstrained)                                        2.38      1.72 │
+   │ feasible (unconstrained)                                        5.17      0.31 │
+   │ feasible (unconstrained)                                        2.02      1.99 │
+   │ feasible (unconstrained)                                        6.78      0.05 │
+   │ feasible (unconstrained)                                        0.63      4.18 │
+   │ feasible (unconstrained)                                        5.63      0.22 │
+   │ feasible (unconstrained)                                        3.91      0.72 │
+   │ feasible (unconstrained)                                        1.28      2.96 │
+   │ feasible (unconstrained)                                        1.06      3.46 │
+   │ feasible (unconstrained)                                        5.42      0.25 │
+   │ feasible (unconstrained)                                        2.62      1.50 │
+   │ feasible (unconstrained)                                        0.58      4.28 │
+   │ feasible (unconstrained)                                        6.28      0.11 │
+   │ feasible (unconstrained)                                        6.14      0.15 │
+   │ feasible (unconstrained)                                        0.26      5.39 │
+   │ feasible (unconstrained)                                        0.36      5.07 │
+   │ feasible (unconstrained)                                        3.42      0.98 │
+   │ feasible (unconstrained)                                        2.96      1.23 │
+   │ feasible (unconstrained)                                        1.18      3.19 │
+   │ feasible (unconstrained)                                        3.69      0.83 │
+   │ feasible (unconstrained)                                        1.54      2.53 │
+   │ feasible (unconstrained)                                        4.49      0.50 │
+   │ feasible (unconstrained)                                        1.77      2.25 │
+   │ feasible (unconstrained)                                        2.15      1.88 │
+   │ feasible (unconstrained)                                        0.18      5.85 │
+   │ feasible (unconstrained)                                        0.20      5.70 │
+   │ feasible (unconstrained)                                        3.76      0.79 │
+   │ feasible (unconstrained)                                        1.47      2.61 │
+   │ feasible (unconstrained)                                        4.63      0.46 │
+   │ feasible (unconstrained)                                        6.45      0.10 │
+   │ feasible (unconstrained)                                        6.97      0.04 │
+   │ feasible (unconstrained)                                        7.35      0.01 │
+   │ feasible (unconstrained)                                        3.30      1.03 │
+   │ feasible (unconstrained)                                        3.06      1.18 │
+   │ feasible (unconstrained)                                        0.42      4.80 │
+   │ feasible (unconstrained)                                        5.30      0.28 │
+   │ feasible (unconstrained)                                        5.78      0.21 │
+   │ feasible (unconstrained)                                        2.30      1.78 │
+   │ feasible (unconstrained)                                        0.97      3.72 │
+   │ feasible (unconstrained)                                        0.85      3.75 │
+   │ feasible (unconstrained)                                        4.82      0.42 │
+   │ feasible (unconstrained)                                        1.83      2.18 │
+   │ feasible (unconstrained)                                        7.20      0.02 │
+   │ feasible (unconstrained)                                        1.14      3.32 │
+   │ feasible (unconstrained)                                        5.98      0.17 │
+   │ feasible (unconstrained)                                        7.73      0.00 │
+   │ feasible (unconstrained)                                        2.85      1.32 │
+   │ feasible (unconstrained)                                        1.62      2.42 │
+   │ feasible (unconstrained)                                        0.77      3.91 │
+   │ feasible (unconstrained)                                        4.24      0.59 │
+   │ feasible (unconstrained)                                        4.99      0.38 │
+   │ feasible (unconstrained)                                        0.49      4.54 │
+   │ feasible (unconstrained)                                        5.90      0.19 │
+   │ feasible (unconstrained)                                        0.11      6.39 │
+   │ feasible (unconstrained)                                        0.09      6.75 │
+   │ feasible (unconstrained)                                        0.09      6.58 │
+   │ feasible (unconstrained)                                        0.52      4.44 │
+   │ feasible (unconstrained)                                        7.08      0.03 │
+   │ feasible (unconstrained)                                        1.42      2.73 │
+   │ feasible (unconstrained)                                        1.67      2.36 │
+   │ feasible (unconstrained)                                        0.16      5.98 │
+   │ feasible (unconstrained)                                        0.12      6.19 │
+   │ feasible (unconstrained)                                        3.15      1.11 │
+   │ feasible (unconstrained)                                        2.20      1.84 │
+   │ feasible (unconstrained)                                        1.94      2.07 │
+   │ feasible (unconstrained)                                        7.51      0.01 │
+   │ feasible (unconstrained)                                        0.46      4.65 │
+   │ feasible (unconstrained)                                        1.35      2.84 │
+   │ feasible (unconstrained)                                        4.75      0.44 │
+   │ feasible (unconstrained)                                        6.60      0.07 │
+   │ feasible (unconstrained)                                        7.57      0.01 │
+   │ feasible (unconstrained)                                        0.77      3.82 │
+   │ feasible (unconstrained)                                        3.20      1.08 │
+   │ feasible (unconstrained)                                        1.91      2.11 │
+   │ feasible (unconstrained)                                        0.37      4.96 │
+   │ feasible (unconstrained)                                        4.98      0.38 │
+   │ feasible (unconstrained)                                        2.71      1.40 │
+   │ feasible (unconstrained)                                        0.11      6.28 │
+   │ feasible (unconstrained)                                        0.99      3.56 │
+   │ feasible (unconstrained)                                        7.84      0.00 │
+   │ feasible (unconstrained)                                        0.10      6.51 │
+   │ feasible (unconstrained)                                        0.23      5.54 │
+   │ feasible (unconstrained)                                        2.80      1.35 │
+   │ feasible (unconstrained)                                        1.29      2.91 │
+   │ feasible (unconstrained)                                        0.99      3.60 │
+   │ feasible (unconstrained)                                        4.04      0.67 │
+   │ feasible (unconstrained)                                        0.43      4.72 │
+   │ feasible (unconstrained)                                        6.59      0.09 │
+   │ feasible (unconstrained)                                        4.36      0.55 │
+   │ feasible (unconstrained)                                        1.40      2.78 │
+   │ feasible (unconstrained)                                        4.37      0.54 │
+   │ feasible (unconstrained)                                        4.12      0.64 │
+   │ payoff 0                                                        0.00      7.83 │
+   │ payoff 1                                                        7.94      0.00 │
+   │ max                                                             7.94      7.83 │
+   │ ave                                                             2.90      2.40 │
+   │ std                                                             2.42      2.20 │
+   │ min                                                             0.00      0.00 │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Metric ───────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ CPT (microseconds)                                                    1.58e+06 │
+   │ CPT (hour:min:sec)                                                    00:00:01 │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Decision ─────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ x[0] = [0.028609389086682313, 1.9859341076320334]                              │
+   │ x[1] = [0.006622432714834758, 1.9993559166051682]                              │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ```
+   </details>
+   </details>
+
+
 ## Citation
 
 To cite or give credit to FelooPy in publications, projects, presentations, web pages, blog posts, etc. please use the following entries:

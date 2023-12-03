@@ -15,7 +15,8 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
     import timeit
     from pymoo.core.problem import Problem
     from pymoo.optimize import minimize
-    from pymoo.factory import get_termination, get_reference_directions
+    from pymoo.termination import get_termination
+    from pymoo.util.ref_dirs import get_reference_directions
 
     import numpy as np
 
