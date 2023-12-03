@@ -1085,7 +1085,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
 - Documentation
  
-   * [Work in Progress!](https://feloopy.readthedocs.io/en/latest/index.html)
+   - [Work in Progress!](https://feloopy.readthedocs.io/en/latest/index.html)
 
 ## Citation
 
