@@ -491,7 +491,7 @@ However, as some users might prefer a dedicated version, the following lists the
    </details>
 
    <details>
-   <summary>Exact optimization</summary>
+   <summary>Constraint optimization</summary>
 
    * _Note_ : Implementing this example at least requires installing the `feloopy[mini]` variants.
 
