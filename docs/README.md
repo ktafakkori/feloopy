@@ -373,7 +373,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
    │                                                                                │
-   │ Date: 2023-12-04                                                Time: 00:42:19 │
+   │ Date: 2023-12-04                                                Time: 00:00:00 │
    │ Interface: pymprog                                                Solver: glpk │
    │                                                                                │
    ╰────────────────────────────────────────────────────────────────────────────────╯
