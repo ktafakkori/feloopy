@@ -803,6 +803,68 @@ However, as some users might prefer a dedicated version, the following lists the
    </details>
 
 
+   <details>
+   <summary>Multi-attribute decision making</summary>
+
+   * _Note_ : Implementing this example at least requires installing the `feloopy[mini]` variant.
+
+   ```python
+   from feloopy import *
+
+   m = madm('ahp','ahp_model', 'pydecision')
+
+   m.add_cpcm([
+   [1  ,   1/3,   1/5,   1  ,   1/4,   1/2,   3  ],   
+   [3  ,   1  ,   1/2,   2  ,   1/3,   3  ,   3  ],  
+   [5  ,   2  ,   1  ,   4  ,   5  ,   6  ,   5  ],   
+   [1  ,   1/2,   1/4,   1  ,   1/4,   1  ,   2  ],   
+   [4  ,   3  ,   1/5,   4  ,   1  ,   3  ,   2  ],   
+   [2  ,   1/3,   1/6,   1  ,   1/3,   1  ,   1/3],   
+   [1/3,   1/3,   1/5,   1/2,   1/2,   3  ,   1  ]   
+   ])
+
+   m.sol()
+   m.report(show_tensors=True)
+   ```
+
+   <details>
+   <summary style="color:green">Display the output</summary>
+
+   ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Date: 2023-12-04                                                Time: 02:09:39 │
+   │ Interface: pydecision                                       Solver: ahp_method │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Model ────────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Name: ahp_model                                                                │
+   │ cpm_defined                                                                    │
+   │ Number of criteria:                                                          7 │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Solve ────────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Method: ahp_method                                                             │
+   │ Status: feasible (solved)                                                      │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Metric ───────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Inconsistency:                                                          0.1094 │
+   │ CPT (microseconds):                                                        228 │
+   │ CPT (hour:min:sec):                                                   00:00:00 │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Decision ─────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ wv = [0.072 , 0.1518, 0.3668, 0.0734, 0.2064, 0.0612, 0.0685]                  │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ```
+   </details>
+   </details>
+
 ## Citation
 
 To cite or give credit to FelooPy in publications, projects, presentations, web pages, blog posts, etc. please use the following entries:

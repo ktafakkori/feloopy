@@ -5230,7 +5230,7 @@ class MADM:
                 if self.madam_method in ['fuzzy_ahp_method']:
                     self.display_as_tensor('fwv', np.round(self.fuzzy_weights,self.output_decimals), self.show_detailed_tensors)
                 else:
-                    self.display_as_tensor('wv', np.round(self.fuzzy_weights,self.output_decimals), self.show_detailed_tensors)
+                    self.display_as_tensor('wv', np.round(self.weights,self.output_decimals), self.show_detailed_tensors)
 
             if self.features['ranks_found']:
 
