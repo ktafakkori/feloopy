@@ -340,7 +340,7 @@ However, as some users might prefer a dedicated version, the following lists the
    <details>
    <summary>Exact optimization</summary>
 
-   * _Note_ : Implementing this example requires installing the `feloopy[nano]` or more complete variants.
+   * _Note_ : Implementing this example at least requires installing the `feloopy[nano]` variants.
 
    ```python
    from feloopy import *
@@ -484,6 +484,76 @@ However, as some users might prefer a dedicated version, the following lists the
    ╭─ Decision ─────────────────────────────────────────────────────────────────────╮
    │                                                                                │
    │ x = [1.]                                                                       │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ```
+   </details>
+   </details>
+
+   <details>
+   <summary>Exact optimization</summary>
+
+   * _Note_ : Implementing this example at least requires installing the `feloopy[mini]` variants.
+
+   ```python
+   from feloopy import *
+
+   m = model('constraint', 'satisfier_model_name', 'ortools_cp')
+
+   # Define variables
+   x = m.bvar(name='x', dim=0)
+   y = m.ivar(name='y', dim=0, bound = [0, 10])
+
+   # Define constraints
+   m.con(x + y <= 1, label='c1')
+   m.con(x - y >= 1, label='c2')
+
+   # Define an objective
+   m.obj(x + y)
+
+   # Solve the model
+   m.sol(['max'], 'ortools')
+
+   # Report the results
+   m.report()
+   ```
+   <details>
+   <summary style="color:green">Display the output</summary>
+
+   ```terminal
+   ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Date: 2023-12-04                                                Time: 00:00:00 │
+   │ Interface: ortools_cp                                          Solver: ortools │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Model ────────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Name: satisfier_model_name                                                     │
+   │ Feature:                                Class:                        Total:   │
+   │ Binary variable                         1                             1        │
+   │ Integer variable                        1                             1        │
+   │ Total variables                         2                             2        │
+   │ Objective                               -                             1        │
+   │ Constraint                              2                             2        │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Solve ────────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Method: constraint                                             Objective value │
+   │ Status:                                                                    max │
+   │ optimal                                                                   1.00 │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Metric ───────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ CPT (microseconds)                                                    3.65e+04 │
+   │ CPT (hour:min:sec)                                                    00:00:00 │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Decision ─────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ x = 1                                                                          │
    │                                                                                │
    ╰────────────────────────────────────────────────────────────────────────────────╯
    ```
