@@ -409,12 +409,88 @@ However, as some users might prefer a dedicated version, the following lists the
       
    ```
    </details>
-
    </details>
 
+   <details>
+   <summary>Heuristic optimization</summary>
 
+   ```python
 
+   from feloopy import *
 
+   def instance(X):
+      
+      # Define model instance
+      m = model('heuristic', 'representor_model_name', 'feloopy', X)
+
+      # Define variables for the model instance
+      x = m.bvar(name='x', dim=0)
+      y = m.pvar(name='y', dim=0, bound = [0, 10])
+
+      # Define constraints for the model instance
+      m.con(x + y |l| 1, label='c1')
+      m.con(x - y |g| 1, label='c2')
+
+      # Define an objective for the model instance
+      m.obj((x-1)**2+(y-1)**2)
+
+      # Solve the model instance
+      m.sol(['max'], 'ga', {'epoch': 1000, 'pop_size': 100})
+
+      return m[X]
+
+   # Make the main model
+   m = make_model(instance)
+
+   # Solve the model
+   m.sol(penalty_coefficient=10)
+
+   # Report the results
+   m.report()
+   ```
+   </details>
+
+   <details>
+   <summary>Display the output</summary>
+
+   ```terminal
+   ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Date: 2023-12-04                                                Time: 00:00:00 │
+   │ Interface: feloopy                                                  Solver: ga │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Model ────────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Name: representor_model_name                                                   │
+   │ Feature:                                Class:                        Total:   │
+   │ Positive variable                       1                             1        │
+   │ Binary variable                         1                             1        │
+   │ Total variables                         2                             2        │
+   │ Objective                               -                             1        │
+   │ Constraint                              2                             2        │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Solve ────────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Method: heuristic                                              Objective value │
+   │ Status:                                                                    max │
+   │ feasible (constrained)                                                    1.00 │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Metric ───────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ CPT (microseconds)                                                    1.31e+06 │
+   │ CPT (hour:min:sec)                                                    00:00:01 │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Decision ─────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ x = [1.]                                                                       │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ```
+   </details>
 
 ## Citation
 

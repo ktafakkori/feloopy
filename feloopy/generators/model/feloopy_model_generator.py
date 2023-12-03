@@ -26,8 +26,7 @@ def generate_model(total_variables, directions, solver_name, solver_options):
 
         case 'ga':
             from ...algorithms.heuristic.GA import GA
-            model_object = GA(f=total_variables, d=directions, s=solver_options.get('epoch', 100), t=solver_options.get('pop_size', 50), mu=solver_options.get('mutation_rate', 0.02), cr=solver_options.get(
-                'crossover_rate', 0.7), sfl=solver_options.get('survival_lb', 0.4), sfu=solver_options.get('survival_ub', 0.6), ac=solver_options.get('archive_cap', 50), rep=solver_options.get('episode', 1), ben=solver_options.get('benchmark', False))
+            model_object = GA(f=total_variables, d=directions, s=solver_options.get('epoch', 100), t=solver_options.get('pop_size', 50), sc=solver_options.get('selection', 1), mu=solver_options.get('mutation_rate', 0.02), cr=solver_options.get('crossover_rate', 0.7), sfl=solver_options.get('survival_lb', 0.4), sfu=solver_options.get('survival_ub', 0.6), ac=solver_options.get('archive_cap', 50), rep=solver_options.get('episode', 1), ben=solver_options.get('benchmark', False))
 
         case 'de':
             from ...algorithms.heuristic.DE import DE
