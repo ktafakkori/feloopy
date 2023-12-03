@@ -338,7 +338,7 @@ However, as some users might prefer a dedicated version, the following lists the
 - Quick start:
 
    <details>
-   <summary>Exact optimziation</summary>
+   <summary>Exact optimization</summary>
 
    * _Note_ : Implementing this example requires installing the `feloopy[nano]` or more complete variants.
 
