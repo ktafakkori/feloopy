@@ -241,22 +241,6 @@ However, as some users might prefer a dedicated version, the following lists the
       pip install -U feloopy[stock]
       ```
 
-   - `hyper` variant:
-
-      This variant includes all interface and solver packages. It installs FelooPy with its common dependencies and the `gekko`, `ortools`, `pulp`, `pyomo`, `pymprog`, `picos`, `linopy`, `cvxpy`, `mip`, `mealpy`, `pydecision`, `rsome`, `pymoo`, `niapy`, `pygad`, `cplex`, `docplex`, `xpress`, `gurobipy`, `cylp`, and `coptpy` packages.
-
-      ```terminal
-      pip install -U feloopy[hyper]
-      ```
-
-   - `mega` variant:
-
-      This variant includes all interface and solver packages. It installs a complete FelooPy with all its dependencies, regardless of whether they are compatible with your operating system, or not.
-
-      ```terminal
-      pip install -U feloopy[mega]
-      ```
-
 </details>
 
 <details>
@@ -316,6 +300,25 @@ However, as some users might prefer a dedicated version, the following lists the
    ```
 </details>
 
+<details>
+<summary>Complete variants</summary>
+
+   - `hyper` variant:
+
+      This variant includes all interface and solver packages. It installs FelooPy with its common dependencies and the `gekko`, `ortools`, `pulp`, `pyomo`, `pymprog`, `picos`, `linopy`, `cvxpy`, `mip`, `mealpy`, `pydecision`, `rsome`, `pymoo`, `niapy`, `pygad`, `cplex`, `docplex`, `xpress`, `gurobipy`, `cylp`, and `coptpy` packages.
+
+      ```terminal
+      pip install -U feloopy[hyper]
+      ```
+
+   - `mega` variant:
+
+      This variant includes all interface and solver packages. It installs a complete FelooPy with all its dependencies, regardless of whether they are compatible with your operating system, or not.
+
+      ```terminal
+      pip install -U feloopy[mega]
+      ```
+</details>
 
 <details>
 <summary>Dev variants</summary>
