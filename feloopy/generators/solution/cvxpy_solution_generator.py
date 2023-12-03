@@ -59,8 +59,16 @@ def generate_solution(features):
     max_iterations = features['max_iterations']
     solver_options = features['solver_options']
 
-    options = {'solver': cvxpy_solver_selector[solver_name], 'verbose': log,
-               'scipy_options': solver_options.get('scipy_options', None)}
+    if 'scipy_options' in solver_options.keys():
+        indicator = True
+    else:
+        indicator = False
+        
+    options = {'solver': cvxpy_solver_selector[solver_name], 'verbose': log} 
+    
+    if indicator:
+        options['scipy_options'] = solver_options.get('scipy_options', None)
+        
     constraint_dict = dict()
     if len(model_constraints)!=0:
         if any(constraint_labels)!=None:

@@ -340,7 +340,7 @@ However, as some users might prefer a dedicated version, the following lists the
    <details>
    <summary>Exact optimization</summary>
 
-   * _Note_ : Implementing this example at least requires installing the `feloopy[nano]` variants.
+   * _Note_ : Implementing this example at least requires installing the `feloopy[nano]` variant.
 
    ```python
    from feloopy import *
@@ -491,14 +491,82 @@ However, as some users might prefer a dedicated version, the following lists the
    </details>
 
    <details>
-   <summary>Constraint optimization</summary>
+   <summary>Convex optimization</summary>
 
-   * _Note_ : Implementing this example at least requires installing the `feloopy[mini]` variants.
+   * _Note_ : Implementing this example at least requires installing the `feloopy[mini]` variant.
 
    ```python
    from feloopy import *
 
-   m = model('constraint', 'satisfier_model_name', 'ortools_cp')
+   m = model('convex', 'convex_model_name', 'cvxpy')
+
+   # Define variables
+   x = m.ftvar(name='x',shape = 0)
+
+   # Define constraints
+   m.con(x <= 1, label='c1')
+   m.con(x >= 1, label='c2')
+
+   # Define an objective
+   m.obj((x-4)**2)
+
+   # Solve the model
+   m.sol(['min'], 'ecos')
+
+   # Report the results
+   m.report()
+   ```
+   <details>
+   <summary style="color:green">Display the output</summary>
+
+   ```terminal
+   ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Date: 2023-12-04                                                Time: 00:00:00 │
+   │ Interface: cvxpy                                                  Solver: ecos │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Model ────────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Name: convex_model_name                                                        │
+   │ Feature:                                Class:                        Total:   │
+   │ Free variable                           1                             1        │
+   │ Total variables                         1                             1        │
+   │ Objective                               -                             1        │
+   │ Constraint                              2                             2        │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Solve ────────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Method: convex                                                 Objective value │
+   │ Status:                                                                    min │
+   │ optimal                                                                   9.00 │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Metric ───────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ CPT (microseconds)                                                    1.06e+04 │
+   │ CPT (hour:min:sec)                                                    00:00:00 │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Decision ─────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ x = 1.000000005186514                                                          │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ```
+   </details>
+   </details>
+
+   <details>
+   <summary>Constraint optimization</summary>
+
+   * _Note_ : Implementing this example at least requires installing the `feloopy[mini]` variant.
+
+   ```python
+   from feloopy import *
+
+   m = model('constraint', 'satisfaction_model_name', 'ortools_cp')
 
    # Define variables
    x = m.bvar(name='x', dim=0)
