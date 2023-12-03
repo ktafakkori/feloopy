@@ -333,6 +333,82 @@ However, as some users might prefer a dedicated version, the following lists the
 
 </details>
 
+## Usage
+
+- Quick start:
+
+   * _Note_ : Implementing this example requires installing the `feloopy[nano]` or more complete variants.
+
+   ```python
+   from feloopy import *
+
+   # Define a model
+   m = model('exact', 'target_model_name', 'pymprog')
+
+   # Define variables
+   x = m.bvar(name='x', dim=0)
+   y = m.pvar(name='y', dim=0, bound = [0, 10])
+
+   # Define constraints
+   m.con(x + y <= 1, label='c1')
+   m.con(x - y >= 1, label='c2')
+
+   # Define an objective
+   m.obj(x + y)
+
+   # Solve the model
+   m.sol(['max'], 'glpk')
+
+   # Report the results
+   m.report()
+   ```
+
+   <details>
+   <summary>Display the output</summary>
+
+   ```terminal
+
+   ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Date: 2023-12-04                                                Time: 00:42:19 │
+   │ Interface: pymprog                                                Solver: glpk │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Model ────────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Name: target_model_name                                                        │
+   │ Feature:                                Class:                        Total:   │
+   │ Positive variable                       1                             1        │
+   │ Binary variable                         1                             1        │
+   │ Total variables                         2                             2        │
+   │ Objective                               -                             1        │
+   │ Constraint                              2                             2        │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Solve ────────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ Method: exact                                                  Objective value │
+   │ Status:                                                                    max │
+   │ optimal                                                                   1.00 │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Metric ───────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ CPT (microseconds)                                                      347.00 │
+   │ CPT (hour:min:sec)                                                    00:00:00 │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Decision ─────────────────────────────────────────────────────────────────────╮
+   │                                                                                │
+   │ x = 1.0                                                                        │
+   │                                                                                │
+   ╰────────────────────────────────────────────────────────────────────────────────╯
+      
+   ```
+   </details>
+
+
+
 ## Citation
 
 To cite or give credit to FelooPy in publications, projects, presentations, web pages, blog posts, etc. please use the following entries:

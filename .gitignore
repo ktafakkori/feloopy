@@ -5,3 +5,5 @@ env
 script.sh
 feloopy.egg-info
 tests
+test.py
+__pycache__
