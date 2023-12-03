@@ -370,7 +370,6 @@ However, as some users might prefer a dedicated version, the following lists the
    <summary>Display the output</summary>
 
    ```terminal
-
    ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
    │                                                                                │
    │ Date: 2023-12-04                                                Time: 00:00:00 │
@@ -406,7 +405,6 @@ However, as some users might prefer a dedicated version, the following lists the
    │ x = 1.0                                                                        │
    │                                                                                │
    ╰────────────────────────────────────────────────────────────────────────────────╯
-      
    ```
    </details>
    </details>
@@ -448,7 +446,6 @@ However, as some users might prefer a dedicated version, the following lists the
    # Report the results
    m.report()
    ```
-   </details>
 
    <details>
    <summary>Display the output</summary>
@@ -490,6 +487,7 @@ However, as some users might prefer a dedicated version, the following lists the
    │                                                                                │
    ╰────────────────────────────────────────────────────────────────────────────────╯
    ```
+   </details>
    </details>
 
 ## Citation
