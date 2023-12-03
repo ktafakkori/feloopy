@@ -9,7 +9,7 @@
 
 Overview:
 
-![Version](https://img.shields.io/static/v1?label=latest&message=v0.2.7&color=darkgreen)
+![Version](https://img.shields.io/static/v1?label=latest&message=v0.2.8&color=darkgreen)
 ![Score](https://img.shields.io/github/stars/ktafakkori/feloopy?label=score&color=darkgreen)
 ![Release Date](https://img.shields.io/github/release-date/ktafakkori/feloopy?label=release%20date&color=darkgreen)
 [![Total Users](https://static.pepy.tech/personalized-badge/feloopy?period=total&units=international_system&left_color=grey&right_color=blue&left_text=total%20users)](https://pepy.tech/project/feloopy?&left_text=totalusers)
@@ -358,10 +358,10 @@ To cite or give credit to FelooPy in publications, projects, presentations, web 
 
 - In-text:
 
-   * _Note_ 1: Please write the version you used, the latest is v0.2.7.
+   * _Note_ 1: Please write the version you used, the latest is v0.2.8.
    * _Note_ 2: Using secondary interfaces or solvers might also require a citation to their projects.
 
-   FelooPy (v0.2.7) was used in conjunction with [interface x] (v0.0.0) (except `feloopy` itself) as the optimization interface and [solver y] (v0.0.0) as the optimization solver.
+   FelooPy (v0.2.8) was used in conjunction with [interface x] (v0.0.0) (except `feloopy` itself) as the optimization interface and [solver y] (v0.0.0) as the optimization solver.
 
 ## License
 
