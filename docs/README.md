@@ -335,7 +335,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
 ## Usage
 
-- Quick start:
+- Quick start
 
    <details>
    <summary>Exact optimization</summary>
@@ -1083,6 +1083,9 @@ However, as some users might prefer a dedicated version, the following lists the
    </details>
    </details>
 
+- Documentation
+ 
+   * [Work in Progress!](https://feloopy.readthedocs.io/en/latest/index.html)
 
 ## Citation
 
