@@ -367,7 +367,7 @@ However, as some users might prefer a dedicated version, the following lists the
    ```
 
    <details>
-   <summary>Display the output</summary>
+   <summary style="color:green">Display the output</summary>
 
    ```terminal
    ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
@@ -448,7 +448,7 @@ However, as some users might prefer a dedicated version, the following lists the
    ```
 
    <details>
-   <summary>Display the output</summary>
+   <summary style="color:green">Display the output</summary>
 
    ```terminal
    ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
