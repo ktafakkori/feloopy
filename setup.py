@@ -1,50 +1,152 @@
-'''
-+---------------------------------------------------------+
-|  Project: FelooPy (0.2.8)                               |
-|  Modified: Wednesday, 27th September 2023 08:05:25 pm   |
-|  Modified By: Keivan Tafakkori                          |
-|  Project: https://github.com/ktafakkori/feloopy         |
-|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
-|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
-+---------------------------------------------------------+
-'''
+# Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
+# See the file LICENSE file for licensing details.
 
 from setuptools import setup, find_packages
 
-common = ['tabulate', 'numpy', 'matplotlib', 'infix', 'pandas', 'openpyxl', 'numba', 'plotly', 'psutil', 'py-cpuinfo', 'win-unicode-console', 'xlsxwriter', 'gputil']
-interfaces = ['gekko', 'ortools', 'pulp', 'pyomo', 'pymprog', 'picos', 'linopy', 'cvxpy', 'mip', 'mealpy', 'pydecision','rsome', 'pymoo', 'niapy', 'pygad']
-solvers = ['cplex', 'docplex', 'xpress', 'gurobipy','cylp', 'coptpy']
+# Common packages for all versions of FelooPy
 
-setup(
-    name='feloopy',
-    version='0.2.8',
-    description='FelooPy: An integrated optimization environment for automated operations research in Python.',
-    packages=find_packages(include=['feloopy', 'feloopy.*']),
-    long_description=open('README.md', encoding="utf8").read(),
-    long_description_content_type='text/markdown',
-    keywords=['optimization', 'machine learning', 'simulation', 'operations research', 'computer science',
-              'data science', 'management science', 'industrial engineering', 'supply chain', 'operations management'],
-    author='Keivan Tafakkori',
-    author_email='k.tafakkori@gmail.com',
-    maintainer='Keivan Tafakkori',
-    maintainer_email='k.tafakkori@gmail.com',
-    url='https://github.com/ktafakkori/feloopy',
-    download_url='https://github.com/ktafakkori/feloopy/releases',
-    license='MIT',
-    python_requires='>=3.10',
-    extras_require={
-                    'pico': [],
-                    'nano': ['pymprog'],
-                    'micro': ['pymprog', 'gekko', 'mealpy'], 
-                    'mini': ['pymprog', 'gekko', 'mealpy', 'ortools', 'cvxpy'], 
-                    'full': ['pymprog', 'gekko', 'mealpy', 'ortools', 'cvxpy', 'pymoo', 'pydecision'], 
-                    'stock': [interfaces],
-                    'hyper': [interfaces+solvers],
-                    'plus_gurobi': [solvers[3]],
-                    'plus_cplex': [solvers[0], solvers[1]],
-                    'plus_xpress': [solvers[2]],
-                    'plus_copt': [solvers[5]],
-                    'only_cylp': [solvers[4]],
-                    'only_linux': ['pymultiobjective']},
-    install_requires=[common],
-)
+common = [
+    'gputil',
+    'infix', 
+    'matplotlib', 
+    'numba', 
+    'numpy', 
+    'openpyxl', 
+    'pandas', 
+    'plotly', 
+    'psutil', 
+    'py-cpuinfo', 
+    'tabulate', 
+    'win-unicode-console', 
+    'scikit-learn',
+    'polars',
+    'xlsxwriter', 
+]
+
+# Interfaces for optimization solvers or algorithms
+
+pico = [
+
+]
+
+nano = pico + [
+    'pymprog'
+]
+
+micro = nano + [
+    'gekko',
+    'mealpy'
+]
+
+mini = micro + [
+    'ortools',
+    'cvxpy'
+]
+
+full = mini + [
+    'pymoo',
+    'pydecision'
+]
+
+stock = full + [
+    'pulp',
+    'pyomo',
+    'picos',
+    'linopy',
+    'mip',
+    'rsome',
+    'niapy',
+    'pygad'
+]
+
+# Solvers for optimization problems or algorithms
+
+plus_gurobi = [
+    'gurobipy'
+]
+
+plus_cplex = [
+    'cplex',
+    'docplex'
+]
+
+plus_xpress = [
+    'xpress'
+]
+
+plus_copt = [
+    'coptpy'
+]
+
+hyper = stock + plus_gurobi + plus_cplex + plus_xpress + plus_copt
+
+# Might have some os-dependent issues
+
+only_cylp = [
+    'cylp'
+]
+
+only_linux = [
+    'pymultiobjective'
+]
+
+mega = hyper + only_cylp + only_linux
+
+extra_dict = {
+    'pico': pico,
+    'nano': nano,
+    'micro': micro, 
+    'mini': mini, 
+    'full': full, 
+    'stock': stock,
+    'hyper': hyper,
+    'plus_gurobi': plus_gurobi,
+    'plus_cplex': plus_cplex,
+    'plus_xpress': plus_xpress,
+    'plus_copt': plus_copt,
+    'only_cylp': only_cylp,
+    'only_linux': only_linux,
+    'mega': mega}
+
+keywords_list = [
+    'optimization',
+    'machine learning', 
+    'simulation', 
+    'operations research', 
+    'computer science',
+    'data science', 
+    'management science', 
+    'industrial engineering', 
+    'supply chain', 
+    'operations management',
+    'mathematical modeling',
+    'decision making'
+    ]
+
+def install_feloopy():
+    """
+    -> Installs the Feloopy package and returns None. 
+    """
+    setup(
+        name = 'feloopy',
+        version = '0.2.8',
+        description = 'FelooPy: An integrated optimization environment (IOE) for automated operations research (AutoOR) in Python.',
+        packages = find_packages(include=['feloopy', 'feloopy.*']),
+        long_description = open('./docs/README.md', encoding="utf8").read(),
+        long_description_content_type = 'text/markdown',
+        keywords = keywords_list,
+        author='Keivan Tafakkori',
+        author_email='k.tafakkori@gmail.com',
+        maintainer='Keivan Tafakkori',
+        maintainer_email='k.tafakkori@gmail.com',
+        url='https://github.com/ktafakkori/feloopy',
+        download_url='https://github.com/ktafakkori/feloopy/releases',
+        license='MIT',
+        python_requires='>=3.10',
+        extras_require=extra_dict,
+        install_requires=[common],
+    )
+
+if __name__ == '__main__':
+
+    install_feloopy()
