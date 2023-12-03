@@ -358,6 +358,8 @@ To cite or give credit to FelooPy in publications, projects, presentations, web 
 
 - In-text:
 
+   * _Note_: Please write the version you used, the latest is v0.2.7.
+
    FelooPy (v0.2.7) was used in conjunction with [interface x] (v0.0.0) (except `feloopy` itself) as the optimization interface and [solver y] (v0.0.0) as the optimization solver.
 
 (Please note that using secondary interfaces or solvers might also require a citation to their projects.)
