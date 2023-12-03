@@ -829,6 +829,7 @@ However, as some users might prefer a dedicated version, the following lists the
    <details>
    <summary style="color:green">Display the output</summary>
 
+   ```terminal
    ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
    │                                                                                │
    │ Date: 2023-12-04                                                Time: 02:09:39 │
