@@ -337,6 +337,9 @@ However, as some users might prefer a dedicated version, the following lists the
 
 - Quick start:
 
+   <details>
+   <summary>Exact optimziation</summary>
+
    * _Note_ : Implementing this example requires installing the `feloopy[nano]` or more complete variants.
 
    ```python
@@ -406,6 +409,10 @@ However, as some users might prefer a dedicated version, the following lists the
       
    ```
    </details>
+
+   </details>
+
+
 
 
 
