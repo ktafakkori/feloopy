@@ -802,9 +802,8 @@ However, as some users might prefer a dedicated version, the following lists the
    </details>
    </details>
 
-
    <details>
-   <summary>Multi-attribute decision making</summary>
+   <summary>Multi-attribute decision-making</summary>
 
    * _Note_ : Implementing this example at least requires installing the `feloopy[mini]` variant.
 
