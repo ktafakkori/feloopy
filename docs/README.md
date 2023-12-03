@@ -832,7 +832,7 @@ However, as some users might prefer a dedicated version, the following lists the
    ```terminal
    ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
    │                                                                                │
-   │ Date: 2023-12-04                                                Time: 02:09:39 │
+   │ Date: 2023-12-04                                                Time: 00:00:00 │
    │ Interface: pydecision                                       Solver: ahp_method │
    │                                                                                │
    ╰────────────────────────────────────────────────────────────────────────────────╯
