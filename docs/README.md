@@ -498,6 +498,7 @@ However, as some users might prefer a dedicated version, the following lists the
    ```python
    from feloopy import *
 
+   # Define a model
    m = model('convex', 'convex_model_name', 'cvxpy')
 
    # Define variables
@@ -566,6 +567,7 @@ However, as some users might prefer a dedicated version, the following lists the
    ```python
    from feloopy import *
 
+   # Define a model
    m = model('constraint', 'satisfaction_model_name', 'ortools_cp')
 
    # Define variables
@@ -639,19 +641,28 @@ However, as some users might prefer a dedicated version, the following lists the
 
    def instance(X):
       
+      # Define model instance
       m = model('heuristic','representor_model_name','pymoo', X)
       
+      # Define variables for the model instance
       x = m.pvar(name = 'x', dim = [2], bound = [-1000,1000])
       
+      # Define objectives for the model instance
       m.obj(x[...,0]**2 + x[...,1]**2)
       m.obj((x[...,0]-2)**2 + (x[...,1]-2)**2)
       
+      # Solve the model instance
       m.sol(['min','min'], 'ns-ga-ii', {'n_gen': 100}, obj_id='all')
 
       return m[X]
 
+   # Make the main model
    m = make_model(instance)
+
+   # Solve the model
    m.sol()
+
+   # Report the results
    m.report()
    ```
 
@@ -810,8 +821,10 @@ However, as some users might prefer a dedicated version, the following lists the
    ```python
    from feloopy import *
 
+   # Define a model
    m = madm('ahp','ahp_model', 'pydecision')
 
+   # Define criteria pairwise comparison matrix
    m.add_cpcm([
    [1  ,   1/3,   1/5,   1  ,   1/4,   1/2,   3  ],   
    [3  ,   1  ,   1/2,   2  ,   1/3,   3  ,   3  ],  
@@ -822,7 +835,10 @@ However, as some users might prefer a dedicated version, the following lists the
    [1/3,   1/3,   1/5,   1/2,   1/2,   3  ,   1  ]   
    ])
 
+   # Define solve method
    m.sol()
+
+   # Report the results
    m.report(show_tensors=True)
    ```
 
@@ -874,8 +890,10 @@ However, as some users might prefer a dedicated version, the following lists the
    ```python
    from feloopy import *
 
-   m = target_model('exact', 'mean_varience_portfolio', 'rsome_ro')
+   # Define a model
+   m = model('exact', 'mean_varience_portfolio', 'rsome_ro')
 
+   # Define parameters
    n = 150                                     
    i = np.arange(1, n+1)
    p = 1.15 + i*0.05/150
@@ -883,12 +901,19 @@ However, as some users might prefer a dedicated version, the following lists the
    phi = 5         
    Q = np.diag(sigma**2)
 
+   # Define variables
    x = m.ptvar('x', [n])                       
 
+   # Define an objective
    m.obj(p@x - phi*m.quad(x, Q))   
+
+   # Define constraints
    m.con(x.sum() == 1)             
 
+   # Solve the model
    m.sol(['max'], 'ecos')
+
+   # Report the results
    m.report()
    ```
 
