@@ -1,8 +1,13 @@
 import os
 import argparse
 import getpass
-import tkinter as tk
-from tkinter import filedialog
+
+try:
+    import tkinter as tk
+    from tkinter import filedialog
+except:
+    ""
+    
 import nbformat
 import shutil
 import zipfile
