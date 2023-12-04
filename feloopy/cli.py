@@ -9,7 +9,7 @@ import zipfile
 
 from .clitools import detect_package_manager
 
-__version__ = "0.2.8"
+__version__ = "v0.2.8"
 
 def create_optimization_project(project_name, directory="."):
 
@@ -18,7 +18,7 @@ def create_optimization_project(project_name, directory="."):
     os.makedirs(project_dir, exist_ok=True)
 
     subdirectories = ["data", "modules", "results"]
-    
+
     for subdirectory in subdirectories:
         subdirectory_path = os.path.join(project_dir, subdirectory)
         os.makedirs(subdirectory_path, exist_ok=True)
@@ -53,52 +53,47 @@ def get_current_date():
     return datetime.now().strftime("%Y-%m-%d")
 
 def select_directory():
-    root = tk.Tk()
-    root.withdraw()
-    directory = filedialog.askdirectory(title="Select Project Directory")
-    root.destroy()
-    return directory
+    try:
+        root = tk.Tk()
+        root.withdraw()
+        directory = filedialog.askdirectory(title="Select Project Directory")
+        root.destroy()
+        return directory
+    except tk.TclError:
+        print("Error: Unable to use graphical file dialog. Please enter the directory manually.")
+        return input("Enter the project directory: ")
 
 def cli_detect():
     detect_package_manager(verbose=True)
 
 def cli_version():
-    print(f"FelooPy (v{__version__})")
+    print(f"FelooPy ({__version__})")
 
 def cli_project(args):
     directory = select_directory()
     if directory:
-        create_optimization_project(args.project_name, directory)
+        create_optimization_project(args.name, directory)
 
-def zip_project(args):
-    project_name = args.project_name
-    project_dir = os.path.join(".", project_name)
-
-    if not os.path.exists(project_dir):
-        print(f"Error: Project '{project_name}' not found.")
-        return
-
-    build_dir = os.path.join(project_dir, "build")
+def zip_project():
+    build_dir = os.path.join(".", "build")
     os.makedirs(build_dir, exist_ok=True)
 
-    zip_file_path = os.path.join(build_dir, f"{project_name}.zip")
+    zip_file_path = os.path.join(build_dir, "src.zip")
 
-    all_files = [os.path.join(dp, f) for dp, dn, filenames in os.walk(project_dir) for f in filenames]
+    all_files = [os.path.relpath(os.path.join(dp, f), start=".") for dp, dn, filenames in os.walk(".") for f in filenames + dn if "build" not in os.path.join(dp, f)]
 
     with zipfile.ZipFile(zip_file_path, 'w') as zipf:
         for file in all_files:
-            arcname = os.path.relpath(file, project_dir)
-            zipf.write(file, arcname=arcname)
+            zipf.write(file, arcname=file)
 
-    print(f"Project '{project_name}' zipped and saved at: {zip_file_path}")
-
+    print(f"Project excluding 'build' directory zipped and saved at: {zip_file_path}")
 
 def main():
     parser = argparse.ArgumentParser(description="FelooPy's command-line tool")
 
     parser.add_argument("command", choices=["detect", "version", "project", "zip"], help="Command to execute")
 
-    parser.add_argument("--project-name", help="Name of the optimization project")
+    parser.add_argument("--name", help="Name of the optimization project")
 
     args = parser.parse_args()
 
@@ -107,12 +102,12 @@ def main():
     elif args.command == "version":
         cli_version()
     elif args.command == "project":
-        if not args.project_name:
-            print("Error: --project-name is required for the 'project' command.")
+        if not args.name:
+            print("Error: --name is required for the 'project' command.")
             return
         cli_project(args)
     elif args.command == "zip":
-        zip_project(args)
+        zip_project()
     else:
         print("Invalid command. Use 'detect', 'version', 'project', or 'zip'.")
 
