@@ -1,6 +1,8 @@
 # Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
 # See the file LICENSE file for licensing details.
 
+__author__ = ['Keivan Tafakkori']
+
 from setuptools import setup, find_packages
 
 # Common packages for all versions of FelooPy
@@ -11,7 +13,7 @@ common = [
     'matplotlib', 
     'numba', 
     'numpy', 
-    'openpyxl', 
+    'openpyxl',
     'pandas', 
     'plotly', 
     'psutil', 
@@ -123,9 +125,9 @@ keywords_list = [
     'decision making'
     ]
 
-def install_feloopy():
+def install_feloopy() -> None:
     """
-    -> Installs the Feloopy package and returns None. 
+    Installs the Feloopy package and returns nothing. 
     """
     setup(
         name = 'feloopy',
@@ -142,6 +144,8 @@ def install_feloopy():
         url='https://github.com/ktafakkori/feloopy',
         download_url='https://github.com/ktafakkori/feloopy/releases',
         license='MIT',
+        entry_points={
+        "console_scripts": [ "feloopy = feloopy.cli:main",]},
         python_requires='>=3.10',
         extras_require=extra_dict,
         install_requires=[common],
