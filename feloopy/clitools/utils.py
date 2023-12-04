@@ -64,16 +64,18 @@ def get_current_date():
     return datetime.now().strftime("%Y-%m-%d")
 
 def select_directory():
+    
     try:
         root = tk.Tk()
         root.withdraw()
         directory = filedialog.askdirectory(title="Select Project Directory")
         root.destroy()
         return directory
-    except tk.TclError:
+    except:
         print("Error: Unable to use graphical file dialog. Please enter the directory manually.")
         return input("Enter the project directory: ")
-
+    
+    
 def cli_detect():
     detect_package_manager(verbose=True)
 

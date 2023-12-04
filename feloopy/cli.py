@@ -17,8 +17,8 @@ from .clitools import detect_package_manager
 
 
 def main():
+    
     parser = argparse.ArgumentParser(description="FelooPy's command-line tool")
-
     parser.add_argument("command", choices=["detect", "version", "project", "backup", "recover", "build"], help="Command to execute")
 
     parser.add_argument("--name", help="Name of the optimization project")
