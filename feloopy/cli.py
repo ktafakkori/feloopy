@@ -15,6 +15,8 @@ import zipfile
 from .clitools.utils import *
 from .clitools import detect_package_manager
 
+def cli_detect():
+    detect_package_manager(verbose=True)
 
 def main():
     

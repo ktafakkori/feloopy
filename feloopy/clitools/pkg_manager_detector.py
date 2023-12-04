@@ -31,3 +31,5 @@ def detect_package_manager(verbose):
 
     if verbose: print("None of the common package managers found. Exiting installation.")
     sys.exit(1)
+    
+

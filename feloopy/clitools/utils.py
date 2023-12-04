@@ -78,9 +78,6 @@ def select_directory():
         print("Error: Unable to use graphical file dialog. Please enter the directory manually.")
         return input("Enter the project directory: ")
     
-def cli_detect():
-    detect_package_manager(verbose=True)
-
 def cli_version():
     print(f"FelooPy ({__version__})")
 
