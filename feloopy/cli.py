@@ -7,7 +7,7 @@ try:
     from tkinter import filedialog
 except:
     ""
-    
+
 import nbformat
 import shutil
 import zipfile
