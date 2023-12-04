@@ -23,6 +23,7 @@ common = [
     'scikit-learn',
     'polars',
     'xlsxwriter', 
+    'nbformat',
 ]
 
 # Interfaces for optimization solvers or algorithms
