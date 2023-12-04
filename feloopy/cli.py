@@ -44,9 +44,6 @@ def create_optimization_project(project_name, directory="."):
         nbformat.write(nb, ipynb_file)
 
     print(f"Optimization project '{project_name}' created at: {project_dir}")
-    
-    
-    
 
 def get_user_name():
     return getpass.getuser()
@@ -86,10 +83,8 @@ def zip_project(args):
 
     zip_file_path = os.path.join(build_dir, f"{project_name}.zip")
 
-    # Gather all files in the project directory
     all_files = [os.path.join(dp, f) for dp, dn, filenames in os.walk(project_dir) for f in filenames]
 
-    # Writing files to a zip archive
     with zipfile.ZipFile(zip_file_path, 'w') as zipf:
         for file in all_files:
             arcname = os.path.relpath(file, project_dir)
@@ -103,7 +98,6 @@ def main():
 
     parser.add_argument("command", choices=["detect", "version", "project", "zip"], help="Command to execute")
 
-    # Adding project name as a command-line argument
     parser.add_argument("--project-name", help="Name of the optimization project")
 
     args = parser.parse_args()
