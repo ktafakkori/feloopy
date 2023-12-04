@@ -1,3 +1,6 @@
+# Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
+# See the file LICENSE file for licensing details.
+
 import os
 import argparse
 import getpass
@@ -5,10 +8,13 @@ try:
     import tkinter as tk
     from tkinter import filedialog
 except:
-    ""
+    pass
+
 import nbformat
 import shutil
 import zipfile
+import subprocess
+import sys
 
 __version__ = "v0.2.8"
 
@@ -20,9 +26,23 @@ def create_optimization_project(project_name, directory="."):
 
     subdirectories = ["data", "modules", "results"]
 
+    data_dir = os.path.join(project_dir, "data")
+    for subdir in ["raw", "processed", "final"]:
+        subdir_path = os.path.join(data_dir, subdir)
+        os.makedirs(subdir_path, exist_ok=True)
+
+    data_dir = os.path.join(project_dir, "results")
+    for subdir in ["tables", "figures", "texts"]:
+        subdir_path = os.path.join(data_dir, subdir)
+        os.makedirs(subdir_path, exist_ok=True)
+        
     for subdirectory in subdirectories:
         subdirectory_path = os.path.join(project_dir, subdirectory)
         os.makedirs(subdirectory_path, exist_ok=True)
+
+    modules_init_path = os.path.join(project_dir, "modules", "__init__.py")
+    with open(modules_init_path, "w") as modules_init_file:
+        modules_init_file.write("# Initialization file for the modules directory")
 
     main_file_path = os.path.join(project_dir, "main.py")
     with open(main_file_path, "w") as main_file:
@@ -53,28 +73,43 @@ def create_optimization_project(project_name, directory="."):
 
 # Notes, to-dos, and other information can be added here.
 """)
-        
+
     print(f"Optimization project '{project_name}' created at: {project_dir}")
 
 def get_user_name():
     return getpass.getuser()
+
+def run_project(file_path):
+    try:
+        subprocess.run(["python", file_path], check=True)
+    except subprocess.CalledProcessError as e:
+        try:
+            subprocess.run([sys.executable, file_path], check=True)
+        except:
+            print(f"Error running the project: {e}")
+
+def pip_install(package):
+    try:
+        subprocess.run([sys.executable, '-m', 'pip', 'install', '--verbose', package], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error installing with pip: {e}")
+        try:
+            subprocess.run([sys.executable, '-m', 'pipx', 'install', '--verbose', package], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error installing with pipx: {e}")
 
 def get_current_date():
     from datetime import datetime
     return datetime.now().strftime("%Y-%m-%d")
 
 def select_directory():
-    
     try:
-        
         root = tk.Tk()
         root.withdraw()
         directory = filedialog.askdirectory(title="Select Project Directory")
         root.destroy()
         return directory
-    
     except:
-        
         print("Error: Unable to use graphical file dialog. Please enter the directory manually.")
         return input("Enter the project directory: ")
     
@@ -87,30 +122,30 @@ def cli_project(args):
         create_optimization_project(args.name, directory)
 
 def zip_project():
-    backup_dir = os.path.join(".", "backup")
+    backup_dir = os.path.join(".", "backups")
     os.makedirs(backup_dir, exist_ok=True)
 
     current_datetime = get_current_datetime()
-    zip_file_name = f"src-{current_datetime}.zip"
+    zip_file_name = f"bkp-{current_datetime}.zip"
     zip_file_path = os.path.join(backup_dir, zip_file_name)
 
-    all_files = [os.path.relpath(os.path.join(dp, f), start=".") for dp, dn, filenames in os.walk(".") for f in filenames + dn if "backup" not in os.path.join(dp, f)]
+    all_files = [os.path.relpath(os.path.join(dp, f), start=".") for dp, dn, filenames in os.walk(".") for f in filenames + dn if "backups" not in os.path.join(dp, f)]
 
     with zipfile.ZipFile(zip_file_path, 'w') as zipf:
         for file in all_files:
             zipf.write(file, arcname=file)
 
-    print(f"Project excluding 'backup' directory zipped and saved at: {zip_file_path}")
+    print(f"Project excluding 'backups' directory zipped and saved at: {zip_file_path}")
 
 
 def recover_project():
     src_files = get_recent_src_files()
 
-    print("Recent src files:")
+    print("Recent project backups:")
     for i, src_file in enumerate(src_files, start=1):
-        print(f"{i}. {src_file}")
+        print(f"{i} | {src_file}")
         
-    selected_index = int(input("Enter the number of the src file to recover: ")) - 1
+    selected_index = int(input("Enter the number of the project file to recover: ")) - 1
 
     if 0 <= selected_index < len(src_files):
 
@@ -125,20 +160,20 @@ def recover_project():
         print("Invalid selection.")
 
 def get_recent_src_files():
-    backup_dir = os.path.join(".", "backup")
-    src_files = [f for f in os.listdir(backup_dir) if f.startswith("src-") and f.endswith(".zip")]
+    backup_dir = os.path.join(".", "backups")
+    src_files = [f for f in os.listdir(backup_dir) if f.startswith("bkp-") and f.endswith(".zip")]
     src_files.sort(reverse=True)
     return src_files[:10]
 
 def delete_all_except_backup():
     for item in os.listdir("."):
-        if os.path.isdir(item) and item != "backup":
+        if os.path.isdir(item) and item != "backups":
             shutil.rmtree(item)
-        elif os.path.isfile(item) and item != "backup":
+        elif os.path.isfile(item) and item != "backups":
             os.remove(item)
 
 def extract_src(src_file):
-    backup_dir = os.path.join(".", "backup")
+    backup_dir = os.path.join(".", "backups")
     zip_file_path = os.path.join(backup_dir, src_file)
 
     with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
@@ -151,7 +186,7 @@ def get_current_datetime():
 
 def build_project():
 
-    backup_dir = os.path.join(".", "backup")
+    backup_dir = os.path.join(".", "backups")
     os.makedirs(backup_dir, exist_ok=True)
 
     venv_name = input("Enter the name of the virtual environment (venv): ")
@@ -174,7 +209,7 @@ def build_project():
     zip_file_name = f"build-{current_datetime}.zip"
     zip_file_path = os.path.join(backup_dir, zip_file_name)
 
-    all_files = [os.path.relpath(os.path.join(dp, f), start=".") for dp, dn, filenames in os.walk(".") for f in filenames + dn if "backup" not in os.path.join(dp, f)]
+    all_files = [os.path.relpath(os.path.join(dp, f), start=".") for dp, dn, filenames in os.walk(".") for f in filenames + dn if "backups" not in os.path.join(dp, f)]
 
     with zipfile.ZipFile(zip_file_path, 'w') as zipf:
         for file in all_files:
@@ -188,3 +223,34 @@ def build_project():
     shutil.move(zip_file_path, build_zip_file_path)
 
     print(f"Project including '{venv_name}' directory built and saved at: {build_zip_file_path}")
+
+def install_vscode_extensions(extensions):
+    print(f"Installing VS Code extensions: {extensions}")
+    try:
+        subprocess.run(['code', '--install-extension', *extensions], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error installing VS Code extensions: {e}")
+        
+def clean_project():
+    
+    extensions_to_delete = ['.pyc', '.pyo', '.pyd', '.py~', '.log', '.zip']
+    directories_to_delete = ['__pycache__']
+
+    for root, dirs, files in os.walk("."):
+        for file in files:
+            if any(file.endswith(ext) for ext in extensions_to_delete) and "backups" not in root:
+                file_path = os.path.join(root, file)
+                os.remove(file_path)
+                print(f"Deleted: {file_path}")
+
+        for directory in dirs:
+            if directory in directories_to_delete and "backups" not in root:
+                dir_path = os.path.join(root, directory)
+                shutil.rmtree(dir_path)
+                print(f"Deleted: {dir_path}")
+
+    print("Project cleaned successfully.")
+    
+def get_installed_dependencies():
+    result = subprocess.run(['pip', 'freeze'], stdout=subprocess.PIPE, text=True)
+    print(result.stdout)

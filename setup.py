@@ -8,22 +8,22 @@ from setuptools import setup, find_packages
 # Common packages for all versions of FelooPy
 
 common = [
-    'gputil',
-    'infix', 
-    'matplotlib', 
-    'numba', 
-    'numpy', 
-    'openpyxl',
-    'pandas', 
-    'plotly', 
-    'psutil', 
-    'py-cpuinfo', 
-    'tabulate', 
-    'win-unicode-console', 
-    'scikit-learn',
-    'polars',
-    'xlsxwriter', 
-    'nbformat',
+    'gputil==1.4.0',
+    'infix==1.2',
+    'matplotlib==3.8.2',
+    'numba==0.58.1',
+    'numpy==1.26.2',
+    'openpyxl==3.1.2',
+    'pandas==2.1.3',
+    'plotly==5.18.0',
+    'psutil==5.9.6',
+    'py-cpuinfo==9.0.0',
+    'tabulate==0.9.0',
+    'win-unicode-console==0.5',
+    'scikit-learn==1.3.2',
+    'polars==0.19.19',
+    'xlsxwriter==3.1.9',
+    'nbformat==5.9.2',
 ]
 
 # Interfaces for optimization solvers or algorithms
@@ -33,52 +33,52 @@ pico = [
 ]
 
 nano = pico + [
-    'pymprog'
+    'pymprog==1.1.2'
 ]
 
 micro = nano + [
-    'gekko',
-    'mealpy'
+    'gekko==1.0.6',
+    'mealpy==3.0.1'
 ]
 
 mini = micro + [
-    'ortools',
-    'cvxpy'
+    'ortools==9.8.3296',
+    'cvxpy==1.4.1'
 ]
 
 full = mini + [
-    'pymoo',
-    'pydecision'
+    'pymoo==0.6.1.1',
+    'pydecision==4.3.9'
 ]
 
 stock = full + [
-    'pulp',
-    'pyomo',
-    'picos',
-    'linopy',
-    'mip',
-    'rsome',
-    'niapy',
-    'pygad'
+    'pulp==2.7.0',
+    'pyomo==6.7.0',
+    'picos==2.4.17',
+    'linopy==0.3.2',
+    'mip==1.15.0',
+    'rsome==1.2.1',
+    'niapy==2.0.5',
+    'pygad==3.2.0'
 ]
 
 # Solvers for optimization problems or algorithms
 
 plus_gurobi = [
-    'gurobipy'
+    'gurobipy==11.0.0'
 ]
 
 plus_cplex = [
-    'cplex',
-    'docplex'
+    'cplex==22.1.1.1',
+    'docplex==2.25.236'
 ]
 
 plus_xpress = [
-    'xpress'
+    'xpress==9.2.5'
 ]
 
 plus_copt = [
-    'coptpy'
+    'coptpy==7.0.3'
 ]
 
 hyper = stock + plus_gurobi + plus_cplex + plus_xpress + plus_copt
@@ -86,11 +86,11 @@ hyper = stock + plus_gurobi + plus_cplex + plus_xpress + plus_copt
 # Might have some os-dependent issues
 
 only_cylp = [
-    'cylp'
+    'cylp==0.92.2'
 ]
 
 only_linux = [
-    'pymultiobjective'
+    'pymultiobjective==1.5.4'
 ]
 
 mega = hyper + only_cylp + only_linux
@@ -146,7 +146,9 @@ def install_feloopy() -> None:
         download_url='https://github.com/ktafakkori/feloopy/releases',
         license='MIT',
         entry_points={
-        "console_scripts": [ "feloopy = feloopy.cli:main",]},
+        "console_scripts": [ "feloopy = feloopy.cli:main",
+                            "flp = feloopy.cli:main",
+                            ]},
         python_requires='>=3.10',
         extras_require=extra_dict,
         install_requires=[common],
