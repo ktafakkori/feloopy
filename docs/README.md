@@ -329,6 +329,22 @@ However, as some users might prefer a dedicated version, the following lists the
    pip install -U git+https://github.com/ktafakkori/feloopy.git#egg=feloopy[variant_name]
    ```
 
+   or 
+
+   ```terminal
+   git clone https://github.com/ktafakkori/feloopy.git
+   cd feloopy
+   pip install .[variant_name]
+   ```
+
+   or
+
+   ```terminal
+   !git clone https://github.com/ktafakkori/feloopy.git
+   %cd feloopy
+   !pip install .[variant_name]
+   ```
+
    where `variant_name` is one of the above variants. (please refer to this [link](https://git-scm.com/downloads) to install, update, or get `git`.)
 
 </details>
