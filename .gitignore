@@ -2,7 +2,7 @@ build
 dist
 env
 .vscode
-script.sh
+log.txt
 feloopy.egg-info
 tests
 test.py
