@@ -6,4 +6,5 @@ script.sh
 feloopy.egg-info
 tests
 test.py
+extras
 __pycache__
