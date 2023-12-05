@@ -134,7 +134,7 @@ def install_feloopy() -> None:
         name = 'feloopy',
         version = '0.2.8',
         description = 'FelooPy: An integrated optimization environment (IOE) for automated operations research (AutoOR) in Python.',
-        packages = find_packages(include=['feloopy', 'feloopy.*']),
+        packages = find_packages(include=['feloopy', 'feloopy.*'], exclude=['feloopy.extras']),
         long_description = open('./docs/README.md', encoding="utf8").read(),
         long_description_content_type = 'text/markdown',
         keywords = keywords_list,
@@ -151,7 +151,8 @@ def install_feloopy() -> None:
                             ]},
         python_requires='>=3.10',
         extras_require=extra_dict,
-        install_requires=[common],
+        install_requires=common,
+        exclude_package_data={'feloopy': ['extras/*']},
     )
 
 if __name__ == '__main__':

@@ -4,6 +4,7 @@ version = "0.2.8"
 description = "FelooPy: An integrated optimization environment (IOE) for automated operations research (AutoOR) in Python."
 authors = ["Keivan Tafakkori <k.tafakkori@gmail.com>"]
 license = "MIT"
+exclude = ["feloopy/extras"]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
@@ -24,15 +25,19 @@ polars = "0.19.19"
 xlsxwriter = "3.1.9"
 nbformat = "5.9.2"
 
+
 [tool.poetry.group.pico.dependencies]
+
 
 [tool.poetry.group.nano.dependencies]
 pymprog = "1.1.2"
+
 
 [tool.poetry.group.micro.dependencies]
 gekko = "1.0.6"
 mealpy = "3.0.1"
 pymprog = "1.1.2"
+
 
 [tool.poetry.group.mini.dependencies]
 ortools = "9.8.3296"
@@ -40,6 +45,7 @@ cvxpy = "1.4.1"
 gekko = "1.0.6"
 mealpy = "3.0.1"
 pymprog = "1.1.2"
+
 
 [tool.poetry.group.full.dependencies]
 pymoo = "0.6.1.1"
@@ -49,6 +55,7 @@ cvxpy = "1.4.1"
 gekko = "1.0.6"
 mealpy = "3.0.1"
 pymprog = "1.1.2"
+
 
 [tool.poetry.group.stock.dependencies]
 pulp = "2.7.0"
@@ -67,18 +74,23 @@ gekko = "1.0.6"
 mealpy = "3.0.1"
 pymprog = "1.1.2"
 
+
 [tool.poetry.group.plus_gurobi.dependencies]
 gurobipy = "11.0.0"
+
 
 [tool.poetry.group.plus_cplex.dependencies]
 cplex = "22.1.1.1"
 docplex = "2.25.236"
 
+
 [tool.poetry.group.plus_xpress.dependencies]
 xpress = "9.2.5"
 
+
 [tool.poetry.group.plus_copt.dependencies]
 coptpy = "7.0.3"
+
 
 [tool.poetry.group.hyper.dependencies]
 pulp = "2.7.0"
@@ -102,11 +114,14 @@ docplex = "2.25.236"
 xpress = "9.2.5"
 coptpy = "7.0.3"
 
+
 [tool.poetry.group.only_cylp.dependencies]
 cylp = "0.92.2"
 
+
 [tool.poetry.group.only_linux.dependencies]
 pymultiobjective = "1.5.4"
+
 
 [tool.poetry.group.mega.dependencies]
 pulp = "2.7.0"
