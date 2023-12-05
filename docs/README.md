@@ -365,6 +365,9 @@ However, as some users might prefer a dedicated version, the following lists the
    flp -v
    ```
 
+   <details>
+   <summary>Details</summary>
+
    Next, you can create your optimization project:
 
    ```terminal
@@ -422,6 +425,8 @@ However, as some users might prefer a dedicated version, the following lists the
    ```terminal
    flp recover
    ```
+
+   </details>
 
 - Quick start
 
