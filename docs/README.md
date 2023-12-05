@@ -351,6 +351,78 @@ However, as some users might prefer a dedicated version, the following lists the
 
 ## Usage
 
+- Command line interface
+
+   To verify FelooPy's command line interface (CLI) accessibility, open a terminal, activate the virtual environment or use the global environment with FelooPy installed, and execute either of the following commands:
+
+   ```terminal
+   feloopy -v
+   ```
+
+   or
+
+   ```terminal
+   flp -v
+   ```
+
+   Next, you can create your optimization project:
+
+   ```terminal
+   flp project --name=test
+   ```
+
+   This command opens a GUI interface to assist with placing the project folder and prints the project directory for you to navigate using the `cd` command.
+
+   The FelooPy's optimization project structure is as follows: 
+
+   ```terminal
+   ├── data
+   │   ├── final
+   │   ├── processed
+   │   └── raw
+   ├── debug.ipynb
+   ├── log.txt
+   ├── main.py
+   ├── modules
+   │   └── __init__.py
+   └── results
+      ├── figures
+      ├── tables
+      └── texts
+   ```
+
+   Note that at specific project progress levels, you can create backups from the project root using:
+
+   ```terminal
+   flp backup
+   ```
+
+   This generates a backup file, preserving the project progress up to a specific date and time, as illustrated below:
+
+   ```terminal
+   ├── backups
+   │   └── bkp-on-2023-12-05-at-21-00-00.zip
+   ├── data
+   │   ├── final
+   │   ├── processed
+   │   └── raw
+   ├── debug.ipynb
+   ├── log.txt
+   ├── main.py
+   ├── modules
+   │   └── __init__.py
+   └── results
+      ├── figures
+      ├── tables
+      └── texts
+   ```
+
+   To recover to a specific project state, use the following command from the project root:
+
+   ```terminal
+   flp recover
+   ```
+
 - Quick start
 
    <details>
