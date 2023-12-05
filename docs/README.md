@@ -426,6 +426,12 @@ However, as some users might prefer a dedicated version, the following lists the
    flp recover
    ```
 
+   To clean residuals, execute the following command from the project root:
+
+   ```terminal
+   flp clean
+   ```
+
    </details>
 
 - Quick start
