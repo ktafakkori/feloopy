@@ -995,7 +995,7 @@ However, as some users might prefer a dedicated version, the following lists the
    from feloopy import *
 
    # Define a model
-   m = model('exact', 'mean_varience_portfolio', 'rsome_ro')
+   m = model('uncertain', 'mean_varience_portfolio', 'rsome_ro')
 
    # Define parameters
    n = 150                                     
