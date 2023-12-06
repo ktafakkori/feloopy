@@ -40,21 +40,6 @@ avar = defaultdict()
 class SpecialObject:
     pass
 
-class Data:
-
-    def __init__(self, 
-                 input: Optional[SpecialObject] = None, 
-                 key: Optional[int] = 0):
-
-        """
-        Definition
-        ----------
-        creates and returns the data handling environment.
-        
-        """
-        self.key = key  
-        self.object = input if input else None
-
 class Model:
 
     def __init__(self, 
@@ -76,7 +61,7 @@ class Model:
         solution_method : Literal['exact', 'heuristic', 'constraint', 'convex']
             Select or type the desired solution method.
         model_name : str
-            Type the name of the model.
+            e the name of the model.
         interface_name : str
             Select or type the desired solver interface.
         agent : Optional[Union[SpecialObject, None]] (default=None)
@@ -88,6 +73,7 @@ class Model:
         """
 
         self.no_agents = no_agents
+
         if solution_method == 'constraint':
             self.solution_method_was = 'constraint'
             solution_method = 'exact'
@@ -95,7 +81,13 @@ class Model:
         elif solution_method == 'convex':
             self.solution_method_was = 'convex'
             solution_method = 'exact'
+
+        elif solution_method == 'uncertain':
+            self.solution_method_was = 'uncertain'
+            solution_method = 'exact'
+
         else:
+
             self.solution_method_was=None
 
         self.features = {
