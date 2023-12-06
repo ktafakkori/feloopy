@@ -520,7 +520,7 @@ However, as some users might prefer a dedicated version, the following lists the
    from feloopy import *
 
    def instance(X):
-      
+
       # Define model instance
       m = model('heuristic', 'representor_model_name', 'feloopy', X)
 
@@ -744,17 +744,17 @@ However, as some users might prefer a dedicated version, the following lists the
    from feloopy import *
 
    def instance(X):
-      
+
       # Define model instance
       m = model('heuristic','representor_model_name','pymoo', X)
-      
+
       # Define variables for the model instance
       x = m.pvar(name = 'x', dim = [2], bound = [-1000,1000])
-      
+
       # Define objectives for the model instance
       m.obj(x[...,0]**2 + x[...,1]**2)
       m.obj((x[...,0]-2)**2 + (x[...,1]-2)**2)
-      
+
       # Solve the model instance
       m.sol(['min','min'], 'ns-ga-ii', {'n_gen': 100}, obj_id='all')
 
@@ -931,13 +931,13 @@ However, as some users might prefer a dedicated version, the following lists the
 
    # Define criteria pairwise comparison matrix
    m.add_cpcm([
-   [1  ,   1/3,   1/5,   1  ,   1/4,   1/2,   3  ],   
-   [3  ,   1  ,   1/2,   2  ,   1/3,   3  ,   3  ],  
-   [5  ,   2  ,   1  ,   4  ,   5  ,   6  ,   5  ],   
-   [1  ,   1/2,   1/4,   1  ,   1/4,   1  ,   2  ],   
-   [4  ,   3  ,   1/5,   4  ,   1  ,   3  ,   2  ],   
-   [2  ,   1/3,   1/6,   1  ,   1/3,   1  ,   1/3],   
-   [1/3,   1/3,   1/5,   1/2,   1/2,   3  ,   1  ]   
+   [1  ,   1/3,   1/5,   1  ,   1/4,   1/2,   3  ],
+   [3  ,   1  ,   1/2,   2  ,   1/3,   3  ,   3  ],
+   [5  ,   2  ,   1  ,   4  ,   5  ,   6  ,   5  ],
+   [1  ,   1/2,   1/4,   1  ,   1/4,   1  ,   2  ],
+   [4  ,   3  ,   1/5,   4  ,   1  ,   3  ,   2  ],
+   [2  ,   1/3,   1/6,   1  ,   1/3,   1  ,   1/3],
+   [1/3,   1/3,   1/5,   1/2,   1/2,   3  ,   1  ]
    ])
 
    # Define solve method
@@ -998,21 +998,21 @@ However, as some users might prefer a dedicated version, the following lists the
    m = model('uncertain', 'mean_varience_portfolio', 'rsome_ro')
 
    # Define parameters
-   n = 150                                     
+   n = 150
    i = np.arange(1, n+1)
    p = 1.15 + i*0.05/150
    sigma = 0.05/450 * (2*i*n*(n+1))**0.5
-   phi = 5         
+   phi = 5
    Q = np.diag(sigma**2)
 
    # Define variables
-   x = m.ptvar('x', [n])                       
+   x = m.ptvar('x', [n])
 
    # Define an objective
-   m.obj(p@x - phi*m.quad(x, Q))   
+   m.obj(p@x - phi*m.quad(x, Q))
 
    # Define constraints
-   m.con(x.sum() == 1)             
+   m.con(x.sum() == 1)
 
    # Solve the model
    m.sol(['max'], 'ecos')
