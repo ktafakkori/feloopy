@@ -122,7 +122,6 @@ _Credit: Keivan Tafakkori_
 
 </details>
 
-
 FelooPy supports the following _expert-based_ classification of decision-making problems:
 
 <details>
@@ -136,11 +135,11 @@ FelooPy supports the following _expert-based_ classification of decision-making 
       - Compensatory methods
          - Scoring methods
          - Compromising methods
-      - Non-compensatory methods 
+      - Non-compensatory methods
          - Conjunctive satisfying methods
          - Lexicographic methods
          - Outranking methods
-         
+
 - Group Decision-Making (GDM)
 
 _Credit: Keivan Tafakkori_
@@ -166,6 +165,7 @@ graph LR
  B2["Non-compensatory"] --> B22["Lexicographic"]
  B2["Non-compensatory"] --> B23["Outranking"]
 ```
+
 _Credit: Keivan Tafakkori_
 
 </details>
@@ -173,7 +173,7 @@ _Credit: Keivan Tafakkori_
 ## Installation
 
 For a quick installation with a classic support of interfaces and solvers, you may use the `pip` package manager (please refer to this [link](https://pip.pypa.io/en/stable/installation/) to install, update, or get one) as follows:
-   
+
    ```terminal
    pip install -U feloopy[stock]
    ```
@@ -188,6 +188,7 @@ However, as some users might prefer a dedicated version, the following lists the
    ```terminal
    pip install -U feloopy
    ```
+
 </details>
 
 <details>
@@ -203,7 +204,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    - `nano` variant:
 
-      This variant includes a small set of additional features. It installs FelooPy with its common dependencies and the `pymprog` package. 
+      This variant includes a small set of additional features. It installs FelooPy with its common dependencies and the `pymprog` package.
 
       ```terminal
       pip install -U feloopy[nano]
@@ -223,7 +224,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
       ```terminal
       pip install -U feloopy[mini]
-      ```   
+      ```
 
    - `full` variant:
 
@@ -298,6 +299,7 @@ However, as some users might prefer a dedicated version, the following lists the
    ```terminal
    pip install -U feloopy[only_linux]
    ```
+
 </details>
 
 <details>
@@ -318,6 +320,7 @@ However, as some users might prefer a dedicated version, the following lists the
       ```terminal
       pip install -U feloopy[mega]
       ```
+
 </details>
 
 <details>
@@ -329,7 +332,7 @@ However, as some users might prefer a dedicated version, the following lists the
    pip install -U git+https://github.com/ktafakkori/feloopy.git#egg=feloopy[variant_name]
    ```
 
-   or 
+   or
 
    ```terminal
    git clone https://github.com/ktafakkori/feloopy.git
@@ -376,7 +379,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    This command opens a GUI interface to assist with placing the project folder and prints the project directory for you to navigate using the `cd` command.
 
-   The FelooPy's optimization project structure is as follows: 
+   The FelooPy's optimization project structure is as follows:
 
    ```terminal
    ├── data
@@ -505,6 +508,7 @@ However, as some users might prefer a dedicated version, the following lists the
    │                                                                                │
    ╰────────────────────────────────────────────────────────────────────────────────╯
    ```
+
    </details>
    </details>
 
@@ -586,6 +590,7 @@ However, as some users might prefer a dedicated version, the following lists the
    │                                                                                │
    ╰────────────────────────────────────────────────────────────────────────────────╯
    ```
+
    </details>
    </details>
 
@@ -909,6 +914,7 @@ However, as some users might prefer a dedicated version, the following lists the
    │                                                                                │
    ╰────────────────────────────────────────────────────────────────────────────────╯
    ```
+
    </details>
    </details>
 
@@ -979,7 +985,6 @@ However, as some users might prefer a dedicated version, the following lists the
    ```
    </details>
    </details>
-
 
    <details>
    <summary>Uncertain optimization</summary>
@@ -1204,11 +1209,12 @@ However, as some users might prefer a dedicated version, the following lists the
    │                                                                                │
    ╰────────────────────────────────────────────────────────────────────────────────╯
    ```
+
    </details>
    </details>
 
 - Documentation
- 
+
    - [Work in Progress!](https://feloopy.readthedocs.io/en/latest/index.html)
 
 ## Citation
