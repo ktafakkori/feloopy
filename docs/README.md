@@ -382,6 +382,7 @@ However, as some users might prefer a dedicated version, the following lists the
    The FelooPy's optimization project structure is as follows:
 
    ```terminal
+   test
    ├── data
    │   ├── final
    │   ├── processed
@@ -406,6 +407,7 @@ However, as some users might prefer a dedicated version, the following lists the
    This generates a backup file, preserving the project progress up to a specific date and time, as illustrated below:
 
    ```terminal
+   test
    ├── backups
    │   └── bkp-on-2023-12-05-at-21-00-00.zip
    ├── data
