@@ -79,16 +79,15 @@ def generate_solution(features):
                     model_object.setObjective(
                         model_objectives[objective_id], gurobi_interface.GRB.MAXIMIZE)
 
-            counter= 0
-            for constraint in model_constraints:
-                if constraint_labels[counter]:
-                    model_object.addConstr(constraint, name = constraint_labels[counter])
+            counter = 0
+            for constraint, label in zip(model_constraints, constraint_labels):
+                if label:
+                    model_object.addConstr(constraint, name=label)
                 else:
                     model_object.addConstr(constraint)
-                counter+=1
+                counter += 1
 
             if save_model != False:
-
                 model_object.write(save_model)
 
             time_solve_begin = timeit.default_timer()

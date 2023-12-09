@@ -7,4 +7,6 @@ feloopy.egg-info
 tests
 test.py
 extras
+extra_examples
 __pycache__
+project*

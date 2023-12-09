@@ -14,7 +14,7 @@ def generate_model(total_variables, directions, solver_name, solver_options):
     match solver_name:
 
         case 'hco':
-            from ...algorithms.heuristic.HCO import HCO
+            from ...extras.algorithms.HCO import HCO
             model_object = HCO(f=total_variables, d=directions, s=solver_options.get('epoch', 100), t=solver_options.get('pop_size', 50), e=solver_options.get(
                 'elitism_number', 3), ac=solver_options.get('archive_cap', 100), rep=solver_options.get('episode', 1), ben=solver_options.get('benchmark', False))
 
@@ -39,7 +39,7 @@ def generate_model(total_variables, directions, solver_name, solver_options):
                 'maximum_temperature', 1000),  ac=solver_options.get('archive_cap', 50), rep=solver_options.get('episode', 1), ben=solver_options.get('benchmark', False))
 
         case 'bo':
-            from ...algorithms.heuristic.BO import BO
+            from ...extras.algorithms.BO import BO
             model_object = BO(f=total_variables, d=directions, s=solver_options.get(
                 'epoch', 100), t=10, rep=solver_options.get('episode', 1), ben=solver_options.get('benchmark', False))
 
@@ -49,7 +49,7 @@ def generate_model(total_variables, directions, solver_name, solver_options):
                 'tabu_list_size', 10), ac=solver_options.get('archive_cap', 50), rep=solver_options.get('episode', 1), ben=solver_options.get('benchmark', False))
 
         case 'pso':
-            from ...algorithms.heuristic.PSO import PSO
+            from ...extras.algorithms.PSO import PSO
             model_object = PSO(f=total_variables, d=directions, s=solver_options.get('epoch', 100), t=solver_options.get('pop_size', 50), w=solver_options.get('velocity_weight', 0.8), c1=solver_options.get(
                 'p_best_weight', 0.1), c2=solver_options.get('g_best_weight', 0.1), ac=solver_options.get('archive_cap', 50), rep=solver_options.get('episode', 1), ben=solver_options.get('benchmark', False))
     return model_object
