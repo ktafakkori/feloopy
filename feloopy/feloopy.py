@@ -19,7 +19,6 @@ from .operators.random_operators import *
 from .operators.data_handler import *
 from .operators.heuristic_operators import *
 from .operators.fix_operators import *
-from .operators.epsilon import *
 from collections import defaultdict
 
 import time

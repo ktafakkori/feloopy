@@ -20,7 +20,6 @@ except ImportError:
     pass
 
 HEURISTIC_ALGORITHMS = [
-    
     ['feloopy', 'de'],
     ['feloopy', 'ga'],
     ['feloopy', 'gwo'],
