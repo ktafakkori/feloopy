@@ -172,7 +172,7 @@ class Model:
         self.get_var = self.value = self.get = self.get_variable
 
     def __getitem__(self, agent: SpecialObject) -> any:
-        
+
         """
         Retrieve the required features of the model object.
 
@@ -2057,7 +2057,7 @@ class Model:
         if self.no_agents!=None:
             if self.features['interface_name'] in ['mealpy' , 'feloopy', 'niapy', 'pygad']:
                 solver_options['pop_size'] = self.no_agents
-        
+
         if len(self.features['objectives']) !=0 and len(directions)!=len(self.features['objectives']):
             raise MultiObjectivityError("The number of directions and the provided objectives do not match.")
 
@@ -2082,17 +2082,11 @@ class Model:
                 if self.features['directions'][obj_id] == None:
 
                     self.features['directions'][obj_id] = directions[obj_id]
-
                 for i in range(len(self.features['objectives'])):
-
                     if i != obj_id:
-
                         del self.features['directions'][i]
-
                         del directions[i]
-
                         del self.features['objectives'][i]
-
                 obj_id = 0
 
                 self.features['objective_counter'] = [1, 1]
