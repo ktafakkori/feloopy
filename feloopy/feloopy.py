@@ -2201,8 +2201,6 @@ class Model:
                                 
                                 self.features['objectives'] = np.array(self.features['objectives']).T
 
-                                print(self.features['objectives'])
-
                                 for i in range(self.features['objective_counter'][0]):
 
                                     if directions[i] == 'max':
