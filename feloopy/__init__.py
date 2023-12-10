@@ -14,6 +14,11 @@ from .feloopy import *
 from .operators import *
 from .algorithms import *
 
+try:
+    from .extras import *
+except ImportError:
+    pass
+
 HEURISTIC_ALGORITHMS = [
     
     ['feloopy', 'de'],
