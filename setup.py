@@ -169,7 +169,7 @@ if __name__ == '__main__':
         python_requires='>=3.10',
         
         extras_require=extra_dict,
-        
+
         install_requires=common,
         
     )
