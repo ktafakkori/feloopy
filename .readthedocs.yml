@@ -1,5 +1,7 @@
-# Read the Docs configuration file for Sphinx projects
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html
+# Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
+# See the file LICENSE file for licensing details.
+
+# Refer to https://docs.readthedocs.io/en/stable/config-file/v2.html for more information.
 
 version: 2
 
@@ -8,13 +10,16 @@ build:
   tools:
     python: "3.12"
 
+# Sphinx configuration
 sphinx:
   configuration: docs/conf.py
 
+# Output formats
 formats:
-   - pdf
-   - epub
+  - pdf
+  - epub
 
 python:
+  # Installation requirements
   install:
     - requirements: docs/requirements.txt
