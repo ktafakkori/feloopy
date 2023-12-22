@@ -172,5 +172,4 @@ if __name__ == '__main__':
         
         install_requires=common,
         
-        exclude_package_data={'feloopy': ['extras/*']},
     )
