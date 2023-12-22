@@ -28,24 +28,26 @@ common = [
 
 # Interfaces for optimization solvers or algorithms
 
-pico = []
+pico = [
+    ''
+]
 
 nano = pico + [
-    'pymprog==1.1.2'
+    'pymprog==1.1.2',
 ]
 
 micro = nano + [
     'gekko==1.0.6',
-    'mealpy==3.0.1'
+    'mealpy==3.0.1',
 ]
 
 mini = micro + [
-    'cvxpy==1.4.1'
+    'cvxpy==1.4.1',
     'ortools==9.8.3296',
 ]
 
 full = mini + [
-    'pydecision==4.3.9'
+    'pydecision==4.3.9',
     'pymoo==0.6.1.1',
 ]
 
@@ -55,7 +57,7 @@ stock = full + [
     'niapy==2.0.5',
     'picos==2.4.17',
     'pulp==2.7.0',
-    'pygad==3.2.0'
+    'pygad==3.2.0',
     'pyomo==6.7.0',
     'rsome==1.2.1',
 ]
@@ -63,20 +65,20 @@ stock = full + [
 # Solvers for optimization problems or algorithms
 
 plus_gurobi = [
-    'gurobipy==11.0.0'
+    'gurobipy==11.0.0',
 ]
 
 plus_cplex = [
     'cplex==22.1.1.1',
-    'docplex==2.25.236'
+    'docplex==2.25.236',
 ]
 
 plus_xpress = [
-    'xpress==9.2.5'
+    'xpress==9.2.5',
 ]
 
 plus_copt = [
-    'coptpy==7.0.3'
+    'coptpy==7.0.3',
 ]
 
 hyper = stock + plus_gurobi + plus_cplex + plus_xpress + plus_copt
@@ -84,11 +86,11 @@ hyper = stock + plus_gurobi + plus_cplex + plus_xpress + plus_copt
 # Might have some os-dependent issues
 
 only_cylp = [
-    'cylp==0.92.2'
+    'cylp==0.92.2',
 ]
 
 only_linux = [
-    'pymultiobjective==1.5.4'
+    'pymultiobjective==1.5.4',
 ]
 
 mega = hyper + only_cylp + only_linux
@@ -111,18 +113,18 @@ extra_dict = {
 
 keywords_list = [
     'computer science',
-    'data science', 
-    'decision making'
+    'data science',
+    'decision making',
     'decision science',
-    'industrial engineering', 
-    'machine learning', 
-    'management science', 
+    'industrial engineering',
+    'machine learning',
+    'management science',
     'mathematical modeling',
     'operations management',
-    'operations research', 
+    'operations research',
     'optimization',
-    'simulation', 
-    'supply chain', 
+    'simulation',
+    'supply chain',
     ]
 
 if __name__ == '__main__':
