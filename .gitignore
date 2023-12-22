@@ -4,9 +4,7 @@ env
 .vscode
 log.txt
 feloopy.egg-info
-tests
-test.py
-extras
-extra_examples
+extra*
 __pycache__
 project*
+test*
