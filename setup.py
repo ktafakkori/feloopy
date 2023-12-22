@@ -11,26 +11,24 @@ common = [
     'gputil==1.4.0',
     'infix==1.2',
     'matplotlib==3.8.2',
+    'nbformat==5.9.2',
     'numba==0.58.1',
     'numpy==1.26.2',
     'openpyxl==3.1.2',
     'pandas==2.1.3',
     'plotly==5.18.0',
+    'polars==0.19.19',
     'psutil==5.9.6',
     'py-cpuinfo==9.0.0',
+    'scikit-learn==1.3.2',
     'tabulate==0.9.0',
     'win-unicode-console==0.5',
-    'scikit-learn==1.3.2',
-    'polars==0.19.19',
     'xlsxwriter==3.1.9',
-    'nbformat==5.9.2',
 ]
 
 # Interfaces for optimization solvers or algorithms
 
-pico = [
-
-]
+pico = []
 
 nano = pico + [
     'pymprog==1.1.2'
@@ -42,24 +40,24 @@ micro = nano + [
 ]
 
 mini = micro + [
-    'ortools==9.8.3296',
     'cvxpy==1.4.1'
+    'ortools==9.8.3296',
 ]
 
 full = mini + [
-    'pymoo==0.6.1.1',
     'pydecision==4.3.9'
+    'pymoo==0.6.1.1',
 ]
 
 stock = full + [
-    'pulp==2.7.0',
-    'pyomo==6.7.0',
-    'picos==2.4.17',
     'linopy==0.3.2',
     'mip==1.15.0',
-    'rsome==1.2.1',
     'niapy==2.0.5',
+    'picos==2.4.17',
+    'pulp==2.7.0',
     'pygad==3.2.0'
+    'pyomo==6.7.0',
+    'rsome==1.2.1',
 ]
 
 # Solvers for optimization problems or algorithms
@@ -112,49 +110,65 @@ extra_dict = {
     'mega': mega}
 
 keywords_list = [
-    'optimization',
-    'machine learning', 
-    'simulation', 
-    'operations research', 
     'computer science',
     'data science', 
-    'management science', 
-    'industrial engineering', 
-    'supply chain', 
-    'operations management',
-    'mathematical modeling',
     'decision making'
+    'decision science',
+    'industrial engineering', 
+    'machine learning', 
+    'management science', 
+    'mathematical modeling',
+    'operations management',
+    'operations research', 
+    'optimization',
+    'simulation', 
+    'supply chain', 
     ]
-
-def install_feloopy() -> None:
-    """
-    Installs the Feloopy package and returns nothing. 
-    """
-    setup(
-        name = 'feloopy',
-        version = '0.2.8',
-        description = 'FelooPy: An integrated optimization environment (IOE) for automated operations research (AutoOR) in Python.',
-        packages = find_packages(include=['feloopy', 'feloopy.*']),
-        long_description = open('./docs/README.md', encoding="utf8").read(),
-        long_description_content_type = 'text/markdown',
-        keywords = keywords_list,
-        author='Keivan Tafakkori',
-        author_email='k.tafakkori@gmail.com',
-        maintainer='Keivan Tafakkori',
-        maintainer_email='k.tafakkori@gmail.com',
-        url='https://github.com/ktafakkori/feloopy',
-        download_url='https://github.com/ktafakkori/feloopy/releases',
-        license='MIT',
-        entry_points={
-        "console_scripts": [ "feloopy = feloopy.cli:main",
-                            "flp = feloopy.cli:main",
-                            ]},
-        python_requires='>=3.10',
-        extras_require=extra_dict,
-        install_requires=common,
-        exclude_package_data={'feloopy': ['extras/*']},
-    )
 
 if __name__ == '__main__':
 
-    install_feloopy()
+    setup(
+        
+        name = 'feloopy',
+        
+        version = '0.2.8',
+        
+        description = 'FelooPy: An integrated optimization environment (IOE) for automated operations research (AutoOR) in Python.',
+        
+        packages = find_packages(include=['feloopy', 'feloopy.*']),
+        
+        long_description = open('./docs/README.md', encoding="utf8").read(),
+        
+        long_description_content_type = 'text/markdown',
+        
+        keywords = keywords_list,
+        
+        author='Keivan Tafakkori',
+        
+        author_email='k.tafakkori@gmail.com',
+        
+        maintainer='Keivan Tafakkori',
+        
+        maintainer_email='k.tafakkori@gmail.com',
+        
+        url='https://github.com/ktafakkori/feloopy',
+        
+        download_url='https://github.com/ktafakkori/feloopy/releases',
+        
+        license='MIT',
+        
+        entry_points={
+        
+        "console_scripts": ["feloopy = feloopy.cli:main",
+                            "flp = feloopy.cli:main",
+                            "fly = feloopy.cli:main",
+                            ]},
+        
+        python_requires='>=3.10',
+        
+        extras_require=extra_dict,
+        
+        install_requires=common,
+        
+        exclude_package_data={'feloopy': ['extras/*']},
+    )
