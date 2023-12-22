@@ -2,7 +2,7 @@ build
 dist
 env
 .vscode
-log.txt
+log*
 feloopy.egg-info
 extra*
 __pycache__
