@@ -1,5 +1,5 @@
 Sphinx
 sphinx_book_theme
 m2r
-myst-parser
-sphinxcontrib-mermaid
+myst_parser
+sphinxcontrib_mermaid
