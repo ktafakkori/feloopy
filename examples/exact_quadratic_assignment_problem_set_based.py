@@ -12,7 +12,7 @@
 from feloopy import *
 
 #Environment
-m = target_model('exact', 'quadratic_assignment_problem', 'gekko', key=0)
+m = target_model('exact', 'quadratic_assignment_problem', 'gekko')
 
 #Dataset
 w = [[0, 3, 0, 2],
@@ -30,10 +30,10 @@ d = [[0, 22, 53, 53],
 d = np.array(d)
 
 #Sets
-I = range(m.card(w))  # Set of assignees
+I = range(len(w))  # Set of assignees
 K = I
 
-J = range(m.card(w[0]))  # Set of assignments
+J = range(len(w[0]))  # Set of assignments
 L = J
 
 a = {(i, j, k, l): w[i, k]*d[j, l] for i, j, k, l in sets(I, J, K, L)}  # Relative cost matrix

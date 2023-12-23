@@ -12,7 +12,7 @@
 from feloopy import *
 
 #Environment
-m = target_model('exact', 'price optimziation problem', 'gekko', key=0)
+m = target_model('exact', 'price optimziation problem', 'gekko')
 
 #Dataset
 a = [1000, 800, 600]

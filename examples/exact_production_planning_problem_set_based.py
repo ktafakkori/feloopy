@@ -12,16 +12,18 @@
 from feloopy import *
 
 #Environment
-m = target_model('exact', 'production planning problem', 'pyomo', key=0)
+m = target_model('exact', 'production planning problem', 'pyomo')
+
+dt = data_toolkit()
 
 #Sets
 I  = range(10)
 R  = range(3) 
 
 #Dataset
-p = load_from_excel('data_exact_production_planning_problem.xlsx', [I], [1], ['i'], 'profit') 
-a = load_from_excel('data_exact_production_planning_problem.xlsx', [I,R], [1,1], ['i','r'], 'usage') 
-b = load_from_excel('data_exact_production_planning_problem.xlsx', [R], [1], ['r'], 'resource')
+p = dt.load_from_excel('data_exact_production_planning_problem.xlsx', [I], [1], ['i'], 'profit') 
+a = dt.load_from_excel('data_exact_production_planning_problem.xlsx', [I,R], [1,1], ['i','r'], 'usage') 
+b = dt.load_from_excel('data_exact_production_planning_problem.xlsx', [R], [1], ['r'], 'resource')
 
 #Variables
 x = m.pvar('production', [I])

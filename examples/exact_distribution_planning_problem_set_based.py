@@ -12,8 +12,9 @@
 from feloopy import *
 
 # Environment
-m = target_model('exact', 'distribution_planning_problem', 'pyomo', key=0)
+m = target_model('exact', 'distribution_planning_problem', 'pyomo')
 
+dt = data_toolkit()
 # Data
 I = range(2)  # Number of suppliers
 J = range(2)  # Number of warehouses
@@ -22,11 +23,11 @@ P = range(3)  # Type of products
 T = range(4)  # Time periods
 
 # Dataset
-dk = m.uniformint(10, 20, [K, P, T])      # Customer demand
-cap = m.uniformint(60, 90, [I, P, T])     # Supplier capacity
-c = m.uniformint(1, 4, [I, J, P, T])      # Cost of sending each unit of goods from the supplier to the warehouse
-cp = m.uniformint(1, 4, [J, K, P, T])     # Cost of sending each item from the warehouse to the customer
-cpp = m.uniformint(2, 8, [I, K, P, T])    # Cost of sending each unit of goods from the supplier to the customer
+dk = dt.uniformint('dk', [K, P, T], [10, 20])      # Customer demand
+cap = dt.uniformint('cap', [I, P, T], [60, 90])     # Supplier capacity
+c = dt.uniformint('c', [I, J, P, T], [1, 4])      # Cost of sending each unit of goods from the supplier to the warehouse
+cp = dt.uniformint('cp', [J, K, P, T], [1, 4])     # Cost of sending each item from the warehouse to the customer
+cpp = dt.uniformint('cpp', [I, K, P, T], [2, 8])    # Cost of sending each unit of goods from the supplier to the customer
 
 # Variables
 x = m.ivar('x', [I, J, P, T])  # Transfer rate of products from the supplier to the warehouse

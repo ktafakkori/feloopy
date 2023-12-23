@@ -13,25 +13,27 @@
 
 from feloopy import *
 
-m = target_model('constraint', 'single_machine_scheduling', 'cplex_cp', key=0)
+m = target_model('constraint', 'single_machine_scheduling', 'cplex_cp')
+
+dt = data_toolkit()
 
 J = range(10)
 
-due_date = m.uniform(75, 200, [J])
-release_time = m.uniform(1,50, [J])
-priority_weights = m.uniformint(1,5, [J])
+due_date = dt.uniform('dd', [J], [75, 200])
+release_time = dt.uniform('rt', [J],  [1,50])
+priority_weights = dt.uniformint('pw', [J],  [1,5])
 precedences = list()
 for j in J:
     if j>=len(J)/2:
-        precedences.append((m.uniformint(0,len(J)/2-1), j))
+        precedences.append((dt.uniformint(f'pc[{j}]', bound=[0,len(J)/2-1]), j))
 
-process_interval = m.cevar('job', J, {j: [m.uniformint(10,40), None, None] for j in J})
+process_interval = m.cevar('job', J, {j: [dt.uniformint(f'pi[{j}]',bound=[10,40]), None, None] for j in J})
 
-m.obj(sum([m.end_of(process_interval[j])*priority_weights[j] for j in J])) 
+m.obj(sum([m.cp_get_event_end(process_interval[j])*priority_weights[j] for j in J])) 
 
-m.con(m.forbid_overlap([process_interval[j] for j in J]))
+m.con(m.cp_forbid_event_overlap([process_interval[j] for j in J]))
 
-m.con([m.prec_end_before_start(process_interval[i],process_interval[j]) for [i,j] in precedences])
+m.con([m.cp_event_end_before_start(process_interval[i],process_interval[j]) for [i,j] in precedences])
 
 m.sol(['min'], 'cplex')
 

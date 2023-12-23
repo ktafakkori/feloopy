@@ -9,7 +9,7 @@
 +---------------------------------------------------------+
 '''
 
-
+from .classes import *
 from .feloopy import *
 from .operators import *
 from .algorithms import *

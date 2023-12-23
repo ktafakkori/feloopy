@@ -1,18 +1,8 @@
-'''
-+---------------------------------------------------------+
-|  Project: FelooPy (0.2.8)                               |
-|  Modified: Wednesday, 27th September 2023 08:50:18 pm   |
-|  Modified By: Keivan Tafakkori                          |
-|  Project: https://github.com/ktafakkori/feloopy         |
-|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
-|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
-+---------------------------------------------------------+
-'''
 
 from feloopy import *
 
 # Environment
-m = learner_model('exact', 'linear_regression_problem', 'cvxpy')
+m = learner_model('convex', 'linear_regression_problem', 'cvxpy')
 
 # Dataset
 a = np.array([[1, 2, 2], [2, 3, 3], [3, 4, 5], [4, 5, 6], [5, 7, 8]])  # Features

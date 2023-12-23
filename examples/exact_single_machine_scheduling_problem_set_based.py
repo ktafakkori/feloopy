@@ -11,7 +11,7 @@
 from feloopy import *
 
 #Environment
-m = target_model('exact', 'single machine scheduling', 'pulp', key=0)
+m = target_model('exact', 'single machine scheduling', 'pulp')
 
 #Dataset
 w = [0.1, 0.4, 0.15, 0.35] #Priority weight of each job

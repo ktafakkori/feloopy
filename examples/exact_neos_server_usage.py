@@ -11,7 +11,7 @@
 from feloopy import *
 
 #Environment
-m = target_model('exact', 'knaspack problem', 'pyomo', key=0)
+m = target_model('exact', 'knaspack problem', 'pyomo')
 
 #Sets
 J = range(7)  # Set of the items

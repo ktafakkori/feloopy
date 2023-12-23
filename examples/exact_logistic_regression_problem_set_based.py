@@ -12,7 +12,7 @@
 from feloopy import *
 
 # Environment
-m = learner_model('exact', 'logistic_regression_problem', 'gekko', key=0)
+m = learner_model('exact', 'logistic_regression_problem', 'gekko')
 
 # Dataset
 a = np.array([[1, 2, 2], [2, 3, 3], [3, 4, 5], [4, 5, 6], [5, 7, 8]])  # Features

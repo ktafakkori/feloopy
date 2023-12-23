@@ -10,20 +10,24 @@
 '''
 from feloopy import *
 
+
+dt = data_toolkit()
+
+
 #Environment
-m = target_model('exact', 'transportation planning problem', 'pymprog', key=0)
+m = target_model('exact', 'transportation planning problem', 'pymprog')
 
 #Sets
 I = range(5) # set of loactions
 L = range(2) # set of capacity levels
 
 #Dataset
-dc = load_from_excel('data_exact_transportation_planning_problem.xlsx', [I,I], [1,1], ['i', 'j'], 'driver_cost') # pairwise driver cost
-fc = load_from_excel('data_exact_transportation_planning_problem.xlsx', [I,I], [1,1], ['i', 'j'], 'freight_cost') # pairwise freight cost
+dc = dt.load_from_excel('data_exact_transportation_planning_problem.xlsx', [I,I], [1,1], ['i', 'j'], 'driver_cost') # pairwise driver cost
+fc = dt.load_from_excel('data_exact_transportation_planning_problem.xlsx', [I,I], [1,1], ['i', 'j'], 'freight_cost') # pairwise freight cost
 vc = fc/1000 + dc # pairwise variable cost
-ec = load_from_excel('data_exact_transportation_planning_problem.xlsx', [I,L], [1,1], ['i', 'j'], 'fixed_cost') # establishment cost per capacity level
-ca = load_from_excel('data_exact_transportation_planning_problem.xlsx', [I,L], [1,1], ['i', 'j'], 'capacity') # capacity
-d = load_from_excel('data_exact_transportation_planning_problem.xlsx', [I], [1], ['i'], 'demand') # demand
+ec = dt.load_from_excel('data_exact_transportation_planning_problem.xlsx', [I,L], [1,1], ['i', 'j'], 'fixed_cost') # establishment cost per capacity level
+ca = dt.load_from_excel('data_exact_transportation_planning_problem.xlsx', [I,L], [1,1], ['i', 'j'], 'capacity') # capacity
+d = dt.load_from_excel('data_exact_transportation_planning_problem.xlsx', [I], [1], ['i'], 'demand') # demand
 
 #Variables
 x = m.pvar('flow',[I,I])

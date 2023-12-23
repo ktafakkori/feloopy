@@ -12,7 +12,7 @@
 from feloopy import *
 
 #Environment
-m = learner_model('exact', 'demand learner', 'gekko', key=0)
+m = learner_model('exact', 'demand learner', 'gekko')
 
 #Dataset
 a = [   [80],    [150],       [200],    [400],    [145],    [350],    [409]]    
@@ -46,7 +46,7 @@ for i in U: w.append(m.get(x[i]))
 b = m.get(z)
 
 #Environment
-m = target_model('exact', 'price optimization problem', 'gekko', key=0)
+m = target_model('exact', 'price optimization problem', 'gekko')
 
 #Dataset
 x = w[0]

@@ -13,7 +13,7 @@
 
 from feloopy import *
 
-m = target_model('constraint', 'single_machine_scheduling', 'cplex_cp', key=0)
+m = target_model('constraint', 'single_machine_scheduling', 'cplex_cp')
 
 J = range(10)
 

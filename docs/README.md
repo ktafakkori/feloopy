@@ -1,7 +1,5 @@
 
-<p align="center">
-   <img src="miscellaneous/logo/logo1.png" width="20%">
-</p>
+![alt text](miscellaneous/logo/logo2.png)
 
 ## Introduction
 
@@ -174,7 +172,7 @@ _Credit: Keivan Tafakkori_
 
 For a quick installation with a classic support of interfaces and solvers, you may use the `pip` package manager (please refer to this [link](https://pip.pypa.io/en/stable/installation/) to install, update, or get one) as follows:
 
-   ```terminal
+   ```bash
    pip install -U feloopy[stock]
    ```
 
@@ -185,7 +183,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    This variant installs the base package without any additional features. It installs FelooPy with its common dependencies.
 
-   ```terminal
+   ```bash
    pip install -U feloopy
    ```
 
@@ -198,7 +196,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
       This variant installs the base package without any additional features. It is the same as the core variant. It installs FelooPy with its common dependencies.
 
-      ```terminal
+      ```bash
       pip install -U feloopy[pico]
       ```
 
@@ -206,7 +204,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
       This variant includes a small set of additional features. It installs FelooPy with its common dependencies and the `pymprog` package.
 
-      ```terminal
+      ```bash
       pip install -U feloopy[nano]
       ```
 
@@ -214,7 +212,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
       This variant includes a moderate set of additional features. It installs FelooPy with its common dependencies and the `pymprog`, `gekko`, and `mealpy` packages.
 
-      ```terminal
+      ```bash
       pip install -U feloopy[micro]
       ```
 
@@ -222,7 +220,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
       This variant includes a large set of additional features. It installs FelooPy with its common dependencies and the `pymprog`, `gekko`, `mealpy`, `ortools`, and `cvxpy` packages.
 
-      ```terminal
+      ```bash
       pip install -U feloopy[mini]
       ```
 
@@ -230,7 +228,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
       This variant includes all available features. It installs FelooPy with its common dependencies and the `pymprog`, `gekko`, `mealpy`, `ortools`, `cvxpy`, `pymoo`, and `pydecision` packages.
       
-      ```terminal
+      ```bash
       pip install -U feloopy[full]
       ```
 
@@ -238,7 +236,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
       This variant includes all interface packages. It installs FelooPy with its common dependencies and the `gekko`, `ortools`, `pulp`, `pyomo`, `pymprog`, `picos`, `linopy`, `cvxpy`, `mip`, `mealpy`, `pydecision`, `rsome`, `pymoo`, `niapy`, and `pygad` packages.
 
-      ```terminal
+      ```bash
       pip install -U feloopy[stock]
       ```
 
@@ -251,7 +249,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    This variant includes the Gurobi solver. It requires a valid Gurobi license. Refer to the [Gurobi website](https://www.gurobi.com/) for more information.
 
-   ```terminal
+   ```bash
    pip install -U feloopy[plus_gurobi]
    ```
 
@@ -259,7 +257,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    This variant includes the CPLEX solver. It requires a valid CPLEX license. Refer to the [CPLEX website](https://www.ibm.com/analytics/cplex-optimizer) for more information.
 
-   ```terminal
+   ```bash
    pip install -U feloopy[plus_cplex]
    ```
 
@@ -267,7 +265,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    This variant includes the Xpress solver. It requires a valid Xpress license. Refer to the [Xpress website](https://www.fico.com/en/products/fico-xpress-optimization) for more information.
 
-   ```terminal
+   ```bash
    pip install -U feloopy[plus_xpress]
    ```
 
@@ -275,7 +273,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    This variant includes the COPT solver. It requires a valid COPT license. Refer to the [COPT website](https://shanshu.ai/copt) for more information.
 
-   ```terminal
+   ```bash
    pip install -U feloopy[plus_copt]
    ```
 
@@ -288,7 +286,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    This variant includes the CyLP solver. It requires a valid CyLP installation. Refer to this [link](https://github.com/coin-or/CyLP) for more information.
 
-   ```terminal
+   ```bash
    pip install -U feloopy[plus_cylp]
    ```
 
@@ -296,7 +294,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    This variant includes additional features for Linux-based distros. It installs FelooPy with its common dependencies and the `pymultiobjective` package.
 
-   ```terminal
+   ```bash
    pip install -U feloopy[only_linux]
    ```
 
@@ -309,7 +307,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
       This variant includes all interface and solver packages. It installs FelooPy with its common dependencies and the `gekko`, `ortools`, `pulp`, `pyomo`, `pymprog`, `picos`, `linopy`, `cvxpy`, `mip`, `mealpy`, `pydecision`, `rsome`, `pymoo`, `niapy`, `pygad`, `cplex`, `docplex`, `xpress`, `gurobipy`, `cylp`, and `coptpy` packages.
 
-      ```terminal
+      ```bash
       pip install -U feloopy[hyper]
       ```
 
@@ -317,7 +315,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
       This variant includes all interface and solver packages. It installs a complete FelooPy with all its dependencies, regardless of whether they are compatible with your operating system, or not.
 
-      ```terminal
+      ```bash
       pip install -U feloopy[mega]
       ```
 
@@ -328,13 +326,13 @@ However, as some users might prefer a dedicated version, the following lists the
 
    To contribute to the project, support the developer with pull requests, and to get the latest updates, you can install a development variant as follows:
 
-   ```terminal
+   ```bash
    pip install -U git+https://github.com/ktafakkori/feloopy.git#egg=feloopy[variant_name]
    ```
 
    or
 
-   ```terminal
+   ```bash
    git clone https://github.com/ktafakkori/feloopy.git
    cd feloopy
    pip install .[variant_name]
@@ -342,7 +340,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    or
 
-   ```terminal
+   ```bash
    !git clone https://github.com/ktafakkori/feloopy.git
    %cd feloopy
    !pip install .[variant_name]
@@ -356,15 +354,15 @@ However, as some users might prefer a dedicated version, the following lists the
 
 - Command line interface
 
-   To verify FelooPy's command line interface (CLI) accessibility, open a terminal, activate the virtual environment or use the global environment with FelooPy installed, and execute either of the following commands:
+   To verify FelooPy's command line interface (CLI) accessibility, open a bash, activate the virtual environment or use the global environment with FelooPy installed, and execute either of the following commands:
 
-   ```terminal
+   ```bash
    feloopy -v
    ```
 
    or
 
-   ```terminal
+   ```bash
    flp -v
    ```
 
@@ -373,7 +371,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    Next, you can create your optimization project:
 
-   ```terminal
+   ```bash
    flp project --name=test
    ```
 
@@ -381,7 +379,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    The FelooPy's optimization project structure is as follows:
 
-   ```terminal
+   ```bash
    test
    ├── data
    │   ├── final
@@ -400,13 +398,13 @@ However, as some users might prefer a dedicated version, the following lists the
 
    Note that at specific project progress levels, you can create backups from the project root using:
 
-   ```terminal
+   ```bash
    flp backup
    ```
 
    This generates a backup file, preserving the project progress up to a specific date and time, as illustrated below:
 
-   ```terminal
+   ```bash
    test
    ├── backups
    │   └── bkp-on-2023-12-05-at-21-00-00.zip
@@ -427,13 +425,13 @@ However, as some users might prefer a dedicated version, the following lists the
 
    To recover to a specific project state, use the following command from the project root:
 
-   ```terminal
+   ```bash
    flp recover
    ```
 
    To clean residuals, execute the following command from the project root:
 
-   ```terminal
+   ```bash
    flp clean
    ```
 
@@ -473,7 +471,7 @@ However, as some users might prefer a dedicated version, the following lists the
    <details>
    <summary style="color:green">Display the output</summary>
 
-   ```terminal
+   ```bash
    ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
    │                                                                                │
    │ Date: 2023-12-04                                                Time: 00:00:00 │
@@ -555,7 +553,7 @@ However, as some users might prefer a dedicated version, the following lists the
    <details>
    <summary style="color:green">Display the output</summary>
 
-   ```terminal
+   ```bash
    ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
    │                                                                                │
    │ Date: 2023-12-04                                                Time: 00:00:00 │
@@ -626,7 +624,7 @@ However, as some users might prefer a dedicated version, the following lists the
    <details>
    <summary style="color:green">Display the output</summary>
 
-   ```terminal
+   ```bash
    ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
    │                                                                                │
    │ Date: 2023-12-04                                                Time: 00:00:00 │
@@ -696,7 +694,7 @@ However, as some users might prefer a dedicated version, the following lists the
    <details>
    <summary style="color:green">Display the output</summary>
 
-   ```terminal
+   ```bash
    ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
    │                                                                                │
    │ Date: 2023-12-04                                                Time: 00:00:00 │
@@ -775,7 +773,7 @@ However, as some users might prefer a dedicated version, the following lists the
    <details>
    <summary style="color:green">Display the output</summary>
 
-   ```terminal
+   ```bash
    ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
    │                                                                                │
    │ Date: 2023-12-04                                                Time: 00:00:00 │
@@ -952,7 +950,7 @@ However, as some users might prefer a dedicated version, the following lists the
    <details>
    <summary style="color:green">Display the output</summary>
 
-   ```terminal
+   ```bash
    ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
    │                                                                                │
    │ Date: 2023-12-04                                                Time: 00:00:00 │
@@ -1026,7 +1024,7 @@ However, as some users might prefer a dedicated version, the following lists the
    <details>
    <summary style="color:green">Display the output</summary>
 
-   ```terminal
+   ```bash
    ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
    │                                                                                │
    │ Date: 2023-12-04                                                Time: 00:00:00 │

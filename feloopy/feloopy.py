@@ -1,75 +1,153 @@
-'''
-+---------------------------------------------------------+
-│  Project: FelooPy (0.2.8)                               │
-│  Modified: Wednesday, 27th September 2023 11:38:36 pm   │
-│  Modified By: Keivan Tafakkori                          │
-│  Project: https://github.com/ktafakkori/feloopy         │
-│  Contact: https://www.linkedin.com/in/keivan-tafakkori/ │
-│  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         │
-+---------------------------------------------------------+
-'''
+# Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
+# See the file LICENSE file for licensing details.
+
+__author__ = ['Keivan Tafakkori']
 
 from .helpers.empty import *
 from .helpers.error import *
 from .helpers.formatter import *
-from .operators.set_operators import *
-from .operators.math_operators import *
-from .operators.update_operators import *
-from .operators.random_operators import *
 from .operators.data_handler import *
-from .operators.heuristic_operators import *
 from .operators.fix_operators import *
-from collections import defaultdict
+from .operators.heuristic_operators import *
+from .operators.math_operators import *
+from .operators.random_operators import *
+from .operators.set_operators import *
+from .operators.update_operators import *
 
-import time
-import platform
+from collections import defaultdict
+from tabulate import tabulate as tb
+from typing import Literal, List, Dict, Tuple, Union, Optional, Any, Callable
 import importlib
-import warnings
 import itertools as it
 import math as mt
 import numpy as np
-from tabulate import tabulate as tb
-from typing import Literal, List, Tuple, Union, Optional
+import platform
 import sys
+import time
+import warnings
+
+from .classes.tensor_variable import *
+from .classes.tensor_variable_collection import *
+from .classes.multidim_variable import *
+from .classes.multidim_variable_collection import *
+from .classes.event_variable import *
+from .classes.event_variable_collection import *
+from .classes.special_constraint import *
+from .classes.linearization import *
+from .classes.constraint_programming import *
 
 warnings.filterwarnings("ignore")
 
-avar = defaultdict()
-
-class SpecialObject:
+class ModelObject:
+    
     pass
 
-class Model:
+class AgentObject:
+    pass
 
-    def __init__(self, 
-                 solution_method: Literal['exact', 'heuristic', 'constraint', 'convex'], 
-                 model_name: str, 
-                 interface_name: Literal['copt', 'cplex', 'cvxpy', 'cylp', 'gekko', 'gurobi', 'linopy', 'mip', 'ortools', 'picos', 'pulp', 'pymprog', 'pyomo', 'rsome_ro', 'rsome_dro' 'xpress'], 
-                 agent: Optional[Union[SpecialObject, None]] = None, 
-                 scens: Optional[int]=1, 
-                 no_agents: Optional[int]=None,
+class ConditionalObject:
+    pass
+
+
+
+class TensorVariableCollection:
+    pass
+
+
+class MultidimVariableCollection:
+    pass
+
+
+
+class EventVariable:
+    pass
+
+
+class Model(TensorVariableClass,
+            TensorVariableCollectionClass,
+            MultidimVariableClass,
+            MultidimVariableCollectionClass,
+            EventVariableClass,
+            EventVariableCollectionClass,
+            SpecialConstraintClass,
+            LinearizationClass,
+            ConstraintProgrammingClass):
+    
+    def __init__(self,
+                 solution_method: Literal[
+                     'constraint', 
+                     'convex', 
+                     'exact', 
+                     'heuristic', 
+                     'uncertain',
+                 ],
+                 model_name: str,
+                 interface_name: Literal[
+                     'copt',
+                     'cplex',
+                     'cplex_cp',
+                     'cvxpy',
+                     'cylp',
+                     'feloopy',
+                     'gekko',
+                     'gurobi',
+                     'linopy',
+                     'mealpy',
+                     'mip',
+                     'niapy',
+                     'ortools',
+                     'ortools_cp'
+                     'picos',
+                     'pulp',
+                     'pygad',
+                     'pymoo',
+                     'pymprog',
+                     'pymultiobjective',
+                     'pyomo',
+                     'rsome_dro',
+                     'rsome_ro',
+                     'xpress',
+                 ],
+                 agent: Optional[Union[AgentObject, None]] = None,
+                 scens: Optional[int] = 1,
+                 no_agents: Optional[int] = None,
                  ) -> None:
-        
         """
-        Definition
-        ----------
-        Creates and initializes the modeling environment.
+        Creates and initializes the mathematical modeling environment.
 
         Parameters
         ----------
-        solution_method : Literal['exact', 'heuristic', 'constraint', 'convex']
-            Select or type the desired solution method.
+        solution_method : Literal['exact', 'heuristic', 'constraint', 'convex', 'uncertain']
+            The desired solution method for optimization.
         model_name : str
-            e the name of the model.
-        interface_name : str
-            Select or type the desired solver interface.
-        agent : Optional[Union[SpecialObject, None]] (default=None)
-            Put the search agent object. 
+            The name of the optimization model.
+        interface_name : Literal[
+            'copt', 'cplex', 'cplex_cp', 'cvxpy', 'cylp', 'feloopy', 'gekko', 'gurobi', 'linopy',
+            'mealpy', 'mip', 'niapy', 'ortools', 'ortools_cp', 'picos', 'pulp', 'pygad', 'pymoo',
+            'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress',
+        ]
+            The selected solver interface for optimization.
+        agent : Optional[Union[AgentObject, None]] (default=None)
+            An optional search agent object. If not provided, the optimization will be agentless.
         scens : Optional[int] (default=1)
-            Determine the number of scenarios.
+            The number of scenarios for the optimization problem. Defaults to 1 if not specified.
         no_agents : Optional[int] (default=None)
-            Determine the number of search agents.
+            The number of search agents to use in the optimization. If not specified, the default behavior will be applied.
         """
+        
+        if solution_method not in {'exact', 'heuristic', 'constraint', 'convex', 'uncertain'}:
+            raise ValueError("Invalid solution method. Please choose from 'exact', 'heuristic', 'constraint', 'convex', or 'uncertain'.")
+        
+        if interface_name not in {'copt', 'cplex', 'cplex_cp', 'cvxpy', 'cylp', 'feloopy', 'gekko', 'gurobi', 'linopy',
+                                  'mealpy', 'mip', 'niapy', 'ortools', 'ortools_cp', 'picos', 'pulp', 'pygad', 'pymoo',
+                                  'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress'}:
+            raise ValueError("Invalid solver interface. Please choose from the provided options.")
+        
+        if not isinstance(scens, int) or scens < 1:
+            raise ValueError("The number of scenarios (scens) must be a positive integer (>=1).")
+        
+        if no_agents is not None and (not isinstance(no_agents, int) or no_agents < 1):
+            raise ValueError("The number of search agents (no_agents) must be a positive integer (>=1) or None.")
 
         self.no_agents = no_agents
 
@@ -86,7 +164,6 @@ class Model:
             solution_method = 'exact'
 
         else:
-
             self.solution_method_was=None
 
         self.features = {
@@ -114,9 +191,9 @@ class Model:
         }
 
         if solution_method == 'heuristic':
-
+            
             self.agent = agent
-
+            
             self.features.update(
                 {
                 'agent_status': self.agent[0],
@@ -138,52 +215,83 @@ class Model:
 
             if self.features['agent_status']!='idle':
                 self.access = True
+                
             else:
                 self.access = False
 
         if solution_method == 'exact':
 
-            self.mainvars = self.coll()
-            self.maindims = self.coll()
+            self.mainvars = defaultdict()
+            self.maindims = defaultdict()
 
             from .generators import model_generator
             self.model = model_generator.generate_model(self.features)
             self.sm = self.link_to_interface = self.lti = self.model
-
+            
         # Alias methods
-
-        self.binary_variable   = self.binary   = self.bool = self.add_bool = self.add_binary = self.add_binary_variable = self.boolean_variable = self.add_boolean_variable = self.bvar
+        
+        # Binary variable aliases
+        self.binary_variable = self.binary = self.bool = self.add_bool = self.add_binary = self.add_binary_variable = self.boolean_variable = self.add_boolean_variable = self.bvar
+        
+        # Positive variable aliases
         self.positive_variable = self.positive = self.add_positive = self.add_positive_variable = self.pvar
-        self.integer_variable = self.integer = self.add_integer =  self.add_integer_variable = self.ivar
+        
+        # Integer variable aliases
+        self.integer_variable = self.integer = self.add_integer = self.add_integer_variable = self.ivar
+        
+        # Free variable aliases
         self.free_variable = self.free = self.float = self.add_free = self.add_float = self.real = self.add_real = self.add_free_variable = self.fvar
-        self.sequential_variable = self.sequence = self.sequential = self.add_sequence = self.add_sequential = self.add_sequential_variable = self.svar
+        
+        # Sequential variable aliases
+        self.sequential_variable = self.sequence = self.sequential = self.add_sequence = self.add_sequential = self.add_sequential_variable = self.permutation_variable = self.add_permutation_variable = self.svar
+        
+        # Positive tensor variable aliases
         self.positive_tensor_variable = self.positive_tensor = self.add_positive_tensor = self.add_positive_tensor_variable = self.ptvar
+        
+        # Binary tensor variable aliases
         self.binary_tensor_variable = self.binary_tensor = self.add_binary_tensor = self.add_binary_tensor_variable = self.add_boolean_tensor_variable = self.boolean_tensor_variable = self.btvar
+        
+        # Integer tensor variable aliases
         self.integer_tensor_variable = self.integer_tensor = self.add_integer_tensor = self.add_integer_tensor_variable = self.itvar
+        
+        # Free tensor variable aliases
         self.free_tensor_variable = self.free_tensor = self.float_tensor = self.add_free_tensor = self.add_float_tensor = self.add_free_tensor_variable = self.ftvar
+        
+        # Random variable aliases
         self.random_variable = self.add_random_variable = self.rvar
+        
+        # Random tensor variable aliases
         self.random_tensor_variable = self.add_random_tensor_variable = self.rtvar
+        
+        # Dependent variable aliases
         self.dependent_variable = self.array = self.add_array = self.add_dependent_variable = self.dvar
-        self.objective = self.reward = self.hypothesis = self.fitness = self.goal = self.add_objective = self.loss = self.gain = self.obj 
+        
+        # Objective aliases
+        self.objective = self.reward = self.hypothesis = self.fitness = self.goal = self.add_objective = self.loss = self.gain = self.obj
+        
+        # Constraint aliases
         self.constraint = self.equation = self.add_constraint = self.add_equation = self.st = self.subject_to = self.cb = self.computed_by = self.penalize = self.pen = self.eq = self.con
+        
+        # Solve aliases
         self.solve = self.implement = self.run = self.optimize = self.sol
+        
+        # Query aliases
         self.get_obj = self.get_objective
         self.get_stat = self.get_status
         self.get_var = self.value = self.get = self.get_variable
 
-    def __getitem__(self, agent: SpecialObject) -> any:
-
+    def __getitem__(self, agent: AgentObject) -> ConditionalObject:
         """
         Retrieve the required features of the model object.
 
         Parameters
         ----------
-        agent : SpecialObject
+        agent : AgentObject
             The search agent object used to determine the feature retrieval method.
 
         Returns
         -------
-        Any
+        ConditionalObject
             The requested features or the model object itself based on the agent's status.
 
         Notes
@@ -191,7 +299,6 @@ class Model:
         - If the agent's status is 'idle', the method returns the model object.
         - If the agent's status is 'feasibility_check', the method invokes `_feasibility_check()` and returns its result.
         - For other statuses, the method calls `_get_result(vectorized, interface_name)` and returns the result.
-
         """
 
         agent_status = self.features['agent_status']
@@ -200,1794 +307,85 @@ class Model:
 
         if agent_status == 'idle':
             return self
+        
         elif agent_status == 'feasibility_check':
             return self._feasibility_check()
+        
         else:
             return self._get_result(vectorized, interface_name)
 
-    def _feasibility_check(self):
+    def _feasibility_check(self) -> str:
         """
-        Private method
+        Perform a feasibility check based on the model's features.
+
+        Returns
+        -------
+        str
+            The feasibility status:
+            - 'feasible (unconstrained)' if the penalty coefficient is 0.
+            - 'infeasible (constrained)' if the penalty value is greater than 0.
+            - 'feasible (constrained)' otherwise.
         """
+        
         if self.features['penalty_coefficient'] == 0:
             return 'feasible (unconstrained)'
         else:
             return 'infeasible (constrained)' if self.penalty > 0 else 'feasible (constrained)'
 
-    def _get_result(self, vectorized, interface_name):
+    def _get_result(self, vectorized: bool, interface_name: str) -> ConditionalObject:
         """
-        Private method
+        Retrieve the optimization result based on the specified parameters.
+
+        Parameters
+        ----------
+        vectorized : bool
+            A boolean indicating whether the result should be vectorized.
+        interface_name : str
+            The name of the solver interface.
+
+        Returns
+        -------
+        ConditionalObject
+            The optimization result:
+            - If vectorized is True and the interface is 'feloopy', returns the search agent.
+            - If vectorized is True and the interface is not 'feloopy', returns the singular result.
+            - If vectorized is False, returns the response.
         """
+        
         if vectorized:
             return self.agent if interface_name == 'feloopy' else self.sing_result
         else:
             return self.response
-
-    # Collection definer
-
-    def coll(dim):
-
-        """
-        Creates and returns an empty collection (dictionary) of variables.
-        """
-
-        from collections import defaultdict
-        return defaultdict()
-
-    # Tensors
-
-    def ftvar(self, name, shape=0, bound=[None, None]):
-        """
-        Creates and returns a tensor-like free variable.
-
-        Args:
-            name (str): Name of this variable.
-            shape (list, optional): Shape of this variable. Default: 0.
-            bound (list, optional): Bounds of this variable. Default: [None, None].
-        """
-        dim = fix_dims(shape)
-        self.features = update_variable_features(name, dim, bound, 'free_variable_counter', self.features)
-        if self.features['solution_method'] == 'exact':
-            
-            from .generators import variable_generator
-            self.mainvars[("ftvar", name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'ftvar', name, bound, dim)
-            self.maindims[name] = dim
-            return self.mainvars[("ftvar", name)]
-
-    def ptvar(self, name, shape=0, bound=[0, None]):
-        """
-        Creates and returns a tensor-like positive variable.
-
-        Args:
-            name (str): Name of this variable.
-            shape (list, optional): Shape of this variable. Default: 0.
-            bound (list, optional): Bounds of this variable. Default: [0, None].
-        """
-        dim = fix_dims(shape)
-        self.features = update_variable_features(name, dim, bound, 'positive_variable_counter', self.features)
-        if self.features['solution_method'] == 'exact':
-            from .generators import variable_generator
-            self.mainvars[("ptvar", name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'ptvar', name, bound, dim)
-            self.maindims[name] = dim
-            if self.features['interface_name'] in ['rsome_ro', 'rsome_dro', 'cvxpy']:
-                self.con(self.mainvars[("ptvar", name)] >= 0)
-                if bound[1]!=None:
-                    self.con(self.mainvars[("ptvar", name)] <= bound[1])
-            return self.mainvars[("ptvar", name)]
-
-    def itvar(self, name, shape=0, bound=[0, None]):
-        """
-        Creates and returns a tensor-like integer variable.
-
-        Args:
-            name (str): Name of this variable.
-            shape (list, optional): Shape of this variable. Default: 0.
-            bound (list, optional): Bounds of this variable. Default: [0, None].
-        """
-        dim = fix_dims(shape)
-        self.features = update_variable_features(name, dim, bound, 'integer_variable_counter', self.features)
-        if self.features['solution_method'] == 'exact':
-            from .generators import variable_generator
-            self.mainvars[("itvar", name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'itvar', name, bound, dim)
-            self.maindims[name] = dim
-            return self.mainvars[("itvar", name)]
-
-    def btvar(self, name, shape=0, bound=[0, 1]):
-        """
-        Creates and returns a tensor-like binary variable.
-        Args:
-            name (str): Name of this variable.
-            shape (list, optional): Shape of this variable. Default: 0.
-            bound (list, optional): Bounds of this variable. Default: [0, 1].
-        """
-        dim = fix_dims(shape)
-        self.features = update_variable_features(name, dim, bound, 'binary_variable_counter', self.features)
-        if self.features['solution_method'] == 'exact':
-            from .generators import variable_generator
-            self.mainvars[("btvar", name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'btvar', name, bound, dim)
-            self.maindims[name] = dim
-            return self.mainvars[("btvar", name)]
-
-    def rtvar(self, name, shape=0):
-
-        """
-        Creates and returns a tensor-like random variable.
-
-        Args:
-            name (str): Name of this variable.
-            shape (list, optional): Shape of this variable. Default: 0.
-        """
-
-        dim = fix_dims(shape)
-        from .generators import variable_generator
-        return variable_generator.generate_variable(self.features['interface_name'], self.model, 'rtvar', name, [None, None], dim)
-
-    # Tensor collections
-
-    def cftvar(self, name, indices, shape=0, bound=[None,None]):
-        """
-        This method creates a dictionary of free (float) tensor variables with given names and indices.
         
-        Parameters:
-            name (str): The base name for the variables.
-            indices (list): The indices for the variables.
-            shape (dict): The shapes for the variables. Defaults to 0 for all indices if not provided as a dictionary.
-            bound (dict): The bounds for the variables. Defaults to [None, None] for all indices if not provided as a dictionary.
-
-        Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a float tensor variable with the name derived from 'name' and the index.
-        """
-        if type(bound)!=dict: bound = {i: bound for i in indices}
-        if type(shape)!=dict: shape = {i: shape for i in indices}
-        return {i: self.ftvar(name+f"[{i}]".replace("(", "").replace(")", ""), shape=shape[i], bound=bound[i]) for i in indices}
-
-    def cptvar(self, name, indices, shape=0, bound=[0, None]):
-        """
-        This method creates a dictionary of positive tensor variables with given names and indices.
-        
-        Parameters:
-            name (str): The base name for the variables.
-            indices (list): The indices for the variables.
-            shape (dict): The shapes for the variables. Defaults to 0 for all indices if not provided as a dictionary.
-            bound (dict): The bounds for the variables. Defaults to [0, None] for all indices if not provided as a dictionary.
-
-        Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a positive tensor variable with the name derived from 'name' and the index.
-        """
-        if type(bound)!=dict: bound = {i: bound for i in indices}
-        if type(shape)!=dict: shape = {i: shape for i in indices}
-        return {i: self.ptvar(name+f"[{i}]".replace("(", "").replace(")", ""), shape=shape[i], bound=bound[i]) for i in indices}
-
-    def citvar(self, name, indices, shape=0, bound=[0, None]):
-        """
-        This method creates a dictionary of integer tensor variables with given names and indices.
-        
-        Parameters:
-            name (str): The base name for the variables.
-            indices (list): The indices for the variables.
-            shape (dict): The shapes for the variables. Defaults to 0 for all indices if not provided as a dictionary.
-            bound (dict): The bounds for the variables. Defaults to [0, None] for all indices if not provided as a dictionary.
-
-        Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is an integer tensor variable with the name derived from 'name' and the index.
-        """
-        if type(bound)!=dict: bound = {i: bound for i in indices}
-        if type(shape)!=dict: shape = {i: shape for i in indices}
-        return {i: self.itvar(name+f"[{i}]".replace("(", "").replace(")", ""), shape=shape[i], bound=bound[i]) for i in indices}
-
-    def cbtvar(self, name, indices, shape=0, bound=[0,1]):
-        """
-        This method creates a dictionary of binary tensor variables with given names and indices.
-        
-        Parameters:
-            name (str): The base name for the variables.
-            indices (list): The indices for the variables.
-            shape (dict): The shapes for the variables. Defaults to 0 for all indices if not provided as a dictionary.
-            bound (dict): The bounds for the variables. Defaults to [0, 1] for all indices if not provided as a dictionary.
-
-        Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a binary tensor variable with the name derived from 'name' and the index.
-        """
-        if type(bound)!=dict: bound = {i: bound for i in indices}
-        if type(shape)!=dict: shape = {i: shape for i in indices}
-        return {i: self.btvar(name+f"[{i}]".replace("(", "").replace(")", ""), shape=shape[i], bound=bound[i]) for i in indices}
-
-    def crtvar(self, name, indices, shape=0):
-
-        """
-        Creates a dictionary of tensor-like random variables with specific names and shapes.
-
-        Args:
-            name (str): Base name for the variables.
-            indices (list): Indices for the variables.
-            shape (dict, optional): Shapes for the variables. Defaults to None.
-
-        Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a tensor-like random variable with the name derived from 'name' and the index, and shape specified by 'shape'.
-        """
-
-        if type(shape)!=dict: shape = {i: shape for i in indices}
-        return {i: self.rtvar(name+f"[{i}]".replace("(", "").replace(")", ""), shape =shape[i]) for i in indices}
-
-    # Variables
-
-    def fvar(self, name, dim=0, bound=[None, None]):
-
-        """
-        `fvar` method is used to create and return a free variable.
-
-        Parameters:
-        - name (str): Name.
-        - dim (list, optional): Dimensions. Default is 0.
-        - bound (list, optional): Lower and upper bounds. Default is [None, None]. Required for heuristic optimization.
-
-        Returns:
-        - variable: A free variable.
-        """
-
-        dim = fix_dims(dim)
-
-        self.features = update_variable_features(name, dim, bound, 'free_variable_counter', self.features)
-
-        match self.features['solution_method']:
-
-            case 'exact':
-
-                from .generators import variable_generator
-                self.mainvars[("fvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'fvar', name, bound, dim)
-                self.maindims[name] = dim
-                return self.mainvars[("fvar",name)]
-
-            case 'heuristic':
-                
-                return generate_heuristic_variable(self.features, 'fvar', name, dim, bound, self.agent,self.no_agents)
-
-    def pvar(self, name, dim=0, bound=[0, None]):
-
-        """
-        Creates and returns a positive variable.
-
-        Args:
-            name (str): Name of this variable.
-            dim (list, optional): Dimensions of this variable. Default: 0.
-            bound (list, optional): Bounds of this variable. Default: [0, None].
-        """
-
-        dim = fix_dims(dim)
-        self.features = update_variable_features(name, dim, bound, 'positive_variable_counter', self.features)
-
-        match self.features['solution_method']:
-
-            case 'exact':
-
-                from .generators import variable_generator
-                self.mainvars[("pvar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'pvar', name, bound, dim)
-                self.maindims[name] = dim
-
-                if self.features['interface_name'] in ['rsome_ro', 'rsome_dro', 'cvxpy']:
-                    if dim==0:
-                        self.con(self.mainvars[("pvar",name)]>=0)
-                        if bound[1]!=None:
-                            self.con(self.mainvars[("pvar",name)]<=bound[1])
-                    elif len(dim)==1:
-                        for i in dim[0]:
-                            self.con(self.mainvars[("pvar",name)][i]>=0)
-                            if bound[1]!=None:
-                                self.con(self.mainvars[("pvar",name)][i]<=bound[1])
-                    else:
-                        for i in it.product(*tuple(dim)):
-                            self.con(self.mainvars[("pvar",name)][i]>=0)
-                            if bound[1]!=None:
-                                self.con(self.mainvars[("pvar",name)][i]<=bound[1])
-
-                return self.mainvars[("pvar",name)]
-
-            case 'heuristic':
-
-                return generate_heuristic_variable(self.features, 'pvar', name, dim, bound, self.agent,self.no_agents)
-
-    def ivar(self, name, dim=0, bound=[0, None]):
-
-        """
-        Creates and returns an integer variable.
-
-        Args:
-            name (str): Name of this variable.
-            dim (list, optional): Dimensions of this variable. Default: 0.
-            bound (list, optional): Bounds of this variable. Default: [0, None].
-        """
-
-        dim = fix_dims(dim)
-        self.features = update_variable_features(name, dim, bound, 'integer_variable_counter', self.features)
-
-        match self.features['solution_method']:
-
-            case 'exact':
-
-                from .generators import variable_generator
-                self.mainvars[("ivar",name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'ivar', name, bound, dim)
-                self.maindims[name] = dim
-
-                if self.features['interface_name'] in ['rsome_ro', 'rsome_dro', 'cvxpy']:
-                    if dim==0:
-                        self.con(self.mainvars[("ivar",name)]>=0)
-                        if bound[1]!=None:
-                            self.con(self.mainvars[("ivar",name)]<=bound[1])
-                    elif len(dim)==1:
-                        for i in dim[0]:
-                            self.con(self.mainvars[("ivar",name)][i]>=0)
-                            if bound[1]!=None:
-                                self.con(self.mainvars[("ivar",name)][i]<=bound[1])
-                    else:
-                        for i in it.product(*tuple(dim)):
-                            self.con(self.mainvars[("ivar",name)][i]>=0)
-                            if bound[1]!=None:
-                                self.con(self.mainvars[("ivar",name)][i]<=bound[1])
-
-                return self.mainvars[("ivar",name)]
-
-            case 'heuristic':
-                return generate_heuristic_variable(self.features, 'ivar', name, dim, bound, self.agent,self.no_agents)
-
-    def bvar(self, name, dim=0, bound=[0, 1]):
-
-        """
-        Creates and returns a binary variable.
-
-        Args:
-            name (str): Name of this variable.
-            dim (list, optional): Dimensions of this variable. Default: 0.
-            bound (list, optional): Bounds of this variable. Default: [0, 1].
-        """
-
-        dim = fix_dims(dim)
-        self.features = update_variable_features(name, dim, bound, 'binary_variable_counter', self.features)
-
-        if self.features['solution_method'] == 'exact':
-
-            from .generators import variable_generator
-            self.mainvars[("bvar", name)] = variable_generator.generate_variable(self.features['interface_name'], self.model, 'bvar', name, bound, dim)
-            self.maindims[name] = dim
-
-            if self.features['interface_name'] in ['cvxpy']:
-                if dim == 0:
-                    self.con(self.mainvars[("bvar", name)] >= 0)
-                    self.con(self.mainvars[("bvar", name)] <= 1)
-                elif len(dim) == 1:
-                    for i in dim[0]:
-                        self.con(self.mainvars[("bvar", name)][i] >= 0)
-                        self.con(self.mainvars[("bvar", name)][i] <= 1)
-                else:
-                    for i in it.product(*tuple(dim)):
-                        self.con(self.mainvars[("bvar", name)][i] >= 0)
-                        self.con(self.mainvars[("bvar", name)][i] <= 1)
-            return self.mainvars[("bvar", name)]
-
-        elif self.features['solution_method'] == 'heuristic':
-            return generate_heuristic_variable(self.features, 'bvar', name, dim, bound, self.agent,self.no_agents)
-
-    def svar(self, name, length=1):
-        """
-        Creates and returns a sequential variable.
-
-        Args:
-            name (str): Name of this variable.
-            length (int, optional): Length of this variable. Default: 1.
-            
-        Returns:
-            A sequential variable with the given name and length.
-        """
-        dim = fix_dims([length])
-        self.features = update_variable_features(name, dim, [0, 1], 'sequential_variable_counter', self.features)
-        match self.features['solution_method']:
-
-            case 'heuristic':
-                
-                return generate_heuristic_variable(self.features, 'svar', name, dim, [0, 1], self.agent,self.no_agents)
-
-    def rvar(self, name, dim=0):
-        """
-        Creates and returns a random variable.
-
-        Args:
-            name (str): Name of this variable.
-            dim (list, optional): Dimensions of this variable. Default: 0.
-        """
-        dim = fix_dims(dim)
-        from .generators import variable_generator
-        return variable_generator.generate_variable(self.features['interface_name'], self.model, 'rvar', name, [None, None], dim)
-
-    def evar(self, name, interval=[None, None, None], dim=0, optional=False):
-
-        """        
-        Creates and returns an event (interval) variable.
-
-        Args:
-            name: Name of this variable.
-            interval: [size, start, end]. 
-            dim (list, optional): Dimensions of this variable. Default: 0.
-        """
-
-        self.features = update_variable_features(name, dim, None, 'event_variable_counter', self.features)
-
-        if len(interval) == 1: interval = [interval[0], None, None]
-
-        if dim == 0:
-
-            if self.features['interface_name'] == 'cplex_cp':
-
-                self.mainvars[("evar",name)] = self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=name, optional=optional)
-                self.maindims[name] = dim
-
-                return self.mainvars[("evar",name)]
-            
-            if self.features['interface_name'] == 'ortools_cp':
-                self.mainvars[("evar",name)] = self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=name, is_present=optional)
-                self.maindims[name] = dim
-
-                return self.mainvars[("evar",name)]
-        else:
-
-            if self.features['interface_name'] == 'cplex_cp':
-
-                if len(dim) == 1:
-                    self.mainvars[("evar",name)] = {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=optional) for key in dim[0]}
-                    self.maindims[name] = dim
-                    return self.mainvars[("evar",name)] 
-                
-                else:
-                    self.mainvars[("evar",name)]  = {key: self.model.interval_var(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", optional=optional) for key in sets(*dim)}
-                    self.maindims[name] = dim
-                    return  self.mainvars[("evar",name)] 
-
-            if self.features['interface_name'] == 'ortools_cp':
-
-                if len(dim) == 1:
-                    self.mainvars[("evar",name)] = {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=optional) for key in dim[0]}
-                    self.maindims[name] = dim
-                    return self.mainvars[("evar",name)]
-                
-                else:
-                    self.mainvars[("evar",name)]  = {key: self.model.NewOptionalIntervalVar(start=interval[1], size=interval[0], end=interval[2], name=f"{name}{key}", is_present=optional) for key in sets(*dim)}
-                    self.maindims[name] = dim
-                    return self.mainvars[("evar",name)] 
-
-    def dvar(self, name, dim=0):
-        
-        """
-        Creates and returns a dependent variable.
-
-        Args:
-            name (str): Name of this variable.
-            dim (list, optional): Dimensions of this variable. Default: 0.
-        """
-
-        dim = fix_dims(dim)
-
-        if self.no_agents!=None:
-            default_pop= self.no_agents
-        else:
-            default_pop = 100
-
-        match self.features['solution_method']:
-
-            case 'exact':
-
-                return np.zeros([len(dims) for dims in dim])
-            
-            case 'heuristic':
-
-                if self.features['agent_status'] == 'idle':
-                    if self.features['vectorized']:
-                        if dim == 0:
-                            return 0
-                        else:
-                            return np.random.rand(*tuple([default_pop]+[len(dims) for dims in dim]))
-                    else:
-                        if dim == 0:
-                            return 0
-                        else:
-                            return np.zeros([len(dims) for dims in dim])
-                else:
-                    if self.features['vectorized']:
-                        if dim == 0:
-                            return np.zeros(self.features['pop_size'])
-                        else:
-                            return np.zeros([self.features['pop_size']]+[len(dims) for dims in dim])
-                    else:
-                        if dim == 0:
-                            return 0
-                        else:
-                            return np.zeros([len(dims) for dims in dim])
-
-    # Variable collections
-
-    def cfvar(self, name, indices, dim=0, bound=[None, None]):
-
-        """
-        This method creates a dictionary of free (continuous) variables with given names and indices.
-        
-        Parameters:
-            name (str): The base name for the variables.
-            indices (list): The indices for the variables.
-            dim (dict): The dimensions for the variables. Defaults to 0 for all indices if not provided as a dictionary.
-            bound (dict): The bounds for the variables. Defaults to [None, None] for all indices if not provided as a dictionary.
-
-        Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a continuous variable with the name derived from 'name' and the index.
-        """
-
-        if type(bound)!=dict: bound = {i: bound for i in indices}
-        if type(dim)!=dict: dim = {i: dim for i in indices}
-        return {i: self.fvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =dim[i], bound=bound[i]) for i in indices}
-
-    def cpvar(self, name, indices, dim=0, bound=[0, None]):
-
-        """
-        This method creates a dictionary of positive continuous variables with given names and indices.
-        
-        Parameters:
-            name (str): The base name for the variables.
-            indices (list): The indices for the variables.
-            dim (dict): The dimensions for the variables. Defaults to 0 for all indices if not provided as a dictionary.
-            bound (dict): The bounds for the variables. Defaults to [0, None] for all indices if not provided as a dictionary.
-
-        Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a positive continuous variable with the name derived from 'name' and the index.
-        """
-
-        if type(bound)!=dict: bound = {i: bound for i in indices}
-        if type(dim)!=dict: dim = {i: dim for i in indices}
-        return {i: self.pvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =dim[i], bound=bound[i]) for i in indices}
-
-    def civar(self, name, indices, dim=0, bound= [0, None]):
-
-        """
-        This method creates a dictionary of integer variables with given names and indices.
-        
-        Parameters:
-            name (str): The base name for the variables.
-            indices (list): The indices for the variables.
-            dim (dict): The dimensions for the variables. Defaults to 0 for all indices if not provided as a dictionary.
-            bound (dict): The bounds for the variables. Defaults to [0, None] for all indices if not provided as a dictionary.
-
-        Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is an integer variable with the name derived from 'name' and the index.
-        """
-
-        if type(bound)!=dict: bound = {i: bound for i in indices}
-        if type(dim)!=dict: dim = {i: dim for i in indices}
-        return {i: self.ivar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =dim[i], bound=bound[i]) for i in indices}
-
-    def cbvar(self, name, indices, dim=0, bound=[0,1]):
-
-        """
-        This method creates a dictionary of binary variables with given names and indices.
-        
-        Parameters:
-            name (str): The base name for the variables.
-            indices (list): The indices for the variables.
-            dim (dict): The dimensions for the variables. Defaults to 0 for all indices if not provided as a dictionary.
-            bound (dict): The bounds for the variables. Defaults to [0, None] for all indices if not provided as a dictionary.
-
-        Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a binary variable with the name derived from 'name' and the index.
-        """
-
-        if type(bound)!=dict: bound = {i: bound for i in indices}
-        if type(dim)!=dict: dim = {i: dim for i in indices}
-        return {i: self.bvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =dim[i], bound=bound[i]) for i in indices}
-
-    def csvar(self, name, indices, length=1):
-        """
-        Creates a dictionary of sequential variables with specific names and lengths.
-
-        Args:
-            name (str): Base name for the variables.
-            indices (list): Indices for the variables.
-            length (dict, optional): Lengths for the variables. Defaults to None.
-
-        Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a sequential variable with the name derived from 'name' and the index, and length specified by 'length'.
-        """
-        if type(length)!=dict: length = {i: length for i in indices}
-        return {i: self.svar(name+f"[{i}]".replace("(", "").replace(")", ""), length =length[i]) for i in indices}
-
-    def crvar(self, name, indices, dim=0):
-        """
-        Creates a dictionary of random variables with specific names and dimensions.
-
-        Args:
-            name (str): Base name for the variables.
-            indices (list): Indices for the variables.
-            dim (dict, optional): Dimensions for the variables. Defaults to None.
-
-        Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a random variable with the name derived from 'name' and the index.
-        """
-        if type(dim)!=dict: dim = {i: dim for i in indices}
-        return {i: self.rvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =dim[i]) for i in indices}
-
-    def cevar(self, name, indices, interval=[None, None, None], dim=0, optional=False):
-
-        if type(interval)!=dict: interval = {i: interval for i in indices}
-        if type(dim)!=dict: dim = {i: dim for i in indices}
-        if type(optional)!=dict: optional = {i: optional for i in indices}
-        return {i: self.evar(name+f"[{i}]".replace("(", "").replace(")", ""), interval=interval[i], dim=dim[i], optional=optional[i]) for i in indices}
-
-    def cdvar(self, name, indices, dim = 0):
-        """
-        This method creates a dictionary of dependent variables with specific names and dimensions.
-
-        Parameters:
-            name (str): The base name for the variables.
-            indices (list): The indices for the variables.
-            dim (dict, optional): The dimensions for the variables. Defaults to 0 for all indices if not provided as a dictionary.
-
-        Returns:
-            dict: A dictionary where each key is an index from 'indices' and the corresponding value is a dependent variable with the name derived from 'name' and the index, and dimensions specified by 'dim'.
-        """
-        if type(dim)!=dict: dim = {i: dim for i in indices}
-        return {i: self.dvar(name+f"[{i}]".replace("(", "").replace(")", ""), dim =dim[i]) for i in indices}
-
-    # Special constraints
-    
-    def scon_exactly_one_one(self, list_of_binary_variables):
-        """
-        This method adds a constraint to the model such that exactly one variable in the list of binary variables is equal to 1.
-
-        Parameters:
-            list_of_binary_variables (list): List of binary variables.
-        """
-        self.con(sum(list_of_binary_variables[i] for i in range(len(list_of_binary_variables)))==1)
-
-    def scon_max_one_one(self, list_of_binary_variables):
-        """
-        This method adds a constraint to the model such that at most one variable in the list of binary variables is equal to 1.
-
-        Parameters:
-            list_of_binary_variables (list): List of binary variables.
-        """
-        self.con(sum(list_of_binary_variables[i] for i in range(len(list_of_binary_variables)))<=1)
-
-    def scon_min_one_one(self, list_of_binary_variables):
-        """
-        This method adds a constraint to the model such that at least one variable in the list of binary variables is equal to 1.
-
-        Parameters:
-            list_of_binary_variables (list): List of binary variables.
-        """
-        self.con(sum(list_of_binary_variables[i] for i in range(len(list_of_binary_variables)))>=1)
-
-    def scon_exactly_m_one(self, list_of_binary_variables, m):
-        """
-        This method adds a constraint to the model such that exactly 'm' variables in the list of binary variables are equal to 1.
-
-        Parameters:
-            list_of_binary_variables (list): List of binary variables.
-            m (int): The exact number of variables that should be equal to 1.
-        """
-        self.con(sum(list_of_binary_variables[i] for i in range(len(list_of_binary_variables)))==m)
-
-    def scon_max_m_one(self, list_of_binary_variables, m):
-        """
-        This method adds a constraint to the model such that at most 'm' variables in the list of binary variables are equal to 1.
-
-        Parameters:
-            list_of_binary_variables (list): List of binary variables.
-            m (int): The maximum number of variables that should be equal to 1.
-        """
-        self.con(sum(list_of_binary_variables[i] for i in range(len(list_of_binary_variables)))<=m)
-
-    def scon_min_m_one(self, list_of_binary_variables, m):
-        """
-        This method adds a constraint to the model such that at least 'm' variables in the list of binary variables are equal to 1.
-
-        Parameters:
-            list_of_binary_variables (list): List of binary variables.
-            m (int): The minimum number of variables that should be equal to 1.
-        """
-        self.con(sum(list_of_binary_variables[i] for i in range(len(list_of_binary_variables)))>=m)
-
-    def scon_only_one_of_the_values(self, variable, list_of_values):
-        """
-        This method adds a constraint to the model such that the variable can only take one value from the list of values.
-
-        Parameters:
-            variable (variable): The variable that should take a value from the list.
-            list_of_values (list): List of potential values for the variable.
-        """
-        try:
-            for i in range(len(list_of_values)):
-                self.features['indicators'].append(self.features['indicators'][-1]+1)
-        except:
-            self.features['indicators'] = []
-            for i in range(len(list_of_values)):
-                self.features['indicators'].append(i)
-        z = self.bvar(f"indicator{self.features['indicators'][-1]}",[range(len(list_of_values))])
-        self.con(variable==sum(list_of_values[i]*z[i] for i in range(len(list_of_values))))
-        self.con(sum(z[i] for i in range(len(list_of_values)))==1)
-
-    def scon_only_one_of_the_values_or_zero(self, variable, list_of_values):
-        """
-        This method adds a constraint to the model such that the variable can either take one value from the list of values or be zero.
-
-        Parameters:
-            variable (variable): The variable that should take a value from the list or be zero.
-            list_of_values (list): List of potential values for the variable.
-        """
-        try:
-            for i in range(len(list_of_values)):
-                self.features['indicators'].append(self.features['indicators'][-1]+1)
-        except:
-            self.features['indicators'] = []
-            for i in range(len(list_of_values)):
-                self.features['indicators'].append(i)
-        z = self.bvar(f"indicator{self.features['indicators'][-1]}",[range(len(list_of_values))])
-        self.con(variable==sum(list_of_values[i]*z[i] for i in range(len(list_of_values))))
-        self.con(sum(z[i] for i in range(len(list_of_values)))<=1)
-
-    def scon_this_depends_on_that(self, this, that):
-        """
-        This method adds a constraint to the model such that the 'this' variable should be less than or equal to the 'that' variable.
-
-        Parameters:
-            this (variable): The dependent variable.
-            that (variable): The variable that 'this' is dependent on.
-        """
-        self.con(this<=that)
-
-    def scon_this_indeed_that(self, this, that):
-        """
-        This method adds a constraint to the model such that the 'this' variable should be less than or equal to the 'that' variable.
-
-        Parameters:
-            this (variable): The dependent variable.
-            that (variable): The variable that 'this' is dependent on.
-        """
-        self.con(this<=that)
-
-    def scon_soft_indicator_leq(self,indicator, expr, rhs, big_m=10e9):
-        """
-        This method adds a soft constraint to the model. It relaxes the constraint expr <= rhs by allowing it to be false. The indicator variable decides whether the constraint should be enforced (1) or not (0).
-
-        Parameters:
-            indicator (variable): The binary variable that indicates whether the constraint should be enforced or not.
-            expr (expression): The left-hand side of the constraint.
-            rhs (number): The right-hand side of the constraint.
-            big_m (number): A large positive number used for relaxation. Default is 10e9.
-        """
-        self.con(expr<=rhs+(1-indicator)*big_m)
-
-    def scon_soft_indicator_geq(self,indicator, expr, rhs, big_m=10e9):
-        """
-        This method adds a soft constraint to the model. It relaxes the constraint expr >= rhs by allowing it to be false. The indicator variable decides whether the constraint should be enforced (1) or not (0).
-
-        Parameters:
-            indicator (variable): The binary variable that indicates whether the constraint should be enforced or not.
-            expr (expression): The left-hand side of the constraint.
-            rhs (number): The right-hand side of the constraint.
-            big_m (number): A large positive number used for relaxation. Default is 10e9.
-        """
-        self.con(expr>=rhs-(1-indicator)*big_m)
-
-    def scon_this_or_that(self,this,rhs_this,that,rhs_that,big_m=10e9):
-        """
-        Adds two constraints and one indicator variable to the model. The constraints ensure that either 'this' is less than or equal to 'rhs_this' or 'that' is less than or equal to 'rhs_that'.
-        Note: Variables can also be expressions.
-
-        Parameters:
-            this (variable): The first variable.
-            rhs_this (number): The upper limit for the 'this' variable.
-            that (variable): The second variable.
-            rhs_that (number): The upper limit for the 'that' variable.
-            big_m (number): A large positive number used for relaxation. Default is 10e9.
-        """
-
-        try:
-            self.features['indicators'].append(self.features['indicators'][-1]+1)
-
-        except:
-            self.features['indicators'] = [0]
-
-        z = self.bvar(f"indicator{self.features['indicators'][-1]}")
-
-        self.con(this<=rhs_this+z*big_m)
-        self.con(that<=rhs_that+(1-z)*big_m)
-
-    def scon_if_then(self, this, rhs_this, that, rhs_that, big_m=10e9, epsilon=10e-9):
-        """
-        Adds two constraints and one indicator variable to the model. If 'this' is less than or equal to 'rhs_this', then 'that' should be less than or equal to 'rhs_that'.
-        Note: Variables can also be expressions.
-
-        Parameters:
-            this (variable): The condition variable.
-            rhs_this (number): The upper limit for the 'this' variable.
-            that (variable): The dependent variable.
-            rhs_that (number): The upper limit for the 'that' variable.
-            big_m (number): A large positive number used for relaxation. Default is 10e9.
-            epsilon (number): A small positive number to ensure strict inequality. Default is 10e-9.
-        """
-        try:
-            self.features['indicators'].append(self.features['indicators'][-1]+1)
-        except:
-            self.features['indicators'] = [0]
-        z = self.bvar(f"indicator{self.features['indicators'][-1]}")
-        self.con(this >= rhs_this + epsilon - z*big_m)
-        self.con(that <= rhs_that + (1-z)*big_m)
-
-    def scon_viol_leq(self,expr,rhs=0):
-        """
-        Adds a constraint to the model that represents the amount of violation for soft constraints of type less than or equal to (<=).
-
-        Parameters:
-            expr (expression): The expression that should be less than or equal to 'rhs'.
-            rhs (number): The right-hand side of the constraint. Default is 0.
-        
-        Returns:
-            z (variable): The variable representing the amount of violation.
-        """
-        try:
-            self.features['indicators'].append(self.features['indicators'][-1]+1)
-        except:
-            self.features['indicators'] = [0]
-        z = self.pvar(f"indicator{self.features['indicators'][-1]}")
-        self.con(expr<=rhs+z)
-        return z
-
-    def scon_viol_geq(self,expr,rhs=0):
-        """
-        Adds a constraint to the model that represents the amount of violation for soft constraints of type greater than or equal to (>=).
-
-        Parameters:
-            expr (expression): The expression that should be greater than or equal to 'rhs'.
-            rhs (number): The right-hand side of the constraint. Default is 0.
-        
-        Returns:
-            z (variable): The variable representing the amount of violation.
-        """
-        try:
-            self.features['indicators'].append(self.features['indicators'][-1]+1)
-        except:
-            self.features['indicators'] = [0]
-        z = self.pvar(f"indicator{self.features['indicators'][-1]}")
-        self.con(expr>=rhs-z)
-        return z 
-
-    def scon_slack_leq(self,expr,rhs=0):
-        """
-        Adds a slack variable to the model for a less than or equal to (<=) constraint. The slack variable represents the difference between the left-hand side expression and the right-hand side.
-
-        Parameters:
-            expr (expression): The expression that should be less than or equal to 'rhs'.
-            rhs (number): The right-hand side of the constraint. Default is 0.
-        
-        Returns:
-            z (variable): The slack variable.
-        """
-        try:
-            self.features['indicators'].append(self.features['indicators'][-1]+1)
-        except:
-            self.features['indicators'] = [0]
-        z = self.pvar(f"indicator{self.features['indicators'][-1]}")
-        self.con(expr+z==rhs)
-        return z 
-
-    def scon_surplus_leq(self,expr,rhs=0):
-        """
-        Adds a surplus variable to the model for a greater than or equal to (>=) constraint. The surplus variable represents the difference between the left-hand side expression and the right-hand side.
-
-        Parameters:
-            expr (expression): The expression that should be greater than or equal to 'rhs'.
-            rhs (number): The right-hand side of the constraint. Default is 0.
-        
-        Returns:
-            z (variable): The surplus variable.
-        """
-        try:
-            self.features['indicators'].append(self.features['indicators'][-1]+1)
-        except:
-            self.features['indicators'] = [0]
-        z = self.nvar(f"indicator{self.features['indicators'][-1]}")
-        self.con(expr-z==rhs)
-        return z
-
-    def scon_viol_eq(self,expr,rhs=0):
-        """
-        Adds two constraints to the model that represent the amount of violation for soft constraints of type equal to (==).
-
-        Parameters:
-            expr (expression): The expression that should be equal to 'rhs'.
-            rhs (number): The right-hand side of the constraint. Default is 0.
-        
-        Returns:
-            z (variable): The variable representing the amount of violation.
-        """
-        try:
-            self.features['indicators'].append(self.features['indicators'][-1]+1)
-        except:
-            self.features['indicators'] = [0]
-        z = self.pvar(f"indicator{self.features['indicators'][-1]}")
-        self.con(expr<=rhs+z)
-        self.con(expr>=rhs-z)
-        return z
-
-    def scon_in_bound(self, expr, lb=None, ub=None, label=None):
-        """
-        Creates upper and/or lower bounds on the given variable in the optimization model.
-        """
-        if lb is not None:
-            self.con(expr >= lb, label=label)
-        if ub is not None:
-            self.con(expr <= ub, label=label)
-
-    def scon_abs_leq(self, expr, rhs):
-        """
-        Linearizes a constraint like │a│ <= b.
-        """
-
-        self.con(expr >= -1*rhs)
-        self.con(expr <= rhs)
-
-    def scon_lin_abs_geq(self, expr, rhs, big_m=10e9):
-        """
-        Linearizes a constraint like │a│ >= b.
-        """
-
-        try:
-            self.features['abs_geq_linearizers'].append(
-                self.features['abs_geq_linearizers'][-1]+1)
-        except:
-            self.features['abs_geq_linearizers'] = [0]
-
-        z = self.bvar(
-            f"abs_geq_linearizer{self.features['abs_geq_linearizers'][-1]}")
-        
-        self.scon_this_or_that()
-
-        self.con(expr >= rhs-z*big_m)
-        self.con(expr <= -1*rhs+(1-z)*big_m)
-
-    # Linearizers
-
-    def lin_piecewise(self, slopes, intercepts, breakpoints):
-        """
-        This method implements a piecewise linear function in the context of mathematical programming.
-
-        Parameters:
-            slopes (list): A list of slopes for each piece of the function.
-            intercepts (list): A list of intercepts for each piece of the function.
-            breakpoints (list): A list of breakpoints that define the domain of each piece of the function.
-
-        Returns:
-            The piecewise linear function represented as a sum of linear functions, each multiplied by a binary variable.
-
-        Note:
-            The function is represented as a sum of linear functions, each multiplied by a binary variable that indicates whether that piece of the function is active. The constraints ensure that only one piece is active at any point in the domain.
-        """
-        try:
-            self.features['indicators'].append(self.features['indicators'][-1]+1)
-        except:
-            self.features['indicators'] = [0]
-
-        x = self.pvar(f"indicatorr{self.features['indicators'][-1]}", range(len(breakpoints)))
-        y = self.bvar(f"indicatorr{self.features['indicators'][-1]}", range(len(breakpoints)))
-
-        for i in range(len(breakpoints) - 1):
-            self.con((breakpoints[i+1] - breakpoints[i])*y[i] <= x[i])
-            self.con(x[i] <= (breakpoints[i+1] - breakpoints[i])*y[i+1])
-
-        self.con(sum(y[i] for i in range(len(breakpoints))) == 1)
-
-        return sum((slopes[i]*x[i] + intercepts[i])*y[i] for i in range(len(breakpoints)))
-
-    def lin_approx(self, f, x, x_range, num_breakpoints):
-        """
-        This method implements a piecewise linear approximation of a non-linear function in the context of mathematical programming.
-
-        Parameters:
-            f (function): The non-linear function to be approximated.
-            x (variable): The variable of the non-linear function.
-            x_range (tuple): A tuple of two numbers representing the minimum and maximum values of x.
-            num_breakpoints (int): The number of breakpoints to use in the approximation.
-
-        Returns:
-            The piecewise linear approximation of the non-linear function.
-        """
-        breakpoints = np.linspace(x_range[0], x_range[1], num_breakpoints)
-        slopes = [(f(breakpoints[i+1]) - f(breakpoints[i])) / (breakpoints[i+1] - breakpoints[i]) for i in range(len(breakpoints)-1)]
-        intercepts = [f(breakpoints[i]) - slopes[i] * breakpoints[i] for i in range(len(breakpoints)-1)]
-        
-        return self.lin_piecewise(slopes, intercepts, breakpoints)
-    
-    def lin_abs_in_obj(self, expr, method=0, dir_obj=None):
-        """
-        Linearizes an │a│ expression inside the objective function.
-
-        Parameters:
-            expr: The absolute value expression to be linearized.
-            method (int): The method to use for linearization.
-                - method 0: Uses +2 pvars and +1 constraint (for min and max).
-                - method 1: Uses +1 pvar and +2 constraints (+1 bvar for max) (for min or max, requires user input).
-                - method 2: Uses +1 pvar and +1 constraint (only for min, does not require user input).
-            dir_obj (str): The direction of the objective function. Required for method 1 when linearizing for max.
-
-        Returns:
-            The linearized expression.
-
-        Note:
-            The linearization is performed based on the chosen method and the direction of the objective function.
-        """
-        if method == 0:
-            try:
-                self.features['abs_obj_linearizers'].append(
-                    self.features['abs_obj_linearizers'][-1]+1)
-                self.features['abs_obj_linearizers'].append(
-                    self.features['abs_obj_linearizers'][-1]+1)
-            except:
-                self.features['abs_obj_linearizers'] = [0, 1]
-            z1 = self.pvar(
-                f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-1]}")
-            z2 = self.pvar(
-                f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-2]}")
-            self.con(expr == z1 - z2)
-            return z1 + z2
-
-        if method == 1:
-            if dir_obj == 'min':
-                try:
-                    self.features['abs_obj_linearizers'].append(
-                        self.features['abs_obj_linearizers'][-1]+1)
-                except:
-                    self.features['abs_obj_linearizers'] = [0]
-                z = self.pvar(
-                    f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-1]}")
-                self.scon_abs_leq(expr, z)
-                return z
-            if dir_obj == 'max':
-                try:
-                    self.features['abs_obj_linearizers'].append(
-                        self.features['abs_obj_linearizers'][-1]+1)
-                except:
-                    self.features['abs_obj_linearizers'] = [0]
-                z = self.pvar(
-                    f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-1]}")
-                self.scon_abs_geq(expr, z)
-                return z
-
-        if method == 2:
-            try:
-                self.features['abs_obj_linearizers'].append(
-                    self.features['abs_obj_linearizers'][-1]+1)
-            except:
-                self.features['abs_obj_linearizers'] = [0]
-            z = self.pvar(
-                f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-1]}")
-            self.con(expr + z >= 0)
-            return expr + 2 * z
-
-    def lin_max(self, input_list, type_max, ub_max):
-        """
-        Linearizes the max function.
-
-        Parameters:
-            input_list (list): The list of expressions to be linearized.
-            type_max (str): The type of variable to use for linearization.
-            ub_max: The upper bound for the linearized expression (optional).
-
-        Returns:
-            The linearized expression.
-
-        Note:
-            The linearization is performed based on the type of variable chosen for linearization and the upper bound, if provided.
-        """
-        if self.features['solution_method'] == 'exact':
-            try:
-                self.features['max_linearizers'].append(
-                    self.features['max_linearizers'][-1]+1)
-            except:
-                self.features['max_linearizers'] = [0]
-
-            if type_max == 'bvar':
-                z = self.bvar(
-                    f"max_linearizer{self.features['max_linearizers'][-1]}")
-            if type_max == 'ivar':
-                z = self.ivar(
-                    f"max_linearizer{self.features['max_linearizers'][-1]}")
-            if type_max == 'pvar':
-                z = self.pvar(
-                    f"max_linearizer{self.features['max_linearizers'][-1]}")
-            if type_max == 'fvar':
-                z = self.fvar(
-                    f"max_linearizer{self.features['max_linearizers'][-1]}")
-
-            for item in input_list:
-                self.con(z >= item)
-            if ub_max is not None:
-                self.con(z <= ub_max)
-            return z
-
-    def lin_min(self, input_list, type_min, lb_min=None):
-
-        """
-        Linearizes the min function.
-
-        Parameters:
-            input_list (list): The list of expressions to be linearized.
-            type_min (str): The type of variable to use for linearization.
-            lb_min: The lower bound for the linearized expression (optional).
-
-        Returns:
-            The linearized expression.
-
-        Note:
-            The linearization is performed based on the type of variable chosen for linearization and the lower bound, if provided.
-        """
-
-        try:
-            self.features['min_linearizers'].append(
-                self.features['min_linearizers'][-1]+1)
-        except:
-            self.features['min_linearizers'] = [0]
-
-        if type_min == 'bvar':
-            z = self.bvar(
-                f"min_linearizer{self.features['min_linearizers'][-1]}")
-        elif type_min == 'ivar':
-            z = self.ivar(
-                f"min_linearizer{self.features['min_linearizers'][-1]}")
-        elif type_min == 'pvar':
-            z = self.pvar(
-                f"min_linearizer{self.features['min_linearizers'][-1]}")
-        elif type_min == 'fvar':
-            z = self.fvar(
-                f"min_linearizer{self.features['min_linearizers'][-1]}")
-
-        for item in input_list:
-            self.con(z <= item)
-        if lb_min is not None:
-            self.con(z >= lb_min)
-        return z
-
-    def lin_prod_bb(self, binary1, binary2):
-        """
-        Linearizes a Binary * Binary product.
-
-        Returns:
-            The linearized expression.
-
-        Note:
-            The linearization requires +3 constraints and +1 positive variable.
-        """
-
-        try:
-            self.features['bb_linearizers'].append(
-                self.features['bb_linearizers'][-1]+1)
-        except:
-            self.features['bb_linearizers'] = [0]
-
-        z = self.pvar(f"bb_linearizer{self.features['bb_linearizers'][-1]}")
-        self.con(z <= binary1)
-        self.con(z <= binary2)
-        self.con(z >= binary1 + binary2 - 1)
-        return z
-    
-    def lin_prod_bp(self, binary, positive, ub_positive=10e9):
-        """
-        Linearizes a Binary * Positive product.
-
-        Returns:
-            The linearized expression.
-
-        Note:
-            The linearization requires +3 constraints and +1 positive variable.
-        """
-        try:
-            self.features['bp_linearizers'].append(
-                self.features['bp_linearizers'][-1]+1)
-        except:
-            self.features['bp_linearizers'] = [0]
-
-        z = self.pvar(f"bp_linearizer{self.features['bp_linearizers'][-1]}")
-        self.con(z <= positive)
-        self.con(z <= binary * ub_positive)
-        self.con(z >= positive - ub_positive * (1 - binary))
-        return z
-
-    def lin_prod_bi(self, binary, integer, ub_integer=10e9):
-        """
-        Linearizes a Binary * Integer product.
-
-        Returns:
-            The linearized expression.
-
-        Note:
-            The linearization requires +3 constraints and +1 positive variable.
-        """
-        try:
-            self.features['bi_linearizers'].append(
-                self.features['bi_linearizers'][-1]+1)
-        except:
-            self.features['bi_linearizers'] = [0]
-
-        z = self.pvar(f"bi_linearizer{self.features['bi_linearizers'][-1]}")
-        self.con(z <= integer)
-        self.con(z <= binary * ub_integer)
-        self.con(z >= integer - ub_integer * (1 - binary))
-        return z
-
-    def lin_prod_ip(self, integer, positive, ub_integer, ub_positive):
-        """
-        Linearizes a Integer * Positive product.
-
-        Returns:
-            The linearized expression.
-
-        Note:
-            The linearization requires +1 + 3 * (mt.ceil(mt.log2(ub_integer + 1))) constraints, +(mt.ceil(mt.log2(ub_integer + 1))) positive variables, and +(mt.ceil(mt.log2(ub_integer + 1))) binary variables.
-        """
-        try:
-            self.features['ip_linearizers'].append(
-                self.features['ip_linearizers'][-1]+1)
-        except:
-            self.features['ip_linearizers'] = [0]
-
-        z = self.pvar(f"ip_linearizer{self.features['ip_linearizers'][-1]}", [
-                    range(mt.ceil(mt.log2(ub_integer + 1)))])
-        x = self.bvar(f"ip_binary_convert{self.features['ip_linearizers'][-1]}", [
-                    range(mt.ceil(mt.log2(ub_integer + 1)))])
-
-        self.con(integer == sum(
-            2**i * x[i] for i in range(mt.ceil(mt.log2(ub_integer + 1)))))
-
-        for i in range(mt.ceil(mt.log2(ub_integer + 1))):
-            self.con(z[i] <= positive)
-            self.con(z[i] <= x[i] * ub_positive)
-            self.con(z[i] >= positive - ub_positive * (1 - x[i]))
-
-        return sum(2**i * z[i] for i in range(mt.ceil(mt.log2(ub_integer + 1))))
-
-    def lin_prod_ii(self, integer1, integer2, ub_integer1, ub_integer2):
-        """
-        Linearizes a Integer * Integer product.
-
-        Returns:
-            The linearized expression.
-
-        Note:
-            The linearization requires +1 + 3 * (mt.ceil(mt.log2(ub_integer + 1))) constraints, +(mt.ceil(mt.log2(ub_integer + 1))) positive variables, and +(mt.ceil(mt.log2(ub_integer + 1))) binary variables.
-        """
-        try:
-            self.features['ii_linearizers'].append(
-                self.features['ii_linearizers'][-1]+1)
-        except:
-            self.features['ii_linearizers'] = [0]
-
-        z = self.pvar(f"ii_linearizer{self.features['ii_linearizers'][-1]}", [
-                    range(mt.ceil(mt.log2(ub_integer1 + 1)))])
-        x = self.bvar(f"ii_binary_convert{self.features['ii_linearizers'][-1]}", [
-                    range(mt.ceil(mt.log2(ub_integer1 + 1)))])
-
-        self.con(integer1 == sum(
-            2**i * x[i] for i in range(mt.ceil(mt.log2(ub_integer1 + 1)))))
-
-        for i in range(mt.ceil(mt.log2(ub_integer1 + 1))):
-            self.con(z[i] <= integer2)
-            self.con(z[i] <= x[i] * ub_integer2)
-            self.con(z[i] >= integer2 - ub_integer2 * (1 - x[i]))
-
-        return sum(2**i * z[i] for i in range(mt.ceil(mt.log2(ub_integer1 + 1))))
-
-    # Constraint programming
-
-    def start_of(self, interval_variable, absent_value=None):
-        """
-        Returns the start time of an interval_variable.
-
-        If the interval_variable is absent in the solution, the absent_value is returned. 
-        The default absent_value is 0.
-
-        Parameters:
-        interval_variable: The interval variable whose start time is to be returned.
-        absent_value: The value to be returned if the interval_variable is absent in the solution.
-
-        Returns:
-        The start time of the interval_variable or the absent_value if the interval_variable is absent in the solution.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.start_of(interval_variable, absent_value)
-        if self.features['interface_name'] == 'ortools_cp':
-            return interval_variable.StartExpr()
-
-    def end_of(self, interval_variable, absent_value=None):
-        """
-        Returns the end time of an interval_variable.
-
-        If the interval_variable is absent in the solution, the absent_value is returned. 
-        The default absent_value is 0.
-
-        Parameters:
-        interval_variable: The interval variable whose end time is to be returned.
-        absent_value: The value to be returned if the interval_variable is absent in the solution.
-
-        Returns:
-        The end time of the interval_variable or the absent_value if the interval_variable is absent in the solution.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.end_of(interval_variable, absent_value)
-        if self.features['interface_name'] == 'ortools_cp':
-            return interval_variable.EndExpr()
-
-    def length_of(self, interval_variable, absent_value=None):
-        """
-        Returns the length of an interval_variable.
-
-        If the interval_variable is absent in the solution, the absent_value is returned. 
-        The default absent_value is 0.
-
-        Parameters:
-        interval_variable: The interval variable whose length is to be returned.
-        absent_value: The value to be returned if the interval_variable is absent in the solution.
-
-        Returns:
-        The length of the interval_variable or the absent_value if the interval_variable is absent in the solution.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.length_of(interval_variable, absent_value)
-        if self.features['interface_name'] == 'ortools_cp':
-            return interval_variable.EndExpr() - interval_variable.StartExpr()
-
-    def size_of(self, interval_variable, absent_value=None):
-        """
-        Returns the size of an interval_variable.
-
-        If the interval_variable is absent in the solution, the absent_value is returned. 
-        The default absent_value is 0.
-
-        Parameters:
-        interval_variable: The interval variable whose size is to be returned.
-        absent_value: The value to be returned if the interval_variable is absent in the solution.
-
-        Returns:
-        The size of the interval_variable or the absent_value if the interval_variable is absent in the solution.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.size_of(interval_variable, absent_value)
-        if self.features['interface_name'] == 'ortools_cp':
-            return interval_variable.SizeExpr()
-
-    def presence_of(self, interval_variable):
-        """
-        Returns the presence (1) or absence (0) of an interval_variable. 
-
-        This method can be used to check whether the interval_variable is present in the solution.
-
-        Parameters:
-        interval_variable: The interval variable whose presence is to be checked.
-
-        Returns:
-        1 if the interval_variable is present in the solution, 0 otherwise.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.presence_of(interval_variable)
-        if self.features['interface_name'] == 'ortools_cp':
-            return interval_variable.IsPresent().Value()
-
-    def prec_start_at_start(self, one, two, delay=0):
-        """
-        Returns a boolean expression that checks if the start time of interval variable 'one' 
-        plus a specified delay equals the start time of interval variable 'two'.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.start_at_start(one, two, delay)
-        if self.features['interface_name'] == 'ortools_cp':
-            return one.StartExpr() + delay == two.StartExpr()
-
-    def prec_start_at_end(self, one, two, delay=0):
-        """
-        Returns a boolean expression that checks if the start time of interval variable 'one' 
-        plus a specified delay equals the end time of interval variable 'two'.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.start_at_end(one, two, delay)
-        if self.features['interface_name'] == 'ortools_cp':
-            return one.StartExpr() + delay == two.EndExpr()
-
-    def prec_start_before_start(self, one, two, delay=0):
-        """
-        Returns a boolean expression that checks if the start time of interval variable 'one' 
-        plus a specified delay is less than or equal to the start time of interval variable 'two'.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.start_before_start(one, two, delay)
-        if self.features['interface_name'] == 'ortools_cp':
-            return one.StartExpr() + delay <= two.StartExpr()
-
-    def prec_start_before_end(self, one, two, delay=0):
-        """
-        Returns a boolean expression that checks if the start time of interval variable 'one' 
-        plus a specified delay is less than or equal to the end time of interval variable 'two'.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.start_before_end(one, two, delay)
-        if self.features['interface_name'] == 'ortools_cp':
-            return one.StartExpr() + delay <= two.EndExpr()
-
-    def prec_end_at_start(self, one, two, delay=0):
-        """
-        Returns a boolean expression that checks if the end time of interval variable 'one' 
-        plus a specified delay equals the start time of interval variable 'two'.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.end_at_start(one, two, delay)
-        if self.features['interface_name'] == 'ortools_cp':
-            return one.EndExpr() + delay == two.StartExpr()
-
-    def prec_end_at_end(self, one, two, delay=0):
-        """
-        Returns a boolean expression that checks if the end time of interval variable 'one' 
-        plus a specified delay equals the end time of interval variable 'two'.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.end_at_end(one, two, delay)
-        if self.features['interface_name'] == 'ortools_cp':
-            return one.EndExpr() + delay == two.EndExpr()
-
-    def prec_end_before_start(self, one, two, delay=0):
-        """
-        Returns a boolean expression that checks if the end time of interval variable 'one' 
-        plus a specified delay is less than or equal to the start time of interval variable 'two'.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.end_before_start(one, two, delay)
-        if self.features['interface_name'] == 'ortools_cp':
-            return one.EndExpr() + delay <= two.StartExpr()
-
-    def prec_end_before_end(self, one, two, delay=0):
-        """
-        Returns a boolean expression that checks if the end time of interval variable 'one' 
-        plus a specified delay is less than or equal to the end time of interval variable 'two'.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.end_before_end(one, two, delay)
-        if self.features['interface_name'] == 'ortools_cp':
-            return one.EndExpr() + delay <= two.EndExpr()
-
-    def forbid_start(self, interval, function):
-        """
-        Forbids an interval variable to start during specified regions.
-
-        Parameters:
-        interval (IntervalVar): The interval variable.
-        function (function): The function that specifies forbidden regions.
-
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.forbid_start(interval, function)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            forbidden_domains = function(interval)
-            for domain in forbidden_domains:
-                self.model.Add(interval.StartExpr() < domain[0])
-                self.model.Add(interval.StartExpr() > domain[1])
-
-    def forbid_end(self, interval, function):
-        """
-        Forbids an interval variable to end during specified regions.
-
-        Parameters:
-        interval (IntervalVar): The interval variable.
-        function (function): The function that specifies forbidden regions.
-
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.forbid_end(interval, function)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            forbidden_domains = function(interval)
-            for domain in forbidden_domains:
-                self.model.Add(interval.EndExpr() < domain[0])
-                self.model.Add(interval.EndExpr() > domain[1])
-
-    def forbid_overlap(self, interval_variables, transition_matrix=None):
-        """
-        Forbids overlapping of interval variables.
-
-        Parameters:
-        interval_variables (list of IntervalVar): The list of interval variables.
-        transition_matrix (list of list of bool, optional): Transition matrix. Defaults to None.
-
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-            if transition_matrix == None:
-                return self.model.no_overlap(interval_variables)
-            else:
-                return self.model.no_overlap(interval_variables, transition_matrix)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            return self.model.AddNoOverlap(interval_variables)
-
-    def forbid_extent(self, interval, function):
-        """
-        Forbid an interval variable to overlap with specified regions.
-
-        Parameters:
-        interval (IntervalVar): The interval variable.
-        function (function): The function that specifies forbidden regions.
-
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.forbid_extent(interval, function)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            forbidden_domains = function(interval)
-            for domain in forbidden_domains:
-                self.model.Add(interval.EndExpr() < domain[0])
-                self.model.Add(interval.StartExpr() > domain[1])
-
-    def overlap_length(self, interval_variable1, interval_variable2, absent_value=None):
-        """
-        To get the length of the overlap of two interval variables.
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.overlap_length(interval_variable1, interval_variable2, absent_value)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            overlap_start = self.model.NewIntVar(0, self.model.Horizon(), "")
-            overlap_end = self.model.NewIntVar(0, self.model.Horizon(), "")
-            self.model.Add(overlap_start <= interval_variable1.EndExpr())
-            self.model.Add(overlap_end >= interval_variable1.StartExpr())
-            return overlap_end - overlap_start
-
-    def start_eval(self, interval, function, absent_value=None):
-        """
-        To evaluate a segmented function at the start of an interval variable
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.start_eval(interval, function, absent_value)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            return function(interval.StartExpr().Value())
-
-    def end_eval(self, interval, function, absent_value=None):
-        """
-        To evaluate a segmented function at the end of an interval variable
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.end_eval(interval, function, absent_value)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            return function(interval.EndExpr().Value())
-
-    def size_eval(self, interval, function, absent_value=None):
-        """
-        To evaluate a segmented function on the size of an interval variable
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.size_eval(interval, function, absent_value)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            return function(interval.SizeExpr().Value())
-
-    def length_eval(self, interval, function, absent_value=None):
-        """
-        To evaluate a segmented function on the length of an interval variable
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.length_eval(interval, function, absent_value)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            return function(interval.SizeExpr().Value())
-
-    def span(self, interval, function, absent_value=None):
-        """
-        Forces that one interval variable must exactly cover a set of interval variables.
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.span(interval, function, absent_value)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            intervals = function(interval)
-            for i in intervals:
-                self.model.Add(interval.StartExpr() <= i.StartExpr())
-                self.model.Add(interval.EndExpr() >= i.EndExpr())
-
-    def always_equal(self, state_function, input1, input2):
-        """
-        Creates an equality constraint between two expressions.
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.always_equal(state_function, input1, input2)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            return self.model.Add(input1 == input2)
-
-    def alternative(self, interval, array, cardinality=None):
-        """
-        Create an alternative constraint between interval variables.
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.alternative(interval, array, cardinality)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            self.model.Add(sum([self.model.NewBoolVar('') for _ in array]) == 1)
-
-    def all_dist_above(self, exprs, value):
-        """
-        All expressions should be greater than or equal to the specified value.
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.all_min_distance(exprs, value)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            for expr in exprs:
-                self.model.Add(expr >= value)
-
-    def sum(self, input):
-
-        """
-        Sum of all values in the input.
-        """
-
-        return self.model.Sum(input)
-
-    def if_then(self, input1, input2):
-        """
-        If input1 is true, then return input2.
-        """
-
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.if_then(input1, input2)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            if input1:
-                return input2
-
-    def synchronize(self, interval, array):
-        """
-        Synchronizes an interval variable interval and a set of interval variables in array.
-        """
-
-        return self.model.synchronize(interval,array)
-
-    def control_resource(self, *args, function='pulse'):
-        """
-        Creates and returns a dynamic resource usage control function.
-        """
-
-        if function == 'pulse':
-            return self.model.pulse(*args)
-        if function == 'step':
-            return self.model.step(*args)
-        if function == 'start':
-            return self.model.step_at_start(*args)
-        if function == 'end':
-            return self.model.step_at_end(*args)
-
-    def circuit(self, nodes):
-        """
-        Creates a circuit constraint.
-
-        The circuit constraint ensures that there is a Hamiltonian circuit on the nodes.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.circuit(nodes)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            return self.model.AddCircuit(nodes)
-
-    def allowed_assignments(self, variables, tuples):
-        """
-        Creates an allowed assignments constraint.
-
-        The allowed assignments constraint ensures that the values assigned to the variables are in the list of tuples.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.allowed_assignments(variables, tuples)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            return self.model.AddAllowedAssignments(variables, tuples)
-
-    def inverse(self, variables, inverse_variables):
-        """
-        Creates an inverse constraint.
-
-        The inverse constraint ensures that if variables[i] = j then inverse_variables[j] = i and vice versa.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.inverse(variables, inverse_variables)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            return self.model.AddInverse(variables, inverse_variables)
-
-    def logical_and(self, expr1, expr2):
-        """
-        Creates a logical AND constraint.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.logical_and(expr1, expr2)
-
-        if self.features['interface_name'] == 'ortools_cp':
-            return self.model.AddBoolAnd([expr1, expr2])
-
-    def logical_or(self, expr1, expr2):
-        """
-        Creates a logical OR constraint.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.logical_or(expr1, expr2)
-            
-        if self.features['interface_name'] == 'ortools_cp':
-            return self.model.AddBoolOr([expr1, expr2])
-
-    def logical_not(self, expr):
-        """
-        Creates a logical NOT constraint.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.logical_not(expr)
-            
-        if self.features['interface_name'] == 'ortools_cp':
-            return self.model.Not(expr)
-
-    def less_than(self, expr1, expr2):
-        """
-        Creates a less than constraint.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.less_than(expr1, expr2)
-            
-        if self.features['interface_name'] == 'ortools_cp':
-            return self.model.Add(expr1 < expr2)
-
-    def greater_than(self, expr1, expr2):
-        """
-        Creates a greater than constraint.
-        """
-        if self.features['interface_name'] == 'cplex_cp':
-            return self.model.greater_than(expr1, expr2)
-            
-        if self.features['interface_name'] == 'ortools_cp':
-            return self.model.Add(expr1 > expr2)
-
-    # Modeling & Solving
-
     def obj(self, expression=0, direction=None, label=None):
-        """
-        Defines an objective function for the optimization problem.
+            """
+            Defines the objective function for the optimization problem.
 
-        Args:
-            expression (formula): The terms of the objective function.
-            direction (str, optional): The direction for optimizing this objective ("min" or "max"). Defaults to None.
-            label (str, optional): The label for this objective function. Defaults to None.
-        """
+            Parameters
+            ----------
+            expression : formula
+                The terms of the objective function.
+            direction : str, optional
+                The direction for optimizing this objective ("min" or "max").
+            label : str, optional
+                The label for this objective function.
 
-        if self.features['solution_method'] == 'exact' or (self.features['solution_method'] == 'heuristic' and self.features['agent_status'] == 'idle'):
+            """
+            
+            if self.features['solution_method'] == 'exact' or (self.features['solution_method'] == 'heuristic' and self.features['agent_status'] == 'idle'):
 
-            self.features['directions'].append(direction)
-            self.features['objectives'].append(expression)
-            self.features['objective_labels'].append(label)
+                self.features['directions'].append(direction)
+                self.features['objectives'].append(expression)
+                self.features['objective_labels'].append(label)
 
-            self.features['objective_counter'][0] += 1
-            self.features['objective_counter'][1] += 1
+                self.features['objective_counter'][0] += 1
+                self.features['objective_counter'][1] += 1
 
-        elif self.features['solution_method'] == 'heuristic' and self.features['agent_status'] != 'idle':
+            elif self.features['solution_method'] == 'heuristic' and self.features['agent_status'] != 'idle':
 
-            self.features['directions'].append(direction)
-            self.features['objectives'].append(expression)
-            self.features['objective_counter'][0] += 1
+                self.features['directions'].append(direction)
+                self.features['objectives'].append(expression)
+                self.features['objective_counter'][0] += 1
 
     def con(self, expression, label=None):
         """
@@ -2717,10 +1115,8 @@ class Model:
 
     def set(self, index='', bound=None, step=1, to_list=False):
         """
-        Python-based Set Definition
-        ~~~~~~~~~~~~~~
-        To define a set. If bound is provided, the set will be a range from bound[0] to bound[1] with a step of step.
-        If index is provided, the set will be created using the label index. 
+        Define a set. If bound is provided, the set will be a range from bound[0] to bound[1] with a step of step.
+        If index is provided, the set will be created using the label index.
 
         Parameters
         ----------
@@ -2730,37 +1126,42 @@ class Model:
             Start and end values of the range. If provided, the set will be a range from bound[0] to bound[1].
         step : int, default 1
             Step size of the range.
+        to_list : bool, default False
+            If True, return the set as a list.
 
         Returns
         -------
-        set
+        set or list
             The created set.
+
+        Raises
+        ------
+        ValueError
+            If neither bound nor index is provided.
         """
 
+        # Check if index is an empty string
         if index == '':
-
             if not to_list:
-
-                return set(range(bound[0],bound[1],step))
-
+                return set(range(bound[0], bound[1], step))
             else:
+                return list(range(bound[0], bound[1], step))
 
-                return list(range(bound[0],bound[1],step))
-
+        # Check if bound is provided
         if bound is not None:
             if not to_list:
-
                 return set(f'{index}{i}' for i in range(bound[0], bound[1], step))
             else:
-                return list([f'{index}{i}' for i in range(bound[0], bound[1], step)])
+                return list(f'{index}{i}' for i in range(bound[0], bound[1], step))
 
+        # Check if index is provided
         elif index:
-
             if not to_list:
                 return set(f'{index}{i}' for i in range(0, len(index), step))
             else:
-                return list([f'{index}{i}' for i in range(0, len(index), step)])
+                return list(f'{index}{i}' for i in range(0, len(index), step))
 
+        # Raise an error if neither bound nor index is provided
         else:
             raise ValueError('Either bound or index must be provided.')
 
@@ -2769,6 +1170,23 @@ class Model:
         Ambiguity set defintion
         """
         return self.model.ambiguity(*args,**kwds)
+
+    def sum(self, input):
+        """
+        Calculate the sum of all values in the input.
+
+        :param input: List of values to be summed.
+        :return: The sum of the input values.
+        """
+        if self.features['interface_name'] == 'cplex':
+            return self.model.Sum(input)
+        
+        elif self.features['interface_name'] == 'gurobi':
+            return self.model.quicksum(input)
+        
+        else:
+            return sum(input)
+
 
     def card(self, set):
         """

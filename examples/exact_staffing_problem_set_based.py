@@ -20,7 +20,7 @@ def roll(n, d):
     return x
 
 #Environment
-m = target_model('exact', 'staffing problem', 'pulp', key=0)
+m = target_model('exact', 'staffing problem', 'pulp')
 
 #Dataset
 Data = {
@@ -48,7 +48,7 @@ for i in I:
     m.con(sum(x[j] for j in roll(i, RD)) >= list(Data.values())[i])
 
 #Solve
-m.sol(['min'], 'cplex')
+m.sol(['min'], 'cbc')
 
 #Display
 m.report()

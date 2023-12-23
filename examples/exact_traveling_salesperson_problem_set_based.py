@@ -12,14 +12,16 @@
 from feloopy import *
 
 #Environment
-m = target_model('exact', 'traveling salesperson problem', 'ortools', key=0)
+m = target_model('exact', 'traveling salesperson problem', 'ortools')
+
+dt = data_toolkit()
 
 #Sets
 N = range(10)
 U = range(9)
 
 #Dataset
-c = m.uniformint(1, 11, [N,N])
+c = dt.uniformint('c', dim= [N,N], bound=[1, 11])
 for i, j in sets(N, N):
     c[i][i] = 0
     c[i][j] = c[j][i]

@@ -20,7 +20,7 @@ cost_matrix = [
 c = np.array(cost_matrix)
 
 # Environment
-m = target_model('exact', 'assignment_problem', 'pulp', key=0)
+m = target_model('exact', 'assignment_problem', 'pulp')
 
 # Sets
 I = range(3)  # Agents
