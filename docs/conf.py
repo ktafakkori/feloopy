@@ -25,6 +25,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.mathjax',
     'sphinxcontrib.mermaid',
+    'sphinx_copybutton',
     'm2r',
 ]
 

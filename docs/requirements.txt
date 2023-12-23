@@ -3,3 +3,7 @@ sphinx_book_theme
 m2r
 myst_parser
 sphinxcontrib_mermaid
+sphinx-book-theme
+myst-parser
+sphinx_copybutton
+numpy
