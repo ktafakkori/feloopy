@@ -53,3 +53,5 @@ mermaid_output_format = 'png'
 
 # For terminal code blocks
 pygments_style = 'sphinx'
+
+myst_config = {}
