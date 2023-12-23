@@ -7,3 +7,4 @@ sphinx-book-theme
 myst-parser
 sphinx_copybutton
 numpy
+feloopy
