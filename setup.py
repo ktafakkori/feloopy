@@ -1,8 +1,6 @@
 # Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
 # See the file LICENSE file for licensing details.
 
-__author__ = ['Keivan Tafakkori']
-
 from setuptools import setup, find_packages
 
 # Common packages for all versions of FelooPy
@@ -24,6 +22,7 @@ common = [
     'tabulate==0.9.0',
     'win-unicode-console==0.5',
     'xlsxwriter==3.1.9',
+    'tqdm==4.66.1',
 ]
 
 # Interfaces for optimization solvers or algorithms

@@ -15,9 +15,67 @@ import shutil
 import zipfile
 import subprocess
 import sys
+import urllib.request
+from tqdm import tqdm
 
 __version__ = "v0.2.8"
 
+def download_and_extract(url, output_folder, filename):
+   print(f"Downloading and unpacking {filename}")
+   with urllib.request.urlopen(url) as url:
+       f = open(filename, 'wb')
+       total_size = int(url.info().get("Content-Length", 0))
+       chunk_size = 1024 # 1 KB
+       pbar = tqdm(total=total_size, unit='iB', unit_scale=True)
+       for data in iter(lambda: url.read(chunk_size), b''):
+           f.write(data)
+           pbar.update(len(data))
+       f.close()
+       pbar.close()
+       
+   if "zip" in filename:
+    shutil.unpack_archive(filename, output_folder)
+    os.remove(filename)
+   elif "tar" in filename:
+    shutil.unpack_archive(filename, output_folder, format='gztar')
+    os.remove(filename)
+       
+def ask_for_directory():
+ root = tk.Tk()
+ root.withdraw()
+ return filedialog.askdirectory() 
+
+def run_setup_file():
+ try:
+     install_dir = ask_for_directory()
+ except Exception:
+     install_dir = input("Enter the directory where you want to install the solvers: ")
+
+ os.chdir(install_dir)
+
+ os.makedirs("solvers", exist_ok=True)
+
+ versions = {
+     "cbc": ("2.10.11", "https://github.com/coin-or/Cbc/releases/download/releases%2F{version}/Cbc-releases.{version}-x86_64-w64-mingw64.zip"),
+     "highs": ("1.5.3", "https://github.com/JuliaBinaryWrappers/HiGHSstatic_jll.jl/releases/download/HiGHSstatic-v{version}%2B0/HiGHSstatic.v{version}.x86_64-w64-mingw32.tar.gz"),
+     "ipopt": ("3.14.13", "https://github.com/coin-or/Ipopt/releases/download/releases%2F{version}/Ipopt-{version}-win64-msvs2019-md.zip"),
+     "glpk": ("4.65", "https://sourceforge.net/projects/winglpk/files/winglpk/GLPK-{version}/winglpk-{version}.zip/download"),
+     "bonmin": ("1.4.0", "https://www.coin-or.org/download/binary/Bonmin/Bonmin-{version}-win32-msvc9.zip"),
+     "couenne": ("0.3.2", "https://www.coin-or.org/download/binary/Couenne/Couenne-{version}-win32-msvc9.zip"),
+     "scip": ("8.0.4", "https://github.com/scipopt/scip/releases/download/v{version_no_dots}/SCIPOptSuite-{version}-win64-VS15.exe")
+ }
+
+ for solver, (version, url) in versions.items():
+     url = url.format(version=version, version_no_dots=version.replace(".", ""))
+     output_folder = os.path.join("solvers", solver + "-windows")
+     if "zip" in url.lower():
+        filename = os.path.join("solvers", solver + "-windows.zip")
+     if "tar" in url.lower():
+        filename = os.path.join("solvers", solver + "-windows.tar.gz")
+     if "exe" in url.lower():
+        filename = os.path.join("solvers", solver + "-windows.exe")
+     download_and_extract(url, output_folder, filename)
+   
 def create_optimization_project(project_name, directory="."):
 
     project_dir = os.path.join(directory, project_name)
@@ -87,16 +145,51 @@ def run_project(file_path):
             subprocess.run([sys.executable, file_path], check=True)
         except:
             print(f"Error running the project: {e}")
-
-def pip_install(package):
-    try:
-        subprocess.run([sys.executable, '-m', 'pip', 'install', '--verbose', package], check=True)
-    except subprocess.CalledProcessError as e:
-        print(f"Error installing with pip: {e}")
+            
+def pip_install(packages, update=False):
+   for package in packages:
+       try:
+           command = [sys.executable, '-m', 'pip', 'install', '--verbose', package]
+           if update:
+               command.insert(4, '--upgrade')
+           subprocess.run(command, check=True)
+           print(f"Successfully {'updated' if update else 'installed'} {package} with pip")
+       except subprocess.CalledProcessError as pip_error:
+           print(f"Error {'updating' if update else 'installing'} {package} with pip: {pip_error}")
+           try:
+               command = ['conda', 'install', '--yes', package]
+               if update:
+                  command.append('--update-all')
+               subprocess.run(command, check=True)
+               print(f"Successfully {'updated' if update else 'installed'} {package} with conda")
+           except (subprocess.CalledProcessError, FileNotFoundError) as conda_error:
+               print(f"Error {'updating' if update else 'installing'} {package} with conda: {conda_error}")
+               try:
+                  command = [sys.executable, '-m', 'pipx', 'install', '--verbose', package]
+                  if update:
+                      command.insert(4, '--upgrade')
+                  subprocess.run(command, check=True)
+                  print(f"Successfully {'updated' if update else 'installed'} {package} with pipx")
+               except subprocess.CalledProcessError as pipx_error:
+                  print(f"Error {'updating' if update else 'installing'} {package} with pipx: {pipx_error}")
+                  
+def pip_uninstall(packages):
+    for package in packages:
         try:
-            subprocess.run([sys.executable, '-m', 'pipx', 'install', '--verbose', package], check=True)
-        except subprocess.CalledProcessError as e:
-            print(f"Error installing with pipx: {e}")
+            subprocess.run([sys.executable, '-m', 'pip', 'uninstall', '-y', package], check=True)
+            print(f"Successfully uninstalled {package} with pip")
+        except subprocess.CalledProcessError as pip_uninstall_error:
+            print(f"Error uninstalling {package} with pip: {pip_uninstall_error}")
+            try:
+                subprocess.run(['conda', 'remove', '--yes', package], check=True)
+                print(f"Successfully uninstalled {package} with conda")
+            except (subprocess.CalledProcessError, FileNotFoundError) as conda_uninstall_error:
+                print(f"Error uninstalling {package} with conda: {conda_uninstall_error}")
+                try:
+                    subprocess.run([sys.executable, '-m', 'pipx', 'uninstall', package], check=True)
+                    print(f"Successfully uninstalled {package} with pipx")
+                except subprocess.CalledProcessError as pipx_uninstall_error:
+                    print(f"Error uninstalling {package} with pipx: {pipx_uninstall_error}")
 
 def get_current_date():
     from datetime import datetime
@@ -136,7 +229,6 @@ def zip_project():
             zipf.write(file, arcname=file)
 
     print(f"Project excluding 'backups' directory zipped and saved at: {zip_file_path}")
-
 
 def recover_project():
     src_files = get_recent_src_files()

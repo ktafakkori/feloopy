@@ -20,11 +20,13 @@ except ImportError:
     pass
 
 HEURISTIC_ALGORITHMS = [
+    
     ['feloopy', 'de'],
     ['feloopy', 'ga'],
     ['feloopy', 'gwo'],
     ['feloopy', 'sa'],
     ['feloopy', 'ts'],
+    
     ['mealpy', 'a-bfo'], 
     ['mealpy', 'adap-ba'], 
     ['mealpy', 'adap-eo'], 
@@ -32,11 +34,11 @@ HEURISTIC_ALGORITHMS = [
     ['mealpy', 'base-alo'], 
     ['mealpy', 'base-bbo'], 
     ['mealpy', 'base-bro'], 
-    ['mealpy', 'base-chio'], 
+    ['mealpy', 'base-chio'],
     ['mealpy', 'base-de'],
-    ['mealpy', 'base-efo'], 
-    ['mealpy', 'base-fbio'], 
-    ['mealpy', 'base-foa'], 
+    ['mealpy', 'base-efo'],
+    ['mealpy', 'base-fbio'],
+    ['mealpy', 'base-foa'],
 
     ['mealpy', 'base-gco'], 
     ['mealpy', 'base-gska'], 
@@ -54,7 +56,6 @@ HEURISTIC_ALGORITHMS = [
     ['mealpy', 'base-tlo'], 
     ['mealpy', 'base-vcs'],
 
-    # Swarm MealPy PSO
     ['mealpy', 'c-pso'], 
     ['mealpy', 'cl-pso'], 
     ['mealpy', 'h-pso-tvac'],  
@@ -63,23 +64,18 @@ HEURISTIC_ALGORITHMS = [
     ['mealpy', 'p-pso'],
     ['mealpy', 'orig-pso'],
 
-    # Evolutionary MealPy GA
     ['mealpy', 'base-ga'],
     ['mealpy', 'single-ga'],
     ['mealpy', 'multi-ga'], 
     ['mealpy', 'elite-multi-ga'], 
     ['mealpy', 'elite-single-ga'],
 
-
     ['mealpy', 'orig-abc'],
-
-
+    
     ['mealpy', 'cma-es'], 
     ['mealpy', 'dev-dmoa'], 
     ['mealpy', 'dev-soa'], 
-    ['mealpy', 'dev-spbo'], 
-
-
+    ['mealpy', 'dev-spbo'],
 
     ['mealpy', 'enha-aeo'], 
     ['mealpy', 'enha-two'], 

@@ -39,7 +39,6 @@ from .classes.constraint_programming import *
 warnings.filterwarnings("ignore")
 
 class ModelObject:
-    
     pass
 
 class AgentObject:
@@ -48,20 +47,14 @@ class AgentObject:
 class ConditionalObject:
     pass
 
-
-
 class TensorVariableCollection:
     pass
-
 
 class MultidimVariableCollection:
     pass
 
-
-
 class EventVariable:
     pass
-
 
 class Model(TensorVariableClass,
             TensorVariableCollectionClass,
