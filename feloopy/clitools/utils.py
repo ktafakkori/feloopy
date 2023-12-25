@@ -17,6 +17,7 @@ import subprocess
 import sys
 import urllib.request
 from tqdm import tqdm
+from datetime import datetime
 
 __version__ = "v0.2.8"
 
@@ -76,88 +77,68 @@ def run_setup_file():
      if "exe" in url.lower():
         filename = os.path.join("solvers", solver + "-windows.exe")
      download_and_extract(url, output_folder, filename)
-   
-def create_optimization_project(project_name, directory="."):
 
-    project_dir = os.path.join(directory, project_name)
+def create_optimization_project(project_name, directory=".", project_type=None):
 
-    os.makedirs(project_dir, exist_ok=True)
+   project_dir = os.path.join(directory, project_name)
 
-    subdirectories = ["data", "modules", "results"]
+   os.makedirs(project_dir, exist_ok=True)
 
-    data_dir = os.path.join(project_dir, "data")
-    for subdir in ["raw", "processed", "final"]:
-        subdir_path = os.path.join(data_dir, subdir)
-        os.makedirs(subdir_path, exist_ok=True)
+   subdirectories = ["data", "modules", "results"]
 
-    data_dir = os.path.join(project_dir, "results")
-    for subdir in ["tables", "figures", "texts"]:
-        subdir_path = os.path.join(data_dir, subdir)
-        os.makedirs(subdir_path, exist_ok=True)
-        
-    for subdirectory in subdirectories:
-        subdirectory_path = os.path.join(project_dir, subdirectory)
-        os.makedirs(subdirectory_path, exist_ok=True)
+   data_dir = os.path.join(project_dir, "data")
+   for subdir in ["raw", "processed", "final"]:
+       subdir_path = os.path.join(data_dir, subdir)
+       os.makedirs(subdir_path, exist_ok=True)
 
-    modules_init_path = os.path.join(project_dir, "modules", "__init__.py")
-    with open(modules_init_path, "w") as modules_init_file:
-        modules_init_file.write("# Initialization file for the modules directory")
+   data_dir = os.path.join(project_dir, "results")
+   for subdir in ["tables", "figures", "texts"]:
+       subdir_path = os.path.join(data_dir, subdir)
+       os.makedirs(subdir_path, exist_ok=True)
+       
+   for subdirectory in subdirectories:
+       subdirectory_path = os.path.join(project_dir, subdirectory)
+       os.makedirs(subdirectory_path, exist_ok=True)
 
-    main_file_path = os.path.join(project_dir, "main.py")
-    with open(main_file_path, "w") as main_file:
-        main_file.write(f"""
+   modules_init_path = os.path.join(project_dir, "modules", "__init__.py")
+   with open(modules_init_path, "w") as modules_init_file:
+       modules_init_file.write("# Initialization file for the modules directory")
+
+   main_file_path = os.path.join(project_dir, "main.py")
+   with open(main_file_path, "w") as main_file:
+       main_file.write(f"""
 # name: {project_name}
 # author: {get_user_name()}
 # feloopy version: {__version__}
-# date: {get_current_date()}
+# date: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 """)
 
-    ipynb_file_path = os.path.join(project_dir, f"debug.ipynb")
-    with open(ipynb_file_path, "w") as ipynb_file:
-        nb = nbformat.v4.new_notebook()
-        nb['metadata'] = {
-            'name:': project_name,
-            'author:': get_user_name(),
-            'feloopy version:': __version__,
-            'date:': get_current_date()
-        }
-        nbformat.write(nb, ipynb_file)
+   ipynb_file_path = os.path.join(project_dir, f"debug.ipynb")
+   with open(ipynb_file_path, "w") as ipynb_file:
+       nb = nbformat.v4.new_notebook()
+       nb['metadata'] = {
+           'name:': project_name,
+           'author:': get_user_name(),
+           'feloopy version:': __version__,
+           'date:': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+       }
+       nbformat.write(nb, ipynb_file)
 
-    log_file_path = os.path.join(project_dir, "log.txt")
-    with open(log_file_path, "w") as log_file:
-        log_file.write(f"""
+   log_file_path = os.path.join(project_dir, "log.txt")
+   with open(log_file_path, "w") as log_file:
+       log_file.write(f"""
 # log for {project_name}
 # author: {get_user_name()}
-# date: {get_current_date()}
+# date: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 
 # Notes, to-dos, and other information can be added here.
 """)
 
-    while True:
-        print("Choose the project type:")
-        print("0 - Spyder")
-        print("1 - VSCode")
-        print("2 - Do not create a project type directory")
-        project_type = input("\nEnter the number corresponding to your choice: ")
-        if project_type.lower().startswith('0'):
-            #Project folder for Spyder Code.
-            project_type = 'spyproject'
-            break
-        elif project_type.lower().startswith('1'):
-            #Project folder for Visual Studio Code.
-            project_type = 'vscode'
-            break
-        elif project_type.lower().startswith('2'):
-            project_type = ''
-            break
-        else:
-            print("Please enter '0', '1', or '2'.")
+   if project_type:
+       project_type_dir = os.path.join(project_dir, '.' + project_type)
+       os.makedirs(project_type_dir, exist_ok=True)
 
-    if project_type:
-        project_type_dir = os.path.join(project_dir, '.' + project_type)
-        os.makedirs(project_type_dir, exist_ok=True)
-   
-    print(f"Optimization project '{project_name}' created at: {project_dir}")
+   print(f"Optimization project '{project_name}' created at: {project_dir}")
 
 def get_user_name():
     return getpass.getuser()
@@ -237,7 +218,7 @@ def cli_version():
 def cli_project(args):
     directory = select_directory()
     if directory:
-        create_optimization_project(args.name, directory)
+        create_optimization_project(args.name, directory, args.type)
 
 def zip_project():
     backup_dir = os.path.join(".", "backups")
@@ -255,27 +236,36 @@ def zip_project():
 
     print(f"Project excluding 'backups' directory zipped and saved at: {zip_file_path}")
 
-def recover_project():
-    src_files = get_recent_src_files()
+def recover_project(args=None):
+   src_files = get_recent_src_files()
 
-    print("Recent project backups:")
-    for i, src_file in enumerate(src_files, start=1):
-        print(f"{i} | {src_file}")
-        
-    selected_index = int(input("Enter the number of the project file to recover: ")) - 1
+   print("Recent project backups:")
+   for i, src_file in enumerate(src_files, start=1):
+       print(f"{i} | {src_file}")
+       
+   if args.name:
+       selected_src_file = next((file for file in src_files if args.name in file), None)
+       if selected_src_file:
+           delete_all_except_backup()
+           extract_src(selected_src_file)
+           print(f"Project recovered from {selected_src_file}")
+       else:
+           print("No backup found for the given name.")
+       return
 
-    if 0 <= selected_index < len(src_files):
+   selected_index = int(input("Enter the number of the project file to recover: ")) - 1
 
-        selected_src_file = src_files[selected_index]
+   if 0 <= selected_index < len(src_files):
+       selected_src_file = src_files[selected_index]
 
-        delete_all_except_backup()
+       delete_all_except_backup()
 
-        extract_src(selected_src_file)
+       extract_src(selected_src_file)
 
-        print(f"Project recovered from {selected_src_file}")
-    else:
-        print("Invalid selection.")
-
+       print(f"Project recovered from {selected_src_file}")
+   else:
+       print("Invalid selection.")
+       
 def get_recent_src_files():
     backup_dir = os.path.join(".", "backups")
     src_files = [f for f in os.listdir(backup_dir) if f.startswith("bkp-") and f.endswith(".zip")]
