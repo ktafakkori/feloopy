@@ -53,12 +53,12 @@ full = mini + [
 stock = full + [
     'linopy==0.3.2',
     'mip==1.15.0',
-    'niapy==2.0.5',
+    'niapy==2.1.0',
     'picos==2.4.17',
     'pulp==2.7.0',
     'pygad==3.2.0',
     'pyomo==6.7.0',
-    'rsome==1.2.1',
+    'rsome==1.2.5',
 ]
 
 # Solvers for optimization problems or algorithms
@@ -77,7 +77,7 @@ plus_xpress = [
 ]
 
 plus_copt = [
-    'coptpy==7.0.3',
+    'coptpy==7.0.4',
 ]
 
 hyper = stock + plus_gurobi + plus_cplex + plus_xpress + plus_copt
