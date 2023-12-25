@@ -62,7 +62,8 @@ def run_setup_file():
      "glpk": ("4.65", "https://sourceforge.net/projects/winglpk/files/winglpk/GLPK-{version}/winglpk-{version}.zip/download"),
      "bonmin": ("1.4.0", "https://www.coin-or.org/download/binary/Bonmin/Bonmin-{version}-win32-msvc9.zip"),
      "couenne": ("0.3.2", "https://www.coin-or.org/download/binary/Couenne/Couenne-{version}-win32-msvc9.zip"),
-     "scip": ("8.0.4", "https://github.com/scipopt/scip/releases/download/v{version_no_dots}/SCIPOptSuite-{version}-win64-VS15.exe")
+     "scip": ("8.0.4", "https://github.com/scipopt/scip/releases/download/v{version_no_dots}/SCIPOptSuite-{version}-win64-VS15.exe"),
+     "git": ("2.43.0", "https://github.com/git-for-windows/git/releases/download/v{version}.windows.1/Git-{version}-64-bit.exe"),
  }
 
  for solver, (version, url) in versions.items():
@@ -132,6 +133,30 @@ def create_optimization_project(project_name, directory="."):
 # Notes, to-dos, and other information can be added here.
 """)
 
+    while True:
+        print("Choose the project type:")
+        print("0 - Spyder")
+        print("1 - VSCode")
+        print("2 - Do not create a project type directory")
+        project_type = input("\nEnter the number corresponding to your choice: ")
+        if project_type.lower().startswith('0'):
+            #Project folder for Spyder Code.
+            project_type = 'spyproject'
+            break
+        elif project_type.lower().startswith('1'):
+            #Project folder for Visual Studio Code.
+            project_type = 'vscode'
+            break
+        elif project_type.lower().startswith('2'):
+            project_type = ''
+            break
+        else:
+            print("Please enter '0', '1', or '2'.")
+
+    if project_type:
+        project_type_dir = os.path.join(project_dir, '.' + project_type)
+        os.makedirs(project_type_dir, exist_ok=True)
+   
     print(f"Optimization project '{project_name}' created at: {project_dir}")
 
 def get_user_name():
