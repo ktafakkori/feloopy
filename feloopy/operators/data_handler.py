@@ -1,13 +1,5 @@
-'''
-+---------------------------------------------------------+
-|  Project: FelooPy (0.2.8)                               |
-|  Modified: Wednesday, 8th November 2023 12:40:23 am   |
-|  Modified By: Keivan Tafakkori                          |
-|  Project: https://github.com/ktafakkori/feloopy         |
-|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
-|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
-+---------------------------------------------------------+
-'''
+# Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
+# See the file LICENSE file for licensing details.
 
 import numpy as np
 import pandas as pd

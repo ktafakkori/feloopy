@@ -1,13 +1,5 @@
-'''
-+---------------------------------------------------------+
-|  Project: FelooPy (0.2.8)                               |
-|  Modified: Wednesday, 27th September 2023 08:50:18 pm   |
-|  Modified By: Keivan Tafakkori                          |
-|  Project: https://github.com/ktafakkori/feloopy         |
-|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
-|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
-+---------------------------------------------------------+
-'''
+# Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
+# See the file LICENSE file for licensing details.
 
 from feloopy import *
 
@@ -21,7 +13,7 @@ I = range(len(c))  # Set of ads
 J = range(len(v))  # Set of viewer types
 
 # Environment
-m = target_model('exact', 'advertising problem', 'pulp')
+m = target_model('exact', 'advertising problem', 'gekko')
 
 # Variables
 x = m.pvar('x', [I])
@@ -34,7 +26,7 @@ for j in J:
     m.con(sum(p[i, j] * x[i] for i in I) >= v[j])
 
 # Solve
-m.sol(['min'], 'glpk')
+m.sol(['min'], 'apopt')
 
 # Display
 m.report()

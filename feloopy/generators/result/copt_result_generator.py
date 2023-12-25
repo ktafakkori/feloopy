@@ -1,15 +1,8 @@
-'''
-+---------------------------------------------------------+
-|  Project: FelooPy (0.2.8)                               |
-|  Modified: Wednesday, 27th September 2023 10:06:52 pm   |
-|  Modified By: Keivan Tafakkori                          |
-|  Project: https://github.com/ktafakkori/feloopy         |
-|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
-|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
-+---------------------------------------------------------+
-'''
+# Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
+# See the file LICENSE file for licensing details.
 
 from coptpy import *
+from ...helpers.formatter import *
 
 copt_status_dict = {
     COPT.OPTIMAL: 'optimal',
@@ -48,22 +41,23 @@ def Get(model_object, result, input1, input2=None):
 
         case 'iis':
             model_object.computeIIS()
-            
+
             output = ''
-            
+
             constrs = model_object.getConstrs()
             vars = model_object.getVars()
-            
+
+
             for i, c in enumerate(constrs):
                 if c.getUpperIIS() > 0 or c.getLowerIIS() > 0:
-                    output += "│" + " " + str(f"con: {c.getName()}").ljust(80-2) + " " + "│"
-                    if i != len(constrs) - 1 or i==0:
+                    output += left_align(f"con: {c.getName()}", rt=True)
+                    if i != len(constrs) or i == 0:
                         output += "\n"
 
             for i, v in enumerate(vars):
                 if v.getLowerIIS() > 0 or v.getUpperIIS() > 0:
-                    output += "│" + " " + str(f"var: {v.getName()}").ljust(80-2) + " " + "│"
-                    if i != len(vars) - 1 or i==0:
+                    output += left_align(f"var: {v.getName()}", rt=True)
+                    if i != len(vars) - 1 or i == 0:
                         output += "\n"
 
             return output

@@ -1,13 +1,6 @@
-'''
-+---------------------------------------------------------+
-│  Project: FelooPy (0.2.8)                               │
-│  Modified: Wednesday, 27th September 2023 11:37:09 pm   │
-│  Modified By: Keivan Tafakkori                          │
-│  Project: https://github.com/ktafakkori/feloopy         │
-│  Contact: https://www.linkedin.com/in/keivan-tafakkori/ │
-│  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         │
-+---------------------------------------------------------+
-'''
+# Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
+# See the file LICENSE file for licensing details.
+
 
 import numpy as np
 
@@ -90,8 +83,14 @@ def boxed(text, box_width=80):
         left_align(line,box_width)
 
 
-def left_align(input, box_width=80):
-    print("│" + " " + input.ljust(box_width-2) + " " + "│")
+def left_align(input, box_width=80, rt=False):
+    
+    
+    if rt:
+        return "│" + " " + input.ljust(box_width-2) + " " + "│"
+    else:
+        print("│" + " " + input.ljust(box_width-2) + " " + "│")
+        
 
 def right_align(input, box_width=80):
     print("│" + " " + input.rjust(box_width-2) + " " + "│")

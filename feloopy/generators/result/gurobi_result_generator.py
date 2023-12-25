@@ -1,17 +1,11 @@
-'''
-+---------------------------------------------------------+
-|  Project: FelooPy (0.2.8)                               |
-|  Modified: Wednesday, 27th September 2023 11:30:23 pm   |
-|  Modified By: Keivan Tafakkori                          |
-|  Project: https://github.com/ktafakkori/feloopy         |
-|  Contact: https://www.linkedin.com/in/keivan-tafakkori/ |
-|  Copyright 2022 - 2023 Keivan Tafakkori, FELOOP         |
-+---------------------------------------------------------+
-'''
+# Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
+# See the file LICENSE file for licensing details.
+
 
 import sys
 
 import gurobipy as gurobi_interface
+from ...helpers.formatter import *
 
 gurobi_status_dict = {
     gurobi_interface.GRB.LOADED: 'loaded',
@@ -58,9 +52,22 @@ def Get(model_object, result, input1, input2=None):
          
         case 'iis':
             model_object.computeIIS()
-            for c in model_object.getConstrs():
+            
+            output = ''
+            
+            constrs = model_object.getConstrs()
+            vars = model_object.getVars()
+
+            for i, c in enumerate(constrs):
                 if c.IISConstr:
-                    print("│" + " " + str(f"con: {c.constrName}").ljust(80-2) + " " + "│")
-            for v in model_object.getVars():
+                    output += left_align(f"con: {c.constrName}", rt=True)
+                    if i != len(constrs) - 1 or i == 0:
+                        output += "\n"
+
+            for i, v in enumerate(vars):
                 if v.IISLB > 0 or v.IISUB > 0:
-                    print("│" + " " + str(f"var: {v.varName}").ljust(80-2) + " " + "│")
+                    output += left_align(f"var: {v.varName}", rt=True)
+                    if i != len(vars) - 1 or i == 0:
+                        output += "\n"
+
+            return output
