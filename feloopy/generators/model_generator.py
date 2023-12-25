@@ -64,11 +64,6 @@ def generate_model(features):
             from .model import cplex_model_generator
             model_object = cplex_model_generator.generate_model(features)
 
-        case 'localsolver':
-
-            from .model import localsolver_model_generator
-            model_object = localsolver_model_generator.generate_model(features)
-
         case 'cplex_cp':
 
             from .model import cplex_cp_model_generator

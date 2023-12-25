@@ -70,11 +70,6 @@ def generate_solution(features):
             from .solution import cplex_solution_generator
             ModelSolution = cplex_solution_generator.generate_solution(features)
             
-        case 'localsolver':
-
-            from .solution import localsolver_solution_generator
-            ModelSolution = localsolver_solution_generator.generate_solution(features)
-
         case 'cplex_cp':
 
             from .solution import cplex_cp_solution_generator

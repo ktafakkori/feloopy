@@ -67,11 +67,6 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
                 from .result import pymprog_result_generator
                 return pymprog_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
 
-            case 'localsolver':
-
-                from .result import localsolver_result_generator
-                return localsolver_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
-
             case 'cplex':
 
                 from .result import cplex_result_generator
@@ -136,11 +131,6 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
                 from .result import ortools_result_generator
                 return ortools_result_generator.Get(model_object, model_solution, indicator)
 
-            case 'localsolver':
-
-                from .result import localsolver_result_generator
-                return localsolver_result_generator.Get(model_object, model_solution, indicator)
-            
             case 'ortools_cp':
 
                 from .result import ortools_cp_result_generator

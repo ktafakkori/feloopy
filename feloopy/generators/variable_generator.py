@@ -69,11 +69,6 @@ def generate_variable(interface_name, model_object, variable_type, variable_name
 
             from .variable import cplex_variable_generator
             return cplex_variable_generator.generate_variable(**inputs)
-
-        case 'localsolver':
-
-            from .variable import localsolver_variable_generator
-            return localsolver_variable_generator.generate_variable(**inputs)
         
         case 'cplex_cp':
 
