@@ -16,53 +16,54 @@ import pulp as pulp_interface
 
 def Get(model_object, result, input1, input2=None):
 
-    directions = +1 if input1[1][input1[2]] == 'min' else -1
-    input1 = input1[0]
+   directions = +1 if input1[1][input1[2]] == 'min' else -1
+   input1 = input1[0]
 
-    match input1:
+   match input1:
 
-        case 'variable':
+       case 'variable':
 
-            return input2.varValue
+           return input2.varValue
 
-        case 'status':
+       case 'status':
 
-            return pulp_interface.LpStatus[result[0]]
+           return pulp_interface.LpStatus[result[0]]
 
-        case 'objective':
+       case 'objective':
 
-            return directions*pulp_interface.value(model_object.objective)
+           return directions*pulp_interface.value(model_object.objective)
 
-        case 'time':
+       case 'time':
 
-            return (result[1][1]-result[1][0])
+           return (result[1][1]-result[1][0])
 
-        case 'dual':
+       case 'dual':
 
-            sense = dict(model_object.constraints).get(input2, None).sense
+           if input2 in model_object.constraints:
+               sense = model_object.constraints[input2].sense
 
-            if sense == pulp_interface.LpConstraintEQ:
-                return dict(model_object.constraints).get(input2, None).pi
+               if sense == pulp_interface.LpConstraintEQ:
+                  return model_object.constraints[input2].pi
 
-            elif sense == pulp_interface.LpConstraintLE and directions==1:
-                return -1*abs(dict(model_object.constraints).get(input2).pi)
-            
-            elif sense == pulp_interface.LpConstraintLE and directions==-1:
-                return 1*abs(dict(model_object.constraints).get(input2).pi)
-        
-            elif sense == pulp_interface.LpConstraintGE and directions==1:
-                return abs(dict(model_object.constraints).get(input2).pi)
-            
-            elif sense == pulp_interface.LpConstraintGE and directions==-1:
-                return -1*abs(dict(model_object.constraints).get(input2).pi)
-            
-            else:
-                print("Unknown constraint sense")
+               elif sense == pulp_interface.LpConstraintLE and directions==1:
+                  return -1*abs(model_object.constraints[input2].pi)
+               
+               elif sense == pulp_interface.LpConstraintLE and directions==-1:
+                  return 1*abs(model_object.constraints[input2].pi)
+               
+               elif sense == pulp_interface.LpConstraintGE and directions==1:
+                  return abs(model_object.constraints[input2].pi)
+               
+               elif sense == pulp_interface.LpConstraintGE and directions==-1:
+                  return -1*abs(model_object.constraints[input2].pi)
+               
+               else:
+                  print("Unknown constraint sense")
 
-        case 'slack':
+       case 'slack':
 
-            return  abs(dict(model_object.constraints).get(input2).slack)
-        
-        case 'rc':
-             return directions*input2.dj
+           if input2 in model_object.constraints:
+               return abs(model_object.constraints[input2].slack)
 
+       case 'rc':
+            return directions*input2.dj
