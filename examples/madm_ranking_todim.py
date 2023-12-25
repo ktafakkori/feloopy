@@ -25,6 +25,7 @@ m.add_dm([
 
 m.add_wv([0.1, 0.4, 0.2, 0.4])
 
-m.sol(['min', 'max', 'max', 'max'],show_graph=False)
+m.sol(['min', 'max', 'max', 'max'],show_graph=False,show_log=False)
 
 m.report(show_tensors=False)
+

@@ -13,7 +13,7 @@
 
 from feloopy import *
 
-m = target_model('constraint', 'flexible_resource_constrained_scheduling', 'cplex_cp', key=0)
+m = target_model('constraint', 'flexible_resource_constrained_scheduling', 'cplex_cp')
 
 J = range(5) #Set of jobs
 O = range(20) #Set of all operations
