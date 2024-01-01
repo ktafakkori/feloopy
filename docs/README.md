@@ -7,7 +7,6 @@
 Overview:
 
 ![Version](https://img.shields.io/static/v1?label=latest&message=v0.2.8&color=darkgreen)
-![Score](https://img.shields.io/github/stars/ktafakkori/feloopy?label=score&color=darkgreen)
 ![Release Date](https://img.shields.io/github/release-date/ktafakkori/feloopy?label=release%20date&color=darkgreen)
 [![Total Users](https://static.pepy.tech/personalized-badge/feloopy?period=total&units=international_system&left_color=grey&right_color=blue&left_text=total%20users)](https://pepy.tech/project/feloopy?&left_text=totalusers)
 [![Monthly Users](https://img.shields.io/pypi/dm/feloopy?label=monthly%20users&color=blue)](https://pypistats.org/packages/feloopy)
