@@ -48,24 +48,41 @@ def generate_solution(features):
     if max_iterations != None:
         "None"
 
-    pulp_solver_selector = {
-        'cbc': pulp_interface.PULP_CBC_CMD(**solver_options),
-        'choco': pulp_interface.CHOCO_CMD(**solver_options),
-        'coin': pulp_interface.COIN_CMD(**solver_options),
-        'coinmp_dll': pulp_interface.COINMP_DLL(**solver_options),
-        'cplex_py': pulp_interface.CPLEX_PY(**solver_options),
-        'cplex': pulp_interface.CPLEX_CMD(**solver_options),
-        'glpk': pulp_interface.GLPK_CMD(**solver_options),
-        'gurobi_cmd': pulp_interface.GUROBI_CMD(**solver_options),
-        'gurobi': pulp_interface.GUROBI(**solver_options),
-        'highs': pulp_interface.HiGHS_CMD(**solver_options),
-        'mipcl': pulp_interface.MIPCL_CMD(**solver_options),
-        'mosek': pulp_interface.MOSEK(**solver_options),
-        'pyglpk': pulp_interface.PYGLPK(**solver_options),
-        'scip': pulp_interface.SCIP_CMD(**solver_options),
-        'xpress_py': pulp_interface.XPRESS_PY(**solver_options),
-        'xpress': pulp_interface.XPRESS(**solver_options)
-    }
+    pulp_solver_selector = {}
+    
+    if solver_name == 'cbc':
+        pulp_solver_selector['cbc'] = pulp_interface.PULP_CBC_CMD(**solver_options)
+    elif solver_name == 'choco':
+        pulp_solver_selector['choco'] = pulp_interface.CHOCO_CMD(**solver_options)
+    elif solver_name == 'coin':
+        pulp_solver_selector['coin'] = pulp_interface.COIN_CMD(**solver_options)
+    elif solver_name == 'coinmp_dll':
+        pulp_solver_selector['coinmp_dll'] = pulp_interface.COINMP_DLL(**solver_options)
+    elif solver_name == 'cplex_py':
+        pulp_solver_selector['cplex_py'] = pulp_interface.CPLEX_PY(**solver_options)
+    elif solver_name == 'cplex':
+        pulp_solver_selector['cplex'] = pulp_interface.CPLEX_CMD(**solver_options)
+    elif solver_name == 'glpk':
+        pulp_solver_selector['glpk'] = pulp_interface.GLPK_CMD(**solver_options)
+    elif solver_name == 'gurobi_cmd':
+        pulp_solver_selector['gurobi_cmd'] = pulp_interface.GUROBI_CMD(**solver_options)
+    elif solver_name == 'gurobi':
+        pulp_solver_selector['gurobi'] = pulp_interface.GUROBI(**solver_options)
+    elif solver_name == 'highs':
+        pulp_solver_selector['highs'] = pulp_interface.HiGHS_CMD(**solver_options)
+    elif solver_name == 'mipcl':
+        pulp_solver_selector['mipcl'] = pulp_interface.MIPCL_CMD(**solver_options)
+    elif solver_name == 'mosek':
+        pulp_solver_selector['mosek'] = pulp_interface.MOSEK(**solver_options)
+    elif solver_name == 'pyglpk':
+        pulp_solver_selector['pyglpk'] = pulp_interface.PYGLPK(**solver_options)
+    elif solver_name == 'scip':
+        pulp_solver_selector['scip'] = pulp_interface.SCIP_CMD(**solver_options)
+    elif solver_name == 'xpress_py':
+        pulp_solver_selector['xpress_py'] = pulp_interface.XPRESS_PY(**solver_options)
+    elif solver_name == 'xpress':
+        pulp_solver_selector['xpress'] = pulp_interface.XPRESS(**solver_options)
+        
 
     if solver_name not in pulp_solver_selector.keys():
         raise RuntimeError(

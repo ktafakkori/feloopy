@@ -6,7 +6,7 @@ from feloopy import *
 #Environment
 m = target_model('exact', 'traveling salesperson problem', 'ortools')
 
-dt = data_toolkit()
+dt = data_toolkit(key=0)
 
 #Sets
 N = range(10)

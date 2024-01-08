@@ -181,6 +181,7 @@ class Model(TensorVariableClass,
             'objective_counter': [0, 0],
             'constraint_counter': [0, 0],
             'objective_being_optimized': 0,
+            'solver_options': {},
             'scens': scens,
         }
 
@@ -214,12 +215,17 @@ class Model(TensorVariableClass,
                 self.access = False
 
         if solution_method == 'exact':
+            
+           
 
             self.mainvars = defaultdict()
             self.maindims = defaultdict()
 
             from .generators import model_generator
             self.model = model_generator.generate_model(self.features)
+            
+            self.features['model_object'] = self.model
+             
             self.sm = self.link_to_interface = self.lti = self.model
             
         # Alias methods
@@ -351,7 +357,54 @@ class Model(TensorVariableClass,
             return self.agent if interface_name == 'feloopy' else self.sing_result
         else:
             return self.response
+
+
+    def vstart(self, variable, input_value):
         
+        from .generators import init_generator
+        init_generator.generate_init(self.features,variable,input_value,fix=False)
+         
+    def tstart(self, name, input_tensor):
+        
+        input_tensor = np.array(input_tensor)
+        
+        from .generators import init_generator
+        for i,j in self.mainvars.keys():
+            if j==name:
+                if self.maindims[j]==0:
+                    init_generator.generate_init(self.features,self.mainvars[(i,j)],input_tensor,fix=False)
+                    
+                elif len(self.maindims[j])==1:
+                
+                    for k in fix_dims(self.maindims[j])[0]:
+                        init_generator.generate_init(self.features,self.mainvars[(i,j)][k],input_tensor[k],fix=False)
+                else:
+                    for k in it.product(*tuple(fix_dims(self.maindims[j]))):
+                        init_generator.generate_init(self.features,self.mainvars[(i,j)][k],input_tensor[k],fix=False)
+                            
+    def vfix(self, variables, values):
+        
+        from .generators import init_generator
+        init_generator.generate_init(self.features,variables,values,fix=True)
+
+    def tfix(self, name, input_tensor):
+        
+        input_tensor = np.array(input_tensor)
+        
+        from .generators import init_generator
+        for i,j in self.mainvars.keys():
+            if j==name:
+                if self.maindims[j]==0:
+                    init_generator.generate_init(self.features,self.mainvars[(i,j)],input_tensor,fix=True)
+                    
+                elif len(self.maindims[j])==1:
+                
+                    for k in fix_dims(self.maindims[j])[0]:
+                        init_generator.generate_init(self.features,self.mainvars[(i,j)][k],input_tensor[k],fix=True)
+                else:
+                    for k in it.product(*tuple(fix_dims(self.maindims[j]))):
+                        init_generator.generate_init(self.features,self.mainvars[(i,j)][k],input_tensor[k],fix=True)
+                          
     def obj(self, expression=0, direction=None, label=None):
             """
             Defines the objective function for the optimization problem.
@@ -455,7 +508,7 @@ class Model(TensorVariableClass,
             raise MultiObjectivityError("The number of directions and the provided objectives do not match.")
 
         self.features['objective_being_optimized'] = obj_id
-        self.features['solver_options'] = solver_options
+        self.features['solver_options'].update(solver_options)
         self.features['debug_mode'] = debug
         self.features['time_limit'] = time_limit
         self.features['thread_count'] = cpu_threads
@@ -2365,7 +2418,7 @@ class Implement:
                                             return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
                                         return var(*i[1])
                                 case 'svar':
-                                    return np.argsort(self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])[i[1]]
+                                    return np.argsort(self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])[i[1]].astype(np.int64)
 
                         else:
                             match self.VariablesType[i[0]]:
@@ -2378,7 +2431,7 @@ class Implement:
                                 case 'ivar':
                                     return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))[0]
                                 case 'svar':
-                                    return np.argsort(self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])
+                                    return np.argsort(self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]]).astype(np.int64)
                 case 'feloopy':
                     for i in args:
                         if len(i) >= 2:
@@ -2428,7 +2481,7 @@ class Implement:
                                         return var(*i[1])
 
                                 case 'svar':
-                                    return np.argsort(self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])[i[1]]
+                                    return np.argsort(self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])[i[1]].astype(np.int64)
 
                         else:
                             match self.VariablesType[i[0]]:
@@ -2442,7 +2495,7 @@ class Implement:
                                 case 'ivar':
                                     return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                                 case 'svar':
-                                    return np.argsort(self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])
+                                    return np.argsort(self.BestAgent[self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]]).astype(np.int64)
         else:
 
             for i in args:
@@ -2498,7 +2551,7 @@ class Implement:
 
                         case 'svar':
 
-                            return np.argsort(self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])[i[1]]
+                            return np.argsort(self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])[i[1]].astype(np.int64)
 
                 else:
 
@@ -2512,7 +2565,7 @@ class Implement:
                         case 'ivar':
                             return np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                         case 'svar':
-                            return np.argsort(self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]])
+                            return np.argsort(self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]]).astype(np.int64)
 
     def dis_indicators(self, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], step: Optional[tuple] = (0.1,), epsilon: float = 0.01, p: float = 2.0, n_clusters: int = 5, save_path: Optional[str] = None, show_log: Optional[bool] = False):
 
@@ -2858,30 +2911,21 @@ class Implement:
             sys.stdout = stdout_origin
 
     def get_numpy_var(self, var_name):
+        output = []
 
         for i in self.VariablesDim.keys():
-            if i==var_name:
-
+            if i == var_name:
                 if self.VariablesDim[i] == 0:
-
-                    output = self.get([i, (0,)])
-
+                    output.append(self.get([i, (0,)]))
                 elif len(self.VariablesDim[i]) == 1:
-
-                    output = np.zeros(shape=len(fix_dims(self.VariablesDim[i])[0]))
-
                     for k in fix_dims(self.VariablesDim[i])[0]:
-                        
-                        output[k] = self.get([i, (k,)])
-
+                        output.append(self.get([i, (k,)]))
                 else:
-                    output = np.zeros(shape=tuple([len(dim) for dim in fix_dims(self.VariablesDim[i])]))
                     for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
+                        output.append(self.get([i, (*k,)]))
 
-                        output[k] = self.get([i, (*k,)])
-
-        return output
-
+        return np.array(output)
+    
     def healthy(self):
         try:
             status = self.get_status().lower()
