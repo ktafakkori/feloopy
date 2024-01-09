@@ -36,6 +36,7 @@ def generate_solution(features):
     else:
 
         msg_lev = pymprog_interface.glpk.GLP_MSG_OFF
+        
 
     if time_limit != None:
         tmlim = time_limit
