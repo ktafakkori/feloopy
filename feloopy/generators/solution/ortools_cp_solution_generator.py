@@ -65,7 +65,13 @@ def generate_solution(features):
 
             if time_limit != None:
                 solver.parameters.max_time_in_seconds = time_limit
-
+                
+            if 'enumerate' in solver_options.keys():
+                if solver_options['enumerate']:
+                    solver.parameters.enumerate_all_solutions = True
+                else:
+                    solver.parameters.enumerate_all_solutions = False
+                    
             time_solve_begin = timeit.default_timer()
             result = solver.Solve(model_object)
             time_solve_end = timeit.default_timer()

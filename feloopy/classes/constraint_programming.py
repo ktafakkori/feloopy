@@ -587,3 +587,13 @@ class ConstraintProgrammingClass:
             
         if self.features['interface_name'] == 'ortools_cp':
             return self.model.Add(expr1 > expr2)
+        
+    def cp_add_exactly_one(self, variable_list):
+
+        if self.features['interface_name'] == 'ortools_cp':
+            return self.model.AddExactlyOne(variable_list)
+        
+    def cp_add_all_different(self, expressions):
+
+        if self.features['interface_name'] == 'ortools_cp':
+            return self.model.AddAllDifferent(expressions)
