@@ -6,6 +6,7 @@ __author__ = ['Keivan Tafakkori']
 
 from .helpers.empty import *
 from .helpers.error import *
+from .helpers.context_manager import *
 from .helpers.formatter import *
 from .helpers.check_constraints import *
 from .operators.data_handler import *
@@ -15,6 +16,7 @@ from .operators.math_operators import *
 from .operators.random_operators import *
 from .operators.set_operators import *
 from .operators.update_operators import *
+
 
 from collections import defaultdict
 from tabulate import tabulate as tb
