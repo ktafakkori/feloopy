@@ -80,6 +80,14 @@ plus_copt = [
     'coptpy==7.0.4',
 ]
 
+plus_insideoptdemo = [
+    'insideopt-demo',
+]
+
+plus_insideopt = [
+    'insideopt',
+]
+
 hyper = stock + plus_gurobi + plus_cplex + plus_xpress + plus_copt
 
 # Might have some os-dependent issues
@@ -92,7 +100,7 @@ only_linux = [
     'pymultiobjective==1.5.4',
 ]
 
-mega = hyper + only_cylp + only_linux
+mega = hyper + only_cylp + only_linux + plus_insideoptdemo
 
 extra_dict = {
     'pico': pico,
@@ -106,6 +114,8 @@ extra_dict = {
     'plus_cplex': plus_cplex,
     'plus_xpress': plus_xpress,
     'plus_copt': plus_copt,
+    'plus_insideopt': plus_insideopt,
+    'plus_insideoptdemo': plus_insideoptdemo,
     'only_cylp': only_cylp,
     'only_linux': only_linux,
     'mega': mega}
