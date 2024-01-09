@@ -6,6 +6,9 @@ sets = it.product
 
 def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
     
+    
+    print(variable_bound)
+    
     if variable_bound[0] == 0:
         variable_bound = 0.0000001
          

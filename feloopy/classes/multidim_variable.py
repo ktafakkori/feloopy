@@ -28,6 +28,7 @@ class MultidimVariableClass:
         dim: List[int] = 0,
         bound: List[Optional[float]] = [None, None]
     ) -> MultidimVariable:
+        
         """
         Creates and returns a free variable.
 
