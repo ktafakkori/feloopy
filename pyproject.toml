@@ -84,6 +84,12 @@ xpress = "9.2.5"
 [tool.poetry.group.plus_copt.dependencies]
 coptpy = "7.0.4"
 
+[tool.poetry.group.plus_insideoptdemo.dependencies]
+insideopt-demo = ""
+
+[tool.poetry.group.plus_insideopt.dependencies]
+insideopt = ""
+
 [tool.poetry.group.hyper.dependencies]
 coptpy = "7.0.4"
 cplex = "22.1.1.1"

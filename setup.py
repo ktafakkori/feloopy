@@ -100,7 +100,7 @@ only_linux = [
     'pymultiobjective==1.5.4',
 ]
 
-mega = hyper + only_cylp + only_linux + plus_insideoptdemo
+mega = hyper + only_cylp + only_linux
 
 extra_dict = {
     'pico': pico,
