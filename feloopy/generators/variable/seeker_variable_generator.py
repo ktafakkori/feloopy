@@ -5,18 +5,7 @@ import itertools as it
 sets = it.product
 
 def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
-    
-    
-    print(variable_bound)
-    
-    if variable_bound[0] == 0:
-        variable_bound = 0.0000001
-         
-    if variable_bound[0] == None:
-        variable_bound = -1e9
-        
-    if variable_bound[1] == None:
-        variable_bound = 1e+9
+
         
     match variable_type:
 

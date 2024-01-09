@@ -131,12 +131,12 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
             case 'insideopt':
 
                 from .result import seeker_result_generator
-                return pyomo_result_generator.Get(model_object, model_solution, indicator)
+                return seeker_result_generator.Get(model_object, model_solution, indicator)
 
             case 'insideopt-demo':
 
                 from .result import seeker_result_generator
-                return pyomo_result_generator.Get(model_object, model_solution, indicator)
+                return seeker_result_generator.Get(model_object, model_solution, indicator)
 
             case 'ortools':
 

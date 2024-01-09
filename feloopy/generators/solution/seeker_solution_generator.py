@@ -30,7 +30,7 @@ def generate_solution(features):
     if time_limit != None:
         timeLimit = time_limit
     else:
-        time_limit = 1e9
+        timeLimit = 1e9
         
     if "lb" in solver_options.keys():
         lowerBound = solver_options['lb']
