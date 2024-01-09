@@ -7,6 +7,7 @@ __author__ = ['Keivan Tafakkori']
 from .helpers.empty import *
 from .helpers.error import *
 from .helpers.formatter import *
+from .helpers.check_constraints import *
 from .operators.data_handler import *
 from .operators.fix_operators import *
 from .operators.heuristic_operators import *
@@ -437,6 +438,24 @@ class Model(TensorVariableClass,
                 self.features['objectives'].append(expression)
                 self.features['objective_counter'][0] += 1
 
+    def enforce_gt(self, lhs, rhs, epsilon=1e-6, label=None):
+        self.con([lhs, '>', rhs, epsilon], label)
+ 
+    def enforce_lt(self, lhs, rhs, epsilon=1e-6, label=None):
+        self.con([lhs, '<', rhs, epsilon], label)
+
+    def enforce_geq(self, lhs, rhs, label=None):
+        self.con([lhs, '>=', rhs], label)
+        
+    def enforce_leq(self, lhs, rhs, epsilon=1e-6, label=None):
+        self.con([lhs, '<=', rhs], label)
+
+    def enforce_eq(self, lhs, rhs, epsilon=1e-6, label=None):
+        self.con([lhs, '==', rhs], label)
+
+    def enforce_neq(self, lhs, rhs, epsilon=1e-6, label=None):
+        self.con([lhs, '!=', rhs, epsilon], label)
+                             
     def con(self, expression, label=None):
         """
         Constraint Definition
@@ -447,39 +466,75 @@ class Model(TensorVariableClass,
             expression (formula): what are the terms of this constraint?
             label (str, optional): what is the label of this constraint?. Defaults to None.
         """
-
+                    
+        def add_special_constraint(element):
+            relation, lower_bound, upper_bound = element[1], element[0], element[2]
+            epsilon = element[3] if len(element) == 4 else 0.000001
+            const = generate_constraint(lower_bound,relation,upper_bound,epsilon)
+            if not isinstance(const, list):
+                const = [const]
+            return const
+                
         match self.features['solution_method']:
 
             case 'exact':
+                match check_constraint_type(expression):
+                    case 0:
+                        #bulk
+                        const_list = []
+                        for element in expression:
+                            const = add_special_constraint(element)
+                            const_list+=const
+                        if isinstance(label, list):
+                            self.features['constraint_labels'] += label
+                        else:
+                            self.features['constraint_labels'] += [str(label) if label else None for i in range(len(expression))]
+                        self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                        self.features['constraints'] += const_list
+                        self.features['constraint_counter'][1] = len(self.features['constraints'])
+                
+                    case 1: 
+                        
+                        if len(expression)==3:
+                            label = [label]
+                           
+                        const = add_special_constraint(expression)
+                        if isinstance(label, list):
+                            self.features['constraint_labels'] += label
+                        else:
+                            self.features['constraint_labels'] += [str(label)+f'_{i}' if label else None for i in range(len(const))]
+                        self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                        self.features['constraints'] += const
+                        self.features['constraint_counter'][1] = len(self.features['constraints'])
+                        
 
-                self.features['constraint_labels'].append(label)
-                self.features['constraint_counter'][0] = len(
-                    set(self.features['constraint_labels']))
-                self.features['constraints'].append(expression)
-                self.features['constraint_counter'][1] = len(
-                    self.features['constraints'])
+                    case 2:
+
+                        if isinstance(label, list):
+                            self.features['constraint_labels'] += label
+                        else:
+                            self.features['constraint_labels'] += [str(label) if label else None for i in range(len(expression))]
+                        self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                        self.features['constraints'] += expression
+                        self.features['constraint_counter'][1] = len(self.features['constraints'])
+                        
+                    case 3:
+                
+                        self.features['constraint_labels'].append(label)
+                        self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                        self.features['constraints'].append(expression)
+                        self.features['constraint_counter'][1] = len(self.features['constraints'])
 
             case 'heuristic':
 
                 if self.features['agent_status'] == 'idle':
-
                     self.features['constraint_labels'].append(label)
-
-                    self.features['constraint_counter'][0] = len(
-                        set(self.features['constraint_labels']))
-
+                    self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
                     self.features['constraints'].append(expression)
-
-                    self.features['constraint_counter'][1] = len(
-                        self.features['constraints'])
-
+                    self.features['constraint_counter'][1] = len(self.features['constraints'])
                 else:
-
                     if self.features['vectorized']:
-
-                        self.features['constraints'].append(
-                            np.reshape(expression, [np.shape(self.agent)[0], 1]))
-
+                        self.features['constraints'].append(np.reshape(expression, [np.shape(self.agent)[0], 1]))
                     else:
                         self.features['constraints'].append(expression)
 
