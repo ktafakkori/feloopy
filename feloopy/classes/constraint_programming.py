@@ -595,5 +595,7 @@ class ConstraintProgrammingClass:
         
     def cp_add_all_different(self, expressions):
 
+        if self.features['interface_name'] == 'cplex_cp':
+            return self.model.all_diff(expressions)
         if self.features['interface_name'] == 'ortools_cp':
             return self.model.AddAllDifferent(expressions)
