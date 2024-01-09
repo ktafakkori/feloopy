@@ -101,6 +101,8 @@ class Model(TensorVariableClass,
                      'rsome_dro',
                      'rsome_ro',
                      'xpress',
+                     'insideopt',
+                     'insideopt-demo',                    
                  ],
                  agent: Optional[Union[AgentObject, None]] = None,
                  scens: Optional[int] = 1,
@@ -134,7 +136,7 @@ class Model(TensorVariableClass,
         
         if interface_name not in {'copt', 'cplex', 'cplex_cp', 'cvxpy', 'cylp', 'feloopy', 'gekko', 'gurobi', 'linopy',
                                   'mealpy', 'mip', 'niapy', 'ortools', 'ortools_cp', 'picos', 'pulp', 'pygad', 'pymoo',
-                                  'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress'}:
+                                  'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress', 'insideopt', 'insideopt-seeker'}:
             raise ValueError("Invalid solver interface. Please choose from the provided options.")
         
         if not isinstance(scens, int) or scens < 1:
