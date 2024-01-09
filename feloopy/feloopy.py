@@ -136,7 +136,7 @@ class Model(TensorVariableClass,
         
         if interface_name not in {'copt', 'cplex', 'cplex_cp', 'cvxpy', 'cylp', 'feloopy', 'gekko', 'gurobi', 'linopy',
                                   'mealpy', 'mip', 'niapy', 'ortools', 'ortools_cp', 'picos', 'pulp', 'pygad', 'pymoo',
-                                  'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress', 'insideopt', 'insideopt-seeker'}:
+                                  'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress', 'insideopt', 'insideopt-demo'}:
             raise ValueError("Invalid solver interface. Please choose from the provided options.")
         
         if not isinstance(scens, int) or scens < 1:
