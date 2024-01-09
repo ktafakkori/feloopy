@@ -27,6 +27,7 @@ import platform
 import sys
 import time
 import warnings
+import contextlib
 
 from .classes.tensor_variable import *
 from .classes.tensor_variable_collection import *
@@ -902,14 +903,67 @@ class Model(TensorVariableClass,
     def state_function(self):
         
         """
-
         Creates and returns a state function.
-
         """
 
         return self.model.state_function()
 
-    def report(self, all_metrics: bool = False, feloopy_info: bool = True, math_info: bool = False, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], show_tensors = False, show_detailed_tensors=False, save=None):
+    def append_full_report(self, filename="result.txt", dir='./results/texts/', **kwargs):
+        path = dir + filename
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        if not os.path.isfile(path):
+            open(path, 'w').close()
+        with open(path, 'a', encoding='utf-8') as f:
+            with contextlib.redirect_stdout(f):
+                self.full_report(**kwargs)
+                
+    def append_report(self, filename="result.txt", dir='./results/texts/', **kwargs):
+        path = dir + filename
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        if not os.path.isfile(path):
+            open(path, 'w').close()
+        with open(path, 'a', encoding='utf-8') as f:
+            with contextlib.redirect_stdout(f):
+                self.report(**kwargs)
+                               
+    def write_full_report(self, filename="result.txt", dir='./results/texts/', **kwargs):
+        path = dir + filename
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        if not os.path.isfile(path):
+            open(path, 'w').close()
+        with open(path, 'w', encoding='utf-8') as f:
+            with contextlib.redirect_stdout(f):
+                self.full_report(**kwargs)
+
+    def write_report(self, filename="result.txt", dir='./results/texts/', **kwargs):
+        path = dir + filename
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        if not os.path.isfile(path):
+            open(path, 'w').close()
+        with open(path, 'w', encoding='utf-8') as f:
+            with contextlib.redirect_stdout(f):
+                self.report(**kwargs)
+            
+    def full_report(self,show_tensors=False, detailed=False):
+        
+        self.report(all_metrics = True, 
+                    feloopy_info = True, 
+                    extra_info = True, 
+                    math_info = True, 
+                    sys_info = True, 
+                    model_info = True, 
+                    sol_info = True, 
+                    obj_values = True, 
+                    dec_info = True, 
+                    metric_info = True, 
+                    show_tensors=show_tensors, 
+                    show_detailed_tensors=detailed)
+             
+    def report(self, all_metrics: bool = False, feloopy_info: bool = True, extra_info: bool = False, math_info: bool = False, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], show_tensors = False, show_detailed_tensors=False, save=None):
 
 
         if not self.healthy():
@@ -1094,30 +1148,89 @@ class Model(TensorVariableClass,
             empty_line()
             bline()
 
+        if extra_info:
+            
+            tline_text("Extra")
+            empty_line()
+            try:
+                left_align("Slack:")
+                for i in self.features['constraint_labels']:
+                    left_align(str(i) + " = " + str(self.get_slack(i)))
+                empty_line()
+            except:
+                pass
+            try:
+                left_align("Dual:")
+                for i in self.features['constraint_labels']:
+                    left_align(str(i) + " = " + str(self.get_dual(i)))
+                empty_line()
+            except:
+                pass
+            bline()
+            
         if save is not None:
             sys.stdout.close()
             sys.stdout = stdout_origin
 
-    def get_numpy_var(self, var_name):
+    def get_numpy_var(self, var_name, dual=False, slack=False, reduced_cost=False):
 
-        for i,j in self.mainvars.keys():
-            if j==var_name:
-                if self.maindims[j]==0:
-                    output = self.get(self.mainvars[(i,j)])
-                elif len(self.maindims[j])==1:
-                    output = np.zeros(shape=len(fix_dims(self.maindims[j])[0]))
-                    for k in fix_dims(self.maindims[j])[0]:
-                        try:
-                            output[k] = self.get(self.mainvars[(i,j)][k])
-                        except:
-                            output[k] = self.get(self.mainvars[(i,j)])[k]
-                else:
-                    output = np.zeros(shape=tuple([len(dim) for dim in fix_dims(self.maindims[j])]))
-                    for k in it.product(*tuple(fix_dims(self.maindims[j]))):
-                        try:
-                            output[k] = self.get(self.mainvars[(i,j)][k])
-                        except:
-                            output[k] =  self.get(self.mainvars[(i,j)])[k]
+        if not dual and not slack:
+            for i,j in self.mainvars.keys():
+                if j==var_name:
+                    if self.maindims[j]==0:
+                        output = self.get(self.mainvars[(i,j)])
+                    elif len(self.maindims[j])==1:
+                        output = np.zeros(shape=len(fix_dims(self.maindims[j])[0]))
+                        for k in fix_dims(self.maindims[j])[0]:
+                            try:
+                                output[k] = self.get(self.mainvars[(i,j)][k])
+                            except:
+                                output[k] = self.get(self.mainvars[(i,j)])[k]
+                    else:
+                        output = np.zeros(shape=tuple([len(dim) for dim in fix_dims(self.maindims[j])]))
+                        for k in it.product(*tuple(fix_dims(self.maindims[j]))):
+                            try:
+                                output[k] = self.get(self.mainvars[(i,j)][k])
+                            except:
+                                output[k] =  self.get(self.mainvars[(i,j)])[k]
+        
+        if reduced_cost:
+            
+    
+            for i,j in self.mainvars.keys():
+                if j==var_name:
+                    if self.maindims[j]==0:
+                        output = self.get_rc(self.mainvars[(i,j)])
+                    elif len(self.maindims[j])==1:
+                        output = np.zeros(shape=len(fix_dims(self.maindims[j])[0]))
+                        for k in fix_dims(self.maindims[j])[0]:
+                            try:
+                                output[k] = self.get_rc(self.mainvars[(i,j)][k])
+                            except:
+                                output[k] = self.get_rc(self.mainvars[(i,j)])[k]
+                    else:
+                        output = np.zeros(shape=tuple([len(dim) for dim in fix_dims(self.maindims[j])]))
+                        for k in it.product(*tuple(fix_dims(self.maindims[j]))):
+                            try:
+                                output[k] = self.get_rc(self.mainvars[(i,j)][k])
+                            except:
+                                output[k] =  self.get_rc(self.mainvars[(i,j)])[k]            
+        if dual:
+            
+            output = []
+            for i in self.features['constraint_labels']:
+                if var_name in i:
+                    output.append(self.get_dual(i))
+            output = np.array(output)
+        
+        if slack:
+
+            output = []
+            for i in self.features['constraint_labels']:
+                if var_name in i:
+                    output.append(self.get_slack(i))
+            output = np.array(output)
+                        
         return output
 
     def decision_information_print(self,status, show_tensors, show_detailed_tensors, box_width=80):
@@ -1797,7 +1910,8 @@ class Implement:
         self.get_objective = self.get_obj
         self.get_var = self.get_variable = self.get
         self.search = self.solve = self.optimize = self.run = self.sol
-
+        self.get_tensor = self.get_numpy_var
+        
         match self.interface_name:
 
             case 'mealpy':
@@ -1923,7 +2037,8 @@ class Implement:
         for i in range(len(ObjectivesDirections)): list_of_functions.append(my_list_of_functions[i])
         
         solution = np.concatenate((self.BestAgent, self.BestReward*ObjectivesDirections), axis=1)
-    
+
+   
         parameters = {
         'min_values': (0,)*self.tot_counter[1],
         'max_values': (1,)*self.tot_counter[1],
@@ -2980,7 +3095,9 @@ class Implement:
                 else:
                     for k in it.product(*tuple(fix_dims(self.VariablesDim[i]))):
                         output.append(self.get([i, (*k,)]))
+        
 
+            
         return np.array(output)
     
     def healthy(self):
@@ -3165,6 +3282,8 @@ class MADM:
             self.madam_method = 'auto'
 
         self.solver_options = dict()
+
+        self.get_tensor = self.get_numpy_var
 
         self.features = {
             'weights_found': False,
