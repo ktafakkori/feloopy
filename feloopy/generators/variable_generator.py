@@ -23,6 +23,16 @@ def generate_variable(interface_name, model_object, variable_type, variable_name
             from .variable import pyomo_variable_generator
             return pyomo_variable_generator.generate_variable(**inputs)
 
+        case 'insideopt':
+
+            from .variable import seeker_variable_generator
+            return seeker_variable_generator.generate_variable(**inputs)
+
+        case 'insideopt-demo':
+
+            from .variable import seeker_variable_generator
+            return seeker_variable_generator.generate_variable(**inputs)
+
         case 'ortools':
 
             from .variable import ortools_variable_generator

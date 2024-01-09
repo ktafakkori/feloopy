@@ -16,6 +16,16 @@ def generate_model(features):
             from .model import pyomo_model_generator
             model_object = pyomo_model_generator.generate_model(features)
 
+        case 'insideopt-demo':
+
+            from .model import seeker_model_generator
+            model_object = seeker_model_generator.generate_demo_model(features)
+
+        case 'insideopt':
+
+            from .model import seeker_model_generator
+            model_object = pyomo_model_generator.generate_model(features)
+
         case 'ortools':
 
             from .model import ortools_model_generator

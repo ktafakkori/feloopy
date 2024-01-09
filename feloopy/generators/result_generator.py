@@ -24,6 +24,16 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
                 from .result import pyomo_result_generator
                 return pyomo_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
 
+            case 'insideopt':
+
+                from .result import seeker_result_generator
+                return seeker_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
+
+            case 'insideopt-demo':
+
+                from .result import seeker_result_generator
+                return seeker_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
+
             case 'ortools':
 
                 from .result import ortools_result_generator
@@ -116,6 +126,16 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
             case 'pyomo':
 
                 from .result import pyomo_result_generator
+                return pyomo_result_generator.Get(model_object, model_solution, indicator)
+
+            case 'insideopt':
+
+                from .result import seeker_result_generator
+                return pyomo_result_generator.Get(model_object, model_solution, indicator)
+
+            case 'insideopt-demo':
+
+                from .result import seeker_result_generator
                 return pyomo_result_generator.Get(model_object, model_solution, indicator)
 
             case 'ortools':

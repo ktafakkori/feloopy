@@ -345,6 +345,8 @@ EXACT_ALGORITHMS = [
     ['linopy', 'gurobi'],
     ['linopy', 'highs'],
     ['linopy', 'xpress'],
+    ['insideopt', 'seeker'],
+    ['insideopt-demo', 'seeker'],
     ['mip', 'cbc'],
     ['mip', 'gurobi'],
     ['mip', 'cplex'],

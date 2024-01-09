@@ -2,7 +2,6 @@
 # See the file LICENSE file for licensing details.
 
 
-
 import cplex
 import itertools as it
 

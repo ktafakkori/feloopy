@@ -17,6 +17,16 @@ def generate_solution(features):
             ModelSolution = pyomo_solution_generator.generate_solution(
                 features)
 
+        case 'insideopt':
+
+            from .solution import seeker_solution_generator
+            ModelSolution = seeker_solution_generator.generate_solution(features)
+
+        case 'insideopt-demo':
+
+            from .solution import seeker_solution_generator
+            ModelSolution = seeker_solution_generator.generate_solution(features)
+                      
         case 'ortools':
 
             from .solution import ortools_solution_generator
