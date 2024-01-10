@@ -90,6 +90,9 @@ insideopt-demo = ""
 [tool.poetry.group.plus_insideopt.dependencies]
 insideopt = ""
 
+[tool.poetry.group.plus_gams.dependencies]
+gampspy = ""
+
 [tool.poetry.group.hyper.dependencies]
 coptpy = "7.0.4"
 cplex = "22.1.1.1"
@@ -111,6 +114,7 @@ pymprog = "1.1.2"
 pyomo = "6.7.0"
 rsome = "1.2.5"
 xpress = "9.2.5"
+gampspy = ""
 
 [tool.poetry.group.only_cylp.dependencies]
 cylp = "0.92.2"
@@ -141,6 +145,7 @@ pymultiobjective = "1.5.4"
 pyomo = "6.7.0"
 rsome = "1.2.5"
 xpress = "9.2.5"
+gampspy = ""
 
 [tool.poetry.scripts]
 feloopy = "feloopy.cli:main"
