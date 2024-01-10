@@ -31,7 +31,7 @@ def Get(model_object, result, input1, input2=None):
     match input1:
         case 'variable':
             return input2.X
-
+        
         case 'status':
             return gurobi_status_dict[model_object.status]
 
