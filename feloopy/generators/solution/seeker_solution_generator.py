@@ -25,7 +25,7 @@ def generate_solution(features):
     solver_options = features['solver_options']
 
     if solver_name not in seeker_solver_selector.keys():
-        raise RuntimeError("Using solver '%s' is not supported by 'cplex'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
+        raise RuntimeError("Using solver '%s' is not supported by 'seeker'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
 
     if time_limit != None:
         timeLimit = time_limit

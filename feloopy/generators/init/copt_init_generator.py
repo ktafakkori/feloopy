@@ -7,4 +7,3 @@ def set_init_value(features, variable, value, fix):
         ""
     else:
         features['model_object'].setMipStart(variable, value)
-        print("applied")

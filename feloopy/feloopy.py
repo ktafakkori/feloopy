@@ -106,7 +106,8 @@ class Model(TensorVariableClass,
                      'rsome_ro',
                      'xpress',
                      'insideopt',
-                     'insideopt-demo',                    
+                     'insideopt-demo', 
+                     'gams',                   
                  ],
                  agent: Optional[Union[AgentObject, None]] = None,
                  scens: Optional[int] = 1,
@@ -124,7 +125,7 @@ class Model(TensorVariableClass,
         interface_name : Literal[
             'copt', 'cplex', 'cplex_cp', 'cvxpy', 'cylp', 'feloopy', 'gekko', 'gurobi', 'linopy',
             'mealpy', 'mip', 'niapy', 'ortools', 'ortools_cp', 'picos', 'pulp', 'pygad', 'pymoo',
-            'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress',
+            'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress', 'insideopt', 'insideopt-demo', 'gams'
         ]
             The selected solver interface for optimization.
         agent : Optional[Union[AgentObject, None]] (default=None)
@@ -140,7 +141,7 @@ class Model(TensorVariableClass,
         
         if interface_name not in {'copt', 'cplex', 'cplex_cp', 'cvxpy', 'cylp', 'feloopy', 'gekko', 'gurobi', 'linopy',
                                   'mealpy', 'mip', 'niapy', 'ortools', 'ortools_cp', 'picos', 'pulp', 'pygad', 'pymoo',
-                                  'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress', 'insideopt', 'insideopt-demo'}:
+                                  'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress', 'insideopt', 'insideopt-demo', 'gams'}:
             raise ValueError("Invalid solver interface. Please choose from the provided options.")
         
         if not isinstance(scens, int) or scens < 1:
@@ -287,6 +288,10 @@ class Model(TensorVariableClass,
         self.get_tensor = self.get_numpy_var
         self.get_var = self.value = self.get = self.get_variable
 
+    def fix_ifneeded(self, dims):
+    
+        return fix_dims(dims)
+        
     def __getitem__(self, agent: AgentObject) -> ConditionalObject:
         """
         Retrieve the required features of the model object.
@@ -412,6 +417,7 @@ class Model(TensorVariableClass,
                         init_generator.generate_init(self.features,self.mainvars[(i,j)][k],input_tensor[k],fix=True)
                           
     def obj(self, expression=0, direction=None, label=None):
+            
             """
             Defines the objective function for the optimization problem.
 
@@ -426,6 +432,20 @@ class Model(TensorVariableClass,
 
             """
             
+            if self.features['interface_name'] == 'gams':
+                
+                try:
+                    self.features['of'].append(self.features['of'][-1] + 1)
+                except:
+                    self.features['of'] = [0]
+
+                z = self.fvar(f"of{self.features['of'][-1]}")
+                self.features['objective_variable'] = z
+                
+                expression = expression == self.features['objective_variable']
+                    
+                
+                
             if self.features['solution_method'] == 'exact' or (self.features['solution_method'] == 'heuristic' and self.features['agent_status'] == 'idle'):
 
                 self.features['directions'].append(direction)
@@ -1359,6 +1379,10 @@ class Model(TensorVariableClass,
         ValueError
             If neither bound nor index is provided.
         """
+        
+        if self.features['interface_name']=='gams':
+            from gamspy import Set
+            return Set(self.model, name=index, records=[f"{index}{i}" for i in range(bound[0],bound[1],step)])
 
         # Check if index is an empty string
         if index == '':
@@ -1391,7 +1415,7 @@ class Model(TensorVariableClass,
         """
         return self.model.ambiguity(*args,**kwds)
 
-    def sum(self, input):
+    def sum(self, input, domain_tuple=None):
         """
         Calculate the sum of all values in the input.
 
@@ -1403,7 +1427,7 @@ class Model(TensorVariableClass,
         
         elif self.features['interface_name'] == 'gurobi':
             return self.model.quicksum(input)
-        
+
         else:
             return sum(input)
 

@@ -26,6 +26,11 @@ def generate_model(features):
             from .model import seeker_model_generator
             model_object = pyomo_model_generator.generate_model(features)
 
+        case 'gams':
+
+            from .model import gamspy_model_generator
+            model_object = gamspy_model_generator.generate_model(features)
+
         case 'ortools':
 
             from .model import ortools_model_generator

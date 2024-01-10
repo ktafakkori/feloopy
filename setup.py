@@ -88,7 +88,11 @@ plus_insideopt = [
     'insideopt',
 ]
 
-hyper = stock + plus_gurobi + plus_cplex + plus_xpress + plus_copt
+plus_gams = [
+    'gamspy',
+]
+
+hyper = stock + plus_gurobi + plus_cplex + plus_xpress + plus_copt + plus_gams
 
 # Might have some os-dependent issues
 
@@ -116,6 +120,7 @@ extra_dict = {
     'plus_copt': plus_copt,
     'plus_insideopt': plus_insideopt,
     'plus_insideoptdemo': plus_insideoptdemo,
+    'plus_gams': plus_gams,
     'only_cylp': only_cylp,
     'only_linux': only_linux,
     'mega': mega}

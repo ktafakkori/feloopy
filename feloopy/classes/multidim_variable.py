@@ -16,6 +16,7 @@ from ..operators.fix_operators import fix_dims
 from ..operators.update_operators import update_variable_features
 
 
+    
 class MultidimVariable:
     """Specifies the variable type."""
 
@@ -47,7 +48,7 @@ class MultidimVariableClass:
             A free variable.
         """
 
-        dim = fix_dims(dim)
+        dim = self.fix_ifneeded(dim)
         self.features = update_variable_features(name, dim, bound, 'free_variable_counter', self.features)
 
         if self.features['solution_method'] == 'exact':
@@ -88,7 +89,7 @@ class MultidimVariableClass:
             A positive variable.
         """
 
-        dim = fix_dims(dim)
+        dim = self.fix_ifneeded(dim)
         self.features = update_variable_features(name, dim, bound, 'positive_variable_counter', self.features)
 
         if self.features['solution_method'] == 'exact':
@@ -146,7 +147,7 @@ class MultidimVariableClass:
             An integer variable.
         """
 
-        dim = fix_dims(dim)
+        dim = self.fix_ifneeded(dim)
         self.features = update_variable_features(name, dim, bound, 'integer_variable_counter', self.features)
 
         if self.features['solution_method'] == 'exact':
@@ -204,7 +205,7 @@ class MultidimVariableClass:
             A binary variable.
         """
 
-        dim = fix_dims(dim)
+        dim = self.fix_ifneeded(dim)
         self.features = update_variable_features(name, dim, bound, 'binary_variable_counter', self.features)
 
         if self.features['solution_method'] == 'exact':
@@ -284,7 +285,7 @@ class MultidimVariableClass:
         MultidimVariable
             A random variable.
         """
-        dim = fix_dims(dim)
+        dim = self.fix_ifneeded(dim)
         from ..generators import variable_generator
         return variable_generator.generate_variable(
             self.features['interface_name'], self.model, 'rvar', name, [None, None], dim
@@ -311,7 +312,7 @@ class MultidimVariableClass:
             A dependent variable.
 
         """
-        dim = fix_dims(dim)
+        dim = self.fix_ifneeded(dim)
 
         if self.no_agents is not None:
             default_pop = self.no_agents
