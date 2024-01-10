@@ -285,7 +285,7 @@ However, as some users might prefer a dedicated version, the following lists the
 
    `plus_insideoptdemo` and `plus_insideopt` variants:
 
-   This variant includes the Seeker(TM) solver. It requires a valid Seeker license. Refer to the [InsideOpt's website](https://insideopt.com/pages/install-insideopt-seeker) for more information.
+   This variant includes the Seeker(TM) solver. It requires a valid Seeker license. Refer to the [InsideOpt website](https://insideopt.com/pages/install-insideopt-seeker) for more information.
 
    ```bash
    pip install -U feloopy[plus_insideoptdemo]
