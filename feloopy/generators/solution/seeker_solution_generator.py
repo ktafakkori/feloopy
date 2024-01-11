@@ -41,11 +41,13 @@ def generate_solution(features):
         upperBound = solver_options['ub']
     else:
         upperBound = 1e20
+        
     match debug:
 
         case False:
 
             counter=0
+            
             for constraint in model_constraints:
   
                 if constraint[1] in ['<=', 'le', 'leq', '=l=']:
@@ -78,7 +80,7 @@ def generate_solution(features):
                     
                 case 'max':
                     time_solve_begin = timeit.default_timer()
-                    model_object.minimize(model_objectives[objective_id], upperBound=upperBound, timeLimit=timeLimit)
+                    model_object.maximize(model_objectives[objective_id], upperBound=upperBound, timeLimit=timeLimit)
                     time_solve_end = timeit.default_timer()
                     objective = model_objectives[objective_id]
 
