@@ -47,6 +47,8 @@ def generate_solution(features):
         case False:
 
             counter=0
+            ss
+            print(model_constraints)
             
             for constraint in model_constraints:
   
