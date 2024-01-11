@@ -30,13 +30,13 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
             '''
 
             if variable_dim == 0:
-                GeneratedVariable = model_object.categorical(low=0, high=2)
+                GeneratedVariable = model_object.categorical(low=0, high=1)
 
             else:
                 if len(variable_dim) == 1:
-                    GeneratedVariable = {key: model_object.categorical(low=0, high=2) for key in variable_dim[0]}
+                    GeneratedVariable = {key: model_object.categorical(low=0, high=1) for key in variable_dim[0]}
                 else:
-                    GeneratedVariable = {key: model_object.categorical(low=0, high=2) for key in sets(*variable_dim)}
+                    GeneratedVariable = {key: model_object.categorical(low=0, high=1) for key in sets(*variable_dim)}
 
         case 'ivar':
 
