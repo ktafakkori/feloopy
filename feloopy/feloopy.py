@@ -547,6 +547,14 @@ class Model(TensorVariableClass,
                         self.features['constraints'].append(expression)
                         self.features['constraint_counter'][1] = len(self.features['constraints'])
 
+                    case 4:
+                
+                        self.features['constraint_labels'].append(label)
+                        self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                        self.features['constraints'].append(expression)
+                        self.features['constraint_counter'][1] = len(self.features['constraints'])
+
+
             case 'heuristic':
 
                 if self.features['agent_status'] == 'idle':
