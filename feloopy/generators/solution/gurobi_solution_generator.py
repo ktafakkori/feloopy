@@ -71,7 +71,6 @@ def generate_solution(features):
                     model_object.setObjective(
                         model_objectives[objective_id], gurobi_interface.GRB.MAXIMIZE)
 
-
             counter = 0
             for constraint, label in zip(model_constraints, constraint_labels):
                 if label:

@@ -2,6 +2,7 @@
 # See the file LICENSE file for licensing details.
 
 def check_constraint_type(constraint):
+    
     if isinstance(constraint, list):
         if isinstance(constraint[0], list):
             return 0
@@ -9,9 +10,13 @@ def check_constraint_type(constraint):
             return 1
         else:
             return 2
-    elif not isinstance(constraint, list):
-        return 3
     
+    elif isinstance(constraint, tuple):
+        return 4
+        
+    elif not isinstance(constraint, (list, tuple)):
+        return 3
+
 def check_sense(sense):
     if sense in ['<=', 'le', 'leq', '=l=']:
         return '<='

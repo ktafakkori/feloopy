@@ -16,7 +16,7 @@ Q = np.diag(sigma**2)
 
 x = m.ptvar('x', [n])                       
 
-m.obj(p@x - phi*m.quad(x, Q))   
+m.obj(p@x - phi*m.quad(x, Q))
 m.con(x.sum() == 1)             
 
 m.sol(['max'], 'ecos')

@@ -3,7 +3,6 @@
 
 __author__ = ['Keivan Tafakkori']
 
-
 from .helpers.empty import *
 from .helpers.error import *
 from .helpers.context_manager import *
@@ -16,7 +15,6 @@ from .operators.math_operators import *
 from .operators.random_operators import *
 from .operators.set_operators import *
 from .operators.update_operators import *
-
 
 from collections import defaultdict
 from tabulate import tabulate as tb
@@ -369,7 +367,6 @@ class Model(TensorVariableClass,
         else:
             return self.response
 
-
     def vstart(self, variable, input_value):
         
         from .generators import init_generator
@@ -497,13 +494,15 @@ class Model(TensorVariableClass,
             if not isinstance(const, list):
                 const = [const]
             return const
-                
+          
         match self.features['solution_method']:
 
             case 'exact':
+                
                 match check_constraint_type(expression):
+                
                     case 0:
-                        #bulk
+                        
                         const_list = []
                         for element in expression:
                             const = add_special_constraint(element)

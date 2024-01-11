@@ -34,7 +34,7 @@ for j in J:
     if j!=0: m.con(c[j] >= c[j-1] + sum(x[i,j]*p[i] for i in I))
 
 #Solve
-m.sol(['min'], 'highs')
+m.sol(['min'], 'cbc')
 
 # Display
 m.report()

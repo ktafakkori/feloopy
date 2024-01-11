@@ -189,6 +189,7 @@ def solution_print(ObjectivesDirections, status, get_obj, get_payoff=None, box_w
         print(row + " │")
 
 def metrics_print(ObjectivesDirections, show_all_metrics, get_obj, calculated_indicators, start=0, end=0, length=None, box_width = 80):
+    
     hour, min, sec =  calculate_time_difference(start, end, length)
 
     try:
