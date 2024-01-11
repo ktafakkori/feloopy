@@ -47,9 +47,7 @@ def generate_solution(features):
         case False:
 
             counter=0
-            ss
-            print(model_constraints)
-            
+
             for constraint in model_constraints:
   
                 if constraint[1] in ['<=', 'le', 'leq', '=l=']:
