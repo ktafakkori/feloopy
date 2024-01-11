@@ -83,6 +83,7 @@ def generate_solution(features):
                     model_object.maximize(model_objectives[objective_id], upperBound=upperBound, timeLimit=timeLimit)
                     time_solve_end = timeit.default_timer()
                     objective = model_objectives[objective_id]
+                    
 
             generated_solution = [objective, [time_solve_begin, time_solve_end]]
 
