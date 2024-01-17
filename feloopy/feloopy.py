@@ -1433,7 +1433,8 @@ class Model(TensorVariableClass,
             return self.model.Sum(input)
         
         elif self.features['interface_name'] == 'gurobi':
-            return self.model.quicksum(input)
+            from gurobipy import quicksum
+            return quicksum(input)
 
         else:
             return sum(input)
