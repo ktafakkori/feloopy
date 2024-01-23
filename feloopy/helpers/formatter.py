@@ -209,6 +209,11 @@ def metrics_print(ObjectivesDirections, show_all_metrics, get_obj, calculated_in
 
     two_column('CPT (hour:min:sec)', "%02d:%02d:%02d" % (hour, min, sec))        
 
+def progress_bar(iterable, unit="iter", description="Progress",remain=False):
+    from tqdm import tqdm
+    leave = False if remain==False else True
+    return tqdm(iterable, desc=description, unit=unit, ncols=82,leave=leave)
+
 def calculate_time_difference(start=0, end=0, length=None):
     if length == None:
         hour = round((end - start), 3) % (24 * 3600) // 3600

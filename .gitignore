@@ -12,3 +12,7 @@ __pycache__
 project*
 test*
 _build
+main*
+modules
+data
+results
