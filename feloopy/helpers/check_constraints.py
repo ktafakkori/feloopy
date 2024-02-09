@@ -1,21 +1,28 @@
 # Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
 # See the file LICENSE file for licensing details.
 
+import types
+
 def check_constraint_type(constraint):
+
+    print(type(constraint))
     
     if isinstance(constraint, list):
-        if isinstance(constraint[0], list):
-            return 0
-        elif len(constraint) <= 4:
-            return 1
+        if isinstance(constraint[0], list) and isinstance(constraint[0][1], str):
+            return 'list with sense'
+        elif isinstance(constraint[1], str):
+            return 'single list with sense'
         else:
-            return 2
-    
-    elif isinstance(constraint, tuple):
-        return 4
-        
-    elif not isinstance(constraint, (list, tuple)):
-        return 3
+            return 'list without sense'
+
+    elif type(constraint)== dict:
+        if isinstance(list(constraint.values())[0], list):
+            return 'single dict with sense'
+        else:
+            
+            return 'dict without sense'
+    else:
+        return 'classic'
 
 def check_sense(sense):
     if sense in ['<=', 'le', 'leq', '=l=']:
@@ -37,7 +44,7 @@ def generate_constraint(lhs, sense, rhs, epsilon):
         case '<=':
             return lhs <= rhs
         case '>=':
-            return lhs <= rhs        
+            return lhs >= rhs        
         case '==':
             return lhs == rhs   
         case '<':

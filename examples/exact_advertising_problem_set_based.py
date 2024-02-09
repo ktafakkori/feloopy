@@ -13,7 +13,7 @@ I = range(len(c))  # Set of ads
 J = range(len(v))  # Set of viewer types
 
 # Environment
-m = target_model('exact', 'advertising problem', 'gekko')
+m = target_model('exact', 'advertising problem', 'copt')
 
 # Variables
 x = m.pvar('x', [I])
@@ -26,7 +26,7 @@ for j in J:
     m.con(sum(p[i, j] * x[i] for i in I) >= v[j])
 
 # Solve
-m.sol(['min'], 'apopt')
+m.sol(['min'], 'copt')
 
 # Display
-m.report()
+m.full_report()

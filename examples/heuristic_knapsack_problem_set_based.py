@@ -26,7 +26,7 @@ def instance(X):
     m.con(sum(w[j]*x[j] for j in J) |l| 100)
 
     # Solve
-    m.sol(['max'], 'a-bfo', {'epoch': 100})
+    m.sol(['max'], 'base-ga', {'epoch': 100})
 
     return m[X]
 
