@@ -14,10 +14,6 @@ Overview:
 [![Documentation](https://readthedocs.org/projects/feloopy/badge/?version=latest&color=darkgreen)](https://feloopy.readthedocs.io/en/latest/?badge=latest&color=darkgreen)
 ![License](https://img.shields.io/static/v1?label=license&message=MIT&color=darkred)
 
-Learn more: 
-
-[![Discord](https://img.shields.io/badge/-Join%20our%20Discord%20server-%237289DA?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/aeGPz4maum)
-
 ## Features
 
 FelooPy supports the following _mathematical structure-based_ classification of optimization problems:
