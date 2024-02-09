@@ -13,87 +13,87 @@ class EMPTY:
 
     def __call__(self, *args):
 
-        return 5
+        return 7
 
     def __getitem__(self, *args):
 
-        return 5
+        return 7
 
     def __setitem__(self, *args):
         'none'
 
     def __hash__(self):
 
-        return 5
+        return 7
 
     def __str__(self):
 
-        return 5
+        return 7
 
     def __repr__(self):
 
-        return 5
+        return 7
 
     def __neg__(self):
 
-        return 5
+        return 7
 
     def __pos__(self):
 
-        return 5
+        return 7
 
     def __pow__(self, other):
 
-        return 5
+        return 7
 
     def __bool__(self):
 
-        return 5
+        return 7
 
     def __add__(self, other):
 
-        return 5
+        return 7
 
     def __radd__(self, other):
 
-        return 5
+        return 7
 
     def __sub__(self, other):
 
-        return 5
+        return 7
 
     def __rsub__(self, other):
 
-        return 5
+        return 7
 
     def __mul__(self, other):
 
-        return 5
+        return 7
 
     def __rmul__(self, other):
 
-        return 5
+        return 7
 
     def __div__(self, other):
 
-        return 5
+        return 7
 
     def __rdiv__(self, other):
 
-        raise 5
+        raise 7
 
     def __le__(self, other):
 
-        return 5
+        return 7
 
     def __ge__(self, other):
 
-        return 5
+        return 7
 
     def __eq__(self, other):
 
-        return 5
+        return 7
 
     def __ne__(self, other):
 
-        return 5
+        return 7

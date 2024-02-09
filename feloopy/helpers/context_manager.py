@@ -15,4 +15,3 @@ class path_manager:
               sys.path.remove(path)
           except ValueError:
               pass
-
