@@ -16,10 +16,7 @@ Overview:
 
 Learn more: 
 
-[![Discord](https://img.shields.io/badge/-Join%20our%20Discord%20server-%237289DA?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/HSfbReWR)
-
-
-
+[![Discord](https://img.shields.io/badge/-Join%20our%20Discord%20server-%237289DA?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/aeGPz4maum)
 
 ## Features
 
