@@ -30,7 +30,6 @@ def if_then(*conditions_and_values):
         raise ValueError("Number of conditions and values must be the same")
     return np.select(conditions, values)
 
-
 def dims(a):
     return np.ndindex(a.shape[1:])
 

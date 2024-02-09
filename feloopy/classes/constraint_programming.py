@@ -8,7 +8,6 @@ Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
 See the file LICENSE file for licensing details.
 """
 
-
 from .event_variable import EventVariable
 from .special_constraint import Expression
 from typing import Optional, Union

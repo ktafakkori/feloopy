@@ -1,13 +1,11 @@
 """
-
-**Multi-dimensional variables module**
+Multi-dimensional variables module
 
 This module facilitates the creation of various types of multi-dimensional variables.
 
+Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
+See the file LICENSE file for licensing details.
 """
-
-# Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
-# See the file LICENSE file for licensing details.
 
 from typing import List, Optional, Union
 import itertools as it
