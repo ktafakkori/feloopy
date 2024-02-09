@@ -3,6 +3,11 @@
 
 from . import *
 
+from .helpers import *
+from .classes import *
+from .operators import *
+from .algorithms import *
+
 __author__ = ['Keivan Tafakkori']
 
 warnings.filterwarnings("ignore")
@@ -4064,3 +4069,79 @@ class MADM:
         bline()
     
 madm = MADM
+
+class copt_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'copt')
+
+class cplex_cp_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('constraint', name, 'cplex_cp')
+
+class cplex_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'cplex')
+
+class cylp_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'cylp')
+
+class cvxpy_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'cvxpy')
+
+class gekko_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'gekko')
+
+class gurobi_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'gurobi')
+
+class gams_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'gams')
+
+class linopy_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'linopy')
+
+class mip_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'mip')
+
+class ortools_cp_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('constraint', name, 'ortools_cp')
+
+class ortools_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'ortools')
+
+class picos_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'picos')
+
+class pyomo_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'pyomo')
+
+class pymprog_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'pymprog')
+
+class rsome_dro_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'rsome_dro')
+
+class rsome_ro_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'rsome_ro')
+
+class seeker_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'seeker')
+
+class xpress_modeler(Model):
+    def __init__(self,name=None):
+        super().__init__('exact', name, 'xpress')
