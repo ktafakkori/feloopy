@@ -55,7 +55,7 @@ for j in J:
     m.con(d[j, 1] >= c[j, 0])
 
 # Solve
-m.sol(['min'], 'cbc')
+m.sol(['min'], 'cbc', time_limit=10, show_log=True)
 
 # Display
-m.report(sys_info=True, math_info=True)
+m.full_report()

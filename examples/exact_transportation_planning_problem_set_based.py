@@ -38,4 +38,4 @@ for i in I:
 #Solve
 m.sol(['min'], 'glpk',show_log=False)
 
-m.report()
+m.full_report()

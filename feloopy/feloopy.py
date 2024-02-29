@@ -30,27 +30,27 @@ class MultidimVariableCollection:
 class EventVariable:
     pass
 
-class Model(TensorVariableClass,
-            TensorVariableCollectionClass,
-            MultidimVariableClass,
-            MultidimVariableCollectionClass,
-            EventVariableClass,
-            EventVariableCollectionClass,
-            SpecialConstraintClass,
-            NormalConstraintClass,
-            LinearizationClass,
-            ConstraintProgrammingClass):
+class model(TensorVariableClass,
+          TensorVariableCollectionClass,
+          MultidimVariableClass,
+          MultidimVariableCollectionClass,
+          EventVariableClass,
+          EventVariableCollectionClass,
+          SpecialConstraintClass,
+          NormalConstraintClass,
+          LinearizationClass,
+          ConstraintProgrammingClass):
     
     def __init__(self,
-                 solution_method: Literal[
+                method: Literal[
                      'constraint', 
                      'convex', 
                      'exact', 
                      'heuristic', 
                      'uncertain',
-                 ],
-                 model_name: str,
-                 interface_name: Literal[
+                 ] = 'exact',
+                 name: str = 'x',
+                 interface: Literal[
                      'copt',
                      'cplex',
                      'cplex_cp',
@@ -78,7 +78,7 @@ class Model(TensorVariableClass,
                      'insideopt',
                      'insideopt-demo', 
                      'gams',                   
-                 ],
+                 ] = 'pulp',
                  agent: Optional[Union[AgentObject, None]] = None,
                  scens: Optional[int] = 1,
                  no_agents: Optional[int] = None,
@@ -88,11 +88,11 @@ class Model(TensorVariableClass,
 
         Parameters
         ----------
-        solution_method : Literal['exact', 'heuristic', 'constraint', 'convex', 'uncertain']
+        method : Literal['exact', 'heuristic', 'constraint', 'convex', 'uncertain']
             The desired solution method for optimization.
-        model_name : str
+        name : str
             The name of the optimization model.
-        interface_name : Literal[
+        interface : Literal[
             'copt', 'cplex', 'cplex_cp', 'cvxpy', 'cylp', 'feloopy', 'gekko', 'gurobi', 'linopy',
             'mealpy', 'mip', 'niapy', 'ortools', 'ortools_cp', 'picos', 'pulp', 'pygad', 'pymoo',
             'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress', 'insideopt', 'insideopt-demo', 'gams'
@@ -106,10 +106,10 @@ class Model(TensorVariableClass,
             The number of search agents to use in the optimization. If not specified, the default behavior will be applied.
         """
         
-        if solution_method not in {'exact', 'heuristic', 'constraint', 'convex', 'uncertain'}:
+        if method not in {'exact', 'heuristic', 'constraint', 'convex', 'uncertain'}:
             raise ValueError("Invalid solution method. Please choose from 'exact', 'heuristic', 'constraint', 'convex', or 'uncertain'.")
         
-        if interface_name not in {'copt', 'cplex', 'cplex_cp', 'cvxpy', 'cylp', 'feloopy', 'gekko', 'gurobi', 'linopy',
+        if interface not in {'copt', 'cplex', 'cplex_cp', 'cvxpy', 'cylp', 'feloopy', 'gekko', 'gurobi', 'linopy',
                                   'mealpy', 'mip', 'niapy', 'ortools', 'ortools_cp', 'picos', 'pulp', 'pygad', 'pymoo',
                                   'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress', 'insideopt', 'insideopt-demo', 'gams'}:
             raise ValueError("Invalid solver interface. Please choose from the provided options.")
@@ -122,25 +122,25 @@ class Model(TensorVariableClass,
 
         self.no_agents = no_agents
 
-        if solution_method == 'constraint':
+        if method == 'constraint':
             self.solution_method_was = 'constraint'
-            solution_method = 'exact'
+            method = 'exact'
 
-        elif solution_method == 'convex':
+        elif method == 'convex':
             self.solution_method_was = 'convex'
-            solution_method = 'exact'
+            method = 'exact'
 
-        elif solution_method == 'uncertain':
+        elif method == 'uncertain':
             self.solution_method_was = 'uncertain'
-            solution_method = 'exact'
+            method = 'exact'
 
         else:
             self.solution_method_was=None
 
         self.features = {
-            'solution_method': solution_method,
-            'model_name': model_name,
-            'interface_name': interface_name,
+            'solution_method': method,
+            'model_name': name,
+            'interface_name': interface,
             'solver_name': None,
             'constraints': [],
             'constraint_labels': [],
@@ -162,7 +162,7 @@ class Model(TensorVariableClass,
             'scens': scens,
         }
 
-        if solution_method == 'heuristic':
+        if method == 'heuristic':
             
             self.agent = agent
             
@@ -179,7 +179,7 @@ class Model(TensorVariableClass,
                 }
             )
 
-            self.features['vectorized'] = interface_name in ['feloopy', 'pymoo']
+            self.features['vectorized'] = interface in ['feloopy', 'pymoo']
 
             if self.agent[0] != 'idle':
 
@@ -191,7 +191,7 @@ class Model(TensorVariableClass,
             else:
                 self.access = False
 
-        if solution_method == 'exact':
+        if method == 'exact':
             
            
 
@@ -1765,9 +1765,7 @@ class Model(TensorVariableClass,
 
             return np.round(x)
 
-# Alternatives for defining this class:
-
-model = mdl = add_model = deterministic_model = certain_model = create_environment = env = feloopy = representor_model = learner_model = target_model = uncertain_target_model = uncertain_learner_model = uncertain_representor_model = optimizer = uncertain_model = stochastic_model = robust_model = possibilistic_model = Model
+# Aliases
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -4070,78 +4068,89 @@ class MADM:
     
 madm = MADM
 
-class copt_modeler(Model):
-    def __init__(self,name=None):
+class feloop_model(model):
+    def __init__(self,name=None, agent=None):
+        if agent==None:
+            super().__init__('exact', name, 'feloopy')
+        else:
+            super().__init__('heuristic', name, 'feloopy', agent=agent)
+
+class copt_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'copt')
 
-class cplex_cp_modeler(Model):
-    def __init__(self,name=None):
+class cplex_cp_model(model):
+    def __init__(self,name='x'):
         super().__init__('constraint', name, 'cplex_cp')
 
-class cplex_modeler(Model):
-    def __init__(self,name=None):
+class cplex_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'cplex')
 
-class cylp_modeler(Model):
-    def __init__(self,name=None):
+class cylp_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'cylp')
 
-class cvxpy_modeler(Model):
-    def __init__(self,name=None):
+class cvxpy_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'cvxpy')
 
-class gekko_modeler(Model):
-    def __init__(self,name=None):
+class gekko_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'gekko')
 
-class gurobi_modeler(Model):
-    def __init__(self,name=None):
+class gurobi_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'gurobi')
 
-class gams_modeler(Model):
-    def __init__(self,name=None):
+class gams_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'gams')
 
-class linopy_modeler(Model):
-    def __init__(self,name=None):
+class linopy_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'linopy')
 
-class mip_modeler(Model):
-    def __init__(self,name=None):
+class mip_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'mip')
 
-class ortools_cp_modeler(Model):
-    def __init__(self,name=None):
+class ortools_cp_model(model):
+    def __init__(self,name='x'):
         super().__init__('constraint', name, 'ortools_cp')
 
-class ortools_modeler(Model):
-    def __init__(self,name=None):
+class ortools_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'ortools')
 
-class picos_modeler(Model):
-    def __init__(self,name=None):
+class picos_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'picos')
 
-class pyomo_modeler(Model):
-    def __init__(self,name=None):
+class pulp_model(model):
+    def __init__(self,name='x'):
+        super().__init__('exact', name, 'pulp')
+
+class pyomo_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'pyomo')
 
-class pymprog_modeler(Model):
-    def __init__(self,name=None):
+class pymprog_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'pymprog')
 
-class rsome_dro_modeler(Model):
-    def __init__(self,name=None):
+class rsome_dro_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'rsome_dro')
 
-class rsome_ro_modeler(Model):
-    def __init__(self,name=None):
+class rsome_ro_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'rsome_ro')
 
-class seeker_modeler(Model):
-    def __init__(self,name=None):
+class seeker_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'seeker')
 
-class xpress_modeler(Model):
-    def __init__(self,name=None):
+class xpress_model(model):
+    def __init__(self,name='x'):
         super().__init__('exact', name, 'xpress')
