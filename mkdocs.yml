@@ -8,7 +8,6 @@ repo_name: ktafakkori/feloopy
 theme:
 
   name: material
-  #custom_dir: docs/_build/overrides
   palette:
 
   # Palette toggle for light mode
@@ -25,7 +24,8 @@ theme:
       icon: material/brightness-4
       name: Switch to light mode
   
-  logo: _build/assets/logo.png
+  logo: assets/logo.png
+
   features:
     - navigation.tracking
     - navigation.instant
