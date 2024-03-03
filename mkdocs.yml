@@ -24,6 +24,7 @@ theme:
     toggle:
       icon: material/brightness-4
       name: Switch to light mode
+  
   logo: _build/assets/logo.png
   features:
     - navigation.tracking
@@ -33,11 +34,9 @@ theme:
     - navigation.footer
     - navigation.indexes
     - content.tabs.link
+  
   icon:
     repo: fontawesome/brands/github
-
-extra_css:
-  - _build/css/extra.css
 
 # Preview controls
 strict: true
