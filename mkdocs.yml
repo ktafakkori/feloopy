@@ -6,15 +6,18 @@ repo_url: https://github.com/ktafakkori/feloopy
 repo_name: ktafakkori/feloopy
 
 theme:
+
   name: material
   #custom_dir: docs/_build/overrides
   palette:
+
   # Palette toggle for light mode
   - media: "(prefers-color-scheme: light)"
     scheme: default
     toggle:
       icon: material/brightness-7
       name: Switch to dark mode
+
   # Palette toggle for dark mode
   - media: "(prefers-color-scheme: dark)"
     scheme: slate
