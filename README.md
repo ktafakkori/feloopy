@@ -1,4 +1,4 @@
-![alt text](miscellaneous/logo/logo2.png)
+![alt text](overrides/logo/logo2.png)
 
 ## Introduction
 
