@@ -2,4 +2,4 @@ site_name: FelooPy
 
 theme:
   name: material
-  logo: miscellaneous\logo\logo3.png
+  logo: miscellaneous/logo/logo3.png
