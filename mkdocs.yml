@@ -5,6 +5,10 @@ site_url: https://feloopy.readthedocs.io/en/latest/
 repo_url: https://github.com/ktafakkori/feloopy
 repo_name: ktafakkori/feloopy
 
+nav:
+  - User guide:
+    - index.md
+
 theme:
 
   name: material
@@ -60,3 +64,7 @@ markdown_extensions:
 plugins:
   - search:
       lang: en
+
+  - markdown-exec
+  - material-plausible
+  
