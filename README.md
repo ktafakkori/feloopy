@@ -1,4 +1,4 @@
-![alt text](overrides/logo/logo2.png)
+![alt text](assets/logo/logo2.png)
 
 ## Introduction
 
