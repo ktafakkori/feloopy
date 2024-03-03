@@ -8,16 +8,6 @@ build:
   tools:
     python: "3.10"
 
-# Sphinx configuration
-sphinx:
-  configuration: docs/conf.py
-
-# Output formats
 formats:
   - pdf
   - epub
-
-python:
-  # Installation requirements
-  install:
-    - requirements: docs/requirements.txt
