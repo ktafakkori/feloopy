@@ -40,10 +40,10 @@ import feloopy as flp
 
 m = flp.model("exact", "model_name", "pymprog")
 
-x = m.bvar(name="x", dim=0)
-y = m.pvar(name="y", dim=0, bound=[0, 10])
-m.con(x + y <= 1, label="c1")
-m.con(x - y >= 1, label="c2")
+x = m.bvar(name="x")
+y = m.pvar(name="y", bound=[0, 10])
+m.con(x + y <= 1, name="c1")
+m.con(x - y >= 1, name="c2")
 m.obj(x + y)
 
 m.sol(["max"], "glpk")
