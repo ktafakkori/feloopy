@@ -312,7 +312,7 @@ class SpecialConstraintClass:
         self.con(expr - z == rhs)
         return z
 
-    def con_expr_in_bound(self, expr: Expression, lb: Optional[float] = None, ub: Optional[float] = None, label: Optional[str] = None):
+    def con_expr_in_bound(self, expr: Expression, lb: Optional[float] = None, ub: Optional[float] = None, name: Optional[str] = None):
         """
         Creates upper and/or lower bounds on the given variable in the optimization model.
 
@@ -320,12 +320,12 @@ class SpecialConstraintClass:
             expr (Expression): The variable expression.
             lb (float, optional): Lower bound. Default is None.
             ub (float, optional): Upper bound. Default is None.
-            label (str, optional): Label for the constraint. Default is None.
+            name (str, optional): name for the constraint. Default is None.
         """
         if lb is not None:
-            self.con(expr >= lb, label=label)
+            self.con(expr >= lb, name=name)
         if ub is not None:
-            self.con(expr <= ub, label=label)
+            self.con(expr <= ub, name=name)
 
     def con_abs_leq(self, expr: Expression, rhs: float):
         """
