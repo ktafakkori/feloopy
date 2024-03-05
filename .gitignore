@@ -9,7 +9,6 @@ feloopy.egg-info
 extra*
 __pycache__
 project*
-test*
 _build
 main*
 modules

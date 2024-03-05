@@ -68,15 +68,14 @@ markdown_extensions:
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.snippets:
-      base_path: ['.','docs/examples/']
-
+      base_path: ['.','docs/inputs/','docs/outputs/']
   - footnotes
 
 
 plugins:
   - search:
       lang: en
-
+  - macros
   - markdown-exec
   - material-plausible
 
