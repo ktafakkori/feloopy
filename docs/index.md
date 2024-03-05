@@ -39,14 +39,14 @@ FelooPy (pronounced /fɛlupaɪ/) is a comprehensive and versatile Decision Scien
 ```py
 import feloopy as flp
 
-m = flp.model('exact', 'model_name', 'pymprog')
-x = m.bvar(name='x', dim=0)
-y = m.pvar(name='y', dim=0, bound = [0, 10])
-m.con(x + y <= 1, label='c1')
-m.con(x - y >= 1, label='c2')
+m = flp.model("exact", "model_name", "pymprog")
+x = m.bvar(name="x", dim=0)
+y = m.pvar(name="y", dim=0, bound=[0, 10])
+m.con(x + y <= 1, label="c1")
+m.con(x - y >= 1, label="c2")
 m.obj(x + y)
 
-m.sol(['max'], 'glpk')
+m.sol(["max"], "glpk")
 
 m.report()
 ```
