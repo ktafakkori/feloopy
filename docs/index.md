@@ -27,7 +27,7 @@ FelooPy (pronounced /fɛlupaɪ/) is a comprehensive and versatile Decision Scien
 
 ## Motivation
 
-- To increase the applicability of operations research in solving challenging real-world problems.
+- To increase the applicability of operations research in solving real-world problems.
 - To focus more on analyzing impact and importance than solving, modeling, or coding.
 - To reduce the need for prompting large language models and seeking coding suggestions.
 - To focus more on stability and scalability than feasibility, logicality, or optimality.
@@ -53,4 +53,4 @@ m.report()
 
 ## License
 
-This project is licensed under the terms of the [MIT license](https://github.com/ktafakkori/feloopy/blob/main/LICENSE).
+FelooPy is licensed based on the [MIT license](https://github.com/ktafakkori/feloopy/blob/main/LICENSE).
