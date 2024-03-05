@@ -3,7 +3,7 @@
 
 from feloopy import *
 
-m = target_model('exact', 'sudoku solver', 'gurobi')
+m = model('exact', 'sudoku solver', 'gurobi')
 
 puzzle = np.array([[5, 3, 0, 0, 7, 0, 0, 0, 2],
                    [6, 0, 0, 1, 9, 5, 0, 0, 0],

@@ -43,7 +43,9 @@ theme:
     - navigation.footer
     - navigation.indexes
     - content.tabs.link
-    
+    - content.code.copy
+    - content.code.annotate
+
   icon:
     repo: fontawesome/brands/github
 
@@ -58,12 +60,16 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.snippets:
-      base_path: ['.','docs/src/']
-      check_paths: true
+      base_path: ['.','docs/examples/']
+
   - footnotes
 
 

@@ -530,16 +530,16 @@ However, as some users might prefer a dedicated version, the following lists the
 
    ```python
 
-   from feloopy import *
+   import feloopy as flp
 
    def instance(X):
 
       # Define model instance
-      m = model('heuristic', 'representor_model_name', 'feloopy', X)
+      m = flp.model('heuristic', 'model_name', 'feloopy', X)
 
       # Define variables for the model instance
       x = m.bvar(name='x', dim=0)
-      y = m.pvar(name='y', dim=0, bound = [0, 10])
+      y = m.pvar(name='y', dim=0, bound = [0, 1])
 
       # Define constraints for the model instance
       m.con(x + y |l| 1, label='c1')
