@@ -80,6 +80,6 @@ plugins:
   - material-plausible
 
 extra_css:
-  - stylesheets/extra.css
+  - stylesheets/better.css
 
 
