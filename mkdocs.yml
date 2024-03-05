@@ -9,6 +9,9 @@ nav:
   - User guide:
     - index.md
 
+    - Getting started: user-guide/getting-started.md
+
+
 theme:
 
   name: material

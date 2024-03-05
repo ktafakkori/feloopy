@@ -1,3 +1,7 @@
+---
+title: FelooPy user guide
+---
+
 #
 
 <img src="assets/banner.png" alt="logo">
