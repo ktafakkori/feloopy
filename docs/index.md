@@ -31,7 +31,7 @@ FelooPy (pronounced /fɛlupaɪ/) is a comprehensive and versatile Decision Scien
 - To reduce the need for prompting large language models and seeking coding suggestions.
 - To focus more on stability and scalability than feasibility, logicality, or optimality.
 - To have an all-in-one integrated optimization environment for decision analytics.
-- To enable benchmarking of various models, solvers, methods, and algorithms.
+- To enable benchmarking of various policies, models, solvers, methods, and algorithms.
 
 ## Example
 
