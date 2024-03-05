@@ -64,25 +64,25 @@ class Expression:
 
 class NormalConstraintClass:
     
-    def enforce_gt(self, lhs, rhs, epsilon=1e-6, label=None):
-        self.con([lhs, '>', rhs, epsilon], label)
+    def enforce_gt(self, lhs, rhs, epsilon=1e-6, name=None):
+        self.con([lhs, '>', rhs, epsilon], name)
  
-    def enforce_lt(self, lhs, rhs, epsilon=1e-6, label=None):
-        self.con([lhs, '<', rhs, epsilon], label)
+    def enforce_lt(self, lhs, rhs, epsilon=1e-6, name=None):
+        self.con([lhs, '<', rhs, epsilon], name)
 
-    def enforce_geq(self, lhs, rhs, label=None):
-        self.con([lhs, '>=', rhs], label)
+    def enforce_geq(self, lhs, rhs, name=None):
+        self.con([lhs, '>=', rhs], name)
         
-    def enforce_leq(self, lhs, rhs, epsilon=1e-6, label=None):
-        self.con([lhs, '<=', rhs], label)
+    def enforce_leq(self, lhs, rhs, epsilon=1e-6, name=None):
+        self.con([lhs, '<=', rhs], name)
 
-    def enforce_eq(self, lhs, rhs, epsilon=1e-6, label=None):
-        self.con([lhs, '==', rhs], label)
+    def enforce_eq(self, lhs, rhs, epsilon=1e-6, name=None):
+        self.con([lhs, '==', rhs], name)
 
-    def enforce_neq(self, lhs, rhs, epsilon=1e-6, label=None):
-        self.con([lhs, '!=', rhs, epsilon], label)
+    def enforce_neq(self, lhs, rhs, epsilon=1e-6, name=None):
+        self.con([lhs, '!=', rhs, epsilon], name)
                              
-    def con(self, expression, label=None):
+    def con(self, expression, name=None):
         """
         Constraint Definition
         ~~~~~~~~~~~~~~~~~~~~~
@@ -90,7 +90,7 @@ class NormalConstraintClass:
 
         Args:
             expression (formula): what are the terms of this constraint?
-            label (str, optional): what is the label of this constraint?. Defaults to None.
+            name (str, optional): what is the name of this constraint?. Defaults to None.
         """
                     
         def add_special_constraint(element):
@@ -115,26 +115,26 @@ class NormalConstraintClass:
                         for element in expression:
                             const = add_special_constraint(element)
                             const_list+=const
-                        if isinstance(label, list): self.features['constraint_labels'] += label
-                        else: self.features['constraint_labels'] += [str(label)+str(i) if label else None for i in range(len(expression))]
+                        if isinstance(name, list): self.features['constraint_labels'] += name
+                        else: self.features['constraint_labels'] += [str(name)+str(i) if name else None for i in range(len(expression))]
                         self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
                         self.features['constraints'] += const_list
                         self.features['constraint_counter'][1] = len(self.features['constraints'])
                 
                     case 'single list with sense': 
                
-                        if len(expression)==3: label = [label]
+                        if len(expression)==3: name = [name]
                         const = add_special_constraint(expression)
-                        if isinstance(label, list): self.features['constraint_labels'] += label
-                        else: self.features['constraint_labels'] += [str(label)+str(i) if label else None for i in range(len(const))]
+                        if isinstance(name, list): self.features['constraint_labels'] += name
+                        else: self.features['constraint_labels'] += [str(name)+str(i) if name else None for i in range(len(const))]
                         self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
                         self.features['constraints'] += const
                         self.features['constraint_counter'][1] = len(self.features['constraints'])
 
                     case 'list without sense':
 
-                        if isinstance(label, list): self.features['constraint_labels'] += label
-                        else: self.features['constraint_labels'] += [str(label)+str(i) if label else None for i in range(len(expression))]
+                        if isinstance(name, list): self.features['constraint_labels'] += name
+                        else: self.features['constraint_labels'] += [str(name)+str(i) if name else None for i in range(len(expression))]
                         self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
                         self.features['constraints'] += list(expression)
                         self.features['constraint_counter'][1] = len(self.features['constraints'])
@@ -167,7 +167,7 @@ class NormalConstraintClass:
                        
                     case 'classic':
                     
-                        self.features['constraint_labels'].append(label)
+                        self.features['constraint_labels'].append(name)
                         self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
                         self.features['constraints'].append(expression)
                         self.features['constraint_counter'][1] = len(self.features['constraints'])
@@ -175,7 +175,7 @@ class NormalConstraintClass:
             case 'heuristic':
 
                 if self.features['agent_status'] == 'idle':
-                    self.features['constraint_labels'].append(label)
+                    self.features['constraint_labels'].append(name)
                     self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
                     self.features['constraints'].append(expression)
                     self.features['constraint_counter'][1] = len(self.features['constraints'])

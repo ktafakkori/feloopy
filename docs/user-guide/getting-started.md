@@ -23,64 +23,67 @@ These solution methods, e.g., simplex, dual simplex, revised simplex, branch & b
 
 An instance of a decision problem using `exact` solution methods is coded and solved as follows:
 
-```py
-from feloopy import *
+=== ":fontawesome-brands-python: Python"
 
-# Define a model
-m = model("exact", "model_name", "pymprog")
+    ```py
+    from feloopy import *
 
-# Define variables
-x = m.bvar(name="x", dim=0)
-y = m.pvar(name="y", dim=0, bound=[0, 1])
+    # Define a model
+    m = model("exact", "model_name", "pymprog")
 
-# Define constraints
-m.con(x + y <= 1, name="c1")
-m.con(x - y >= 1, name="c2")
+    # Define variables
+    x = m.bvar(name="x", dim=0)
+    y = m.pvar(name="y", dim=0, bound=[0, 1])
 
-# Define an objective
-m.obj(x + y)
+    # Define constraints
+    m.con(x + y <= 1, name="c1")
+    m.con(x - y >= 1, name="c2")
 
-# Solve the model
-m.sol(["max"], "glpk")
+    # Define an objective
+    m.obj(x + y)
 
-# Report the results
-m.report()
-```
+    # Solve the model
+    m.sol(["max"], "glpk")
 
-```console
-╭─ FelooPy v0.0.0 ───────────────────────────────────────────────────────────────╮
-│                                                                                │
-│ Date: 0000-00-00                                                Time: 00:00:00 │
-│ Interface: pymprog                                                Solver: glpk │
-│                                                                                │
-╰────────────────────────────────────────────────────────────────────────────────╯
-╭─ Model ────────────────────────────────────────────────────────────────────────╮
-│                                                                                │
-│ Name: model_name                                                               │
-│ Feature:                                Class:                        Total:   │
-│ Positive variable                       1                             1        │
-│ Binary variable                         1                             1        │
-│ Total variables                         2                             2        │
-│ Objective                               -                             1        │
-│ Constraint                              2                             2        │
-│                                                                                │
-╰────────────────────────────────────────────────────────────────────────────────╯
-╭─ Solve ────────────────────────────────────────────────────────────────────────╮
-│                                                                                │
-│ Method: exact                                                  Objective value │
-│ Status:                                                                    max │
-│ optimal                                                                   1.00 │
-│                                                                                │
-╰────────────────────────────────────────────────────────────────────────────────╯
-╭─ Metric ───────────────────────────────────────────────────────────────────────╮
-│                                                                                │
-│ CPT (microseconds)                                                     1591.90 │
-│ CPT (hour:min:sec)                                                    00:00:00 │
-│                                                                                │
-╰────────────────────────────────────────────────────────────────────────────────╯
-╭─ Decision ─────────────────────────────────────────────────────────────────────╮
-│                                                                                │
-│ x = 1.0                                                                        │
-│                                                                                │
-╰────────────────────────────────────────────────────────────────────────────────╯
-```
+    # Report the results
+    m.report()
+    ```
+=== ":material-console: Console"
+
+    ```console
+    ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
+    │                                                                                │
+    │ Date: 2024-03-05                                                Time: 21:18:37 │
+    │ Interface: pymprog                                                Solver: glpk │
+    │                                                                                │
+    ╰────────────────────────────────────────────────────────────────────────────────╯
+    ╭─ Model ────────────────────────────────────────────────────────────────────────╮
+    │                                                                                │
+    │ Name: target_model_name                                                        │
+    │ Feature:                                Class:                        Total:   │
+    │ Positive variable                       1                             1        │
+    │ Binary variable                         1                             1        │
+    │ Total variables                         2                             2        │
+    │ Objective                               -                             1        │
+    │ Constraint                              2                             2        │
+    │                                                                                │
+    ╰────────────────────────────────────────────────────────────────────────────────╯
+    ╭─ Solve ────────────────────────────────────────────────────────────────────────╮
+    │                                                                                │
+    │ Method: exact                                                  Objective value │
+    │ Status:                                                                    max │
+    │ optimal                                                                   1.00 │
+    │                                                                                │
+    ╰────────────────────────────────────────────────────────────────────────────────╯
+    ╭─ Metric ───────────────────────────────────────────────────────────────────────╮
+    │                                                                                │
+    │ CPT (microseconds)                                                     1899.50 │
+    │ CPT (hour:min:sec)                                                    00:00:00 │
+    │                                                                                │
+    ╰────────────────────────────────────────────────────────────────────────────────╯
+    ╭─ Decision ─────────────────────────────────────────────────────────────────────╮
+    │                                                                                │
+    │ x = 1.0                                                                        │
+    │                                                                                │
+    ╰────────────────────────────────────────────────────────────────────────────────╯
+    ```
