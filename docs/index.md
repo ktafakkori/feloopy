@@ -14,7 +14,7 @@
 
 </center>
 
-FelooPy (pronounced /fɛlupaɪ/) is a comprehensive and versatile Decision Science and Operations Research library. It allows for coding, modeling, and solving decision problems and aligns with low or no-code requirements, letting you focus more on analytics. The library covers various categories and utilizes numerous interfaces and solvers without requiring prompting large language models or learning complex coding syntaxes. It is primarily developed in Python, which makes it accessible and callable from multiple programming languages.
+FelooPy (pronounced /fɛlupaɪ/) is a comprehensive and versatile Decision Science and Operations Research library. It allows for coding, modeling, and solving decision problems and aligns with low or no-code requirements, letting you focus more on analytics. The library covers various categories of mathematical and statistical methods for decision-making and utilizes numerous interfaces and solvers without requiring prompting large language models or learning complex coding syntaxes. It is primarily developed in Python, which makes it accessible and callable from multiple programming languages.
 
 ## Key features
 
@@ -23,7 +23,6 @@ FelooPy (pronounced /fɛlupaɪ/) is a comprehensive and versatile Decision Scien
 - Versatile: Covers linear, non-linear, integer, mixed-integer, mixed integer nonlinear programming.
 - Intuitive: Code as it is mathematically modeled, no advanced programming knowledge needed.
 - Automated: Configure your solution method, let FelooPy handle the rest.
-
 
 ## Motivation
 
@@ -40,6 +39,7 @@ FelooPy (pronounced /fɛlupaɪ/) is a comprehensive and versatile Decision Scien
 import feloopy as flp
 
 m = flp.model("exact", "model_name", "pymprog")
+
 x = m.bvar(name="x", dim=0)
 y = m.pvar(name="y", dim=0, bound=[0, 10])
 m.con(x + y <= 1, label="c1")
