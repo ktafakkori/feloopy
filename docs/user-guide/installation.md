@@ -572,7 +572,7 @@ For enabling the switch among multiple different optimization algorithms, progra
 
 ### `plus_gurobi`
 
-This variant includes the Gurobi solver. It requires a valid Gurobi license. Refer to the Gurobi website for more information.
+This variant includes the Gurobi solver. It requires a valid Gurobi license. Refer to the [Gurobi website](https://www.gurobi.com/) for more information.
 
 === ":material-console: System-wide"
 
@@ -640,7 +640,7 @@ This variant includes the Gurobi solver. It requires a valid Gurobi license. Ref
 
 ### `plus_cplex`
 
-This variant includes the CPLEX solver. It requires a valid CPLEX license. Refer to the CPLEX website for more information.
+This variant includes the CPLEX solver. It requires a valid CPLEX license. Refer to the [CPLEX website](https://www.ibm.com/analytics/cplex-optimizer) for more information.
 
 === ":material-console: System-wide"
 
@@ -708,7 +708,8 @@ This variant includes the CPLEX solver. It requires a valid CPLEX license. Refer
 
 ### `plus_xpress`
 
-This variant includes the Xpress solver. It requires a valid Xpress license. Refer to the Xpress website for more information.
+This variant includes the Xpress solver. It requires a valid Xpress license. Refer to the [Xpress website](https://www.fico.com/en/products/fico-xpress-optimization) for more information.
+
 
 === ":material-console: System-wide"
 
@@ -776,7 +777,7 @@ This variant includes the Xpress solver. It requires a valid Xpress license. Ref
 
 ### `plus_copt`
 
-This variant includes the COPT solver. It requires a valid COPT license. Refer to the COPT website for more information.
+This variant includes the COPT solver. It requires a valid COPT license. Refer to the [COPT website](https://shanshu.ai/copt) for more information.
 
 === ":material-console: System-wide"
 
@@ -844,7 +845,7 @@ This variant includes the COPT solver. It requires a valid COPT license. Refer t
 
 ### `plus_gams`
 
-This variant includes the GAMS (General Algebraic Modeling System) interface. It requires a valid GAMS license. Refer to the GAMS website for more information.
+This variant includes the GAMS (General Algebraic Modeling System) interface. It requires a valid GAMS license. Refer to the [GAMS website](https://www.gams.com/) for more information.
 
 
 === ":material-console: System-wide"
@@ -913,7 +914,10 @@ This variant includes the GAMS (General Algebraic Modeling System) interface. It
 
 ### `plus_insideopt`
 
-This variant includes the Seeker(TM) solver. It requires a valid Seeker license. Refer to the InsideOpt website for more information. You may use `plus_insideoptdemo` to test the demo version.
+This variant includes the Seeker(TM) solver. It requires a valid Seeker license. Refer to the [InsideOpt website](https://insideopt.com/pages/install-insideopt-seeker) for more information. You may use `plus_insideoptdemo` to test the demo version.
+
+
+
 
 === ":material-console: System-wide"
 
@@ -984,7 +988,7 @@ This variant includes the Seeker(TM) solver. It requires a valid Seeker license.
 
 ### `only_cylp`
 
-This variant includes the CyLP solver. It requires a valid CyLP installation. Refer to this link for more information.
+This variant includes the CyLP solver. It requires a valid CyLP installation. Refer to this [link](https://github.com/coin-or/CyLP) for more information.
 
 
 === ":material-console: System-wide"
@@ -1054,7 +1058,7 @@ This variant includes the CyLP solver. It requires a valid CyLP installation. Re
 ### `only_linux`
 
 
-This variant includes additional features for Linux-based distros. It installs FelooPy with its common dependencies and the pymultiobjective package.
+This variant includes additional features for Linux-based distros. It installs FelooPy with its common dependencies and the `pymultiobjective` package.
 
 
 === ":material-console: System-wide"
