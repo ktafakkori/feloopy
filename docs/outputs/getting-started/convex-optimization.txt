@@ -1,39 +1,48 @@
-(CVXPY) Mar 06 01:17:40 AM: Encountered unexpected exception importing solver GLOP:
-RuntimeError('Unrecognized new version of ortools (9.8.3296). Expected < 9.8.0. Please open a feature request on cvxpy to enable support for this version.')
-(CVXPY) Mar 06 01:17:40 AM: Encountered unexpected exception importing solver PDLP:
-RuntimeError('Unrecognized new version of ortools (9.8.3296). Expected < 9.8.0. Please open a feature request on cvxpy to enable support for this version.')
 
 ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
 │                                                                                │
-│ Date: 2024-03-06                                                Time: 01:17:40 │
+│ Date: 2024-03-07                                                Time: 18:40:25 │
 │ Interface: cvxpy                                                  Solver: ecos │
 │                                                                                │
 ╰────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Model ────────────────────────────────────────────────────────────────────────╮
 │                                                                                │
-│ Name: convex_model_name                                                        │
+│ Name: model_name                                                               │
 │ Feature:                                Class:                        Total:   │
-│ Free variable                           1                             1        │
-│ Total variables                         1                             1        │
+│ Free variable                           1                             15       │
+│ Total variables                         1                             15       │
 │ Objective                               -                             1        │
-│ Constraint                              2                             2        │
 │                                                                                │
 ╰────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Solve ────────────────────────────────────────────────────────────────────────╮
 │                                                                                │
 │ Method: convex                                                 Objective value │
 │ Status:                                                                    min │
-│ optimal                                                                   9.00 │
+│ optimal                                                                   7.01 │
 │                                                                                │
 ╰────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Metric ───────────────────────────────────────────────────────────────────────╮
 │                                                                                │
-│ CPT (microseconds)                                                    2.42e+04 │
+│ CPT (microseconds)                                                    1.41e+04 │
 │ CPT (hour:min:sec)                                                    00:00:00 │
 │                                                                                │
 ╰────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Decision ─────────────────────────────────────────────────────────────────────╮
 │                                                                                │
-│ x = 1.000000005186514                                                          │
+│ x[0] = 0.17492417646075706                                                     │
+│ x[1] = -0.38102550941189334                                                    │
+│ x[2] = 0.34732251155569943                                                     │
+│ x[3] = 0.017309800766098893                                                    │
+│ x[4] = -0.08457840240212473                                                    │
+│ x[5] = -0.08134019357405091                                                    │
+│ x[6] = 0.29311899913458567                                                     │
+│ x[7] = 0.2701976181988335                                                      │
+│ x[8] = 0.1749317847095773                                                      │
+│ x[9] = -0.23953448943383862                                                    │
+│ x[10] = 0.6409793497254026                                                     │
+│ x[11] = -0.4163363709102623                                                    │
+│ x[12] = 0.12799688431302775                                                    │
+│ x[13] = 0.10639419837588153                                                    │
+│ x[14] = -0.3215841088187847                                                    │
 │                                                                                │
 ╰────────────────────────────────────────────────────────────────────────────────╯

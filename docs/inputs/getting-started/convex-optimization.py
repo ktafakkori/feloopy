@@ -1,17 +1,24 @@
 import feloopy as flp
+import numpy as np
+
+# Import useful tensor-based functions
+from cvxpy import sum_squares
+
+# Generate data
+m = 20
+n = 15
+np.random.seed(1)
+A = np.random.randn(m, n)
+b = np.random.randn(m)
 
 # Define a model
-m = flp.model("convex", "convex_model_name", "cvxpy")
+m = flp.model("convex", "model_name", "cvxpy")
 
 # Define variables
-x = m.ftvar(name="x")
-
-# Define constraints
-m.con(x <= 1, name="c1")
-m.con(x >= 1, name="c2")
+x = m.ftvar(name="x", shape=[n])
 
 # Define an objective
-m.obj((x - 4) ** 2)
+m.obj(sum_squares(A @ x - b))
 
 # Solve the model
 m.sol(["min"], "ecos")

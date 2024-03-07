@@ -10,7 +10,20 @@ nav:
     - index.md
 
     - Getting started: user-guide/getting-started.md
-
+    - Installation: user-guide/installation.md
+    - Concepts:
+      - concepts/index.md
+      - Sets: concepts/sets.md
+      - Parameters: concepts/parameters.md
+      - Variables: concepts/variables.md
+      - Constraints: concepts/constraints.md
+      - Objectives: concepts/objectives.md
+      - Facilitators: concepts/facilitators.md
+      - Handlers: concepts/handlers.md
+      - Configurators: concepts/configurators.md
+      - Analyzers: concepts/analyzers.md
+  
+  - About: about/index.md
 
 theme:
 
@@ -81,5 +94,3 @@ plugins:
 
 extra_css:
   - stylesheets/better.css
-
-

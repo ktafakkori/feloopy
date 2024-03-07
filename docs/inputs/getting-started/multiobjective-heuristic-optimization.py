@@ -1,5 +1,6 @@
 import feloopy as flp
 
+
 def instance(X):
 
     # Define model instance
@@ -16,6 +17,7 @@ def instance(X):
     m.sol(["min", "min"], "ns-ga-ii", {"n_gen": 100}, obj_id="all")
 
     return m[X]
+
 
 # Make the main model
 m = flp.make_model(instance)

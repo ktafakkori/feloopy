@@ -1,26 +1,24 @@
-By following this section, new FelooPy users can learn to use the core classes, methods, or functions that help them code, model, and solve various decision problems. Notably, by solution method, we mean the process used to make the final decision based on the given inputs and following the features of the search algorithm.
+This section equips new FelooPy users with the fundamental elements (classes and their core methods and core functions) necessary to code, model, and solve almost all kinds of decision problems common in operations research and decision science.
 
 ## Installing FelooPy
 
-If you have already installed other optimization packages like `pyomo`, `pulp`, `ortools`, `gekko` or `docplex`, `gurobipy`, `xpress`, `coptpy` and `insideopt`, and want to upgrade the way you use them through FelooPy you may use the following installation command:
+Suppose you have already installed other optimization packages like `pyomo`, `pulp`, `ortools`, `gekko` or `docplex`, `gurobipy`, `xpress`, `coptpy`, `insideopt` and `gamspy`, and want to upgrade the way you use them through FelooPy. In that case, you may use the following installation command:
 
 ```terminal
 pip install feloopy
 ```
 
-Else, if you are new to optimization in Python or want a fresh install, you can start installation using the following command:
+Otherwise, if you are new to optimization in Python or want a fresh install, you can start installation using the following command:
 
 ```terminal
 pip install feloopy[stock]
 ```
 
-## Exact solution methods
+## Optimization algorithms
 
-FelooPy supports solving target optimization models using exact solution methods. By target, we mean models directly structured by an expert based on assumed aspects in terms of mathematical relations.
+### *Exact optimization algorithms*
 
-These solution methods (e.g., simplex, dual simplex, revised simplex, branch & bound, or branch & cut) have already been coded and fine-tuned by free and open-source solvers like `cbc`, `highs`, `glpk`, and `ipopt` or by commercial solvers like `cplex`, `gurobi`, `copt`, `xpress`, and `seeker`. You can also use a basic solver like `cbc` and design problem-specific exact or decomposition-based solution methods.
-
-An instance of a decision problem using exact solution methods is coded and solved as follows:
+FelooPy supports solving mathematical models using exact optimization algorithms. These algorithms are heuristics guaranteed to find optimal solutions to a decision problem translated as a mathematical model in a not necessarily polynomial time. Simplex, dual simplex, revised simplex, branch & bound, or branch & cut are examples of such algorithms. Free and open-source solvers like `cbc`, `highs`, `glpk`, and `ipopt` or commercial solvers like `cplex`, `gurobi`, `copt`, `xpress`, and `seeker` have already coded and fine-tuned such algorithms for direct use. However, one can also leverage these solvers and design problem-specific or improved exact optimization algorithms. A mathematical model solved by an exact optimization algorithm is programmed as follows:
 
 === ":fontawesome-brands-python: Python"
 
@@ -34,14 +32,9 @@ An instance of a decision problem using exact solution methods is coded and solv
     --8<-- "./getting-started/exact-optimization.txt"
     ```
 
-## Heuristic solution methods
+### *Heuristic optimization algorithms*
 
-
-FelooPy supports solving representor optimization models using heuristic solution methods. By representor, we mean models encoded and decoded using heuristics desired by an expert based on assumed aspects of mathematical logic.
-
-These solution methods (e.g., genetic algorithm, particle swarm optimization, differential evolution, simulated annealing, or tabu search) have already been coded and fine-tuned by free and open-source interfaces like `mealpy` and `pygad`, or by `feloopy` itself. Note that you can modify the decoding process according to your needs or have several local search phases.
-
-An instance of a decision problem using heuristic solution methods is coded and solved as follows:
+FelooPy supports solving a representation of mathematical models using heuristic optimization algorithms. These algorithms are heuristics that are not guaranteed to find optimal solutions to a decision problem translated by the representation of a mathematical model in a possibly polynomial time. Such algorithms include genetic algorithm, differential evolution, particle swarm optimization, grey wolf optimizer, simulated annealing, and tabu search. Free and open-source interfaces and solvers like `mealpy`, `niapy`, `pymoo`, `pygad` or `feloopy` (itself) have already coded and fine-tuned such algorithms for direct use. However, one can leverage these solvers and design problem-specific or improved heuristic optimization algorithms. A mathematical model solved by a heuristic optimization algorithm is programmed as follows:
 
 === ":fontawesome-brands-python: Python"
 
@@ -55,12 +48,12 @@ An instance of a decision problem using heuristic solution methods is coded and 
     --8<-- "./getting-started/heuristic-optimization.txt"
     ```
 
-## Convex solution methods
+## Programming facilitators
 
+### *Convex programming methods*
 
-FelooPy supports using convex solution methods. The models solved via these solution methods should have a specific property: convexity.
-
-An instance of a decision problem using convex solution methods is coded and solved as follows:
+FelooPy supports solving mathematical models that have convexity properties using convex programming methods. These programming methods facilitate using scalars, vectors, matrices, or tensors in programming a mathematical model, enabling the consideration of statistical metrics in machine learning, control, finance, and more. Most of these algorithms are guaranteed to find optimal solutions to a decision problem translated by the representation of a mathematical model in a not necessarily polynomial time.
+Free and open-source interfaces like `cvxpy` and `gekko` or commercial ones like `gurobi` have already coded and fine-tuned such programming methods for direct use. A mathematical model solved by a convex programming method is coded as follows:
 
 === ":fontawesome-brands-python: Python"
 
@@ -74,11 +67,9 @@ An instance of a decision problem using convex solution methods is coded and sol
     --8<-- "./getting-started/convex-optimization.txt"
     ```
 
-## Constraint solution methods
+### *Constraint programming methods*
 
-FelooPy supports using constraint programming-based solution methods. The models solved via these solution methods can be of any form. However, the focus is on satisfying constraints or finding feasible solutions. Sometimes, they can also find optimal solutions. Besides, they only accept binary and integer variables and event variables.
-
-An instance of a decision problem using constraint solution methods is coded and solved as follows:
+FelooPy empowers users to tackle complex decision problems through constraint programming. Unlike exact or heuristic optimization algorithms, which are targeted at finding "optimal" or "best possible" solutions in a huge feasible space, or unlike convex programming methods that primarily enable the use of the unique structure of variables, constraint programming allows the use of unique programming methods that specify logic for finding a reduced set of feasible solutions (satisfying your constraints) and only allows the use of binary or integer variables. Free and open-source interfaces like `ortools_cp` or commercial ones like `cplex_cp` have already coded and fine-tuned such programming methods for direct use. A mathematical model solved by a constraint programming method is coded as follows:
 
 === ":fontawesome-brands-python: Python"
 
@@ -92,11 +83,11 @@ An instance of a decision problem using constraint solution methods is coded and
     --8<-- "./getting-started/constraint-optimization.txt"
     ```
 
+## Complexity handlers
 
-## Uncertain solution methods
+### *Uncertainty handling methods*
 
-FelooPy supports handling uncertainty of your (predicted/estimated) datasets using extra processes. An example of using these methods is provided as follows:
-
+FelooPy supports handling the uncertainty of your (predicted/estimated) datasets solved by exact optimization algorithms using special methods and functions. Free and open-source interfaces like `rsome_ro` or `rsome_dro` have already coded and fine-tuned stochastic, robust, or distributionally robust uncertainty handling methods for direct use. A mathematical model solved by an exact optimization algorithm using uncertainty handling methods is coded as follows:
 
 === ":fontawesome-brands-python: Python"
 
@@ -110,28 +101,42 @@ FelooPy supports handling uncertainty of your (predicted/estimated) datasets usi
     --8<-- "./getting-started/uncertain-optimization.txt"
     ```
 
-## Multi-objective solution methods
+### *Multi-objectivity handling methods*
 
+FelooPy-specific methods support handling multi-objectivity of your decision problems being solved by either exact or heuristic optimization algorithms. 
 
-FelooPy supports solving optimization problems that include multiple objective functions. An instance of a decision problem using these methods is coded and solved as follows:
-
+A multi-objective mathematical model solved by an exact optimization algorithm is coded as follows:
 
 === ":fontawesome-brands-python: Python"
 
     ```py
-    --8<-- "./getting-started/multiobjective-optimization.py"
+    --8<-- "./getting-started/multiobjective-exact-optimization.py"
     ```
 
 === ":material-console: Console"
 
     ```console
-    --8<-- "./getting-started/multiobjective-optimization.txt"
+    --8<-- "./getting-started/multiobjective-exact-optimization.txt"
     ```
 
-## Multi-attribute solution methods
+A multi-objective mathematical model solved by a heuristic optimization algorithm is coded as follows:
 
-FelooPy supports getting experts opinions regarding the performance of multiple alternatives regarding multiple criteria and then weight criteria, rank alternatives or do both simultanously. Some of these methods also enable classification of alternatives. Below, is an example solved using these methods:
+=== ":fontawesome-brands-python: Python"
 
+    ```py
+    --8<-- "./getting-started/multiobjective-heuristic-optimization.py"
+    ```
+
+=== ":material-console: Console"
+
+    ```console
+    --8<-- "./getting-started/multiobjective-heuristic-optimization.txt"
+    ```
+
+
+### *Opinion handling methods*
+
+FelooPy supports decision problems that involve getting experts' opinions regarding the performance of multiple alternatives regarding multiple criteria/attributes and then weighting criteria/attributes, ranking or selecting alternatives, or doing both simultaneously. These methods enable solving decision problems without mathematical models and using expert-based data. Some of these methods also allow the classification of alternatives. Below is an example solved using these methods:
 
 === ":fontawesome-brands-python: Python"
 
@@ -144,3 +149,4 @@ FelooPy supports getting experts opinions regarding the performance of multiple 
     ```console
     --8<-- "./getting-started/multiattribute-decision.txt"
     ```
+

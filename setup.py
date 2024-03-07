@@ -11,7 +11,7 @@ common = [
     'matplotlib==3.8.2',
     'nbformat==5.9.2',
     'numba==0.58.1',
-    'numpy==1.26.2',
+    'numpy==1.20.0',
     'openpyxl==3.1.2',
     'pandas==2.1.3',
     'plotly==5.18.0',
@@ -48,6 +48,7 @@ mini = micro + [
 full = mini + [
     'pydecision==4.3.9',
     'pymoo==0.6.1.1',
+    'rsome==1.2.5',
 ]
 
 stock = full + [
@@ -58,7 +59,6 @@ stock = full + [
     'pulp==2.7.0',
     'pygad==3.2.0',
     'pyomo==6.7.0',
-    'rsome==1.2.5',
 ]
 
 # Solvers for optimization problems or algorithms
