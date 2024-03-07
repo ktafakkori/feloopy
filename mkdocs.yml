@@ -48,6 +48,7 @@ theme:
       name: Switch to light mode
   
   logo: assets/logo.png
+  favicon: assets/favicon.png
 
   features:
     - navigation.tracking
@@ -111,3 +112,4 @@ extra:
       link: https://twitter.com/ktafakkori
     - icon: fontawesome/solid/paper-plane
       link: mailto:feloop.crm@gmail.com
+
