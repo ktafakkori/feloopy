@@ -28,34 +28,9 @@ FelooPy (pronounced /fɛlupaɪ/) is a comprehensive and versatile Decision Scien
 - Intuitive: Code as mathematically modeled; no advanced programming knowledge is needed.
 - Automated: Configure your solution method and let FelooPy handle the rest.
 
-## Motivation
+## Supported decision problems
 
-- To increase the applicability of operations research in solving real-world problems.
-- To focus more on analyzing impact and importance than solving, modeling, or coding.
-- To reduce the need to prompt large language models and seek coding suggestions.
-- To focus more on stability and scalability than feasibility, logicality, or optimality.
-- To have an all-in-one integrated optimization environment for decision analytics.
-- To enable benchmarking of various policies, models, solvers, methods, and algorithms.
-
-## Example
-
-```py
-import feloopy as flp
-
-m = flp.model("exact", "model_name", "pymprog")
-
-x = m.bvar(name="x")
-y = m.pvar(name="y", bound=[0, 1])
-m.con(x + y <= 1, name="c1")
-m.con(x - y >= 1, name="c2")
-m.obj(x + y)
-
-m.sol(["max"], "glpk")
-
-m.report()
-```
-
-FelooPy supports the following _mathematical structure-based_ classification of optimization problems:
+FelooPy supports the following _mathematical structure-based_ classification of decision problems:
 
 - Numerical optimization
    - Linear Programming (LP)
@@ -139,7 +114,7 @@ graph LR
  D23["NLOC"] --> D231["GMINLP, or GMIP"]
 ```
 
-FelooPy supports the following _expert-based_ classification of decision-making problems:
+FelooPy supports the following _expert-based_ classification of decision problems:
 
 - Multi-Attribute Decision-Making (MADM)
    - Weighting methods
@@ -156,7 +131,6 @@ FelooPy supports the following _expert-based_ classification of decision-making 
 
 - Group Decision-Making (GDM)
 
-
 ```mermaid
 graph LR 
  CLASS["FelooPy"] --> SUBCLASS1["MADM"]
@@ -172,6 +146,34 @@ graph LR
  B2["Non-compensatory"] --> B21["Conjunctive satisfying"]
  B2["Non-compensatory"] --> B22["Lexicographic"]
  B2["Non-compensatory"] --> B23["Outranking"]
+```
+
+## Motivation
+
+- To increase the applicability of operations research in solving real-world problems.
+- To focus more on analyzing impact and importance than solving, modeling, or coding.
+- To reduce the need to prompt large language models and seek coding suggestions.
+- To focus more on stability and scalability than feasibility, logicality, or optimality.
+- To have an all-in-one integrated optimization environment for decision analytics.
+- To enable benchmarking of various policies, models, solvers, methods, and algorithms.
+
+
+## Example
+
+```py
+import feloopy as flp
+
+m = flp.model("exact", "model_name", "pymprog")
+
+x = m.bvar(name="x")
+y = m.pvar(name="y", bound=[0, 1])
+m.con(x + y <= 1, name="c1")
+m.con(x - y >= 1, name="c2")
+m.obj(x + y)
+
+m.sol(["max"], "glpk")
+
+m.report()
 ```
 
 ## License
