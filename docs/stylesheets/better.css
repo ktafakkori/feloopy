@@ -62,3 +62,16 @@ span .md-typeset .emojione, .md-typeset .gemoji, .md-typeset .twemoji {
     -webkit-mask-image: var(--md-admonition-icon--rust);
             mask-image: var(--md-admonition-icon--rust);
   }
+
+  .md-typeset__table {
+    min-width: 100%;
+}
+
+.md-typeset table:not([class]) {
+    display: table;
+}
+
+.md-typeset__table td,
+.md-typeset__table th {
+    font-size: 18px;
+}

@@ -97,3 +97,17 @@ extra_css:
   - stylesheets/better.css
 
 copyright: Copyright &copy; 2022 - 2024 Keivan Tafakkori
+
+extra:
+
+  social:
+    - icon: fontawesome/brands/linkedin 
+      link: https://www.linkedin.com/in/keivan-tafakkori/
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/YuvQP86c
+    - icon: fontawesome/brands/github
+      link: https://github.com/ktafakkori
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/ktafakkori
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:feloop.crm@gmail.com
