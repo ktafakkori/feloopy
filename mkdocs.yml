@@ -13,6 +13,7 @@ nav:
     - Installation: user-guide/installation.md
     - Concepts:
       - concepts/index.md
+      - Environments: concepts/environments.md
       - Sets: concepts/sets.md
       - Parameters: concepts/parameters.md
       - Variables: concepts/variables.md
