@@ -148,7 +148,7 @@ FelooPy (pronounced /fɛlupaɪ/) is a comprehensive and versatile Decision Scien
 
 - Efficient: Optimized for speed, designed with Python in mind.
 - Integrated: Seamlessly integrates with any interface and solver for optimization, making switching easy.
-- Versatile: Covers linear, nonlinear, integer, mixed-integer, mixed-integer nonlinear programming.
+- Versatile: Covers linear, nonlinear, integer, mixed-integer linear, mixed-integer nonlinear programming.
 - Intuitive: Code as mathematically modeled; no advanced programming knowledge is needed.
 - Automated: Configure your solution method and let FelooPy handle the rest.
 
