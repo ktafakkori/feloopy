@@ -1270,12 +1270,16 @@ To contribute to the project, support the developer with pull requests, and get 
 pip install -U git+https://github.com/ktafakkori/feloopy.git#egg=feloopy[variant_name]
 ```
 
+or
+
 ```bash
 git clone https://github.com/ktafakkori/feloopy.git
 cd feloopy
 pip install .[variant_name]
-or
+
 ```
+
+or
 
 ```bash
 !git clone https://github.com/ktafakkori/feloopy.git
