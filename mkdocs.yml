@@ -95,3 +95,5 @@ plugins:
 
 extra_css:
   - stylesheets/better.css
+
+copyright: Copyright &copy; 2022 - 2024 Keivan Tafakkori
