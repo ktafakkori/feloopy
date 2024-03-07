@@ -20,6 +20,130 @@ title: FelooPy user guide
 
 FelooPy (pronounced /fɛlupaɪ/) is a comprehensive and versatile Decision Science and Operations Research library. It allows for coding, modeling, and solving decision problems and aligns with low or no-code requirements, letting you focus more on analytics. The library covers various categories of mathematical and statistical methods for decision-making and utilizes numerous interfaces and solvers without requiring prompting large language models or learning complex coding syntaxes. It is primarily developed in Python, which makes it accessible and callable from multiple programming languages.
 
+<table align="center">
+  <tr>
+    <td style="text-align: center;">
+      <canvas id="gameCanvas" width="400" height="400" style="border: 3px solid white;"></canvas>
+    </td>
+  </tr>
+</table>
+
+<script>
+  var canvas = document.getElementById('gameCanvas');
+  var context = canvas.getContext('2d');
+
+  var snake, prey, direction, updateInterval, drawInterval, gameOver;
+
+  function startGame() {
+      snake = [{ top: canvas.height / 2, left: canvas.width / 2, direction: 'right' }];
+      prey = generatePrey();
+      direction = 'right';
+      gameOver = false;
+
+      if (updateInterval) clearInterval(updateInterval);
+      if (drawInterval) clearInterval(drawInterval);
+
+      updateInterval = setInterval(update, 100);
+      drawInterval = setInterval(draw, 100);
+  }
+
+  function generatePrey() {
+      return {
+          top: Math.floor(Math.random() * (canvas.height / 20)) * 20,
+          left: Math.floor(Math.random() * (canvas.width / 20)) * 20
+      };
+  }
+
+  function draw() {
+      if (gameOver) {
+          startGame();
+          return;
+      }
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      context.fillStyle = 'lightblue';
+      for (var i = 0; i < snake.length; i++) {
+          var segment = snake[i];
+          context.save();
+          context.translate(segment.left + 20, segment.top + 20);
+          context.rotate((segment.direction === 'right' ? 45 : segment.direction === 'down' ? 135 : segment.direction === 'left' ? 225 : 315) * Math.PI / 180);
+
+          context.fillRect(-20, -20, 40, 40);
+
+          if (i === 0) {
+              context.fillStyle = 'white';
+              context.beginPath();
+              context.arc(0, -10, 6, 0, Math.PI * 2);
+              context.closePath();
+              context.fill();
+          }
+
+          context.restore();
+      }
+
+      if (prey !== null) {
+          context.fillStyle = 'orange';
+          context.save();
+          context.translate(prey.left + 20, prey.top + 20);
+          context.rotate(45 * Math.PI / 180);
+          context.fillRect(-20, -20, 40, 40);
+
+          context.fillStyle = 'white';
+          context.beginPath();
+          context.arc(0, -10, 6, 0, Math.PI * 2);
+          context.closePath();
+          context.fill();
+
+          context.restore();
+      }
+  }
+
+  function update() {
+      if (gameOver || prey === null) return;
+
+      var head = Object.assign({}, snake[0]);
+      var preyDirection;
+
+      if (prey.top < head.top) {
+          direction = 'up';
+          preyDirection = 'down';
+      } else if (prey.top > head.top) {
+          direction = 'down';
+          preyDirection = 'up';
+      } else if (prey.left < head.left) {
+          direction = 'left';
+          preyDirection = 'right';
+      } else if (prey.left > head.left) {
+          direction = 'right';
+          preyDirection = 'left';
+      }
+
+      head.direction = direction;
+
+      if (direction === 'left') {
+          head.left -= 20;
+      } else if (direction === 'right') {
+          head.left += 20;
+      } else if (direction === 'up') {
+          head.top -= 20;
+      } else if (direction === 'down') {
+          head.top += 20;
+      }
+
+      snake.unshift(head);
+
+      if (head.left === prey.left && head.top === prey.top) {
+          snake.push({});
+          prey = generatePrey();
+      } else {
+          snake.pop();
+      }
+  }
+
+  startGame();
+</script>
+
 ## Key features
 
 - Efficient: Optimized for speed, designed with Python in mind.
