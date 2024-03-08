@@ -9,7 +9,7 @@
 
     CPython 3.10.x interpreters, which are downloadable from [here](https://www.python.org/downloads/), come with the `pip` package manager by default.
 
-- Integrated development environment (IDE):
+- Integrated development environment/Code editor:
 
     [Spyder](https://www.spyder-ide.org/#section-download), [Visual Studio Code](https://code.visualstudio.com/download), [Google Colab](https://colab.research.google.com/), or [JupyterLab](https://jupyter.org/install).
 
