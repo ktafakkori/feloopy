@@ -92,7 +92,7 @@ As some users might prefer a dedicated version, the following lists the availabl
 
 ## Core variant
 
-This variant installs the base package without any additional features. It installs FelooPy with typical data handling, visualization, and scientific computing dependencies. Besides, it comes with original developments of FelooPy (e.g., some heuristic optimization algorithms and problem-handling methods). Therefore, you can solve almost any decision problem using `feloopy` (itself) as the interface variant and algorithms like `ga`, `de`, `gwo`, `ts`, and `sa`.
+This variant installs the base package without any additional features. It installs FelooPy with typical data handling, visualization, and scientific computing dependencies. Besides, it comes with original developments of FelooPy (e.g., some heuristic optimization algorithms and problem-handling methods). Therefore, you can solve almost any decision problem using `feloopy` (itself) as the interface and algorithms like `ga`, `de`, `gwo`, `ts`, and `sa`.
 
 === ":material-console: System-wide"
 
