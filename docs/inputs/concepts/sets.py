@@ -39,7 +39,7 @@ print()
 
 print("# --8<-- [start:conditionalset]")
 # --8<-- [start:conditionalset]
-I = dt.set(name="I", bound=[0, 9], callback=lambda x: x % 2 == 0)
+I = dt.set(name="I", bound=[0, 9], callback=lambda i: i % 2 == 0)
 
 print(I)
 print(type(I))
