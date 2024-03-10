@@ -192,4 +192,4 @@ After creating a set using one of the above commands you may use the standard [s
 
 !!! note
 
-    Complex multi-dimensional sets (e.g., $J = \lbrace (0,1),(1,2),...,(10,10) \rbrace$ or $J = \lbrace (i,k): i \in I \wedge jk \in K_i\rbrace$) are always recommended to be constructed by the users, as Python offers flexibility in this regard.
+    Complex multi-dimensional sets (e.g., $J = \lbrace (0,1),(1,2),...,(10,10) \rbrace$ or $J = \lbrace (i,k): i \in I \wedge k \in K_i\rbrace$) are always recommended to be constructed by the users, as Python offers flexibility in this regard.
