@@ -1,3 +1,5 @@
+One of the fundamental concepts in decision science, optimization, or operations research, is the definition of sets. Any decision environment (virtual or real) consists of sets; elements that eventually have meaningful mathematical/statistical relations to be logically modeled by an expert, with the hope of creating a feasible region, that lets us search for an optimal decision.
+
 This section outlines the process of defining sets within any decision environment. Initially, it's necessary to instantiate a data toolkit, which facilitates dataset manipulation. Notably, sets are integral components of your data. The coding procedure of sets begins as follows:
 
 ```py
