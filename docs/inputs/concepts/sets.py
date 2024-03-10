@@ -128,22 +128,22 @@ print("# --8<-- [end:directset4]")
 
 
 
-print("# --8<-- [start:alaisset1]")
-# --8<-- [start:alaisset1]
+print("# --8<-- [start:aliasset1]")
+# --8<-- [start:aliasset1]
 I = dt.set(name="I", size=10)
 J = dt.alias(name="J", init=I)
 
 print(J)
 print(type(J))
-# --8<-- [end:alaisset1]
-print("# --8<-- [end:alaisset1]")
+# --8<-- [end:aliasset1]
+print("# --8<-- [end:aliasset1]")
 
 
-print("# --8<-- [start:alaisset2]")
-# --8<-- [start:alaisset2]
+print("# --8<-- [start:aliasset2]")
+# --8<-- [start:aliasset2]
 J = I
 
 print(J)
 print(type(J))
-# --8<-- [end:alaisset2]
-print("# --8<-- [end:alaisset2]")
+# --8<-- [end:aliasset2]
+print("# --8<-- [end:aliasset2]")

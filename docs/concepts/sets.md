@@ -154,20 +154,20 @@ In this example, a direct set is created using `numpy`, initializing it with a s
     --8<-- "./concepts/sets.txt:directset3"
     ```
 
-## Alais set
+## Alias set
 
 If it is desired to create and store another set J with attributes same as I, you may use the following code: 
 
 === ":fontawesome-brands-python: Python"
 
     ```py
-    --8<-- "./concepts/sets.py:alaisset1"
+    --8<-- "./concepts/sets.py:aliasset1"
     ```
 
 === ":material-console: Console"
 
     ```console
-    --8<-- "./concepts/sets.txt:alaisset1"
+    --8<-- "./concepts/sets.txt:aliasset1"
     ```
 
 which is equivalent to:
@@ -175,13 +175,13 @@ which is equivalent to:
 === ":fontawesome-brands-python: Python"
 
     ```py
-    --8<-- "./concepts/sets.py:alaisset2"
+    --8<-- "./concepts/sets.py:aliasset2"
     ```
 
 === ":material-console: Console"
 
     ```console
-    --8<-- "./concepts/sets.txt:alaisset2"
+    --8<-- "./concepts/sets.txt:aliasset2"
     ```
 
 After creating a set using one of the above commands you may use the standard [set operations of Python](https://docs.python.org/3/library/stdtypes.html#set) (if the returned type is `set`, by default) or you may use the standard [list operations of Python](https://docs.python.org/3/library/stdtypes.html#lists) (if the returned type is `list`, i.e., `to_list=True`) or you may use the standard [range operations of Python](https://docs.python.org/3/library/stdtypes.html#ranges) (if the returned type is `range`, i.e., `to_range=True`). If you create a set with named indices or a special callback function, returning the created set as a `range` is impossible.
