@@ -15,4 +15,6 @@ modules
 data
 results
 site
+clean.py
+test.py
 *.sio

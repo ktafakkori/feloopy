@@ -71,6 +71,9 @@ strict: true
 markdown_extensions:
   - admonition
   - pymdownx.details
+  - pymdownx.arithmatex
+  - pymdownx.mark
+  - pymdownx.smartsymbols
   - attr_list
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
@@ -97,6 +100,9 @@ plugins:
 extra_css:
   - stylesheets/better.css
 
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML
+  
 copyright: Copyright &copy; 2022 - 2024 Keivan Tafakkori
 
 extra:

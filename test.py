@@ -18,12 +18,13 @@ for root, dirs, files in os.walk(input_dir):
                 input_file_path = os.path.join(root, filename)
                 output_file_path = os.path.join(output_subdir, f"{os.path.splitext(filename)[0]}.txt")
 
-                with open(input_file_path, 'r', encoding='utf-8') as code_file:
-                    code = code_file.read()
+                if not os.path.isfile(output_file_path):
+                    with open(input_file_path, 'r', encoding='utf-8') as code_file:
+                        code = code_file.read()
 
-                with open(output_file_path, 'w', encoding='utf-8') as output_file:
-                    try:
-                        with contextlib.redirect_stdout(output_file):
-                            exec(code)
-                    except Exception as e:
-                        output_file.write(f"Error in {filename}: {str(e)}\n")
+                    with open(output_file_path, 'w', encoding='utf-8') as output_file:
+                        try:
+                            with contextlib.redirect_stdout(output_file):
+                                exec(code)
+                        except Exception as e:
+                            output_file.write(f"Error in {filename}: {str(e)}\n")

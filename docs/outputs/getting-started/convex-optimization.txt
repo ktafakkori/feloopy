@@ -1,7 +1,11 @@
+(CVXPY) Mar 10 03:30:42 PM: Encountered unexpected exception importing solver GLOP:
+RuntimeError('Unrecognized new version of ortools (9.8.3296). Expected < 9.8.0. Please open a feature request on cvxpy to enable support for this version.')
+(CVXPY) Mar 10 03:30:42 PM: Encountered unexpected exception importing solver PDLP:
+RuntimeError('Unrecognized new version of ortools (9.8.3296). Expected < 9.8.0. Please open a feature request on cvxpy to enable support for this version.')
 
 ╭─ FelooPy v0.2.8 ───────────────────────────────────────────────────────────────╮
 │                                                                                │
-│ Date: 2024-03-07                                                Time: 18:40:25 │
+│ Date: 2024-03-10                                                Time: 15:30:42 │
 │ Interface: cvxpy                                                  Solver: ecos │
 │                                                                                │
 ╰────────────────────────────────────────────────────────────────────────────────╯
@@ -23,7 +27,7 @@
 ╰────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Metric ───────────────────────────────────────────────────────────────────────╮
 │                                                                                │
-│ CPT (microseconds)                                                    1.41e+04 │
+│ CPT (microseconds)                                                    1.33e+04 │
 │ CPT (hour:min:sec)                                                    00:00:00 │
 │                                                                                │
 ╰────────────────────────────────────────────────────────────────────────────────╯

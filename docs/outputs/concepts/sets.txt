@@ -1,0 +1,54 @@
+# --8<-- [start:simpleset]
+{'i1', 'i2', 'i4', 'i8', 'i7', 'i9', 'i5', 'i0', 'i6', 'i3'}
+<class 'set'>
+# --8<-- [end:simpleset]
+
+# --8<-- [start:recommendedset]
+{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+<class 'set'>
+# --8<-- [end:recommendedset]
+
+# --8<-- [start:conditionalset]
+{0, 2, 4, 6, 8}
+<class 'set'>
+# --8<-- [end:conditionalset]
+
+# --8<-- [start:setaslist]
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+<class 'list'>
+# --8<-- [end:setaslist]
+
+# --8<-- [start:setasrange]
+range(0, 10)
+<class 'range'>
+# --8<-- [end:setasrange]
+
+# --8<-- [start:directset1]
+{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+<class 'set'>
+# --8<-- [end:directset1]
+
+# --8<-- [start:directset2]
+{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+<class 'set'>
+# --8<-- [end:directset2]
+
+# --8<-- [start:directset3]
+{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+<class 'set'>
+# --8<-- [end:directset3]
+
+# --8<-- [start:directset4]
+{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+<class 'set'>
+# --8<-- [end:directset4]
+
+# --8<-- [start:alaisset1]
+{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+<class 'set'>
+# --8<-- [end:alaisset1]
+
+# --8<-- [start:alaisset2]
+{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+<class 'set'>
+# --8<-- [end:alaisset2]
