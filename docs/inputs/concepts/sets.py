@@ -4,9 +4,7 @@ dt = flp.data_toolkit(key=0)
 # --8<-- [end:setenvironment]
 
 
-
 print()
-
 
 
 print("# --8<-- [start:simpleset]")
@@ -19,9 +17,7 @@ print(type(I))
 print("# --8<-- [end:simpleset]")
 
 
-
 print()
-
 
 
 print("# --8<-- [start:recommendedset]")
@@ -71,6 +67,7 @@ print(I)
 print(type(I))
 # --8<-- [end:setasrange]
 print("# --8<-- [end:setasrange]")
+
 
 print()
 
@@ -127,6 +124,8 @@ print(type(I))
 print("# --8<-- [end:directset4]")
 
 
+print()
+
 
 print("# --8<-- [start:aliasset1]")
 # --8<-- [start:aliasset1]
@@ -137,6 +136,9 @@ print(J)
 print(type(J))
 # --8<-- [end:aliasset1]
 print("# --8<-- [end:aliasset1]")
+
+
+print()
 
 
 print("# --8<-- [start:aliasset2]")

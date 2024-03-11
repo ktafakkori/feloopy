@@ -17,4 +17,5 @@ results
 site
 clean.py
 test.py
+example.py
 *.sio
