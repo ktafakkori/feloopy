@@ -1,3 +1,4 @@
+In modeling a meaningful relationship between elements of various sets in a decision environment, we usually need some indicators, metrics, features, and attributes, given to or collected by the experts as “parameters”. In statistics, however, parameters are referred to as independent and dependent "variables". In both mathematical/statistical modeling, the aim is to increase the accuracy of the solution. In statistics, the accuracy of a decision (e.g., the value of the regressors) depends on statistical measures, while in mathematics and especially operations research, accuracy depends on some expert-defined metrics to match the expectations of a real/virtual world.
 
 This section outlines the process of defining parameters within any decision environment. Continuing the definition of [sets](./sets.md), it is necessary to have instantiated a data toolkit, as follows:
 
