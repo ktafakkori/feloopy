@@ -7,7 +7,6 @@ import itertools as it
 import numpy as np
 import pandas as pd
 import polars as pl
-import sqlite3
 
 try:
     from ..extras.operators.data_handler import *
@@ -19,16 +18,43 @@ except:
 
 class DataToolkit(FileManager):
 
-    def __init__(self, key=None):
+    def __init__(self, key=None, memorize=True):
+        
         self.data = dict()
         self.history = dict()
+        self.seed= key
         self.random = np.random.default_rng(key)
         self.criteria_directions = dict()
         self.tstart = self.vstart = self.start
         self.lfe = self.load_from_excel
+        self.memorize=memorize
+        self.gaussian = self.normal
+        
+        self.store = self.__keep
 
-
-
+    def __fix_dims(self, dim, is_range=True):
+        if dim == 0:
+            pass
+        elif not isinstance(dim, set):
+            if len(dim) >= 1:
+                if not isinstance(dim[0], set):
+                    if is_range:
+                        dim = [range(d) if not isinstance(d, range) else d for d in dim]
+                    else:
+                        dim = [len(d) if not isinstance(d, int) else d for d in dim]
+        return dim
+    
+    def __keep(self, name, value, neglect=False):
+        if self.memorize and neglect==False:
+            self.data[name]=value
+            return self.data[name]
+        elif neglect:
+            return value
+        else:
+            return value
+    
+    ## Sets
+     
     def _convert_to_set(self, input_set):
         if isinstance(input_set, set):
             return input_set
@@ -50,99 +76,303 @@ class DataToolkit(FileManager):
         named_indices=False,
         size=None,
         init=None,
-        axis=0):
+        axis=0,
+        neglect=False):
         
         if size is not None:
-            
             if to_range:
-                created_set = range(size)
+                result = range(size)
             else:
-                created_set = set(range(size))
+                result = set(range(size))
         elif init is not None:
             
             if type(init)==int:
                 if to_range:
-                    created_set = range(init)
+                    result = range(init)
                 else:
-                    created_set = set(range(init))
+                    result = set(range(init))
             elif type(init)==np.ndarray:
                 if to_range:
-                    created_set = range(np.shape(init)[axis])
+                    result = range(np.shape(init)[axis])
                 else:
-                    created_set = set(range(np.shape(init)[axis]))
+                    result = set(range(np.shape(init)[axis]))
 
             elif type(init)==list:
                 if to_range:
-                    created_set = range(len(list))
+                    result = range(len(list))
                 else:
-                    created_set = set(range(len(list)))
+                    result = set(range(len(list)))
             else:
                 try:
-                    created_set = set(init)
+                    result = set(init)
                 except:
-                    created_set = init 
+                    result = init 
         else:   
             if callback:
                 named_indices = False
             if to_range:
-                created_set = range(bound[0], bound[1] + 1, step)
+                result = range(bound[0], bound[1] + 1, step)
             elif named_indices:
-                created_set = {f"{name.lower()}{i}" for i in range(bound[0], bound[1] + 1, step) if not callback or callback(i)}
+                result = {f"{name.lower()}{i}" for i in range(bound[0], bound[1] + 1, step) if not callback or callback(i)}
             else:
                 if callback:
-                    created_set =  set(item for item in range(bound[0], bound[1] + 1, step) if callback(item))
+                    result =  set(item for item in range(bound[0], bound[1] + 1, step) if callback(item))
                 else:
-                    created_set =  set(range(bound[0], bound[1] + 1, step))
+                    result =  set(range(bound[0], bound[1] + 1, step))
         if to_list:
-            created_set = list(created_set)
+            result = list(result)
+        
+        return self.__keep(name, result, neglect)
+    
 
-        self.data[name] = created_set
+    def alias(self, name, init, neglect=False):
+        result=init
+        return self.__keep(name, result, neglect)
 
-        return self.data[name]
+    def union(self, name, *sets, neglect=False):
+        converted_sets = [self._convert_to_set(s) for s in sets]
+        result=  set().union(*converted_sets)
+        return self.__keep(name, result, neglect)
 
-    def __fix_dims(self, dim, is_range=True):
-        if dim == 0:
-            pass
-        elif not isinstance(dim, set):
-            if len(dim) >= 1:
-                if not isinstance(dim[0], set):
-                    if is_range:
-                        dim = [range(d) if not isinstance(d, range) else d for d in dim]
-                    else:
-                        dim = [len(d) if not isinstance(d, int) else d for d in dim]
-        return dim
+    def intersection(self, name, *sets, neglect=False):
+        converted_sets = [self._convert_to_set(s) for s in sets]
+        result = set().intersection(*converted_sets)
+        return self.__keep(name, result, neglect)
 
-    def alias(self, name, init):
-        if type(init) == str:
-            self.data[name] = self.data[init]
+    def difference(self,name, *sets, neglect=False):
+        converted_sets = [self._convert_to_set(s) for s in sets]
+        result = converted_sets[0]
+        for s in converted_sets[1:]:
+            result = result.difference(s)
+        return self.__keep(name, result, neglect)
+
+    def symmetric_difference(self,name, *sets, neglect=False):
+        converted_sets = [self._convert_to_set(s) for s in sets]
+        result = converted_sets[0]
+        for s in converted_sets[1:]:
+            result = result.symmetric_difference(s)
+        return self.__keep(name, result, neglect)
+
+    ## Parameters
+
+    def _sample_list_or_array(self, name, init, size, replace=False, sort_result=False, return_indices=False, axis=None):
+        if isinstance(init, (list, range)):
+            init = np.array(init)
+
+        if axis is None:
+            sampled_indices = self.random.choice(init.size, size=size, replace=replace)
         else:
-            self.data[name] = init
+            axis = np.atleast_1d(axis)
+            axis_size = init.shape[axis[0]] if len(axis) == 1 else np.prod([init.shape[i] for i in axis])
+            sampled_indices = self.random.choice(axis_size, size=size, replace=replace)
+
+        if return_indices:
+            if sort_result:
+                sampled_indices.sort()
+            self.data[name] = sampled_indices
+        else:
+            sampled_data = init.flat[sampled_indices] if axis is None else np.take(init, sampled_indices, axis=axis)
+            if sort_result:
+                sampled_data.sort()
+            self.data[name] = sampled_data
+
         return self.data[name]
 
-    def union(self, *sets):
-        converted_sets = [self._convert_to_set(s) for s in sets]
-        return set().union(*converted_sets)
+    def _sample_pandas_dataframe(self, name, init, size, replace=False, sort_result=False, return_indices=False, axis=None):
+        axis = 0 if axis is None else axis 
 
-    def intersection(self, *sets):
-        converted_sets = [self._convert_to_set(s) for s in sets]
-        return set().intersection(*converted_sets)
+        if axis not in [0, 1]:
+            raise ValueError("Invalid axis for Pandas DataFrame sampling. Supported axes: 0 (rows), 1 (columns)")
 
-    def difference(self, *sets):
-        converted_sets = [self._convert_to_set(s) for s in sets]
-        result_set = converted_sets[0]
-        for s in converted_sets[1:]:
-            result_set = result_set.difference(s)
-        return result_set
+        sampled_indices = self.random.choice(init.shape[axis], size=size, replace=replace)
 
-    def symmetric_difference(self, *sets):
-        converted_sets = [self._convert_to_set(s) for s in sets]
-        result_set = converted_sets[0]
-        for s in converted_sets[1:]:
-            result_set = result_set.symmetric_difference(s)
-        return result_set
+        if return_indices:
+            self.data[name] = sampled_indices
+        else:
+            if axis == 0:
+                sampled_data = init.iloc[sampled_indices, :]
+            else:
+                sampled_data = init.iloc[:, sampled_indices]
 
-    def is_subset(self, set1, set2):
-        return set1.issubset(set2)
+            if sort_result:
+                sampled_data = sampled_data.sort_index(axis=axis)
+
+            self.data[name] = sampled_data
+
+        return self.data[name]
+       
+    def zeros(self, name, dim=0, neglect=False):
+        dim = self.__fix_dims(dim)
+        if dim == 0:
+            result = np.zeros(1)
+        else:
+            result = np.zeros(tuple(len(i) for i in dim))
+        return self.__keep(name, result, neglect)
+
+    def ones(self, name, dim=0, neglect=False):
+        dim = self.__fix_dims(dim)
+        if dim == 0:
+            result = np.ones(1)
+        else:
+            result = np.ones(tuple(len(i) for i in dim))
+        return self.__keep(name, result, neglect)
+
+    def uniformint(self, name, dim=0, bound=[1, 10], result=None, neglect=False):
+        dim = self.__fix_dims(dim)
+        if dim == 0:
+            result = self.random.integers(low=bound[0], high=bound[1] + 1)
+        else:
+            result = self.random.integers(low=bound[0], high=bound[1] + 1, size=[len(i) for i in dim])
+        return self.__keep(name, result, neglect)
+    
+    def bernoulli(self, name, dim=0, p=0.5, result=None, neglect=False):
+        dim = self.__fix_dims(dim)
+        if dim == 0:
+            result = self.random.choice([0, 1], p=[1-p, p])
+        else:
+            result = self.random.choice([0, 1], p=[1-p, p], size=[len(i) for i in dim])
+        return self.__keep(name, result, neglect)
+    
+    def binomial(self, name, dim=0, n=None, p=None, result=None, neglect=False):
+        dim = self.__fix_dims(dim, is_range=False)
+        if dim == 0:
+            result = self.random.binomial(n, p)
+        else:
+            result = self.random.binomial(n, p, size=tuple(len(s) for s in dim))
+        return self.__keep(name, result, neglect)
+
+    def poisson(self, name, dim=0, lam=1, result=None, neglect=False):
+        dim = self.__fix_dims(dim, is_range=False)
+        if dim == 0:
+            result = self.random.poisson(lam)
+        else:
+            result = self.random.poisson(lam, size=tuple(len(s) for s in dim))
+        return self.__keep(name, result, neglect)
+
+    def geometric(self, name, dim=0, p=None, result=None, neglect=False):
+        dim = self.__fix_dims(dim, is_range=False)
+        if dim == 0:
+            result = self.random.geometric(p)
+        else:
+            result = self.random.geometric(p, size=tuple(len(s) for s in dim))
+        return self.__keep(name, result, neglect)
+
+    def negative_binomial(self, name, dim=0, r=None, p=None, result=None, neglect=False):
+        dim = self.__fix_dims(dim, is_range=False)
+        if dim == 0:
+            result = self.random.negative_binomial(r, p)
+        else:
+            result = self.random.negative_binomial(r, p, size=tuple(len(s) for s in dim))
+        return self.__keep(name, result, neglect)
+
+    def hypergeometric(self, name, dim=0, N=None, m=None, n=None, result=None, neglect=False):
+        nbad = m
+        ngood = N - m
+        nsamples = n
+
+        dim = self.__fix_dims(dim, is_range=False)
+        if dim == 0:
+            result = self.random.hypergeometric(ngood, nbad, nsamples)
+        else:
+            result = self.random.hypergeometric(ngood, nbad, nsamples, size=tuple(len(s) for s in dim))
+        return self.__keep(name, result, neglect)
+
+    def uniform(self, name, dim=0, bound=[0, 1], result=None, neglect=False):
+        dim = self.__fix_dims(dim)
+        if dim == 0:
+            result = self.random.uniform(low=bound[0], high=bound[1])
+        else:
+            result = self.random.uniform(low=bound[0], high=bound[1], size=[len(i) for i in dim])
+        return self.__keep(name, result, neglect)
+
+    def weight(self, name, dim=0, bound=[0, 1], result=None, neglect=False):
+        dim = self.__fix_dims(dim)
+        if dim == 0:
+            data = self.random.uniform(low=bound[0], high=bound[1])
+            result = data / data.sum() if data.sum() != 0 else data
+        else:
+            data = self.random.uniform(low=bound[0], high=bound[1], size=[len(i) for i in dim])
+            result = data / data.sum(axis=-1, keepdims=True) if data.sum() != 0 else data
+        return self.__keep(name, result, neglect)
+
+    def normal(self, name, dim=0, mu=0, sigma=1, result=None, neglect=False):
+        dim = self.__fix_dims(dim)
+        if dim == 0:
+            result = self.random.normal(mu, sigma)
+        else:
+            result = self.random.normal(mu, sigma, size=[len(i) for i in dim])
+        return self.__keep(name, result, neglect)
+
+    def standard_normal(self, name, dim=0, result=None, neglect=False):
+        dim = self.__fix_dims(dim)
+        if dim == 0:
+            result = self.random.normal(0, 1)
+        else:
+            result = self.random.normal(0, 1, size=[len(i) for i in dim])
+        return self.__keep(name, result, neglect)
+
+    def exponential(self, name, dim=0, lam=1.0, result=None, neglect=False):
+        dim = self.__fix_dims(dim, is_range=False)
+        if dim == 0:
+            result = self.random.exponential(scale=1/lam)
+        else:
+            result = self.random.exponential(scale=1/lam, size=[len(i) for i in dim])
+        return self.__keep(name, result, neglect)
+
+    def gamma(self, name, dim=0, alpha=1, lam=1, result=None, neglect=False):
+        dim = self.__fix_dims(dim, is_range=False)
+        if dim == 0:
+            result = self.random.gamma(shape=alpha, scale=1/lam)
+        else:
+            result = self.random.gamma(shape=alpha, scale=1/lam, size=[len(i) for i in dim])
+        return self.__keep(name, result, neglect)
+
+    def erlang(self, name, dim=0, alpha=1, lam=1, result=None, neglect=False):
+        alpha = int(alpha)
+        dim = self.__fix_dims(dim, is_range=False)
+        if dim == 0:
+            result = self.random.gamma(shape=alpha, scale=1/lam)
+        else:
+            result = self.random.gamma(shape=alpha, scale=1/lam, size=[len(i) for i in dim])
+        return self.__keep(name, result, neglect)
+
+    def beta(self, name, dim=0, a=1, b=1, result=None, neglect=False):
+        dim = self.__fix_dims(dim, is_range=False)
+        if dim == 0:
+            result = self.random.beta(a, b, size=None)
+        else:
+            result = self.random.beta(a, b, size=[len(i) for i in dim])
+        return self.__keep(name, result, neglect)
+
+    def weibull(self, name, dim=0, alpha=None, beta=None, result=None, neglect=False):
+        dim = self.__fix_dims(dim, is_range=False)
+        if dim == 0:
+            result = alpha * self.random.weibull(a=beta)
+        else:
+            result = alpha * self.random.weibull(a=beta, size=[len(i) for i in dim])
+        return self.__keep(name, result, neglect)
+
+    def cauchy(self, name, dim=0, alpha=None, beta=None, result=None, neglect=False):
+        dim = self.__fix_dims(dim, is_range=False)
+        if dim == 0:
+            result = self.random.standard_cauchy()
+        else:
+            result = self.random.standard_cauchy(size=[len(i) for i in dim])
+        return self.__keep(name, result, neglect)
+
+    def dirichlet(self, name, dim=0, k=None, alpha=None, result=None, neglect=False):
+        dim = self.__fix_dims(dim, is_range=False)
+        if alpha is None:
+            if k is not None:
+                alpha = np.ones(k)
+            elif isinstance(dim, list):
+                alpha = np.ones(len(dim[-1]))
+        if dim == 0 or len(dim) == 1:
+            result = self.random.dirichlet(alpha)
+        else:
+            result = self.random.dirichlet(alpha, size=[len(i) for i in dim])
+        return self.__keep(name, result, neglect)
+
 
     def start(self, name, value, direction=None):
         self.criteria_directions[name] = direction
@@ -167,157 +397,37 @@ class DataToolkit(FileManager):
                 counter += 1
             xcounter += 1
 
-    def zeros(self, name, dim=0):
-        dim = self.__fix_dims(dim)
-        if dim == 0:
-            self.data[name] = np.zeros(1)
-        else:
-            self.data[name] = np.zeros(tuple(len(i) for i in dim))
-        return self.data[name]
 
-    def ones(self, name, dim=0):
-        dim = self.__fix_dims(dim)
-        if dim == 0:
-            self.data[name] = np.ones(1)
-        else:
-            self.data[name] = np.ones(tuple(len(i) for i in dim))
-        return self.data[name]
+    def sample(self, name, init, size, replace=False, sort_result=False, return_indices=False, axis=None, neglect=False):
 
-    def uniform(self, name, dim=0, bound=[0, 1]):
-        dim = self.__fix_dims(dim)
-        if dim == 0:
-            self.data[name] = self.random.uniform(low=bound[0], high=bound[1])
+        type_is= type(init)
+        
+        if type_is ==set:
+            init = list(init)
+            
+        if isinstance(init, (list, set,range, np.ndarray)):
+            sample =  self._sample_list_or_array(name, init, size, replace, sort_result, return_indices, axis)
+        elif isinstance(init, pd.DataFrame):
+            sample = self._sample_pandas_dataframe(name, init, size, replace, sort_result, return_indices, axis)
         else:
-            self.data[name] = self.random.uniform(
-                low=bound[0], high=bound[1], size=[len(i) for i in dim]
-            )
-        return self.data[name]
+            raise ValueError("Unsupported data type for sampling. Supported types: set, list, range, numpy.ndarray, pandas.DataFrame")
 
-    def normal(self, name, dim=0, mu=0, sigma=1):
-        dim = self.__fix_dims(dim)
-        if dim == 0:
-            self.data[name] = self.random.normal(mu, sigma)
+        self.__keep(name, sample, neglect)
+        
+        if type_is ==set:
+            return set(sample)
+        elif type_is in [list, range]:
+            return list(sample)
+        elif return_indices:
+            return set(sample)
         else:
-            self.data[name] = self.random.normal(mu, sigma, size=[len(i) for i in dim])
-        return self.data[name]
-
-    def uniformint(self, name, dim=0, bound=[0, 10]):
-        dim = self.__fix_dims(dim)
-        if dim == 0:
-            self.data[name] = self.random.integers(low=bound[0], high=bound[1] + 1)
-        else:
-            self.data[name] = self.random.integers(
-                low=bound[0], high=bound[1] + 1, size=[len(i) for i in dim]
-            )
-        return self.data[name]
-
-    def dirichlet(self, name, dim=0, alpha=None):
-        dim = self.__fix_dims(dim, is_range=False)
-        if dim == 0:
-            self.data[name] = self.random.dirichlet(alpha)
-        else:
-            self.data[name] = self.random.dirichlet(alpha, size=dim)
-        return self.data[name]
-
-    def exponential(self, name, dim=0, scale=1.0):
-        dim = self.__fix_dims(dim, is_range=False)
-        if dim == 0:
-            self.data[name] = self.random.exponential(scale)
-        else:
-            self.data[name] = self.random.exponential(scale, size=dim)
-        return self.data[name]
-
-    def poisson(self, name, dim=0, lam=1):
-        dim = self.__fix_dims(dim, is_range=False)
-        if dim == 0:
-            self.data[name] = self.random.poisson(lam)
-        else:
-            self.data[name] = self.random.poisson(lam, size=dim)
-        return self.data[name]
-
-    def gamma(self, name, dim=0, shape=1, scale=1):
-        dim = self.__fix_dims(dim, is_range=False)
-        if dim == 0:
-            self.data[name] = self.random.gamma(shape, scale)
-        else:
-            self.data[name] = self.random.gamma(shape=shape, scale=scale, size=dim)
-        return self.data[name]
-
-    def weibull(self, name, dim=0, shape=None, scale=None):
-        dim = self.__fix_dims(dim, is_range=False)
-        if dim == 0:
-            self.data[name] = self.random.weibull(shape=shape, scale=scale)
-        else:
-            self.data[name] = self.random.weibull(shape=shape, scale=scale, size=dim)
-        return self.data[name]
-
-    def binomial(self, name, dim=0, n=None, p=None):
-        dim = self.__fix_dims(dim, is_range=False)
-        if dim == 0:
-            self.data[name] = self.random.binomial(n, p)
-        else:
-            self.data[name] = self.random.binomial(n, p, size=dim)
-        return self.data[name]
-
-    def geometric(self, name, dim=0, p=None):
-        dim = self.__fix_dims(dim, is_range=False)
-        if dim == 0:
-            self.data[name] = self.random.geometric(p)
-        else:
-            self.data[name] = self.random.geometric(p, size=dim)
-        return self.data[name]
-
-    def uniformlist(
-        self,
-        name,
-        dim=0,
-        index_range=[0, 1],
-        from_set=range(0),
-        repetition=False,
-        sorted=True,
-    ):
-        dim = self.__fix_dims(dim)
-        if dim == 0:
-            if sorted:
-                self.data[name] = np.sort(
-                    self.random.choice(
-                        from_set,
-                        self.random.integers(index_range[0], index_range[1] + 1),
-                        replace=repetition,
-                    )
-                )
-            else:
-                self.data[name] = self.random.choice(
-                    from_set,
-                    self.random.integers(index_range[0], index_range[1] + 1),
-                    replace=repetition,
-                )
-        else:
-            if sorted:
-                self.data[name] = [
-                    np.sort(
-                        self.random.choice(
-                            from_set,
-                            self.random.integers(index_range[0], index_range[1] + 1),
-                            replace=repetition,
-                        )
-                    )
-                    for i in dim[0]
-                ]
-            else:
-                self.data[name] = [
-                    self.random.choice(
-                        from_set,
-                        self.random.integers(index_range[0], index_range[1] + 1),
-                        replace=repetition,
-                    )
-                    for i in dim[0]
-                ]
-        return self.data[name]
+            return sample
 
     def load_from_excel(
-        self, name: str, dim: list, labels: list, appearance: list, file_name: str
+        self, name: str, dim: list, labels: list, appearance: list, file_name: str, neglect=False
     ):
+        
+        dim = self.__fix_dims(dim, is_range=True)
 
         if len(appearance) == 2:
             if (
@@ -358,8 +468,17 @@ class DataToolkit(FileManager):
             result = par.reshape(
                 par.shape[0],
             )
-        self.data[name] = result
-        return self.data[name]
+        
+        if dim==0:
+            result=result[0][0]
+        
+        elif len(dim)==1:
+            result=np.reshape(result,[len(dim[0]),])
+        
+        else:
+            pass
+
+        return self.__keep(name, result, neglect)
 
 
 data_toolkit = data_utils = data_manager = DataToolkit

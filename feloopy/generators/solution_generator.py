@@ -31,7 +31,12 @@ def generate_solution(features):
 
             from .solution import gamspy_solution_generator
             ModelSolution = gamspy_solution_generator.generate_solution(features)
-                                        
+
+        case 'highs':
+
+            from .solution import highs_solution_generator
+            ModelSolution = highs_solution_generator.generate_solution(features)
+                                                   
         case 'ortools':
 
             from .solution import ortools_solution_generator

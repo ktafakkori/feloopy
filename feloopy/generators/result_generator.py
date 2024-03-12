@@ -34,6 +34,10 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
                 from .result import gamspy_result_generator
                 return gamspy_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
 
+            case 'highs':
+
+                from .result import highs_result_generator
+                return highs_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
 
             case 'insideopt-demo':
 
@@ -138,7 +142,12 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
 
                 from .result import gamspy_result_generator
                 return gamspy_result_generator.Get(model_object, model_solution, indicator)
-            
+
+            case 'highs':
+
+                from .result import highs_result_generator
+                return highs_result_generator.Get(model_object, model_solution, indicator)
+                      
             case 'insideopt':
 
                 from .result import seeker_result_generator

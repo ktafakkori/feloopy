@@ -36,6 +36,11 @@ def generate_model(features):
             from .model import ortools_model_generator
             model_object = ortools_model_generator.generate_model(features)
 
+        case 'highs':
+
+            from .model import highs_model_generator
+            model_object = highs_model_generator.generate_model(features)
+
         case 'ortools_cp':
 
             from .model import ortools_cp_model_generator

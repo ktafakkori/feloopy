@@ -38,6 +38,11 @@ def generate_variable(interface_name, model_object, variable_type, variable_name
             from .variable import gamspy_variable_generator
             return gamspy_variable_generator.generate_variable(**inputs)
 
+        case 'highs':
+
+            from .variable import highs_variable_generator
+            return highs_variable_generator.generate_variable(**inputs)
+
         case 'ortools':
 
             from .variable import ortools_variable_generator

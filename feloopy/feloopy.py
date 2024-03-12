@@ -77,7 +77,8 @@ class model(TensorVariableClass,
                      'xpress',
                      'insideopt',
                      'insideopt-demo', 
-                     'gams',                   
+                     'gams',
+                     'highs',                 
                  ] = 'pulp',
                  agent: Optional[Union[AgentObject, None]] = None,
                  scens: Optional[int] = 1,
@@ -95,7 +96,7 @@ class model(TensorVariableClass,
         interface : Literal[
             'copt', 'cplex', 'cplex_cp', 'cvxpy', 'cylp', 'feloopy', 'gekko', 'gurobi', 'linopy',
             'mealpy', 'mip', 'niapy', 'ortools', 'ortools_cp', 'picos', 'pulp', 'pygad', 'pymoo',
-            'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress', 'insideopt', 'insideopt-demo', 'gams'
+            'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress', 'insideopt', 'insideopt-demo', 'gams', 'highs'
         ]
             The selected solver interface for optimization.
         agent : Optional[Union[AgentObject, None]] (default=None)
@@ -111,7 +112,7 @@ class model(TensorVariableClass,
         
         if interface not in {'copt', 'cplex', 'cplex_cp', 'cvxpy', 'cylp', 'feloopy', 'gekko', 'gurobi', 'linopy',
                                   'mealpy', 'mip', 'niapy', 'ortools', 'ortools_cp', 'picos', 'pulp', 'pygad', 'pymoo',
-                                  'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress', 'insideopt', 'insideopt-demo', 'gams'}:
+                                  'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress', 'insideopt', 'insideopt-demo', 'gams', 'highs'}:
             raise ValueError("Invalid solver interface. Please choose from the provided options.")
         
         if not isinstance(scens, int) or scens < 1:

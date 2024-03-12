@@ -1,0 +1,80 @@
+# --8<-- [start:generatingparameters]
+[ 1.94038833  0.50515962  0.31514584 -0.2721063  -5.56506688 -0.9906162
+ -2.3436739  -0.64118045 -1.06227015 -0.90195419]
+<class 'numpy.ndarray'>
+# --8<-- [end:generatingparameters]
+
+# --8<-- [start:samplingaset]
+{11, 21}
+<class 'set'>
+# --8<-- [end:samplingaset]
+
+# --8<-- [start:samplingalist]
+[11, 21]
+<class 'list'>
+# --8<-- [end:samplingalist]
+
+# --8<-- [start:samplinganarray]
+[ 4 21]
+<class 'numpy.ndarray'>
+# --8<-- [end:samplinganarray]
+
+# --8<-- [start:samplingpandas]
+  Name  Age City  Salary
+3    H   35    D   70000
+2    G   22    C   55000
+<class 'pandas.core.frame.DataFrame'>
+# --8<-- [end:samplingpandas]
+
+# --8<-- [start:storingaparameter]
+1
+<class 'int'>
+# --8<-- [end:storingaparameter]
+
+# --8<-- [start:loadingaparameter1]
+1
+<class 'numpy.int64'>
+# --8<-- [end:loadingaparameter1]
+
+# --8<-- [start:loadingaparameter2]
+[1 2 3 4]
+<class 'numpy.ndarray'>
+# --8<-- [end:loadingaparameter2]
+
+# --8<-- [start:loadingaparameter3]
+[[ 1  5  9]
+ [ 2  6 10]
+ [ 3  7 11]
+ [ 4  8 12]]
+<class 'numpy.ndarray'>
+# --8<-- [end:loadingaparameter3]
+
+# --8<-- [start:loadingaparameter4]
+[[[ 1.  5.]
+  [ 9. 13.]]
+
+ [[ 2.  6.]
+  [10. 14.]]
+
+ [[ 3.  7.]
+  [11. 15.]]
+
+ [[ 4.  8.]
+  [12. 16.]]]
+<class 'numpy.ndarray'>
+# --8<-- [end:loadingaparameter4]
+
+# --8<-- [start:loadingaparameter5]
+[[[ 1.  9.]
+  [ 2. 10.]]
+
+ [[ 3. 11.]
+  [ 4. 12.]]
+
+ [[ 5. 13.]
+  [ 6. 14.]]
+
+ [[ 7. 15.]
+  [ 8. 16.]]]
+<class 'numpy.ndarray'>
+# --8<-- [end:loadingaparameter5]
