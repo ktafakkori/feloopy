@@ -46,7 +46,7 @@ print()
 
 print("# --8<-- [start:samplingaset]")
 # --8<-- [start:samplingaset]
-a = dt.sample(name="a", init={11,4,21,30}, size=2, replace=False)
+a = dt.sample(name="a", init={11, 4, 21, 30}, size=2, replace=False)
 
 print(a)
 print(type(a))
@@ -59,7 +59,7 @@ print()
 
 print("# --8<-- [start:samplingalist]")
 # --8<-- [start:samplingalist]
-a = dt.sample(name="a", init=[11,4,21,30], size=2, replace=False)
+a = dt.sample(name="a", init=[11, 4, 21, 30], size=2, replace=False)
 
 print(a)
 print(type(a))
@@ -74,7 +74,7 @@ print("# --8<-- [start:samplinganarray]")
 # --8<-- [start:samplinganarray]
 import numpy as np
 
-a = dt.sample(name="a", init=np.array([11,4,21,30]), size=2, replace=False)
+a = dt.sample(name="a", init=np.array([11, 4, 21, 30]), size=2, replace=False)
 
 print(a)
 print(type(a))
@@ -91,10 +91,10 @@ import pandas as pd
 
 
 data = {
-    'Name': ['E', 'F', 'G', 'H'],
-    'Age': [25, 30, 22, 35],
-    'City': ['A', 'B', 'C', 'D'],
-    'Salary': [60000, 80000, 55000, 70000]
+    "Name": ["E", "F", "G", "H"],
+    "Age": [25, 30, 22, 35],
+    "City": ["A", "B", "C", "D"],
+    "Salary": [60000, 80000, 55000, 70000],
 }
 
 df = pd.DataFrame(data)
@@ -127,7 +127,13 @@ print()
 print("# --8<-- [start:loadingaparameter1]")
 # --8<-- [start:loadingaparameter1]
 
-a = dt.load_from_excel(name="a", dim=0, labels=['i'], appearance=[1,0], file_name="data.xlsx")
+a = dt.load_from_excel(
+    name="a", 
+    dim=0, 
+    labels=["i"], 
+    appearance=[1, 0], 
+    file_name="data.xlsx"
+)
 
 print(a)
 print(type(a))
@@ -141,7 +147,13 @@ print()
 print("# --8<-- [start:loadingaparameter2]")
 # --8<-- [start:loadingaparameter2]
 
-b = dt.load_from_excel(name="b", dim=[4], labels=['i'], appearance=[1,0], file_name="data.xlsx")
+b = dt.load_from_excel(
+    name="b", 
+    dim=[4], 
+    labels=["i"], 
+    appearance=[1, 0], 
+    file_name="data.xlsx"
+)
 
 print(b)
 print(type(b))
@@ -155,7 +167,13 @@ print()
 print("# --8<-- [start:loadingaparameter3]")
 # --8<-- [start:loadingaparameter3]
 
-c = dt.load_from_excel(name="c", dim=[4,3], labels=['i','j'], appearance=[1,1], file_name="data.xlsx")
+c = dt.load_from_excel(
+    name="c", 
+    dim=[4, 3], 
+    labels=["i", "j"], 
+    appearance=[1, 1], 
+    file_name="data.xlsx"
+)
 
 print(c)
 print(type(c))
@@ -169,7 +187,13 @@ print()
 print("# --8<-- [start:loadingaparameter4]")
 # --8<-- [start:loadingaparameter4]
 
-d = dt.load_from_excel(name="d", dim=[4,2,2], labels=['i','j','k'], appearance=[1,2], file_name="data.xlsx")
+d = dt.load_from_excel(
+    name="d",
+    dim=[4, 2, 2],
+    labels=["i", "j", "k"],
+    appearance=[1, 2],
+    file_name="data.xlsx",
+)
 
 print(d)
 print(type(d))
@@ -183,7 +207,13 @@ print()
 print("# --8<-- [start:loadingaparameter5]")
 # --8<-- [start:loadingaparameter5]
 
-e = dt.load_from_excel(name="e", dim=[4,2,2], labels=['i','j','k'], appearance=[2,1], file_name="data.xlsx")
+e = dt.load_from_excel(
+    name="e",
+    dim=[4, 2, 2],
+    labels=["i", "j", "k"],
+    appearance=[2, 1],
+    file_name="data.xlsx",
+)
 
 print(e)
 print(type(e))
