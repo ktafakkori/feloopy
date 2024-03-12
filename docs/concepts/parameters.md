@@ -114,9 +114,7 @@ Some parameters might just be samples of a `set`, `list`, numpy `np.ndarray`, or
 
 ## Storing a parameter
 
-
 Users might prefer storing some custom defined parameters using `data_toolkit`.
-
 
 === ":fontawesome-brands-python: Python"
 
@@ -131,7 +129,6 @@ Users might prefer storing some custom defined parameters using `data_toolkit`.
     ```
 
 ## Loading a parameter
-
 
 FelooPy also enables users to load their structured datasets from Excel files! A sample code for each case is provided as follows:
 
