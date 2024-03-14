@@ -1,5 +1,6 @@
+
 # --8<-- [start:simpleset]
-{'i1', 'i2', 'i4', 'i8', 'i7', 'i9', 'i5', 'i0', 'i6', 'i3'}
+{'i7', 'i2', 'i1', 'i4', 'i5', 'i8', 'i0', 'i9', 'i6', 'i3'}
 <class 'set'>
 # --8<-- [end:simpleset]
 

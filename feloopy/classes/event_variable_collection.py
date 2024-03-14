@@ -26,27 +26,7 @@ class EventVariableCollectionClass:
         dim: Optional[Any] = 0,
         optional: Optional[Any] = False
     ) -> EventVariableCollection:
-        """
-        Creates a dictionary of event (event) variables with specific names and indices.
 
-        Parameters
-        ----------
-        name : str
-            Base name for the variables.
-        indices : List[Any]
-            Indices for the variables.
-        event : Optional[Any]
-            [size, start, end]. Defaults to [None, None, None].
-        dim : Optional[Any]
-            Dimensions for the variables. Defaults to 0.
-        optional : Optional[Any]
-            Optional flag. Defaults to False.
-
-        Returns
-        -------
-        EventVariableCollection
-            A dictionary where each key is an index from 'indices' and the corresponding value is an event variable with the name derived from 'name' and the index.
-        """
         if type(event) != dict:
             event = {i: event for i in indices}
         if type(dim) != dict:

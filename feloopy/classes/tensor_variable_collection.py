@@ -35,26 +35,7 @@ class TensorVariableCollectionClass:
         shape: Union[int, Dict] = 0,
         bound: Union[List[Optional[float]], Dict] = [None, None]
     ) -> TensorVariableCollection:
-        """
-        Creates a dictionary of free (float) tensor variables with given names and indices.
 
-        Parameters
-        ----------
-        name : str
-            The base name for the variables.
-        indices : List
-            The indices for the variables.
-        shape : Union[int, Dict], optional
-            The shapes for the variables. Defaults to 0 for all indices if not provided as a dictionary.
-        bound : Union[List[Optional[float]], Dict], optional
-            The bounds for the variables. Defaults to [None, None] for all indices if not provided as a dictionary.
-
-        Returns
-        -------
-        TensorVariableCollection
-            A dictionary where each key is an index from 'indices', and the corresponding value is a float tensor variable
-            with the name derived from 'name' and the index.
-        """
         if not isinstance(bound, dict):
             bound = {i: bound for i in indices}
 
@@ -76,25 +57,7 @@ class TensorVariableCollectionClass:
         shape: Union[int, Dict] = 0,
         bound: Union[List, Dict] = [0, None]
     ) -> TensorVariableCollection:
-        """
-        This method creates a dictionary of positive tensor variables with given names and indices.
 
-        Parameters
-        ----------
-        name : str
-            The base name for the variables.
-        indices : list
-            The indices for the variables.
-        shape : Union[int, dict], optional
-            The shapes for the variables. Defaults to 0 for all indices if not provided as a dictionary.
-        bound : Union[list[0, None], dict], optional
-            The bounds for the variables. Defaults to [0, None] for all indices if not provided as a dictionary.
-
-        Returns
-        -------
-        TensorVariableCollection
-            A dictionary where each key is an index from 'indices' and the corresponding value is a positive tensor variable with the name derived from 'name' and the index.
-        """
         if not isinstance(bound, dict):
             bound = {i: bound for i in indices}
 
@@ -116,25 +79,7 @@ class TensorVariableCollectionClass:
         shape: Union[int, Dict] = 0,
         bound: Union[List, Dict] = [0, None]
     ) -> TensorVariableCollection:
-        """
-        This method creates a dictionary of integer tensor variables with given names and indices.
 
-        Parameters
-        ----------
-        name : str
-            The base name for the variables.
-        indices : list
-            The indices for the variables.
-        shape : Union[int, dict], optional
-            The shapes for the variables. Defaults to 0 for all indices if not provided as a dictionary.
-        bound : Union[list[0, None], dict], optional
-            The bounds for the variables. Defaults to [0, None] for all indices if not provided as a dictionary.
-
-        Returns
-        -------
-        TensorVariableCollection
-            A dictionary where each key is an index from 'indices' and the corresponding value is an integer tensor variable with the name derived from 'name' and the index.
-        """
         if not isinstance(bound, dict):
             bound = {i: bound for i in indices}
 
@@ -156,25 +101,7 @@ class TensorVariableCollectionClass:
         shape: Union[int, Dict] = 0,
         bound: Union[List, Dict] = [0, 1]
     ) -> TensorVariableCollection:
-        """
-        This method creates a dictionary of binary tensor variables with given names and indices.
 
-        Parameters
-        ----------
-        name : str
-            The base name for the variables.
-        indices : list
-            The indices for the variables.
-        shape : Union[int, dict], optional
-            The shapes for the variables. Defaults to 0 for all indices if not provided as a dictionary.
-        bound : Union[list[0, 1], dict], optional
-            The bounds for the variables. Defaults to [0, 1] for all indices if not provided as a dictionary.
-
-        Returns
-        -------
-        TensorVariableCollection
-            A dictionary where each key is an index from 'indices' and the corresponding value is a binary tensor variable with the name derived from 'name' and the index.
-        """
         if not isinstance(bound, dict):
             bound = {i: bound for i in indices}
 
@@ -195,23 +122,7 @@ class TensorVariableCollectionClass:
         indices: List,
         shape: Union[int, Dict] = 0
     ) -> TensorVariableCollection:
-        """
-        Creates a dictionary of tensor-like random variables with specific names and shapes.
 
-        Parameters
-        ----------
-        name : str
-            Base name for the variables.
-        indices : list
-            Indices for the variables.
-        shape : Union[int, dict], optional
-            Shapes for the variables. Defaults to None.
-
-        Returns
-        -------
-        TensorVariableCollection
-            A dictionary where each key is an index from 'indices' and the corresponding value is a tensor-like random variable with the name derived from 'name' and the index, and shape specified by 'shape'.
-        """
         if not isinstance(shape, dict):
             shape = {i: shape for i in indices}
 
