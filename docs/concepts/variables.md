@@ -2,7 +2,6 @@
 
 Variables play a critical role in obtaining the best possible real/virtual world solutions or designs based on a decision environment, given the sets and parameters. While similar to parameters, variables encompass the values that need to be determined (preferably optimally) by a machine with a given or learnable feasible and logical policy and using search algorithms. Variables are either encoded-decoded directly (e.g., in exact optimization algorithms) or indirectly (e.g., in heuristic optimization algorithms). They can also be defined as tensors (e.g., in convex programming) or a special logical constraint (e.g., in constraint programming).
 
-
 In this section, continuing the definition of [sets](sets.md), and [parameters](parameters.md), the way that variables are defined using FelooPy is described.
 
 ## Generating a variable
@@ -31,7 +30,7 @@ The `model` class provides user-friendly methods for defining various types of m
 | `evar`   | $[[0, \infty),[0, \infty)]$                                 |
 | `rvar`   | $(-\infty, \infty)$                                         |
 
-(N.B.: The range is defined for each index at each dimension.)
+(Note: The range is defined for each index at each dimension.)
 
 Here's an example demonstrating the definition of multi-dimensional variables in FelooPy:
 
@@ -57,7 +56,7 @@ Tensor variables are essential for handling complex decision environments in con
 | `ftvar`  | $(-\infty, \infty)$         |
 | `rtvar`  | $(-\infty, \infty)$         |
 
-(N.B.: The range is defined for each element at each axis of the specified shape.)
+(Note: The range is defined for each element at each axis of the specified shape.)
 
 Here's an example illustrating the definition of tensor variables in FelooPy:
 
@@ -83,7 +82,7 @@ The `model` class provides functions to define collections of multi-dimensional 
 | `cevar`  | $[[0, \infty),[0, \infty)]$                                 |
 | `crvar`  | $(-\infty, \infty)$                                         |
 
-(N.B.: The range is defined for each index at each dimension for each collection member.)
+(Note: The range is defined for each index at each dimension for each collection member.)
 
 Here's an example showcasing the definition of multi-dimensional collection variables:
 
@@ -103,13 +102,12 @@ Similarly, the `model` class offers functions to define collections of tensor va
 | `cftvar` | $(-\infty, \infty)$         |
 | `crtvar` | $(-\infty, \infty)$         |
 
-(N.B.: The range is defined for each element at each axis of the specified shape for each collection member.)
+(Note: The range is defined for each element at each axis of the specified shape for each collection member.)
 
 Here's an example illustrating the definition of tensor collection variables in FelooPy:
 
 ```py
 --8<-- "./concepts/variables.py:tensorcoll"
 ```
-
 
 By leveraging these comprehensive variable definitions, FelooPy enables users to model diverse decision environments effectively and easily.
