@@ -1,6 +1,6 @@
 # Variables
 
-Variables play a critical role in obtaining the best possible real/virtual world solutions or designs based on a decision environment, given the sets and parameters. While similar to parameters, variables encompass the values that need to be determined (preferably optimally) by a machine with a given or learnable feasible and logical policy and using search algorithms. Variables are either encoded-decoded directly (e.g., in exact optimization algorithms) or indirectly (e.g., in heuristic optimization algorithms). They can also be defined as tensors (e.g., in convex programming) or a special logical constraint (e.g., in constraint programming).
+Variables play a critical role in obtaining the best possible real/virtual world solutions or designs based on a decision environment, given the sets and parameters. While similar to parameters, variables encompass the values that need to be determined (preferably optimally) by a machine with a given or learnable feasible and logical policy and using search algorithms. Variables are either encoded-decoded directly (e.g., in exact optimization algorithms) or indirectly (e.g., in heuristic optimization algorithms). They can also be defined as tensors, matrices, or vectors (e.g., in convex programming) a special logical constraint (e.g., in constraint programming), or for simulating a random value (e.g., in uncertainty handling).
 
 In this section, continuing the definition of [sets](sets.md), and [parameters](parameters.md), the way that variables are defined using FelooPy is described.
 
