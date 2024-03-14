@@ -12,13 +12,13 @@ In FelooPy, variables are encapsulated within the `model` class, which offers in
 
 The `model` class provides user-friendly methods for defining various types of multi-dimensional variables in FelooPy:
 
-- Binary variable: Denoted as $y$ or $y_{ij}$, taking values in $\lbrace 0,1 \rbrace$.
-- Integer variable: Denoted as $w$ or $w_{ij}$, taking values in $\lbrace 0,1,2,... \rbrace$.
-- Positive variable: Denoted as $x$ or $x_{ij}$, taking values in $[0, \infty)$.
-- Free variable: Denoted as $z$ or $z_{ij}$, taking values in $(-\infty, \infty)$.
-- Sequence variable (vector): Denoted as $\mathbf{p}$, allowing sequences of values.
-- Event variable: Denoted as $c$ or $c_{ij}$, representing events with varying values.
-- Random variable: Denoted as $\epsilon$ or $\epsilon_{ij}$, encompassing stochastic elements.
+- Binary variable: Denoted as $y$ or $y_{ij}$.
+- Integer variable: Denoted as $w$ or $w_{ij}$.
+- Positive variable: Denoted as $x$ or $x_{ij}$.
+- Free variable: Denoted as $z$ or $z_{ij}$.
+- Sequence variable (vector): Denoted as $\mathbf{p}$.
+- Event variable: Denoted as $c$ or $c_{ij}$.
+- Random variable: Denoted as $\epsilon$ or $\epsilon_{ij}$.
 
 | function | range                                                       |
 | -------- | ----------------------------------------------------------- |
