@@ -44,7 +44,6 @@ In the real world, instances of a dataset are almost always collected and not ge
 
 An all-in-one example of using these functions is provided as follows:
 
-
 ```py
 --8<-- "./concepts/parameters.py:generatingparameters"
 ```
