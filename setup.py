@@ -8,10 +8,10 @@ from setuptools import setup, find_packages
 common = [
     'gputil==1.4.0',
     'infix==1.2',
-    'matplotlib==3.8.2',
+    'matplotlib',
     'nbformat==5.9.2',
-    'numba==0.58.1',
-    'numpy==1.21.0',
+    'numba',
+    'numpy',
     'openpyxl==3.1.2',
     'pandas==2.1.3',
     'plotly==5.18.0',
