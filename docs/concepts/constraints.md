@@ -8,7 +8,6 @@ Consider the following constraint:
 
 $$ \sum_{i \in I} p_{ij} x_{i} \geqslant v_{j}, \quad \forall j \in J$$
 
-
 FelooPy supports defining constraints in 7 different ways as follows:
 
 ```py
