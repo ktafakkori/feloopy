@@ -21,3 +21,12 @@
 [![Monthly Users](https://img.shields.io/pypi/dm/feloopy?label=monthly%20users&color=blue)](https://pypistats.org/packages/feloopy)
 ![Source Users](https://img.shields.io/github/downloads/ktafakkori/feloopy/total?label=source%20users&color=blue)
 </div>
+
+You can install `feloopy` inside a Python>=3.10.x environment.
+
+```py
+pip install feloopy
+```
+
+For more information, please refer to FelooPy's [documentation](https://feloopy.readthedocs.io/en/latest/).
+
