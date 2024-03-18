@@ -17,5 +17,8 @@
 [![Discord](https://img.shields.io/discord/1196153377969676399)](https://discord.gg/VpZDeG8wbv)
 ![License](https://img.shields.io/static/v1?label=license&message=MIT&color=darkred)
 
+[![Total Users](https://static.pepy.tech/personalized-badge/feloopy?period=total&units=international_system&left_color=grey&right_color=blue&left_text=total%20users)](https://pepy.tech/project/feloopy?&left_text=totalusers)
+[![Monthly Users](https://img.shields.io/pypi/dm/feloopy?label=monthly%20users&color=blue)](https://pypistats.org/packages/feloopy)
+![Source Users](https://img.shields.io/github/downloads/ktafakkori/feloopy/total?label=source%20users&color=blue)
 </div>
 
