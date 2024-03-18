@@ -9,7 +9,7 @@
   </p>
 </div>
 
-<div align="center">
+<div align="center" style="margin-bottom: 2px;">
 
 ![Version](https://img.shields.io/static/v1?label=Version&message=v0.2.8&color=darkgreen)
 ![Release Date](https://img.shields.io/github/release-date/ktafakkori/feloopy?label=release&color=darkgreen)
@@ -21,4 +21,3 @@
 [![Monthly Users](https://img.shields.io/pypi/dm/feloopy?label=monthly%20users&color=blue)](https://pypistats.org/packages/feloopy)
 ![Source Users](https://img.shields.io/github/downloads/ktafakkori/feloopy/total?label=source%20users&color=blue)
 </div>
-
