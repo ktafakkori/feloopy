@@ -1,4 +1,4 @@
-![alt text](assets/logo/logo2.png)
+![alt text](docs/assets/banner.png)
 
 ## Introduction
 
