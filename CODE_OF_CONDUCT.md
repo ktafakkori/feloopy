@@ -36,11 +36,8 @@ Community leaders will enforce these standards:
 For violations, we follow these guidelines:
 
 1. **Correction**: A private warning with an explanation and a possible public apology request.
-
 2. **Warning**: Given for a single violation or a series of actions. No interaction with involved parties for a specified time.
-
 3. **Temporary Ban**: For serious violations, no public interaction for a set period.
-
 4. **Permanent Ban**: For consistent, severe violations or harassment of individuals or groups.
 
 ## Credits
