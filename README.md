@@ -18,6 +18,6 @@
 ![Source Users](https://img.shields.io/github/downloads/ktafakkori/feloopy/total?label=source%20users&color=blue)
 [![Documentation](https://readthedocs.org/projects/feloopy/badge/?label=docs&version=latest&color=darkgreen)](https://feloopy.readthedocs.io/en/latest/?badge=latest&color=darkgreen&label=docs)
 ![License](https://img.shields.io/static/v1?label=license&message=MIT&color=darkred)
-[![Discord](https://img.shields.io/discord/1196153377969676399)](https://discord.gg/GbfgXGJ8Bk)
+[![Discord](https://img.shields.io/discord/1196153377969676399)](https://discord.gg/YuvQP86c)
 
 </div>
