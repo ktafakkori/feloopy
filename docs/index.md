@@ -6,7 +6,7 @@ title: FelooPy user guide
 
 <img src="assets/banner.png" alt="logo">
 
-<h2 align='center'>Efficient & Feature-Rich Integrated Optimization Environment</h2>
+<h2 align='center'>Efficient & Feature-Rich Integrated Decision Environment</h2>
 
 <center>
 
