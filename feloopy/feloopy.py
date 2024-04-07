@@ -597,7 +597,7 @@ RANKING_ALGORITHMS = [
     ]
 
 SPECIAL_ALGORITHMS = [
-    ['cwdea_method', 'feloopy']
+    ['cwdea_method', 'feloopy'],
     ['dematel_method', 'pydecision'],
     ['electre_i_s', 'pydecision'],
     ['electre_i_v', 'pydecision'],
