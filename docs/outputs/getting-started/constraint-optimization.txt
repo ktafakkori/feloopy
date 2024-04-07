@@ -1,39 +1,3 @@
- ! --------------------------------------------------- CP Optimizer 22.1.0.0 --
- ! Minimization problem - 11 variables, 1 constraint
- ! Initial process time : 0.11s (0.11s extraction + 0.00s propagation)
- !  . Log search space  : 33.2 (before), 33.2 (after)
- !  . Memory usage      : 441.6 kB (before), 441.6 kB (after)
- ! Using parallel search with 4 workers.
- ! ----------------------------------------------------------------------------
- !          Best Branches  Non-fixed    W       Branch decision
-                        0         11                 -
- + New bound is 0
- ! Using iterative diving.
- ! Using temporal relaxation.
- *            13       21  0.73s        1      (gap is 100.0%)
- *             9       41  0.73s        1      (gap is 100.0%)
- *             8       65  0.73s        1      (gap is 100.0%)
- *             7      137  0.73s        1      (gap is 100.0%)
- *             6      164  0.73s        1      (gap is 100.0%)
- *             3      571  0.73s        1      (gap is 100.0%)
-               3     1000          1    1        14 != startOf(job[3])
-               3     2000          5    1   F    17 <= startOf(job[2])
-               3     3000          5    1        14 != startOf(job[9])
-               3     4000          5    1   F    22 <= startOf(job[8])
-               3     5000          5    1   F         !presenceOf(job[0])
-               3     5386          6    1   F        -
- + New bound is 3 (gap is 0.00%)
- ! ----------------------------------------------------------------------------
- ! Search completed, 6 solutions found.
- ! Best objective         : 3 (optimal - effective tol. is 0)
- ! Best bound             : 3
- ! ----------------------------------------------------------------------------
- ! Number of branches     : 48497
- ! Number of fails        : 11741
- ! Total memory usage     : 2.3 MB (2.2 MB CP Optimizer + 0.0 MB Concert)
- ! Time spent in solve    : 0.77s (0.67s engine + 0.11s extraction)
- ! Search speed (br. / s) : 72709.1
- ! ----------------------------------------------------------------------------
 
 ┌─ FelooPy v0.3.0 ───────────────────────────────────────────────────────────────────────┐
 │                                                                                        │
