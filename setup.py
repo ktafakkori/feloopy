@@ -23,6 +23,7 @@ common = [
     'win-unicode-console==0.5',
     'xlsxwriter==3.1.9',
     'tqdm',
+    'colorama',
 ]
 
 # Interfaces for optimization solvers or algorithms
