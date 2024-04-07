@@ -65,20 +65,20 @@ stock = full + [
 # Solvers for optimization problems or algorithms
 
 plus_gurobi = [
-    'gurobipy==11.0.0',
+    'gurobipy',
 ]
 
 plus_cplex = [
-    'cplex==22.1.1.1',
-    'docplex==2.25.236',
+    'cplex',
+    'docplex',
 ]
 
 plus_xpress = [
-    'xpress==9.2.5',
+    'xpress',
 ]
 
 plus_copt = [
-    'coptpy==7.0.4',
+    'coptpy',
 ]
 
 plus_insideoptdemo = [

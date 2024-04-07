@@ -78,17 +78,17 @@ rsome = "1.2.5"
 highspy = ""
 
 [tool.poetry.group.plus_gurobi.dependencies]
-gurobipy = "11.0.0"
+gurobipy = ""
 
 [tool.poetry.group.plus_cplex.dependencies]
-cplex = "22.1.1.1"
-docplex = "2.25.236"
+cplex = ""
+docplex = ""
 
 [tool.poetry.group.plus_xpress.dependencies]
 xpress = "9.2.5"
 
 [tool.poetry.group.plus_copt.dependencies]
-coptpy = "7.0.4"
+coptpy = ""
 
 [tool.poetry.group.plus_insideoptdemo.dependencies]
 insideopt-demo = ""
@@ -100,12 +100,12 @@ insideopt = ""
 gampspy = ""
 
 [tool.poetry.group.hyper.dependencies]
-coptpy = "7.0.4"
-cplex = "22.1.1.1"
+coptpy = ""
+cplex = ""
 cvxpy = "1.4.2"
-docplex = "2.25.236"
+docplex = ""
 gekko = "1.1.0"
-gurobipy = "11.0.0"
+gurobipy = ""
 linopy = "0.3.8"
 mealpy = "3.0.1"
 mip = "1.15.0"
@@ -130,13 +130,13 @@ cylp = "0.92.2"
 pymultiobjective = "1.5.4"
 
 [tool.poetry.group.mega.dependencies]
-coptpy = "7.0.4"
-cplex = "22.1.1.1"
+coptpy = ""
+cplex = ""
 cvxpy = "1.4.2"
 cylp = "0.92.2"
-docplex = "2.25.236"
+docplex = ""
 gekko = "1.1.0"
-gurobipy = "11.0.0"
+gurobipy = ""
 linopy = "0.3.8"
 mealpy = "3.0.1"
 mip = "1.15.0"
