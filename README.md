@@ -25,6 +25,9 @@
 ![Source Users](https://img.shields.io/github/downloads/ktafakkori/feloopy/total?label=source%20users&color=blue)
 </div>
 
+[This](https://github.com/ktafakkori/feloopy) is FelooPy project's repository hosted by GitHub.  For more information, please refer to FelooPy's [documentation](https://feloopy.readthedocs.io/en/latest/).
+
+
 ## Installation
 
 You can install `feloopy` inside a Python>=3.10.x environment.
@@ -33,7 +36,6 @@ You can install `feloopy` inside a Python>=3.10.x environment.
 pip install feloopy
 ```
 
-For more information, please refer to FelooPy's [documentation](https://feloopy.readthedocs.io/en/latest/).
 
 
 ## Citation
