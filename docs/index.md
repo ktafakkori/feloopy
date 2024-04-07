@@ -287,7 +287,7 @@ graph LR
 ```py
 import feloopy as flp
 
-m = flp.model("exact", "model_name", "pymprog")
+m = flp.model(name="model_name", method="exact", interface="pymprog")
 
 x = m.bvar(name="x")
 y = m.pvar(name="y", bound=[0, 1])
@@ -295,9 +295,9 @@ m.con(x + y <= 1, name="c1")
 m.con(x - y >= 1, name="c2")
 m.obj(x + y)
 
-m.sol(["max"], "glpk")
+m.sol(directions=["max"], solver="glpk")
 
-m.report()
+m.clean_report()
 ```
 
 ## License

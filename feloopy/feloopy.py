@@ -944,7 +944,7 @@ class model(
                 self.features['objectives'].append(expression)
                 self.features['objective_counter'][0] += 1
 
-    def sol(self, directions=None, solver_name=None, solver_options=dict(), obj_id=0, email=None, debug=False, time_limit=None, cpu_threads=None, absolute_gap=None, relative_gap=None, show_log=False, save_log=False, save_model=False, max_iterations=None, obj_operators=[]):
+    def sol(self, directions=None, solver=None, solver_options=dict(), obj_id=0, email=None, debug=False, time_limit=None, cpu_threads=None, absolute_gap=None, relative_gap=None, show_log=False, save_log=False, save_model=False, max_iterations=None, obj_operators=[]):
         """
         Solve Command Definition
         ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -983,7 +983,7 @@ class model(
         self.features['email_address'] = email
         self.features['max_iterations'] = max_iterations
         self.features['obj_operators'] = obj_operators
-        self.features['solver_name'] = solver_name
+        self.features['solver_name'] = solver
 
         try:
             if type(obj_id) != str and directions != None:
@@ -1643,7 +1643,7 @@ class model(
                         
         return output
 
-    def decision_information_print(self,status, show_tensors, show_detailed_tensors, box_width=90):
+    def decision_information_print(self,status, show_tensors, show_detailed_tensors, box_width=88):
         
         if show_detailed_tensors: show_tensors=True
         
@@ -5258,7 +5258,10 @@ class search(model,Implement):
             try:
                 if self.method in ["constraint"]:
                     box.empty()
-                    self.em.decision_information_print(self.em.status, show_tensors=False, show_detailed_tensors=False, box_width=width)
+                    self.em.decision_information_print(self.em.status, 
+                                                       show_tensors=False, 
+                                                       show_detailed_tensors=False, 
+                                                       box_width=width)
                     box.empty()
                     box.bottom()
                 else:
