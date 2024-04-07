@@ -4,7 +4,7 @@ import feloopy as flp
 def model_name():
 
     # Define a model
-    m = flp.model("exact", "model_name", "pulp")
+    m = flp.model(name="model_name", method="exact", interface="pulp")
 
     # Define variables
     x = m.pvar("x", [2])
@@ -18,7 +18,6 @@ def model_name():
     m.con(5 * x[0] + 4 * x[1] <= 200)
 
     return m
-
 
 payoff, conflict, pareto, variables = flp.sol_multi(
     model_name,

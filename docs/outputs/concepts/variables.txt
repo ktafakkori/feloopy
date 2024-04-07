@@ -1,0 +1,5 @@
+(CVXPY) Apr 07 01:52:11 PM: Encountered unexpected exception importing solver GLOP:
+RuntimeError('Unrecognized new version of ortools (9.8.3296). Expected < 9.8.0. Please open a feature request on cvxpy to enable support for this version.')
+(CVXPY) Apr 07 01:52:11 PM: Encountered unexpected exception importing solver PDLP:
+RuntimeError('Unrecognized new version of ortools (9.8.3296). Expected < 9.8.0. Please open a feature request on cvxpy to enable support for this version.')
+Error in variables.py: name 'duration' is not defined

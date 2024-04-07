@@ -21,8 +21,7 @@ def generate_solution(model_object, fitness_function, total_features, objectives
 
         termination={
             "mode": solver_options.get("mode", "MG"), 
-            "quantity": solver_options.get("quantity", 100)
-            }
+            "quantity": solver_options.get("quantity", 100)}
 
     else:
         termination=None

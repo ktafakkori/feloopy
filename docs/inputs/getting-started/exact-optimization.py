@@ -1,7 +1,7 @@
 import feloopy as flp
 
 # Define a model
-m = flp.model("exact", "model_name", "pymprog")
+m = flp.model(name="model_name", method="exact", interface="pymprog")
 
 # Define variables
 x = m.bvar(name="x")
@@ -18,4 +18,4 @@ m.obj(x + y)
 m.sol(["max"], "glpk")
 
 # Report the results
-m.report()
+m.clean_report()

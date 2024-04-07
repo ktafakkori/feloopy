@@ -11,4 +11,3 @@ def set_init_value(features, variable, value, fix):
         
     else:
         variable.value = value
-     

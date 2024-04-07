@@ -147,7 +147,7 @@ if __name__ == '__main__':
         
         name = 'feloopy',
         
-        version = '0.2.8',
+        version = '0.2.9',
         
         description = 'FelooPy: An integrated optimization environment (IOE) for automated operations research (AutoOR) in Python.',
         

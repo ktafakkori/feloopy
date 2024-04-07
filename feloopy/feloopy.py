@@ -1,147 +1,727 @@
 # Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
 # See the file LICENSE file for licensing details.
 
-from . import *
+import contextlib
+import importlib
+import itertools as it
+import math as mt
+import os
+import platform
+import sys
+import time
+import warnings
+from collections import defaultdict
+from typing import Literal, Optional, Union
+from contextlib import suppress
+from .operators.metrics import compute_similarity
+import timeit 
+import copy
 
-from .helpers import *
-from .classes import *
-from .operators import *
+import numpy as np
+
+HEURISTIC_ALGORITHMS = [
+    
+    ['feloopy', 'de'],
+    ['feloopy', 'ga'],
+    ['feloopy', 'gwo'],
+    ['feloopy', 'sa'],
+    ['feloopy', 'ts'],
+    
+    ['mealpy', 'a-bfo'], 
+    ['mealpy', 'adap-ba'], 
+    ['mealpy', 'adap-eo'], 
+    ['mealpy', 'augm-aeo'], 
+    ['mealpy', 'base-alo'], 
+    ['mealpy', 'base-bbo'], 
+    ['mealpy', 'base-bro'], 
+    ['mealpy', 'base-chio'],
+    ['mealpy', 'base-de'],
+    ['mealpy', 'base-efo'],
+    ['mealpy', 'base-fbio'],
+    ['mealpy', 'base-foa'],
+
+    ['mealpy', 'base-gco'], 
+    ['mealpy', 'base-gska'], 
+    ['mealpy', 'base-hs'],
+    ['mealpy', 'base-ja'], 
+    ['mealpy', 'base-lco'], 
+    ['mealpy', 'base-mfo'], 
+    ['mealpy', 'base-mvo'], 
+    ['mealpy', 'base-qsa'], 
+    ['mealpy', 'base-saro'], 
+    ['mealpy', 'base-sbo'], 
+    ['mealpy', 'base-sca'], 
+    ['mealpy', 'base-sma'], 
+    ['mealpy', 'base-ssa'], 
+    ['mealpy', 'base-tlo'], 
+    ['mealpy', 'base-vcs'],
+
+    ['mealpy', 'c-pso'], 
+    ['mealpy', 'cl-pso'], 
+    ['mealpy', 'h-pso-tvac'],  
+    ['mealpy', 'cl-pso'], 
+    ['mealpy', 'h-pso-tvac'],
+    ['mealpy', 'p-pso'],
+    ['mealpy', 'orig-pso'],
+
+    ['mealpy', 'base-ga'],
+    ['mealpy', 'single-ga'],
+    ['mealpy', 'multi-ga'], 
+    ['mealpy', 'elite-multi-ga'], 
+    ['mealpy', 'elite-single-ga'],
+
+    ['mealpy', 'orig-abc'],
+    
+    ['mealpy', 'cma-es'], 
+    ['mealpy', 'dev-dmoa'], 
+    ['mealpy', 'dev-soa'], 
+    ['mealpy', 'dev-spbo'],
+
+    ['mealpy', 'enha-aeo'], 
+    ['mealpy', 'enha-two'], 
+    ['mealpy', 'gwo-woa'], 
+    ['mealpy', 'hi-woa'], 
+    ['mealpy', 'impr-aeo'], 
+    ['mealpy', 'impr-bso'], 
+    ['mealpy', 'impr-lco'], 
+    ['mealpy', 'impr-nmra'], 
+    ['mealpy', 'impr-qsa'], 
+    ['mealpy', 'impr-sfo'], 
+    ['mealpy', 'impr-slo'], 
+    ['mealpy', 'itlo'], 
+    ['mealpy', 'ja-de'], 
+    ['mealpy', 'l-sha-de'], 
+    ['mealpy', 'levy-aro'], 
+    ['mealpy', 'levy-ep'], 
+    ['mealpy', 'levy-es'], 
+    ['mealpy', 'levy-ja'], 
+    ['mealpy', 'levy-qsa'], 
+    ['mealpy', 'levy-two'], 
+    ['mealpy', 'modi-aeo'], 
+    ['mealpy', 'modi-ba'], 
+    ['mealpy', 'modi-eo'],
+    ['mealpy', 'modi-slo'],
+    ['mealpy', 'modi101-gto'],
+    ['mealpy', 'modi102-gto'],
+    
+    ['mealpy', 'o-cro'], 
+    ['mealpy', 'oppo-qsa'], 
+    ['mealpy', 'oppo-two'], 
+     
+    ['mealpy', 'orig-acor'], 
+    ['mealpy', 'orig-aeo'], 
+    ['mealpy', 'orig-agto'], 
+    ['mealpy', 'orig-alo'], 
+    ['mealpy', 'orig-ao'], 
+    ['mealpy', 'orig-archoa'], 
+    ['mealpy', 'orig-aro'], 
+    ['mealpy', 'orig-aso'], 
+    ['mealpy', 'orig-avoa'], 
+    ['mealpy', 'orig-ba'], 
+    ['mealpy', 'orig-bbo'], 
+    ['mealpy', 'orig-beesa'], 
+    ['mealpy', 'orig-beesa'], 
+    ['mealpy', 'orig-bes'], 
+    ['mealpy', 'orig-bfo'], 
+    ['mealpy', 'orig-bmo'], 
+    ['mealpy', 'orig-bro'], 
+    ['mealpy', 'orig-bsa'], 
+    ['mealpy', 'orig-bso'], 
+    ['mealpy', 'orig-ca'], 
+    ['mealpy', 'orig-cdo'], 
+    ['mealpy', 'orig-cem'], 
+    ['mealpy', 'orig-cgo'], 
+    ['mealpy', 'orig-chio'], 
+    ['mealpy', 'orig-circle-sa'], 
+    ['mealpy', 'orig-coa'], 
+    ['mealpy', 'orig-cro'], 
+    ['mealpy', 'orig-csa'], 
+    ['mealpy', 'orig-cso'], 
+    ['mealpy', 'orig-dmoa'], 
+    ['mealpy', 'orig-do'], 
+    ['mealpy', 'orig-efo'], 
+    ['mealpy', 'orig-eho'], 
+    ['mealpy', 'orig-eo'], 
+    ['mealpy', 'orig-eoa'], 
+    ['mealpy', 'orig-ep'], 
+    ['mealpy', 'orig-es'], 
+    ['mealpy', 'orig-esoa'], 
+    ['mealpy', 'orig-evo'], 
+    ['mealpy', 'orig-fa'], 
+    ['mealpy', 'orig-fbio'], 
+    ['mealpy', 'orig-ffa'], 
+    ['mealpy', 'orig-fla'], 
+    ['mealpy', 'orig-foa'], 
+    ['mealpy', 'orig-fox'], 
+    ['mealpy', 'orig-fpa'], 
+    ['mealpy', 'orig-gbo'], 
+    ['mealpy', 'orig-gco'], 
+    ['mealpy', 'orig-gjo'], 
+    ['mealpy', 'orig-goa'], 
+    ['mealpy', 'orig-gska'], 
+    ['mealpy', 'orig-gto'],
+    ['mealpy', 'orig-gwo'], 
+    ['mealpy', 'orig-hba'], 
+    ['mealpy', 'orig-hbo'], 
+    ['mealpy', 'orig-hc'], 
+    ['mealpy', 'orig-hgs'], 
+    ['mealpy', 'orig-hgso'], 
+    ['mealpy', 'orig-hho'], 
+    ['mealpy', 'orig-hs'], 
+    ['mealpy', 'orig-huco'], 
+    ['mealpy', 'orig-ica'], 
+    ['mealpy', 'orig-info'], 
+    ['mealpy', 'orig-iwo'], 
+    ['mealpy', 'orig-ja'], 
+    ['mealpy', 'orig-lco'], 
+    ['mealpy', 'orig-ma'], 
+    ['mealpy', 'orig-mfo'], 
+    ['mealpy', 'orig-mgo'], 
+    ['mealpy', 'orig-mpa'], 
+    ['mealpy', 'orig-mrfo'], 
+    ['mealpy', 'orig-msa'], 
+    ['mealpy', 'orig-mvo'], 
+    ['mealpy', 'orig-nmra'], 
+    ['mealpy', 'orig-nro'], 
+    ['mealpy', 'orig-pfa'], 
+     
+    ['mealpy', 'orig-pss'], 
+    ['mealpy', 'orig-qsa'], 
+    ['mealpy', 'orig-rime'], 
+    ['mealpy', 'orig-run'], 
+    ['mealpy', 'orig-sa'], 
+    ['mealpy', 'orig-saro'],
+    ['mealpy', 'orig-sbo'], 
+    ['mealpy', 'orig-sca'], 
+    ['mealpy', 'orig-scso'], 
+    ['mealpy', 'orig-sfo'], 
+    ['mealpy', 'orig-shio'], 
+    ['mealpy', 'orig-sho'], 
+    ['mealpy', 'orig-slo'], 
+    ['mealpy', 'orig-sma'], 
+    ['mealpy', 'orig-soa'], 
+    ['mealpy', 'orig-sos'], 
+    ['mealpy', 'orig-spbo'], 
+    ['mealpy', 'orig-srsr'], 
+    ['mealpy', 'orig-ssa'], 
+    ['mealpy', 'orig-ssdo'], 
+    ['mealpy', 'orig-sso'], 
+    ['mealpy', 'orig-sspidera'], 
+    ['mealpy', 'orig-sspidero'], 
+    ['mealpy', 'orig-tlo'], 
+    ['mealpy', 'orig-tsa'], 
+    ['mealpy', 'orig-tso'], 
+    ['mealpy', 'orig-two'], 
+    ['mealpy', 'orig-vcs'], 
+    ['mealpy', 'orig-warso'], 
+    ['mealpy', 'orig-wca'], 
+    ['mealpy', 'orig-wdo'], 
+    ['mealpy', 'orig-who'], 
+    ['mealpy', 'orig-woa'],  
+    ['mealpy', 'prob-beesa'], 
+    ['mealpy', 'ql-sca'], 
+    ['mealpy', 'rw-gwo'], 
+    ['mealpy', 'sa-de'], 
+    ['mealpy', 'sap-de'], 
+    ['mealpy', 'sea-ho'], 
+    ['mealpy', 'selec-aro'], 
+    ['mealpy', 'sha-de'], 
+    ['mealpy', 'simp-cma-es'],  
+    ['mealpy', 'swarm-hc'], 
+    ['mealpy', 'whale-foa'], 
+    ['mealpy', 'wmqi-mrfo'], 
+
+    ['niapy', 'base-abc'],
+    ['niapy', 'base-ba'],
+    ['niapy', 'base-bea'],
+    ['niapy', 'base-bfo'],
+    ['niapy', 'base-ca'],
+    ['niapy', 'base-clonalg'],
+    ['niapy', 'base-cro'],
+    ['niapy', 'base-cs'],
+    ['niapy', 'base-cso'],
+    ['niapy', 'base-de'],
+    ['niapy', 'base-dynnp-de'],
+    ['niapy', 'base-anp-de'],
+    ['niapy', 'base-ms-de'],
+    ['niapy', 'base-dynnp-ms-de'],
+    ['niapy', 'base-1+1-es'],
+    ['niapy', 'base-m+1-es'],
+    ['niapy', 'base-m+l-es'],
+    ['niapy', 'base-m,l-es'],
+    ['niapy', 'base-fa'],
+    ['niapy', 'base-foa'],
+    ['niapy', 'base-fpa'],
+    ['niapy', 'base-fss'],
+    ['niapy', 'base-bb-fwa'],
+    ['niapy', 'base-fwa'],
+    ['niapy', 'base-e-fwa'],
+    ['niapy', 'base-dyn-fwa-g'],
+    ['niapy', 'base-dyn-fwa'],
+    ['niapy', 'base-ga'],
+    ['niapy', 'base-gsa'],
+    ['niapy', 'base-gso'],
+    ['niapy', 'base-gso-v1'],
+    ['niapy', 'base-gso-v2'],
+    ['niapy', 'base-gso-v3'],
+    ['niapy', 'base-gwo'],
+    ['niapy', 'base-hho'],
+    ['niapy', 'base-hs'],
+    ['niapy', 'base-hs-v1'],
+    ['niapy', 'base-kh'],
+    ['niapy', 'base-loa'],
+    ['niapy', 'base-mbo'],
+    ['niapy', 'base-mfo'],
+    ['niapy', 'base-mke-v1'],
+    ['niapy', 'base-mke-v2'],
+    ['niapy', 'base-mke-v3'],
+    ['niapy', 'base-wvc-pso'],
+    ['niapy', 'base-pso'],
+    ['niapy', 'base-ovc-pso'],
+    ['niapy', 'base-c-pso'],
+    ['niapy', 'base-m-pso'],
+    ['niapy', 'base-mc-pso'],
+    ['niapy', 'base-mcu-pso'],
+    ['niapy', 'base-cl-pso'],
+    ['niapy', 'base-sca'],
+    
+    ['niapy', 'modi-h-ba'],
+    ['niapy', 'modi-de-mts'],
+    ['niapy', 'modi-de-mts-v1'],
+    ['niapy', 'modi-dynnp-de-mts'],
+    ['niapy', 'modi-dynnp-de-mts-v1'],
+    ['niapy', 'modi-ms-de-mts'],
+    ['niapy', 'modi-ms-de-mts-v1'],
+    ['niapy', 'modi-dynnp-ms-de-mts'],
+    ['niapy', 'modi-dynnp-ms-de-mts-v1'],
+    ['niapy', 'modi-sa-de'],
+    ['niapy', 'modi-ms-sa-de'],
+    ['niapy', 'modi-a-ba'],
+    ['niapy', 'modi-sa-ba'],
+    ['niapy', 'modi-hsa-ba'],
+    ['niapy', 'modi-pf-ba'],
+    ['niapy', 'modi-sh-a-de'],
+    ['niapy', 'modi-lpsr-sh-a-de'],
+  
+    ['niapy', 'other-nmm'],
+    ['niapy', 'other-hc'],
+    ['niapy', 'other-sa'],
+    ['niapy', 'other-mts'],
+    ['niapy', 'other-mts1'],
+    ['niapy', 'other-mts-ls1'],
+    ['niapy', 'other-mts-ls2'],
+    ['niapy', 'other-mts-ls3'],
+    ['niapy', 'other-mts-ls1v1'],
+    ['niapy', 'other-mts-ls3v1'],
+    ['niapy', 'other-aso'],
+    ['niapy', 'other-rs'],
+  
+    ]
+
+EXACT_ALGORITHMS = [
+
+    ['copt', 'copt'],
+    ['cplex', 'cplex'],
+    ['cvxpy', 'cbc'],
+    ['cvxpy', 'clarabel'],
+    ['cvxpy', 'copt'],
+    ['cvxpy', 'cplex'],
+    ['cvxpy', 'cvxopt'],
+    ['cvxpy', 'ecos'],
+    ['cvxpy', 'glop'],
+    ['cvxpy', 'glpk-mi'],
+    ['cvxpy', 'glpk'],
+    ['cvxpy', 'gurobi'],
+    ['cvxpy', 'mosek'],
+    ['cvxpy', 'nag'],
+    ['cvxpy', 'osqp'],
+    ['cvxpy', 'pdlp'],
+    ['cvxpy', 'proxqp'],
+    ['cvxpy', 'scip'],
+    ['cvxpy', 'scipy'],
+    ['cvxpy', 'scs'],
+    ['cvxpy', 'xpress'],
+    ['cylp', 'cbc'],
+    ['gekko', 'apopt'],
+    ['gekko', 'bpopt'],
+    ['gekko', 'ipopt'],
+    ['gurobi', 'gurobi'],
+    ['linopy', 'cbc'],
+    ['linopy', 'cplex'],
+    ['linopy', 'glpk'],
+    ['linopy', 'gurobi'],
+    ['linopy', 'highs'],
+    ['linopy', 'xpress'],
+    ['insideopt', 'seeker'],
+    ['insideopt-demo', 'seeker'],
+    ['mip', 'cbc'],
+    ['mip', 'gurobi'],
+    ['mip', 'cplex'],
+    ['mip', 'glpk'],
+    ['ortools', 'bop'],
+    ['ortools', 'cbc'],
+    ['ortools', 'clp'],
+    ['ortools', 'cplex-'],
+    ['ortools', 'cplex'],
+    ['ortools', 'glop'],
+    ['ortools', 'glpk-'],
+    ['ortools', 'glpk'],
+    ['ortools', 'gurobi-'],
+    ['ortools', 'gurobi'],
+    ['ortools', 'sat'],
+    ['ortools', 'scip'],
+    ['ortools', 'xpress-'],
+    ['ortools', 'xpress'],
+    ['picos', 'cplex'],
+    ['picos', 'cvxopt'],
+    ['picos', 'ecos'],
+    ['picos', 'glpk'],
+    ['picos', 'gurobi'],
+    ['picos', 'mosek'],
+    ['picos', 'mskfn'],
+    ['picos', 'osqp'],
+    ['picos', 'scip'],
+    ['picos', 'smcp'],
+    ['pulp', 'cbc'],
+    ['pulp', 'choco'],
+    ['pulp', 'coin'],
+    ['pulp', 'coinmp-dll'],
+    ['pulp', 'cplex-py'],
+    ['pulp', 'cplex'],
+    ['pulp', 'glpk'],
+    ['pulp', 'gurobi-cmd'],
+    ['pulp', 'gurobi'],
+    ['pulp', 'highs'],
+    ['pulp', 'mipcl'],
+    ['pulp', 'mosek'],
+    ['pulp', 'pyglpk'],
+    ['pulp', 'scip'],
+    ['pulp', 'xpress-py'],
+    ['pulp', 'xpress'],
+    ['pymprog', 'glpk'],
+    ['pyomo', 'asl'],
+    ['pyomo', 'baron'],
+    ['pyomo', 'cbc'],
+    ['pyomo', 'conopt'],
+    ['pyomo', 'cplex-direct'],
+    ['pyomo', 'cplex-persistent'],
+    ['pyomo', 'cplex'],
+    ['pyomo', 'cyipopt'],
+    ['pyomo', 'gams'],
+    ['pyomo', 'gdpopt.gloa'],
+    ['pyomo', 'gdpopt.lbb'],
+    ['pyomo', 'gdpopt.loa'],
+    ['pyomo', 'gdpopt.ric'],
+    ['pyomo', 'gdpopt'],
+    ['pyomo', 'glpk'],
+    ['pyomo', 'gurobi-direct'],
+    ['pyomo', 'gurobi-persistent'],
+    ['pyomo', 'gurobi'],
+    ['pyomo', 'highs'],
+    ['pyomo', 'ipopt'],
+    ['pyomo', 'mindtpy'],
+    ['pyomo', 'mosek-direct'],
+    ['pyomo', 'mosek-persistent'],
+    ['pyomo', 'mosek'],
+    ['pyomo', 'mpec-minlp'],
+    ['pyomo', 'mpec-nlp'],
+    ['pyomo', 'multistart'],
+    ['pyomo', 'path'],
+    ['pyomo', 'scip'],
+    ['pyomo', 'trustregion'],
+    ['pyomo', 'xpress-direct'],
+    ['pyomo', 'xpress-persistent'],
+    ['pyomo', 'xpress'],
+    ['xpress', 'xpress'],
+    ['gams', 'alphaecp'],
+    ['gams', 'antigone'],
+    ['gams', 'baron'],
+    ['gams', 'cbc'],
+    ['gams', 'conopt'],
+    ['gams', 'convert'],
+    ['gams', 'copt'],
+    ['gams', 'cplex'],
+    ['gams', 'de'],
+    ['gams', 'decis'],
+    ['gams', 'dicopt'],
+    ['gams', 'examiner'],
+    ['gams', 'gamschk'],
+    ['gams', 'gurobi'],
+    ['gams', 'guss'],
+    ['gams', 'highs'],
+    ['gams', 'ipopt'],
+    ['gams', 'jams'],
+    ['gams', 'kestrel'],
+    ['gams', 'knitro'],
+    ['gams', 'lindo'],
+    ['gams', 'lindoglobal'],
+    ['gams', 'miles'],
+    ['gams', 'minos'],
+    ['gams', 'mosek'],
+    ['gams', 'mps2gms'],
+    ['gams', 'mpsge'],
+    ['gams', 'msnlp'],
+    ['gams', 'nlpec'],
+    ['gams', 'octeract'],
+    ['gams', 'odh'],
+    ['gams', 'path'],
+    ['gams', 'pathnlp'],
+    ['gams', 'quad'],
+    ['gams', 'sbb'],
+    ['gams', 'scip'],
+    ['gams', 'shot'],
+    ['gams', 'snopt'],
+    ['gams', 'soplex'],
+    ['gams', 'xpress'],
+]
+
+UNCERTAINTY_ALGORITHMS = [
+    ['rsome-dro', 'copt'],
+    ['rsome-dro', 'cplex'],
+    ['rsome-dro', 'cvxpy'],
+    ['rsome-dro', 'cylp'],
+    ['rsome-dro', 'ecos'],
+    ['rsome-dro', 'gurobi'],
+    ['rsome-dro', 'mosek'],
+    ['rsome-dro', 'ortools'],
+    ['rsome-dro', 'scipy'],
+    ['rsome-ro', 'copt'],
+    ['rsome-ro', 'cplex'],
+    ['rsome-ro', 'cvxpy'],
+    ['rsome-ro', 'cylp'],
+    ['rsome-ro', 'ecos'],
+    ['rsome-ro', 'gurobi'],
+    ['rsome-ro', 'mosek'],
+    ['rsome-ro', 'ortools'],
+    ['rsome-ro', 'scipy'],
+]
+
+CONSTRAINT_ALGORITHMS = [
+    ['cplex-cp', 'cplex'],
+    ['ortools-cp', 'ortools']
+]
+
+MOO_ALGORITHMS = [
+    ['pymoo', 'age-mo-ea-ii'],
+    ['pymoo', 'age-mo-ea'],
+    ['pymoo', 'cta-ea'],
+    ['pymoo', 'd-ns-ga-ii'],
+    ['pymoo', 'mo-ea-d'],
+    ['pymoo', 'ns-ga-ii'],
+    ['pymoo', 'ns-ga-iii'],
+    ['pymoo', 'r-ns-ga-ii'],
+    ['pymoo', 'r-ns-ga-iii'],
+    ['pymoo', 'rv-ea'],
+    ['pymoo', 'sms-ea'],
+    ['pymoo', 'sp-ea-ii'],
+    ['pymoo', 'u-ns-ga-iii'],
+    ['pymultiobjective', 'cta-ea'],
+    ['pymultiobjective', 'ea-d'],
+    ['pymultiobjective', 'ea-fc'],
+    ['pymultiobjective', 'ea-hv'],
+    ['pymultiobjective', 'est-hv'],
+    ['pymultiobjective', 'gr-ea'],
+    ['pymultiobjective', 'modi-pso'],
+    ['pymultiobjective', 'na-ea'],
+    ['pymultiobjective', 'ns-ga-ii'],
+    ['pymultiobjective', 'ns-ga-ii'],
+    ['pymultiobjective', 'ns-ga-iii'],
+    ['pymultiobjective', 'pa-es'],
+    ['pymultiobjective', 'rv-ea'],
+    ['pymultiobjective', 'sm-pso'],
+    ['pymultiobjective', 'sms-ea'],
+    ['pymultiobjective', 'sp-ea-ii'],
+    ['pymultiobjective', 'u-ns-ga-iii'],
+]
+
+WEIGHTING_ALGORITHMS = [
+    ['ahp_method','pydecision'],
+    ['fuzzy_ahp_method','pydecision'],
+    ['bw_method','pydecision'],
+    ['fuzzy_bw_method','pydecision'],
+    ['cilos_method', 'pydecision'],
+    ['critic_method', 'pydecision'],
+    ['entropy_method', 'pydecision'],
+    ['idocriw_method', 'pydecision'],
+    ['merec_method', 'pydecision'],
+    ['lp_method', 'feloopy'],
+    ]
+
+RANKING_ALGORITHMS = [
+    ['aras_method', 'pydecision'],
+    ['fuzzy_aras_method', 'pydecision'],
+    ['borda_method', 'pydecision'],
+    ['cocoso_method', 'pydecision'],
+    ['codas_method', 'pydecision'],
+    ['copeland_method', 'pydecision'],
+    ['copras_method', 'pydecision'],
+    ['fuzzy_copras_method', 'pydecision'],
+    ['cradis_method', 'pydecision'],
+    ['edas_method', 'pydecision'],
+    ['fuzzy_edas_method', 'pydecision'],
+    ['gra_method', 'pydecision'],
+    ['mabac_method', 'pydecision'],
+    ['macbeth_method', 'pydecision'],
+    ['mairca_method', 'pydecision'],
+    ['marcos_method', 'pydecision'],
+    ['maut_method', 'pydecision'],
+    ['moora_method', 'pydecision'],
+    ['fuzzy_moora_method', 'pydecision'],
+    ['moosra_method', 'pydecision'],
+    ['multimoora_method', 'pydecision'],
+    ['ocra_method', 'pydecision'],
+    ['fuzzy_ocra_method', 'pydecision'],
+    ['oreste_method', 'pydecision'],
+    ['piv_method', 'pydecision'],
+    ['promethee_ii', 'pydecision'],
+    ['promethee_iv', 'pydecision'],
+    ['promethee_vi', 'pydecision'],
+    ['psi_method', 'pydecision'],
+    ['regime_method', 'pydecision'],
+    ['rov_method', 'pydecision'],
+    ['saw_method', 'pydecision'],
+    ['smart_method', 'pydecision'],
+    ['spotis_method', 'pydecision'],
+    ['todim_method', 'pydecision'],
+    ['topsis_method', 'pydecision'],
+    ['fuzzy_topsis_method', 'pydecision'],
+    ['vikor_method', 'pydecision'],
+    ['fuzzy_vikor_method', 'pydecision'],
+    ['waspas_method', 'pydecision'],
+    ['fuzzy_waspas_method', 'pydecision'],
+    ['la_method', 'feloopy'],
+    ]
+
+SPECIAL_ALGORITHMS = [
+    ['dematel_method', 'pydecision'],
+    ['fuzzy_dematel_method', 'pydecision'],
+    ['electre_i', 'pydecision'],
+    ['electre_i_s', 'pydecision'],
+    ['electre_i_v', 'pydecision'],
+    ['electre_ii', 'pydecision'],
+    ['electre_iii', 'pydecision'],
+    ['electre_iv', 'pydecision'],
+    ['electre_tri_b', 'pydecision'],
+    ['promethee_i', 'pydecision'],
+    ['promethee_iii', 'pydecision'],
+    ['promethee_v', 'pydecision'],
+    ['promethee_gaia', 'pydecision'],
+    ['wings_method', 'pydecision'],
+    ['cwdea_method', 'feloopy']
+]
+
 from .algorithms import *
+from .classes import *
+from .helpers import *
+from .operators import *
 
 __author__ = ['Keivan Tafakkori']
 
-warnings.filterwarnings("ignore")
-
-class ModelObject:
-    pass
-
-class AgentObject:
-    pass
-
-class ConditionalObject:
-    pass
-
-class TensorVariableCollection:
-    pass
-
-class MultidimVariableCollection:
-    pass
-
-class EventVariable:
-    pass
-
-class model(TensorVariableClass,
-          TensorVariableCollectionClass,
-          MultidimVariableClass,
-          MultidimVariableCollectionClass,
-          EventVariableClass,
-          EventVariableCollectionClass,
-          SpecialConstraintClass,
-          NormalConstraintClass,
-          LinearizationClass,
-          ConstraintProgrammingClass):
+class model(
+    TensorVariableClass,
+    TensorVariableCollectionClass,
+    MultidimVariableClass,
+    MultidimVariableCollectionClass,
+    EventVariableClass,
+    EventVariableCollectionClass,
+    SpecialConstraintClass,
+    NormalConstraintClass,
+    LinearizationClass,
+    ConstraintProgrammingClass,
+    ):
     
-    def __init__(self,
-                method: Literal[
-                     'constraint', 
-                     'convex', 
-                     'exact', 
-                     'heuristic', 
-                     'uncertain',
-                 ] = 'exact',
-                 name: str = 'x',
-                 interface: Literal[
-                     'copt',
-                     'cplex',
-                     'cplex_cp',
-                     'cvxpy',
-                     'cylp',
-                     'feloopy',
-                     'gekko',
-                     'gurobi',
-                     'linopy',
-                     'mealpy',
-                     'mip',
-                     'niapy',
-                     'ortools',
-                     'ortools_cp',
-                     'picos',
-                     'pulp',
-                     'pygad',
-                     'pymoo',
-                     'pymprog',
-                     'pymultiobjective',
-                     'pyomo',
-                     'rsome_dro',
-                     'rsome_ro',
-                     'xpress',
-                     'insideopt',
-                     'insideopt-demo', 
-                     'gams',
-                     'highs',                 
-                 ] = 'pulp',
-                 agent: Optional[Union[AgentObject, None]] = None,
-                 scens: Optional[int] = 1,
-                 no_agents: Optional[int] = None,
-                 ) -> None:
+    def __init__(
+        self,
+        name: str = 'model_name',
+        method: Literal['constraint', 'convex', 'exact', 'heuristic', 'uncertain'] = 'exact',
+        interface: Literal['copt','cplex','cplex_cp','cvxpy','cylp','feloopy','gekko','gurobi','linopy','mealpy','mip','niapy','ortools','ortools_cp','picos','pulp','pygad','pymoo','pymprog','pymultiobjective','pyomo','rsome_dro','rsome_ro','xpress','insideopt','insideopt-demo', 'gams','highs'] = 'pulp',
+        agent: Optional[Any] = None,
+        no_scenarios: Optional[int] = None,
+        no_agents: Optional[int] = None,
+        scenario_ids: Optional[list] = None,
+        constraint_ids: Optional[list] = None,
+        validate: bool = True,
+        ):
+        
         """
         Creates and initializes the mathematical modeling environment.
 
         Parameters
         ----------
-        method : Literal['exact', 'heuristic', 'constraint', 'convex', 'uncertain']
-            The desired solution method for optimization.
-        name : str
-            The name of the optimization model.
-        interface : Literal[
-            'copt', 'cplex', 'cplex_cp', 'cvxpy', 'cylp', 'feloopy', 'gekko', 'gurobi', 'linopy',
-            'mealpy', 'mip', 'niapy', 'ortools', 'ortools_cp', 'picos', 'pulp', 'pygad', 'pymoo',
-            'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress', 'insideopt', 'insideopt-demo', 'gams', 'highs'
-        ]
-            The selected solver interface for optimization.
-        agent : Optional[Union[AgentObject, None]] (default=None)
-            An optional search agent object. If not provided, the optimization will be agentless.
-        scens : Optional[int] (default=1)
-            The number of scenarios for the optimization problem. Defaults to 1 if not specified.
-        no_agents : Optional[int] (default=None)
-            The number of search agents to use in the optimization. If not specified, the default behavior will be applied.
+        name
+            Name of the mathematical model.
+        method
+            Desired solution method.
+        interface
+            Desired solver interface.
+        agent
+            Search agent in heuristic optimization.
+        no_scenarios
+            Number of scenarios in uncertainty handling.
+        no_agents
+            Number of search agents in heuristic optimization.
+        scenario_ids
+            Indices of scenarios in uncertainty handling.
+        constraint_ids
+            Indices of constraints to be considered.
         """
         
-        if method not in {'exact', 'heuristic', 'constraint', 'convex', 'uncertain'}:
-            raise ValueError("Invalid solution method. Please choose from 'exact', 'heuristic', 'constraint', 'convex', or 'uncertain'.")
-        
-        if interface not in {'copt', 'cplex', 'cplex_cp', 'cvxpy', 'cylp', 'feloopy', 'gekko', 'gurobi', 'linopy',
-                                  'mealpy', 'mip', 'niapy', 'ortools', 'ortools_cp', 'picos', 'pulp', 'pygad', 'pymoo',
-                                  'pymprog', 'pymultiobjective', 'pyomo', 'rsome_dro', 'rsome_ro', 'xpress', 'insideopt', 'insideopt-demo', 'gams', 'highs'}:
-            raise ValueError("Invalid solver interface. Please choose from the provided options.")
-        
-        if not isinstance(scens, int) or scens < 1:
-            raise ValueError("The number of scenarios (scens) must be a positive integer (>=1).")
-        
-        if no_agents is not None and (not isinstance(no_agents, int) or no_agents < 1):
-            raise ValueError("The number of search agents (no_agents) must be a positive integer (>=1) or None.")
+        if validate: 
 
+            validate_string(
+                label="method", 
+                list_of_allowed_values=['constraint', 'convex', 'exact', 'heuristic', 'uncertain'], 
+                input_string=method,
+                required=True)
+
+            validate_string(
+                label="interface", 
+                list_of_allowed_values=['copt','cplex','cplex_cp','cvxpy','cylp','feloopy','gekko','gurobi','linopy','mealpy','mip','niapy','ortools','ortools_cp','picos','pulp','pygad','pymoo','pymprog','pymultiobjective','pyomo','rsome_dro','rsome_ro','xpress','insideopt','insideopt-demo', 'gams','highs'], 
+                input_string=interface,
+                required=True)
+            
+            validate_integer(
+                label="no_scenarios", 
+                min_value=1, 
+                max_value=None, 
+                input_integer=no_scenarios, 
+                required=False)
+
+            validate_integer(
+                label="no_agents", 
+                min_value=1, 
+                max_value=None, 
+                input_integer=no_agents, 
+                required=False)
+            
+            validate_existence(
+                label="agent", 
+                input_value=agent, 
+                condition=True if method=="heuristic" else False)
+                           
+        self.name = name
+        self.method = method
+        self.interface = interface
+        self.agent = agent
+        self.no_scenarios = no_scenarios
         self.no_agents = no_agents
+        self.scenario_ids = scenario_ids
+        self.constraint_ids = constraint_ids
 
-        if method == 'constraint':
-            self.solution_method_was = 'constraint'
-            method = 'exact'
-
-        elif method == 'convex':
-            self.solution_method_was = 'convex'
-            method = 'exact'
-
-        elif method == 'uncertain':
-            self.solution_method_was = 'uncertain'
-            method = 'exact'
-
+        if self.method in ["constraint", "convex", "uncertain"]:
+            self.method_was = self.method
+            self.method = "exact"
         else:
-            self.solution_method_was=None
+            self.method_was = None
 
         self.features = {
-            'solution_method': method,
-            'model_name': name,
-            'interface_name': interface,
+            'solution_method': self.method,
+            'model_name': self.name,
+            'interface_name': self.interface,
+            'no_scenarios': self.no_scenarios,
+            'no_agents': self.no_agents,
+            'scenario_ids': self.scenario_ids,
+            'constraint_ids': self.constraint_ids,
             'solver_name': None,
             'constraints': [],
             'constraint_labels': [],
@@ -160,12 +740,25 @@ class model(TensorVariableClass,
             'constraint_counter': [0, 0],
             'objective_being_optimized': 0,
             'solver_options': {},
-            'scens': scens,
         }
 
-        if method == 'heuristic':
+        if self.method == 'exact':
+
+            from .generators import model_generator
+            self.model = model_generator.generate_model(self.features)
+                   
+                   
+            self.features.update(
+                {
+                'model_object': self.model,
+                'variables': defaultdict(),
+                'dimensions': defaultdict(),
+                }
+            )
             
-            self.agent = agent
+            self.link_to_interface = self.lti = self._ = self.model
+                    
+        if self.method == 'heuristic':
             
             self.features.update(
                 {
@@ -176,128 +769,45 @@ class model(TensorVariableClass,
                 'variable_dim': dict() if self.agent[0] == 'idle' else None,
                 'pop_size': 1 if self.agent[0] == 'idle' else len(self.agent[1]),
                 'penalty_coefficient': 0 if self.agent[0] == 'idle' else self.agent[3],
-                'vectorized': None,
+                'vectorized': self.interface in ['feloopy', 'pymoo'],
                 }
             )
-
-            self.features['vectorized'] = interface in ['feloopy', 'pymoo']
-
             if self.agent[0] != 'idle':
-
                 self.agent = self.agent[1].copy()
-
-            if self.features['agent_status']!='idle':
-                self.access = True
-                
-            else:
-                self.access = False
-
-        if method == 'exact':
-            
-           
-
-            self.mainvars = defaultdict()
-            self.maindims = defaultdict()
-
-            from .generators import model_generator
-            self.model = model_generator.generate_model(self.features)
-            
-            self.features['model_object'] = self.model
-             
-            self.sm = self.link_to_interface = self.lti = self.model
-            
-        # Alias methods
-        
-        # Binary variable aliases
+ 
         self.binary_variable = self.binary = self.bool = self.add_bool = self.add_binary = self.add_binary_variable = self.boolean_variable = self.add_boolean_variable = self.bvar
-        
-        # Positive variable aliases
         self.positive_variable = self.positive = self.add_positive = self.add_positive_variable = self.pvar
-        
-        # Integer variable aliases
         self.integer_variable = self.integer = self.add_integer = self.add_integer_variable = self.ivar
-        
-        # Free variable aliases
         self.free_variable = self.free = self.float = self.add_free = self.add_float = self.real = self.add_real = self.add_free_variable = self.fvar
-        
-        # Sequential variable aliases
         self.sequential_variable = self.sequence = self.sequential = self.add_sequence = self.add_sequential = self.add_sequential_variable = self.permutation_variable = self.add_permutation_variable = self.svar
-        
-        # Positive tensor variable aliases
         self.positive_tensor_variable = self.positive_tensor = self.add_positive_tensor = self.add_positive_tensor_variable = self.ptvar
-        
-        # Binary tensor variable aliases
         self.binary_tensor_variable = self.binary_tensor = self.add_binary_tensor = self.add_binary_tensor_variable = self.add_boolean_tensor_variable = self.boolean_tensor_variable = self.btvar
-        
-        # Integer tensor variable aliases
         self.integer_tensor_variable = self.integer_tensor = self.add_integer_tensor = self.add_integer_tensor_variable = self.itvar
-        
-        # Free tensor variable aliases
         self.free_tensor_variable = self.free_tensor = self.float_tensor = self.add_free_tensor = self.add_float_tensor = self.add_free_tensor_variable = self.ftvar
-        
-        # Random variable aliases
         self.random_variable = self.add_random_variable = self.rvar
-        
-        # Random tensor variable aliases
         self.random_tensor_variable = self.add_random_tensor_variable = self.rtvar
-        
-        # Dependent variable aliases
         self.dependent_variable = self.array = self.add_array = self.add_dependent_variable = self.dvar
-        
-        # Objective aliases
         self.objective = self.reward = self.hypothesis = self.fitness = self.goal = self.add_objective = self.loss = self.gain = self.obj
-        
-        # Constraint aliases
         self.constraint = self.equation = self.add_constraint = self.add_equation = self.st = self.subject_to = self.cb = self.computed_by = self.penalize = self.pen = self.eq = self.con
-        
-        # Solve aliases
         self.solve = self.implement = self.run = self.optimize = self.sol
-        
-        # Query aliases
         self.get_obj = self.get_objective
         self.get_stat = self.get_status
         self.get_tensor = self.get_numpy_var
         self.get_var = self.value = self.get = self.get_variable
 
-    def fix_ifneeded(self, dims):
-    
-        return fix_dims(dims)
-        
-    def __getitem__(self, agent: AgentObject) -> ConditionalObject:
-        """
-        Retrieve the required features of the model object.
-
-        Parameters
-        ----------
-        agent : AgentObject
-            The search agent object used to determine the feature retrieval method.
-
-        Returns
-        -------
-        ConditionalObject
-            The requested features or the model object itself based on the agent's status.
-
-        Notes
-        -----
-        - If the agent's status is 'idle', the method returns the model object.
-        - If the agent's status is 'feasibility_check', the method invokes `_feasibility_check()` and returns its result.
-        - For other statuses, the method calls `_get_result(vectorized, interface_name)` and returns the result.
-        """
-
+    def __getitem__(self, agent):
         agent_status = self.features['agent_status']
         vectorized = self.features['vectorized']
         interface_name = self.features['interface_name']
-
         if agent_status == 'idle':
             return self
-        
         elif agent_status == 'feasibility_check':
             return self._feasibility_check()
-        
         else:
             return self._get_result(vectorized, interface_name)
 
     def _feasibility_check(self) -> str:
+        
         """
         Perform a feasibility check based on the model's features.
 
@@ -315,7 +825,10 @@ class model(TensorVariableClass,
         else:
             return 'infeasible (constrained)' if self.penalty > 0 else 'feasible (constrained)'
 
-    def _get_result(self, vectorized: bool, interface_name: str) -> ConditionalObject:
+    def fix_ifneeded(self, dims):
+        return fix_dims(dims)
+    
+    def _get_result(self, vectorized: bool, interface_name: str):
         """
         Retrieve the optimization result based on the specified parameters.
 
@@ -350,18 +863,18 @@ class model(TensorVariableClass,
         input_tensor = np.array(input_tensor)
         
         from .generators import init_generator
-        for i,j in self.mainvars.keys():
+        for i,j in self.features['variables'].keys():
             if j==name:
-                if self.maindims[j]==0:
-                    init_generator.generate_init(self.features,self.mainvars[(i,j)],input_tensor,fix=False)
+                if self.features['dimensions'][j]==0:
+                    init_generator.generate_init(self.features,self.features['variables'][(i,j)],input_tensor,fix=False)
                     
-                elif len(self.maindims[j])==1:
+                elif len(self.features['dimensions'][j])==1:
                 
-                    for k in fix_dims(self.maindims[j])[0]:
-                        init_generator.generate_init(self.features,self.mainvars[(i,j)][k],input_tensor[k],fix=False)
+                    for k in fix_dims(self.features['dimensions'][j])[0]:
+                        init_generator.generate_init(self.features,self.features['variables'][(i,j)][k],input_tensor[k],fix=False)
                 else:
-                    for k in it.product(*tuple(fix_dims(self.maindims[j]))):
-                        init_generator.generate_init(self.features,self.mainvars[(i,j)][k],input_tensor[k],fix=False)
+                    for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
+                        init_generator.generate_init(self.features,self.features['variables'][(i,j)][k],input_tensor[k],fix=False)
                             
     def vfix(self, variables, values):
         
@@ -373,18 +886,18 @@ class model(TensorVariableClass,
         input_tensor = np.array(input_tensor)
         
         from .generators import init_generator
-        for i,j in self.mainvars.keys():
+        for i,j in self.features['variables'].keys():
             if j==name:
-                if self.maindims[j]==0:
-                    init_generator.generate_init(self.features,self.mainvars[(i,j)],input_tensor,fix=True)
+                if self.features['dimensions'][j]==0:
+                    init_generator.generate_init(self.features,self.features['variables'][(i,j)],input_tensor,fix=True)
                     
-                elif len(self.maindims[j])==1:
+                elif len(self.features['dimensions'][j])==1:
                 
-                    for k in fix_dims(self.maindims[j])[0]:
-                        init_generator.generate_init(self.features,self.mainvars[(i,j)][k],input_tensor[k],fix=True)
+                    for k in fix_dims(self.features['dimensions'][j])[0]:
+                        init_generator.generate_init(self.features,self.features['variables'][(i,j)][k],input_tensor[k],fix=True)
                 else:
-                    for k in it.product(*tuple(fix_dims(self.maindims[j]))):
-                        init_generator.generate_init(self.features,self.mainvars[(i,j)][k],input_tensor[k],fix=True)
+                    for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
+                        init_generator.generate_init(self.features,self.features['variables'][(i,j)][k],input_tensor[k],fix=True)
                           
     def obj(self, expression=0, direction=None, label=None):
             
@@ -540,9 +1053,9 @@ class model(TensorVariableClass,
                     "Do nothing"
 
                 else:
-
+                    
                     if self.features['vectorized']:
-
+                        
                         if self.features['interface_name']=='feloopy':
 
                             self.penalty = np.zeros(np.shape(self.agent)[0])
@@ -638,11 +1151,10 @@ class model(TensorVariableClass,
                     else:
 
                         self.penalty = 0
-
+                        
                         if len(self.features['constraints']) >= 1:
-
-                            self.penalty = np.amax(
-                                np.array([0]+self.features['constraints'], dtype=object))
+                            
+                            self.penalty = np.amax(np.array([0]+self.features['constraints'], dtype=object))
 
                         if type(obj_id) != str:
 
@@ -675,6 +1187,8 @@ class model(TensorVariableClass,
                                     self.response[i] = self.features['objectives'][i] + \
                                         self.features['penalty_coefficient'] * \
                                         (self.penalty)**2
+                        
+                        
 
     def healthy(self):
         try:
@@ -854,9 +1368,14 @@ class model(TensorVariableClass,
                     metric_info = True, 
                     show_tensors=show_tensors, 
                     show_detailed_tensors=detailed)
-             
-    def report(self, all_metrics: bool = False, feloopy_info: bool = True, extra_info: bool = False, math_info: bool = False, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], show_tensors = False, show_detailed_tensors=False, save=None):
+            
+    def clean_report(self):
 
+        command = "cls" if os.name == "nt" else "clear"
+        os.system(command)
+        self.report()
+         
+    def report(self, all_metrics: bool = False, feloopy_info: bool = True, extra_info: bool = False, math_info: bool = False, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], show_tensors = False, show_detailed_tensors=False, save=None):
 
         if not self.healthy():
             print()
@@ -864,13 +1383,12 @@ class model(TensorVariableClass,
             print('WARNING: Model is not healthy!')
             print()
             print()
-            
-            
+             
         self.interface_name = self.features['interface_name']
-        if self.solution_method_was==None:
+        if self.method_was==None:
             self.solution_method = self.features['solution_method']
         else:
-            self.solution_method = self.solution_method_was
+            self.solution_method = self.method_was
         self.model_name = self.features['model_name']
         self.solver_name = self.features['solver_name']
         self.model_constraints = self.features['constraints']
@@ -895,7 +1413,7 @@ class model(TensorVariableClass,
         if len(str(status)) == 0:
             status = ['infeasible (constrained)']
 
-        box_width = 80
+        box_width = 90
         vspace()
 
         if feloopy_info:
@@ -904,7 +1422,7 @@ class model(TensorVariableClass,
             now = datetime.datetime.now()
             date_str = now.strftime("Date: %Y-%m-%d")
             time_str = now.strftime("Time: %H:%M:%S")
-            tline_text("FelooPy v0.2.8")
+            tline_text("FelooPy v0.2.9")
             empty_line()
             two_column(date_str, time_str)
             two_column(f"Interface: {self.interface_name}", f"Solver: {self.solver_name}")
@@ -963,7 +1481,7 @@ class model(TensorVariableClass,
         if math_info:
             try:
                 import textwrap
-                tline_text('Math', box_width=80)
+                tline_text('Math', box_width=90)
                 empty_line()
                 obdirs = 0
                 for objective in self.features['objectives']:
@@ -1067,46 +1585,46 @@ class model(TensorVariableClass,
     def get_numpy_var(self, var_name, dual=False, slack=False, reduced_cost=False):
 
         if not dual and not slack:
-            for i,j in self.mainvars.keys():
+            for i,j in self.features['variables'].keys():
                 if j==var_name:
-                    if self.maindims[j]==0:
-                        output = self.get(self.mainvars[(i,j)])
-                    elif len(self.maindims[j])==1:
-                        output = np.zeros(shape=len(fix_dims(self.maindims[j])[0]))
-                        for k in fix_dims(self.maindims[j])[0]:
+                    if self.features['dimensions'][j]==0:
+                        output = self.get(self.features['variables'][(i,j)])
+                    elif len(self.features['dimensions'][j])==1:
+                        output = np.zeros(shape=len(fix_dims(self.features['dimensions'][j])[0]))
+                        for k in fix_dims(self.features['dimensions'][j])[0]:
                             try:
-                                output[k] = self.get(self.mainvars[(i,j)][k])
+                                output[k] = self.get(self.features['variables'][(i,j)][k])
                             except:
-                                output[k] = self.get(self.mainvars[(i,j)])[k]
+                                output[k] = self.get(self.features['variables'][(i,j)])[k]
                     else:
-                        output = np.zeros(shape=tuple([len(dim) for dim in fix_dims(self.maindims[j])]))
-                        for k in it.product(*tuple(fix_dims(self.maindims[j]))):
+                        output = np.zeros(shape=tuple([len(dim) for dim in fix_dims(self.features['dimensions'][j])]))
+                        for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
                             try:
-                                output[k] = self.get(self.mainvars[(i,j)][k])
+                                output[k] = self.get(self.features['variables'][(i,j)][k])
                             except:
-                                output[k] =  self.get(self.mainvars[(i,j)])[k]
+                                output[k] =  self.get(self.features['variables'][(i,j)])[k]
         
         if reduced_cost:
             
     
-            for i,j in self.mainvars.keys():
+            for i,j in self.features['variables'].keys():
                 if j==var_name:
-                    if self.maindims[j]==0:
-                        output = self.get_rc(self.mainvars[(i,j)])
-                    elif len(self.maindims[j])==1:
-                        output = np.zeros(shape=len(fix_dims(self.maindims[j])[0]))
-                        for k in fix_dims(self.maindims[j])[0]:
+                    if self.features['dimensions'][j]==0:
+                        output = self.get_rc(self.features['variables'][(i,j)])
+                    elif len(self.features['dimensions'][j])==1:
+                        output = np.zeros(shape=len(fix_dims(self.features['dimensions'][j])[0]))
+                        for k in fix_dims(self.features['dimensions'][j])[0]:
                             try:
-                                output[k] = self.get_rc(self.mainvars[(i,j)][k])
+                                output[k] = self.get_rc(self.features['variables'][(i,j)][k])
                             except:
-                                output[k] = self.get_rc(self.mainvars[(i,j)])[k]
+                                output[k] = self.get_rc(self.features['variables'][(i,j)])[k]
                     else:
-                        output = np.zeros(shape=tuple([len(dim) for dim in fix_dims(self.maindims[j])]))
-                        for k in it.product(*tuple(fix_dims(self.maindims[j]))):
+                        output = np.zeros(shape=tuple([len(dim) for dim in fix_dims(self.features['dimensions'][j])]))
+                        for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
                             try:
-                                output[k] = self.get_rc(self.mainvars[(i,j)][k])
+                                output[k] = self.get_rc(self.features['variables'][(i,j)][k])
                             except:
-                                output[k] =  self.get_rc(self.mainvars[(i,j)])[k]            
+                                output[k] =  self.get_rc(self.features['variables'][(i,j)])[k]            
         if dual:
             
             output = []
@@ -1125,63 +1643,63 @@ class model(TensorVariableClass,
                         
         return output
 
-    def decision_information_print(self,status, show_tensors, show_detailed_tensors, box_width=80):
+    def decision_information_print(self,status, show_tensors, show_detailed_tensors, box_width=90):
         
         if show_detailed_tensors: show_tensors=True
         
         if not show_tensors:
 
-            for i,j in self.mainvars.keys():
+            for i,j in self.features['variables'].keys():
 
                 if i!='evar':
 
-                    if self.maindims[j] == 0:
+                    if self.features['dimensions'][j] == 0:
 
-                        if self.get(self.mainvars[(i,j)]) not in [0, None]:
+                        if self.get(self.features['variables'][(i,j)]) not in [0, None]:
 
-                            print(f"│ {j} =", self.get(self.mainvars[(i,j)]), " "* (box_width-(len(f"│ {j} =") + len(str(self.get(self.mainvars[(i,j)]))))-1) + "│")
+                            print(f"│ {j} =", self.get(self.features['variables'][(i,j)]), " "* (box_width-(len(f"│ {j} =") + len(str(self.get(self.features['variables'][(i,j)]))))-1) + "│")
 
-                    elif len(self.maindims[j])==1:
+                    elif len(self.features['dimensions'][j])==1:
                         try:
-                            for k in fix_dims(self.maindims[j])[0]:
-                                if self.get(self.mainvars[(i,j)][k]) not in [0, None]:
-                                    print(f"│ {j}[{k}] =", self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"│ {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "│")
+                            for k in fix_dims(self.features['dimensions'][j])[0]:
+                                if self.get(self.features['variables'][(i,j)][k]) not in [0, None]:
+                                    print(f"│ {j}[{k}] =", self.get(self.features['variables'][(i,j)][k]), " "* (box_width-(len(f"│ {j}[{k}] =") + len(str(self.get(self.features['variables'][(i,j)][k])))) - 1) + "│")
                         except:
-                            for k in fix_dims(self.maindims[j])[0]:
-                                if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
-                                    print(f"│ {j}[{k}] =", self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"│ {j}[{k}] =") + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "│")
+                            for k in fix_dims(self.features['dimensions'][j])[0]:
+                                if self.get(self.features['variables'][(i,j)])[k] not in [0, None]:
+                                    print(f"│ {j}[{k}] =", self.get(self.features['variables'][(i,j)])[k], " "* (box_width-(len(f"│ {j}[{k}] =") + len(str(self.get(self.features['variables'][(i,j)])[k]))) - 1) + "│")
                     else:
                         try:
-                            for k in it.product(*tuple(fix_dims(self.maindims[j]))):
-                                if self.get(self.mainvars[(i,j)][k]) not in [0, None]:
-                                    print(f"│ {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)][k]), " "* (box_width-(len(f"│ {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)][k])))) - 1) + "│")
+                            for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
+                                if self.get(self.features['variables'][(i,j)][k]) not in [0, None]:
+                                    print(f"│ {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.features['variables'][(i,j)][k]), " "* (box_width-(len(f"│ {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.features['variables'][(i,j)][k])))) - 1) + "│")
                         except:
-                            for k in it.product(*tuple(fix_dims(self.maindims[j]))):
-                                if self.get(self.mainvars[(i,j)])[k] not in [0, None]:
-                                    print(f"│ {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.mainvars[(i,j)])[k], " "* (box_width-(len(f"│ {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.mainvars[(i,j)])[k]))) - 1) + "│")
+                            for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
+                                if self.get(self.features['variables'][(i,j)])[k] not in [0, None]:
+                                    print(f"│ {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.features['variables'][(i,j)])[k], " "* (box_width-(len(f"│ {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.features['variables'][(i,j)])[k]))) - 1) + "│")
 
                 else:
 
-                    if self.maindims[j] == 0:
-                            if self.get_start(self.mainvars[(i,j)])!=None:
-                                print(f"│ {j} =", [self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])])))-1) + "│")
+                    if self.features['dimensions'][j] == 0:
+                            if self.get_start(self.features['variables'][(i,j)])!=None:
+                                print(f"│ {j} =", [self.get_start(self.features['variables'][(i,j)]), self.get_end(self.features['variables'][(i,j)])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)]), self.get_end(self.features['variables'][(i,j)])])))-3) + "│")
 
 
-                    elif len(self.maindims[j])==1:                    
-                        for k in fix_dims(self.maindims[j])[0]:
-                            if self.get_start(self.mainvars[(i,j)][k])!=None:
-                                print(f"│ {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "│")
+                    elif len(self.features['dimensions'][j])==1:                    
+                        for k in fix_dims(self.features['dimensions'][j])[0]:
+                            if self.get_start(self.features['variables'][(i,j)][k])!=None:
+                                print(f"│ {j}[{k}] =", [self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])])))-3) + "│")
 
                     else:                    
-                        for k in it.product(*tuple(fix_dims(self.maindims[j]))):
-                            if self.get_start(self.mainvars[(i,j)][k])!=None:
-                                print(f"│ {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "│")
+                        for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
+                            if self.get_start(self.features['variables'][(i,j)][k])!=None:
+                                print(f"│ {j}[{k}] =", [self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])])))-3) + "│")
                     
         else:
             
             if show_detailed_tensors: np.set_printoptions(threshold=np.inf)
             
-            for i,j in self.mainvars.keys():
+            for i,j in self.features['variables'].keys():
                 
                 if i!='evar':
                     
@@ -1202,19 +1720,19 @@ class model(TensorVariableClass,
                         
                 else:
 
-                    if self.maindims[j] == 0:
-                            if self.get_start(self.mainvars[(i,j)])!=None:
-                                print(f"│ {j} =", [self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.mainvars[(i,j)]), self.get_end(self.mainvars[(i,j)])])))-1) + "│")
+                    if self.features['dimensions'][j] == 0:
+                            if self.get_start(self.features['variables'][(i,j)])!=None:
+                                print(f"│ {j} =", [self.get_start(self.features['variables'][(i,j)]), self.get_end(self.features['variables'][(i,j)])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)]), self.get_end(self.features['variables'][(i,j)])])))-3) + "│")
 
-                    elif len(self.maindims[j])==1:                    
-                        for k in fix_dims(self.maindims[j])[0]:
-                            if self.get_start(self.mainvars[(i,j)][k])!=None:
-                                print(f"│ {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "│")
+                    elif len(self.features['dimensions'][j])==1:                    
+                        for k in fix_dims(self.features['dimensions'][j])[0]:
+                            if self.get_start(self.features['variables'][(i,j)][k])!=None:
+                                print(f"│ {j}[{k}] =", [self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])])))-3) + "│")
 
                     else:                    
-                        for k in it.product(*tuple(fix_dims(self.maindims[j]))):
-                            if self.get_start(self.mainvars[(i,j)][k])!=None:
-                                print(f"│ {j}[{k}] =", [self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.mainvars[(i,j)][k]), self.get_end(self.mainvars[(i,j)][k])])))-1) + "│")
+                        for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
+                            if self.get_start(self.features['variables'][(i,j)][k])!=None:
+                                print(f"│ {j}[{k}] =", [self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])])))-3) + "│")
                             
     # Methods to work with input and output data.
 
@@ -1294,11 +1812,12 @@ class model(TensorVariableClass,
         """
         if self.features['interface_name'] == 'cplex':
             return self.model.sum(input)
-        
         elif self.features['interface_name'] == 'gurobi':
             from gurobipy import quicksum
             return quicksum(input)
-
+        elif self.features['interface_name'] == 'mip':
+            from mip import xsum
+            return xsum(input)
         else:
             return sum(input)
 
@@ -1779,6 +2298,7 @@ class Implement:
 
         self.model_data = ModelFunction(['idle'])
         self.ModelFunction = ModelFunction
+        self.features = self.model_data.features
         self.interface_name = self.model_data.features['interface_name']
         self.solution_method = self.model_data.features['solution_method']
         self.model_name = self.model_data.features['model_name']
@@ -2855,6 +3375,12 @@ class Implement:
             payoff.append(val)
         return np.array(payoff)
 
+    def clean_report(self):
+
+        command = "cls" if os.name == "nt" else "clear"
+        os.system(command)
+        self.report()
+        
     def report(self, all_metrics: bool = False, feloopy_info: bool = True, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], show_tensors = False, show_detailed_tensors=False, save=None):
 
         if not self.healthy():
@@ -2874,7 +3400,7 @@ class Implement:
         if len(str(status)) == 0:
             status = ['infeasible (constrained)']
 
-        box_width = 80
+        box_width = 90
         vspace()
 
         if feloopy_info:
@@ -2883,7 +3409,7 @@ class Implement:
             now = datetime.datetime.now()
             date_str = now.strftime("Date: %Y-%m-%d")
             time_str = now.strftime("Time: %H:%M:%S")
-            tline_text("FelooPy v0.2.8")
+            tline_text("FelooPy v0.2.9")
             empty_line()
             two_column(date_str, time_str)
             two_column(f"Interface: {self.interface_name}", f"Solver: {self.solver_name}")
@@ -3000,10 +3526,12 @@ class Implement:
             status = self.get_status().lower()
             return ('optimal' in status or 'feasible' in status) and 'infeasible' not in status
         except:
-            status = self.get_status()[0].lower()
-            return ('feasible' in status or 'optimal' in status) and 'infeasible' not in status
-        
-    def decision_information_print(self, status, show_tensors, show_detailed_tensors, box_width=80):
+            try:
+                status = self.get_status()[0].lower()
+                return ('feasible' in status or 'optimal' in status) and 'infeasible' not in status
+            except:
+                return False
+    def decision_information_print(self, status, show_tensors, show_detailed_tensors, box_width=90):
         
         
         if show_detailed_tensors: show_tensors=True
@@ -3065,85 +3593,6 @@ class Implement:
             
 construct = make_model = implementor = implement = Implement
 
-
-WEIGHTING_ALGORITHMS = [
-    ['ahp_method','pydecision'],
-    ['fuzzy_ahp_method','pydecision'],
-    ['bw_method','pydecision'],
-    ['fuzzy_bw_method','pydecision'],
-    ['cilos_method', 'pydecision'],
-    ['critic_method', 'pydecision'],
-    ['entropy_method', 'pydecision'],
-    ['idocriw_method', 'pydecision'],
-    ['merec_method', 'pydecision'],
-    ['lp_method', 'feloopy'],
-    ]
-
-RANKING_ALGORITHMS = [
-    ['aras_method', 'pydecision'],
-    ['fuzzy_aras_method', 'pydecision'],
-    ['borda_method', 'pydecision'],
-    ['cocoso_method', 'pydecision'],
-    ['codas_method', 'pydecision'],
-    ['copeland_method', 'pydecision'],
-    ['copras_method', 'pydecision'],
-    ['fuzzy_copras_method', 'pydecision'],
-    ['cradis_method', 'pydecision'],
-    ['edas_method', 'pydecision'],
-    ['fuzzy_edas_method', 'pydecision'],
-    ['gra_method', 'pydecision'],
-    ['mabac_method', 'pydecision'],
-    ['macbeth_method', 'pydecision'],
-    ['mairca_method', 'pydecision'],
-    ['marcos_method', 'pydecision'],
-    ['maut_method', 'pydecision'],
-    ['moora_method', 'pydecision'],
-    ['fuzzy_moora_method', 'pydecision'],
-    ['moosra_method', 'pydecision'],
-    ['multimoora_method', 'pydecision'],
-    ['ocra_method', 'pydecision'],
-    ['fuzzy_ocra_method', 'pydecision'],
-    ['oreste_method', 'pydecision'],
-    ['piv_method', 'pydecision'],
-    ['promethee_ii', 'pydecision'],
-    ['promethee_iv', 'pydecision'],
-    ['promethee_vi', 'pydecision'],
-    ['psi_method', 'pydecision'],
-    ['regime_method', 'pydecision'],
-    ['rov_method', 'pydecision'],
-    ['saw_method', 'pydecision'],
-    ['smart_method', 'pydecision'],
-    ['spotis_method', 'pydecision'],
-    ['todim_method', 'pydecision'],
-    ['topsis_method', 'pydecision'],
-    ['fuzzy_topsis_method', 'pydecision'],
-    ['vikor_method', 'pydecision'],
-    ['fuzzy_vikor_method', 'pydecision'],
-    ['waspas_method', 'pydecision'],
-    ['fuzzy_waspas_method', 'pydecision'],
-    ['la_method', 'feloopy'],
-    ]
-
-SPECIAL_ALGORITHMS = [
-    ['dematel_method', 'pydecision'],
-    ['fuzzy_dematel_method', 'pydecision'],
-    ['electre_i', 'pydecision'],
-    ['electre_i_s', 'pydecision'],
-    ['electre_i_v', 'pydecision'],
-    ['electre_ii', 'pydecision'],
-    ['electre_iii', 'pydecision'],
-    ['electre_iv', 'pydecision'],
-    ['electre_tri_b', 'pydecision'],
-    ['promethee_i', 'pydecision'],
-    ['promethee_iii', 'pydecision'],
-    ['promethee_v', 'pydecision'],
-    ['promethee_gaia', 'pydecision'],
-    ['wings_method', 'pydecision'],
-    ['cwdea_method', 'feloopy']
-]
-
-# Missing: SWOT, BOCR, ANP
-
 class MADM:
 
     def __init__(self, solution_method, problem_name, interface_name):
@@ -3158,6 +3607,7 @@ class MADM:
         Returns:
         None
         """
+        
         self.model_name = problem_name
         self.interface_name = 'pyDecision.algorithm' if interface_name == 'pydecision' else interface_name
         self.madam_method = solution_method
@@ -3204,6 +3654,9 @@ class MADM:
             'classification_found': False,
             'selection_found': False
         }
+        
+    def healthy(self):
+        return True
 
     def add_criteria_set(self, index='', bound=None, step=1, to_list=False):
         """
@@ -3936,7 +4389,13 @@ class MADM:
     def get_normalized_weights(self):
         
         return self.normalized_weights
-    
+
+    def clean_report(self):
+
+        command = "cls" if os.name == "nt" else "clear"
+        os.system(command)
+        self.report()
+        
     def report(self, all_metrics=False, feloopy_info=True, sys_info=False,
                         model_info=True, sol_info=True, metric_info=True,
                         ideal_pareto=None, ideal_point=None, show_tensors=False,
@@ -3964,6 +4423,12 @@ class MADM:
 
         self._generate_decision_info()
 
+    def clean_report(self):
+
+        command = "cls" if os.name == "nt" else "clear"
+        os.system(command)
+        self.report()
+        
     def display_as_tensor(self, name, numpy_var, detailed):
         if detailed:
             np.set_printoptions(threshold=np.inf)
@@ -3987,7 +4452,7 @@ class MADM:
         date_str = now.strftime("Date: %Y-%m-%d")
         time_str = now.strftime("Time: %H:%M:%S")
 
-        tline_text("FelooPy v0.2.8")
+        tline_text("FelooPy v0.2.9")
         empty_line()
         two_column(date_str, time_str)
 
@@ -4155,3 +4620,756 @@ class seeker_model(model):
 class xpress_model(model):
     def __init__(self,name='x'):
         super().__init__('exact', name, 'xpress')
+        
+class search(model,Implement):
+
+    def __init__(
+        self,
+        environment=None,
+        name="model_name",
+        method="exact",
+        approach = "nwsm",
+        interface="pymprog",
+        directions=["max"],
+        solver="glpk",
+        dataset = None,
+        key_params = [],
+        key_vars = [],
+        scenarios = [],
+        benchmark=None,
+        repeat=30,
+        verbose=False,
+        should_run=True,
+        memorize=True,
+        report=False,
+        control_scenario=0,
+        options={},
+        *args, **kwargs
+    ):
+
+        self.key_params = key_params
+        self.key_vars = key_vars
+        self.scenarios =  scenarios
+    
+        self.args = args
+        self.kwargs = kwargs 
+        self.environment = environment
+        self.name = name
+        self.method = method
+        self.approach = approach
+        self.interface = interface
+        self.directions = directions
+        self.solver = solver
+        self.verbose = verbose
+        self.should_run = should_run
+        self.memorize = memorize
+        self.sensitivity_analyzed = False
+        self.options = options
+        self.should_benchmark = True if (type(benchmark)==str and benchmark=='all') or (type(benchmark)==list and len(benchmark)>=1) else False
+        self.data = {}
+        
+        self.number_of_objectives = len(self.directions)
+        
+        self.create_env(environment)
+            
+        if self.should_run:
+
+            if self.should_benchmark: 
+                self.benchmark_results = self.benchmark(algorithms=benchmark, repeat=repeat)
+                       
+            self.run(verbose=self.verbose)
+        
+        if len(self.key_params)!=0:
+            self.sensitivity(dataset, key_params, scenarios, environment,control_scenario)
+            
+        if report:
+            self.report()
+    
+    def clean_report(self):
+
+        command = "cls" if os.name == "nt" else "clear"
+        os.system(command)
+        self.report()
+        
+    def create_env(self, environment):
+        if self.method in ["exact", "convex", "constraint", "uncertain"]:
+            self.em = model(method=self.method,name=self.name,interface=self.interface)
+            self.em = self.environment(self.em, *self.args, **self.kwargs)
+          
+        if self.method in ["heuristic"]:
+            if len(self.directions)==1:
+                def instance(X):
+                    lm = model(method=self.method, name=self.name, interface=self.interface, agent=X)
+                    lm = environment(lm)
+                    lm.sol(directions=self.directions,solver_name=self.solver,show_log=self.verbose, solver_options={'epoch':10, "pop_size":10})
+                    return lm[X]
+                
+                self.em = Implement(instance)
+
+            else:
+                def instance(X):
+                    m = model(self.name,self.method, self.interface,X)
+                    m = self.environment(m, *self.args, **self.kwargs)
+                    m.sol(self.directions, self.solver, {'n_gen': 100}, obj_id='all')
+                    return m[X]
+
+                self.em = implement(instance)
+
+        if self.method in ["madm"]:
+            self.em = madm(self.solver,self.name, self.interface)
+            self.em = self.environment(self.em, *self.args, **self.kwargs)
+
+    def healthy(self):
+        return self.em.healthy()
+    
+    def run(self, verbose):
+        
+        import sys
+        import threading
+        import time
+
+        solving_complete = False
+        
+        if not verbose:
+            """
+            def animate():
+                while not solving_complete:
+                    for frame in ['◴', '◷', '◶', '◵']:
+                        sys.stdout.write('\rSolving... ' + frame + ' ')
+                        sys.stdout.flush()
+                        time.sleep(0.1)
+
+            animate_thread = threading.Thread(target=animate)
+            animate_thread.daemon = True
+            animate_thread.start()
+            """
+            
+        if  self.number_of_objectives==1:
+            if self.method in ["exact", "convex", "constraint", "uncertain"]:
+                self.em.sol(directions=self.directions, solver_name=self.solver, show_log=verbose)
+            elif self.method == "heuristic":
+                self.em.sol(penalty_coefficient=0.1)
+        else:
+            if self.method in ["exact", "convex", "constraint", "uncertain"]:
+                
+                try:
+                    from .extras.algorithms.exact.multiobjective import sol_multi
+                except:
+                    from .algorithms.exact.multiobjective import sol_multi
+                    
+                def instance():
+                    self.em = model(method=self.method, name=self.name, interface=self.interface)
+                    self.em = self.environment(self.em, *self.args, **self.kwargs)
+                    return self.em
+                
+                
+                self.time_solve_begin = timeit.default_timer()
+                self.result = sol_multi(instance=instance,
+                                         directions=self.directions.copy(),
+                                         objective_id=self.approach,
+                                         solver_name=self.solver,
+                                         save_vars=True,
+                                         approach_options={
+                                             "payoff_method": "separated",
+                                             "intervals": 5,
+                                             "wm": "random",
+                                         }
+                                         )
+                self.time_solve_end = timeit.default_timer()
+            elif self.method == "heuristic":
+                self.em.solve(show_log=False, penalty_coefficient=0.1)
+
+        if self.method == "madm":
+            self.time_solve_begin = timeit.default_timer()
+            self.em.sol()
+            self.time_solve_end = timeit.default_timer()
+        
+        if self.method in ["heuristic"]: self.cpt = self.em.get_time()
+            
+        if self.em.healthy():
+            if self.method not in ["madm"]:
+                if self.number_of_objectives != 1:
+                    if self.method not in ["heuristic"]:
+                        self.solutions = self.result[3]
+                    else:
+                        num_pareto = self.em.get_obj().shape[0]
+                        self.solutions = {i: {} for i in range(num_pareto)}
+                        for i in range(num_pareto):
+                            for j in self.em.VariablesDim.keys():
+                                self.solutions[i][j] = self.em.get_numpy_var(j)
+                else:
+                    self.solutions = {}
+                    if self.method not in ["heuristic"]:
+                        for typ, var in self.em.features['variables'].keys():
+                            self.solutions[var] = self.em.get_numpy_var(var)
+                    else:
+                        for j in self.em.VariablesDim.keys():
+                            self.solutions[j] = self.em.get_numpy_var(j)
+            else:
+                values_list = [
+                        'rv', 
+                        'wv', 
+                        'fwv', 
+                        'dmrv', 
+                        'dprv',
+                        'rmcv',
+                        'rpcv',
+                        'dominated',
+                        'concordance',
+                        'discordance',
+                        'kernel',
+                        'dominance',
+                        'dominance_s',
+                        'dominance_w',
+                        'global_concordance',
+                        'credibility',
+                        'rank_d',
+                        'rank_a',
+                        'classification'
+                    ]
+                self.solutions = {}
+                for key in values_list:
+                    try:
+                        self.solutions[key] = self.em.get_numpy_var(key)
+                    except:
+                        pass
+            
+            if self.memorize:
+                if self.number_of_objectives == 1:
+                    self.data.update(self.solutions)
+                else:
+                    self.data.update({"pareto": self.solutions})
+
+            if self.method != 'madm':
+                if self.number_of_objectives == 1:
+                    self.objective_values = np.array([[self.em.get_obj()]])
+                    self.num_objective_values = 1
+                    self.cpt = self.em.get_time()
+                else:
+                    if self.method == "heuristic":
+                        self.objective_values = self.em.get_obj()
+                        self.num_objective_values = self.objective_values.shape[0]
+                        self.cpt = self.em.get_time()
+                    else:
+                        self.objective_values = self.result[0]
+                        self.num_objective_values = self.objective_values.shape[0]
+                        self.cpt = self.time_solve_end - self.time_solve_begin
+            
+            if self.memorize:
+                if self.method != 'madm':
+                    self.data["obj"] = self.objective_values
+                    self.data["cpt"] = self.cpt
+                    self.data["healthy"] = self.em.healthy()
+                else:
+                    self.data["cpt"] = self.time_solve_end - self.time_solve_begin
+                    self.data["healthy"] = self.em.healthy()               
+            
+        solving_complete = True
+
+        if not verbose:
+            """
+            # Ensure the animation stops after solving is completed
+            sys.stdout.write('\rSolving... Done!    \n')
+            sys.stdout.flush()
+            """
+            
+    def get(self,input=None):
+        
+        if type(input)==str:
+            return self.em.get_tensor(input)
+
+    def get_obj(self):
+        if self.number_of_objectives==1:
+            return self.em.get_obj()
+        else:
+            if self.method=='heuristic':
+                return self.em.get_obj()
+            else:
+                return self.result[0]
+                
+        
+    def get_dual(self,input):
+        return self.em.get_dual(input)
+
+    def get_slack(self,input):
+        return self.em.get_slack(input)
+      
+    def sensitivity(self, dataset, parameter_names, parameter_values, environment=None,control_scenario=0):
+        
+        self.sensitivity_parameter_names = parameter_names
+        self.sensitivity_parameter_values = parameter_values
+        
+        if self.em.healthy():
+            
+            self.sensitivity_analyzed = True
+    
+            
+            self.sensitivity_memorize = False
+            self.sensitivity_verbose=False
+            if environment is None: 
+                environment = self.environment
+            
+            number_of_parameters = len(parameter_values)
+            number_of_names = len(parameter_names)
+            
+            if number_of_parameters != number_of_names:
+                raise ValueError("Number of parameter names and values do not match. It should be like ['a','b','c'] and [list_values_of_a (e.g., [1,2,3]), list_values_of_b (e.g., [1,2,3]), list_values_of_c (e.g., [1,2,3])]")
+        
+            sensitivity_keys = [
+                "sensitivtiy_values",
+                "sensitivtiy_of_health_to",
+                "sensitivtiy_of_cpt_to",
+                "sensitivtiy_of_objectives_to",
+                "sensitivtiy_of_solutions_to",
+            ]
+            
+            self.sensitivity_begin_timer = timeit.default_timer()
+            for parameter_name in parameter_names:
+                for key in sensitivity_keys:
+                    dataset.store(f"{key}_{parameter_name}", [])
+                previous_parameter_value = copy.deepcopy(dataset.data[parameter_name])
+                for parameter_value in parameter_values[parameter_names.index(parameter_name)]:
+                    dataset.data[f"sensitivtiy_values_{parameter_name}"].append(parameter_value)
+                    dataset.data[parameter_name] = parameter_value
+                    self.create_env(environment)
+                    with suppress(Exception):
+                        self.run(verbose=self.verbose)
+                    if self.method!='madm':
+                        if self.number_of_objectives==1:
+                            #Single-objective case extraction
+                            self.sensitivity_solutions = {}
+                            if self.method != "heuristic":
+                                for typ, var in self.em.features['variables'].keys():
+                                    self.sensitivity_solutions[var] = self.em.get_numpy_var(var) if self.em.healthy() else None
+                            else:
+                                for j in self.em.VariablesDim.keys():
+                                    self.sensitivity_solutions[j]=self.em.get_numpy_var(j) if self.em.healthy() else None
+                            self.sensitivity_objective_values = np.array([[self.em.get_obj()]])[0][0] if self.em.healthy() else None
+                            self.sensitivity_num_objective_values = 1
+                            self.sensitivity_cpt = self.em.get_time()
+                        else:
+                            #Multi-objective case extraction
+                            if self.method != "heuristic":
+                                self.sensitivity_solutions = self.result[3] if self.em.healthy() else None
+                                self.sensitivity_objective_values = self.result[0] if self.em.healthy() else np.array([[None for i in range(self.directions)]])
+                                self.sensitivity_num_objective_values = self.objective_values.shape[0]
+                                self.sensitivity_cpt = self.time_solve_end - self.time_solve_begin        
+                            else:
+                                self.sensitivity_num_objective_values = self.em.get_obj().shape[0] if self.em.healthy()  else 1
+                                self.sensitivity_solutions  = {i: {} for i in range(self.num_objective_values)}
+                                for i in range(self.sensitivity_num_objective_values):
+                                    for j in self.em.VariablesDim.keys():
+                                        self.sensitivity_solutions[i][j]=self.em.get_numpy_var(j) if self.em.healthy() else None
+                                self.sensitivity_objective_values = self.em.get_obj() if self.em.healthy() else None
+                                self.sensitivity_num_objective_values = self.objective_values.shape[0]
+                                self.sensitivity_cpt = self.time_solve_end - self.time_solve_begin
+                    dataset.data[f"sensitivtiy_of_health_to_{parameter_name}"].append(self.em.healthy())
+                    dataset.data[f"sensitivtiy_of_cpt_to_{parameter_name}"].append(self.sensitivity_cpt)
+                    dataset.data[f"sensitivtiy_of_objectives_to_{parameter_name}"].append(self.sensitivity_objective_values)
+                    dataset.data[f"sensitivtiy_of_solutions_to_{parameter_name}"].append(self.sensitivity_solutions)
+  
+                dataset.data[parameter_name] = previous_parameter_value
+            self.sensitivity_end_timer = timeit.default_timer()         
+            
+            if self.number_of_objectives==1:
+                for parameter_name in parameter_names:
+                    dataset.data[f"sensitivtiy_of_similarity_to_{parameter_name}"] = compute_similarity(dataset.data[f"sensitivtiy_of_solutions_to_{parameter_name}"],control_scenario_id=control_scenario)
+
+            self.sensitivity_data = copy.deepcopy(dataset.data)
+
+            return self.sensitivity_data
+
+    def benchmark(self, environment=None, algorithms=None, repeat=1, show_report=False):
+
+        if environment is None:
+            environment = self.environment        
+        
+        if algorithms is None:
+            if self.method=="exact":
+                algorithms=EXACT_ALGORITHMS
+            if self.method=="heuristic":
+                algorithms=HEURISTIC_ALGORITHMS
+        
+        columns = pd.MultiIndex.from_product([['time', 'obj'], ['ave', 'std', 'min', 'max']],names=['metric', 'stat'])
+        df = pd.DataFrame(columns=columns,index=[i+1 for i in range(len(algorithms))])
+        counter = 0
+        for interface, solver in progress_bar(algorithms, unit="alg", description="Benchmarking"):
+            objs = []
+            times = []
+            try:
+                for _ in range(repeat):
+                    self.create_env(environment)
+                    with suppress(Exception):
+                        self.run(verbose=self.verbose)
+                    objs.append(self.em.get_obj())
+                    times.append(self.em.get_time())
+                    
+                df.loc[counter+1, ('time', 'ave')] = pd.Series(times).mean()
+                df.loc[counter+1, ('time', 'std')] = pd.Series(times).std()
+                df.loc[counter+1, ('time', 'min')] = pd.Series(times).min()
+                df.loc[counter+1, ('time', 'max')] = pd.Series(times).max()
+                df.loc[counter+1, ('obj', 'ave')] = pd.Series(objs).mean()
+                df.loc[counter+1, ('obj', 'std')] = pd.Series(objs).std()
+                df.loc[counter+1, ('obj', 'min')] = pd.Series(objs).min()
+                df.loc[counter+1, ('obj', 'max')] = pd.Series(objs).max()
+                df.loc[counter+1, ('interface', '')] = interface
+                df.loc[counter+1, ('solver', '')] = solver
+                
+            except:
+                
+                df.loc[counter+1, ('interface', '')] = interface
+                df.loc[counter+1, ('solver', '')] = solver        
+                pass
+            
+            os.system('cls' if os.name == 'nt' else 'clear')
+            counter += 1
+            
+        df_cleaned = df.dropna(subset=[('time', 'ave'), ('obj', 'ave')]).reset_index(drop=True)
+        df_sorted = df_cleaned.sort_values(by=('time', 'ave'))
+        df_sorted = df_sorted.reset_index(drop=True)
+        
+        if show_report:
+            print(df_sorted.to_string())
+
+        self.ben_results = df_sorted
+
+        return self.ben_results
+
+    def clean_report(self):
+
+        command = "cls" if os.name == "nt" else "clear"
+        os.system(command)
+        self.report()
+
+    def report(self, skip_system_information=True,width=90,style=1,skip=False):
+        
+        # First box: FelooPy
+        print()
+        from colorama import init, Fore
+        init(autoreset=True)
+
+        phealthy = "Unknown"
+        if self.em.healthy() or self.method=="madm" or self.sensitivity_analyzed:
+            phealthy = f"{Fore.GREEN}{'√ Healthy'}"
+        else:
+            phealthy = f"{Fore.RED}{'X Unhealthy'}"
+
+        print(phealthy)
+        print()
+        
+        box = report(width=width, style=style)
+    
+        import datetime
+        current_datetime = datetime.datetime.now()
+        formatted_date = current_datetime.strftime("%Y-%m-%d")
+        formatted_time = current_datetime.strftime("%H:%M:%S")
+    
+        box.top(left="FelooPy v0.2.9", right="Released March 2024")
+        box.empty()
+        
+        box.clear_columns(list_of_strings=["", f"Interface: {self.interface}"], label=f"Date: {formatted_date}", max_space_between_elements=4)
+        box.clear_columns(list_of_strings=["", f"Solver: {self.solver}"], label=f"Time: {formatted_time}", max_space_between_elements=4)
+        box.clear_columns(list_of_strings=["",f"Method: {self.method}"], label= f"Name: {self.name}", max_space_between_elements=4)
+        
+        if self.method in ["exact", "convex", "constraint", "uncertain","heuristic"]:
+            if self.number_of_objectives==1:
+                ptype = "single-objective"
+            elif self.number_of_objectives<=3:
+                ptype = "multi-objective"
+            else:
+                ptype = "many-objective"
+        else:
+            ptype="multi-attribute"
+        
+        try:
+            if len(self.em.solver_options) >= 1:
+                pconfigurated = "√ Configured"
+            else:
+                pconfigurated = "X Unconfigured"
+        except:
+            try:
+                if len(self.em.features['solver_options']) >= 1:
+                    pconfigurated = "√ Configured"
+                else:
+                    pconfigurated = "X Unconfigured"
+            except:
+                pconfigurated = "N/A"
+
+
+               
+        import platform
+        import psutil
+        import cpuinfo
+        import GPUtil
+    
+        def get_system_characteristics():
+            os_info = platform.system()
+            ram_info = np.round(psutil.virtual_memory().total / (1024.0 ** 3))
+            cpu_info = cpuinfo.get_cpu_info()
+            cpu_generation = cpu_info['brand_raw'].split()[-1]
+            gpus = GPUtil.getGPUs()
+            gpu_memory = sum(gpu.memoryTotal for gpu in gpus)
+            gpu_memory_gb = np.round(gpu_memory / 1024)
+            system_characteristics = f"OS:{os_info} RAM:{ram_info}GB CPU:{cpu_generation} GPU:{gpu_memory_gb}GB"
+            return system_characteristics
+
+        box.clear_columns(list_of_strings=["",f"{pconfigurated}"], label= f"Type: {ptype}", max_space_between_elements=4)
+        
+        box.empty()
+                
+        if skip_system_information is False:
+            try: 
+                box.bottom(right=get_system_characteristics())
+            except:
+                box.bottom()
+        else:
+            box.bottom()
+        print()
+        
+        # Second box: Model
+        if self.method!='madm':
+            box.top(left="Model")
+            
+            values = [
+                format_string(self.em.features.get("binary_variable_counter",[0,0])[0],ensure_length=True), 
+                format_string(self.em.features.get("integer_variable_counter",[0,0])[0],ensure_length=True), 
+                format_string(self.em.features.get("positive_variable_counter",[0,0])[0],ensure_length=True), 
+                format_string(self.em.features.get("free_variable_counter",[0,0])[0],ensure_length=True), 
+                format_string(self.em.features.get("event_variable_counter",[0,0])[0],ensure_length=True), 
+                format_string(self.em.features.get("sequential_variable_counter",[0,0])[0],ensure_length=True), 
+                format_string(self.em.features.get("objective_counter",[0,0])[0],ensure_length=True), 
+                format_string(self.em.features.get("constraint_counter",[0,0])[0],ensure_length=True),
+                ]            
+
+            box.clear_columns(list_of_strings=["B"+" "*(len(values[0])-1), "I"+" "*(len(values[1])-1), "P"+" "*(len(values[2])-1), "F"+" "*(len(values[3])-1), "E"+" "*(len(values[4])-1), "S"+" "*(len(values[5])-1), "O"+" "*(len(values[6])-1), "C"+" "*(len(values[7])-1)], label="     ", max_space_between_elements=4)
+            box.middle()
+            box.clear_columns(list_of_strings=values, label=f"Class", max_space_between_elements=4)
+
+            values = [
+                format_string(self.em.features.get("binary_variable_counter",[0,0])[1],ensure_length=True), 
+                format_string(self.em.features.get("integer_variable_counter",[0,0])[1],ensure_length=True),
+                format_string(self.em.features.get("positive_variable_counter",[0,0])[1],ensure_length=True),  
+                format_string(self.em.features.get("free_variable_counter",[0,0])[1],ensure_length=True), 
+                format_string(self.em.features.get("event_variable_counter",[0,0])[1],ensure_length=True), 
+                format_string(self.em.features.get("sequential_variable_counter",[0,0])[1],ensure_length=True), 
+                format_string(self.em.features.get("objective_counter",[0,0])[1],ensure_length=True), 
+                format_string(self.em.features.get("constraint_counter",[0,0])[1],ensure_length=True),
+                ]
+        
+            box.clear_columns(list_of_strings=values, label=f"Size ", max_space_between_elements=4)
+            box.bottom()
+        else:
+            self.em._generate_metric_info()
+
+        # Mathematical Model
+        try:
+            import textwrap
+            tline_text('Math', box_width=90)
+            empty_line()
+            obdirs = 0
+            for objective in self.features['objectives']:
+                wrapped_objective = textwrap.fill(str(objective), width=90)
+                boxed(str(f"obj: {self.features['directions'][obdirs]} {wrapped_objective}"))
+                obdirs += 1
+            left_align('s.t.')
+            if self.features['constraint_labels'][0] != None:
+                for constraint in sorted(zip(self.features['constraint_labels'], self.features['constraints']), key=lambda x: x[0]):
+                    wrapped_constraint = textwrap.fill(str(constraint[1]), width=90)
+                    boxed(str(f"con {constraint[0]}: {wrapped_constraint}"))
+            else:
+                counter = 0
+                for constraint in self.features['constraints']:
+                    wrapped_constraint = textwrap.fill(str(constraint), width=90)
+                    boxed(str(f"con {counter}: {wrapped_constraint}"))
+                    counter += 1
+            empty_line()
+            bline()
+        except:
+            pass
+        
+        # Slack duual
+
+        tline_text("Extra")
+        empty_line()
+        try:
+            left_align("Slack:")
+            for i in self.em.features['constraint_labels']:
+                left_align(str(i) + " = " + str(self.em.get_slack(i)))
+            empty_line()
+        except:
+            pass
+        try:
+            left_align("Dual:")
+            for i in self.em.features['constraint_labels']:
+                left_align(str(i) + " = " + str(self.em.get_dual(i)))
+            empty_line()
+        except:
+            pass
+        bline()
+    
+
+        if self.healthy() == False:
+            tline_text("Debug")
+            empty_line()
+            try:
+                print(self.get_iis())
+            except:
+                ''
+            empty_line()
+            bline()
+                    
+        # Third box: Metrics
+        if self.method!='madm':                
+            print()
+            seconds_value = self.cpt
+            microseconds_value = seconds_value * 1e6
+            microseconds_scientific_notation = "{:.2e}".format(microseconds_value)
+            hours = int(microseconds_value // 3600e6)
+            minutes = int((microseconds_value % 3600e6) // 60e6)
+            seconds = int((microseconds_value % 60e6) / 1e6)
+            time_formatted = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+            box.top(left="Metric",right=f"{time_formatted} h:m:s" + f" {microseconds_scientific_notation} μs")
+            box.empty()
+            if self.number_of_objectives==1:
+                def show(i):
+                    return "Objective"
+            else:
+                def show(i):
+                    return f"Pareto point {i}"
+            
+            try:
+                for i in range(self.num_objective_values):
+                    k=None
+                    if skip==False:
+                        k = i
+                    else:
+                        if i%skip==0:
+                            k=i
+                    if k!=None:
+                        box.row(left= show(k), right=' '.join(format_string(j,ensure_length=True) for j in self.objective_values[k]))
+            except:
+                pass
+                            
+            box.empty()
+            box.bottom()
+            
+            # Fourth box: Decisions
+            print()
+            box.top(left="Decision")
+            try:
+                if self.method in ["constraint"]:
+                    box.empty()
+                    self.em.decision_information_print(self.em.status, show_tensors=False, show_detailed_tensors=False, box_width=width)
+                    box.empty()
+                    box.bottom()
+                else:
+                    if self.number_of_objectives ==1:
+                        for key in self.solutions:
+                            box.empty()
+                            box.print_tesnor(key,self.solutions[key])
+                    else:
+                        box.empty()
+                        for i in range(self.objective_values.shape[0]):
+                            k=None
+                            if skip==False:
+                                k = i
+                            else:
+                                if i%skip==0:
+                                    k=i
+                            if k!=None:
+                                box.row(left=f"Pareto solution {k}")
+                                box.empty()
+                                for key in self.solutions[k]:
+                                    box.print_tesnor(key,self.solutions[k][key])
+                            if i!=self.objective_values.shape[0]-1:
+                                box.empty()
+                    box.empty()
+                    box.bottom()
+            except: 
+                box.empty()
+                box.empty()
+                box.bottom()
+                pass
+        else:
+            self.em.show_tensor=True
+            self.em.show_detailed_tensors=False
+            self.em.output_decimals=True
+            print()
+            self.em._generate_decision_info()
+        
+        # Benchmark
+        if self.should_benchmark:
+            print()
+            box.top(left="Benchmark")
+            box.empty()
+            box.print_pandas_df(label="Benchmark Results", df=self.ben_results[[('interface', ''), ('solver', ''), ('time', 'ave'), ('obj', 'ave')]])
+            box.empty()
+            box.bottom()
+        
+        # Sensitivity report
+        if self.sensitivity_analyzed:
+            print()
+            
+            for parameter_name in self.sensitivity_parameter_names:
+                if self.sensitivity_parameter_names.index(parameter_name)==0:
+                    box.top(left="Sensitivity")
+                
+                box.empty()
+                box.row(left=f"∞ Parameter {parameter_name}")
+                box.empty()
+                
+                for i in range(len(self.sensitivity_parameter_values[self.sensitivity_parameter_names.index(parameter_name)])):
+                    j=None
+                    if skip==False:
+                        j=i
+                    else:
+                        if i%skip ==0:
+                            j=i
+                    
+                    if j!=None:
+                        box.empty()                    
+                        
+                        seconds_value = self.sensitivity_data[f"sensitivtiy_of_cpt_to_{parameter_name}"][j]
+                        microseconds_value = seconds_value * 1e6
+                        microseconds_scientific_notation = "{:.2e}".format(microseconds_value)
+                        hours = int(microseconds_value // 3600e6)
+                        minutes = int((microseconds_value % 3600e6) // 60e6)
+                        seconds = int((microseconds_value % 60e6) / 1e6)
+                        time_formatted = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+
+                        box.empty()
+                        from colorama import init, Fore
+                        init(autoreset=True)
+                        
+                        if self.number_of_objectives==1:
+                            box.row(left=f"→ Scenario {j}", center=(f"{'√ Healthy'}" if self.sensitivity_data[f"sensitivtiy_of_health_to_{parameter_name}"][j] else f"{'X Unhealthy'}")+ f" (Objective: {format_string(self.sensitivity_data[f'sensitivtiy_of_objectives_to_{parameter_name}'][j])})", right=f"{time_formatted} h:m:s" + f" {microseconds_scientific_notation} μs")
+                        else:
+                            box.row(left=f"→ Scenario {j}", center=(f"{'√ Healthy'}" if self.sensitivity_data[f"sensitivtiy_of_health_to_{parameter_name}"][j] else f"{'X Unhealthy'}"), right=f"{time_formatted} h:m:s" + f" {microseconds_scientific_notation} μs")
+                            
+                        box.empty()
+                        for key in self.sensitivity_data[f"sensitivtiy_of_solutions_to_{parameter_name}"][j]:
+                            if key in self.key_vars:
+                                if self.number_of_objectives ==1:
+                                    box.print_tesnor(key,self.sensitivity_data[f"sensitivtiy_of_solutions_to_{parameter_name}"][j][key], "∆ " + format_string(self.sensitivity_data[f"sensitivtiy_of_similarity_to_{parameter_name}"][j][key])+"")
+                        
+                        if self.number_of_objectives !=1:
+                            for obj_id in range(self.number_of_objectives):
+                                box.print_tesnor(f"Objective {obj_id}",np.mean(self.sensitivity_data[f"sensitivtiy_of_objectives_to_{parameter_name}"][j][:,obj_id]))
+                    
+                        
+                    box.empty()
+                
+            seconds_value = self.sensitivity_end_timer - self.sensitivity_begin_timer
+            microseconds_value = seconds_value * 1e6
+            microseconds_scientific_notation = "{:.2e}".format(microseconds_value)
+            hours = int(microseconds_value // 3600e6)
+            minutes = int((microseconds_value % 3600e6) // 60e6)
+            seconds = int((microseconds_value % 60e6) / 1e6)
+            time_formatted = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+                        
+        
+            box.bottom(right=f"{time_formatted} h:m:s" + f" {microseconds_scientific_notation} μs")
+        
+            
+            
+            print()

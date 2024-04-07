@@ -8,7 +8,6 @@ repo_name: ktafakkori/feloopy
 nav:
   - User guide:
     - index.md
-
     - Getting started: user-guide/getting-started.md
     - Installation: user-guide/installation.md
     - Concepts:
@@ -88,7 +87,6 @@ markdown_extensions:
   - pymdownx.snippets:
       base_path: ['.','docs/inputs/','docs/outputs/']
   - footnotes
-
 
 plugins:
   - search:

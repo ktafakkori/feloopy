@@ -55,36 +55,36 @@ class EventVariableClass:
         if dim == 0:
 
             if self.features['interface_name'] == 'cplex_cp':
-                self.mainvars[("evar", name)] = self.model.interval_var(start=event[1], size=event[0], end=event[2], name=name, optional=optional)
-                self.maindims[name] = dim
-                return self.mainvars[("evar", name)]
+                self.features['variables'][("evar", name)] = self.model.interval_var(start=event[1], size=event[0], end=event[2], name=name, optional=optional)
+                self.features['dimensions'][name] = dim
+                return self.features['variables'][("evar", name)]
                 
             elif self.features['interface_name'] == 'ortools_cp':
-                self.mainvars[("evar", name)] = self.model.NewOptionalIntervalVar(start=event[1], size=event[0], end=event[2], name=name, is_present=optional)
-                self.maindims[name] = dim
-                return self.mainvars[("evar", name)]
+                self.features['variables'][("evar", name)] = self.model.NewOptionalIntervalVar(start=event[1], size=event[0], end=event[2], name=name, is_present=optional)
+                self.features['dimensions'][name] = dim
+                return self.features['variables'][("evar", name)]
         else:
 
             if self.features['interface_name'] == 'cplex_cp':
 
                 if len(dim) == 1:
-                    self.mainvars[("evar", name)] = {key: self.model.interval_var(start=event[1], size=event[0], end=event[2], name=f"{name}{key}", optional=optional) for key in dim[0]}
-                    self.maindims[name] = dim
-                    return self.mainvars[("evar", name)] 
+                    self.features['variables'][("evar", name)] = {key: self.model.interval_var(start=event[1], size=event[0], end=event[2], name=f"{name}{key}", optional=optional) for key in dim[0]}
+                    self.features['dimensions'][name] = dim
+                    return self.features['variables'][("evar", name)] 
                     
                 else:
-                    self.mainvars[("evar", name)]  = {key: self.model.interval_var(start=event[1], size=event[0], end=event[2], name=f"{name}{key}", optional=optional) for key in sets(*dim)}
-                    self.maindims[name] = dim
-                    return  self.mainvars[("evar", name)] 
+                    self.features['variables'][("evar", name)]  = {key: self.model.interval_var(start=event[1], size=event[0], end=event[2], name=f"{name}{key}", optional=optional) for key in sets(*dim)}
+                    self.features['dimensions'][name] = dim
+                    return  self.features['variables'][("evar", name)] 
 
             elif self.features['interface_name'] == 'ortools_cp':
 
                 if len(dim) == 1:
-                    self.mainvars[("evar", name)] = {key: self.model.NewOptionalIntervalVar(start=event[1], size=event[0], end=event[2], name=f"{name}{key}", is_present=optional) for key in dim[0]}
-                    self.maindims[name] = dim
-                    return self.mainvars[("evar", name)]
+                    self.features['variables'][("evar", name)] = {key: self.model.NewOptionalIntervalVar(start=event[1], size=event[0], end=event[2], name=f"{name}{key}", is_present=optional) for key in dim[0]}
+                    self.features['dimensions'][name] = dim
+                    return self.features['variables'][("evar", name)]
                     
                 else:
-                    self.mainvars[("evar", name)]  = {key: self.model.NewOptionalIntervalVar(start=event[1], size=event[0], end=event[2], name=f"{name}{key}", is_present=optional) for key in sets(*dim)}
-                    self.maindims[name] = dim
-                    return self.mainvars[("evar", name)]
+                    self.features['variables'][("evar", name)]  = {key: self.model.NewOptionalIntervalVar(start=event[1], size=event[0], end=event[2], name=f"{name}{key}", is_present=optional) for key in sets(*dim)}
+                    self.features['dimensions'][name] = dim
+                    return self.features['variables'][("evar", name)]

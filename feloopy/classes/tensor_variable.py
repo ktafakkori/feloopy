@@ -56,11 +56,11 @@ class TensorVariableClass:
         
         if self.features['solution_method'] == 'exact':
             from ..generators import variable_generator
-            self.mainvars[("ftvar", name)] = variable_generator.generate_variable(
+            self.features['variables'][("ftvar", name)] = variable_generator.generate_variable(
                 self.features['interface_name'], self.model, 'ftvar', name, bound, dim
             )
-            self.maindims[name] = dim
-            return self.mainvars[("ftvar", name)]
+            self.features['dimensions'][name] = dim
+            return self.features['variables'][("ftvar", name)]
 
         raise ValueError(f"Error: TensorVariable '{name}' cannot be created.")
     
@@ -93,18 +93,18 @@ class TensorVariableClass:
         if self.features['solution_method'] == 'exact':
             from ..generators import variable_generator
 
-            self.mainvars[("ptvar", name)] = variable_generator.generate_variable(
+            self.features['variables'][("ptvar", name)] = variable_generator.generate_variable(
                 self.features['interface_name'], self.model, 'ptvar', name, bound, dim
             )
-            self.maindims[name] = dim
+            self.features['dimensions'][name] = dim
 
             if self.features['interface_name'] in ['rsome_ro', 'rsome_dro', 'cvxpy']:
-                self.con(self.mainvars[("ptvar", name)] >= 0)
+                self.con(self.features['variables'][("ptvar", name)] >= 0)
 
                 if bound and bound[1] is not None:
-                    self.con(self.mainvars[("ptvar", name)] <= bound[1])
+                    self.con(self.features['variables'][("ptvar", name)] <= bound[1])
 
-            return self.mainvars[("ptvar", name)]
+            return self.features['variables'][("ptvar", name)]
     
         raise ValueError(f"Error: TensorVariable '{name}' cannot be created.")
     
@@ -138,11 +138,11 @@ class TensorVariableClass:
         if self.features['solution_method'] == 'exact':
             from ..generators import variable_generator
 
-            self.mainvars[("itvar", name)] = variable_generator.generate_variable(
+            self.features['variables'][("itvar", name)] = variable_generator.generate_variable(
                 self.features['interface_name'], self.model, 'itvar', name, bound, dim
             )
-            self.maindims[name] = dim
-            return self.mainvars[("itvar", name)]
+            self.features['dimensions'][name] = dim
+            return self.features['variables'][("itvar", name)]
 
         raise ValueError(f"Error: TensorVariable '{name}' cannot be created.")
     
@@ -176,11 +176,11 @@ class TensorVariableClass:
         if self.features['solution_method'] == 'exact':
             from ..generators import variable_generator
 
-            self.mainvars[("btvar", name)] = variable_generator.generate_variable(
+            self.features['variables'][("btvar", name)] = variable_generator.generate_variable(
                 self.features['interface_name'], self.model, 'btvar', name, bound, dim
             )
-            self.maindims[name] = dim
-            return self.mainvars[("btvar", name)]
+            self.features['dimensions'][name] = dim
+            return self.features['variables'][("btvar", name)]
 
         raise ValueError(f"Error: TensorVariable '{name}' cannot be created.")
 

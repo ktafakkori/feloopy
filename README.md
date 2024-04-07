@@ -29,4 +29,3 @@ pip install feloopy
 ```
 
 For more information, please refer to FelooPy's [documentation](https://feloopy.readthedocs.io/en/latest/).
-

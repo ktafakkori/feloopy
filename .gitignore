@@ -16,6 +16,10 @@ data
 results
 site
 clean.py
+test.py
+debug.ipynb
 create.py
 example.py
+data.xlsx
+documents/
 *.sio

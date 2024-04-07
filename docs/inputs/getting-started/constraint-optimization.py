@@ -8,7 +8,7 @@ due_date = np.random.uniform(75, 200, size=[J])
 priority_weights = np.random.random_integers(1, 5, size=[J])
 
 # Define a model
-m = flp.model("constraint", "model_name", "cplex_cp")
+m = flp.model(name="model_name", method="constraint", interface="cplex_cp")
 
 # Define variables
 process_event = m.cevar(
@@ -32,4 +32,4 @@ m.obj(
 m.sol(["min"], "cplex")
 
 # Report the results
-m.report()
+m.clean_report()

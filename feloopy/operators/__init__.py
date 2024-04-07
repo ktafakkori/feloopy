@@ -14,3 +14,4 @@ from .pareto import *
 from .random_operators import *
 from .set_operators import *
 from .update_operators import *
+from .validator import *

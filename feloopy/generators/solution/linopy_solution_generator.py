@@ -1,8 +1,6 @@
 # Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
 # See the file LICENSE file for licensing details.
 
-
-
 from linopy import Model as LINOPYMODEL
 from linopy import LinearExpression
 import timeit
@@ -12,8 +10,8 @@ linopy_solver_selector = {'cbc': 'cbc',
                           'highs': 'highs',
                           'gurobi': 'gurobi',
                           'xpress': 'xpress',
-                          'cplex': 'cplex'}
-
+                          'cplex': 'cplex',
+                          'copt', 'copt'}
 
 def generate_solution(features):
 
@@ -35,30 +33,19 @@ def generate_solution(features):
     email = features['email_address']
     max_iterations = features['max_iterations']
     solver_options = features['solver_options']
-
+    
     if solver_name not in linopy_solver_selector.keys():
-        raise RuntimeError(
-            "Using solver '%s' is not supported by 'linopy'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
-
+        raise RuntimeError("Using solver '%s' is not supported by 'linopy'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
     match debug:
-
         case False:
-
             match directions[objective_id]:
                 case "min":
-                    print(model_objectives[objective_id])
-                    print(type(model_objectives[objective_id]))
                     model_object.add_objective(model_objectives[objective_id])
-                    
                 case "max":
                     model_object.add_objective(-1*model_objectives[objective_id])
-
-            for constraint in model_constraints:
-                model_object.add_constraint(constraint)
-
+            for constraint in model_constraints: model_object.add_constraint(constraint)
             time_solve_begin = timeit.default_timer()
             result = model_object.solve(solver_name=solver_name)
             time_solve_end = timeit.default_timer()
             generated_solution = [result, [time_solve_begin, time_solve_end]]
-
     return generated_solution

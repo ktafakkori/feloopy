@@ -2,7 +2,7 @@ import feloopy as flp
 import numpy as np
 
 # Define a model
-m = flp.model("uncertain", "mean_varience_portfolio", "rsome_ro")
+m = flp.model(name="mean_varience_portfolio", method="uncertain", interface="rsome_ro")
 
 # Define parameters
 n = 150
@@ -25,4 +25,4 @@ m.con(x.sum() == 1)
 m.sol(["max"], "ecos")
 
 # Report the results
-m.report()
+m.clean_report()

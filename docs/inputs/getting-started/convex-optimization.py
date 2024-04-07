@@ -12,7 +12,7 @@ A = np.random.randn(m, n)
 b = np.random.randn(m)
 
 # Define a model
-m = flp.model("convex", "model_name", "cvxpy")
+m = flp.model(name="model_name", method="convex",  interface="cvxpy")
 
 # Define variables
 x = m.ftvar(name="x", shape=[n])
@@ -24,4 +24,4 @@ m.obj(sum_squares(A @ x - b))
 m.sol(["min"], "ecos")
 
 # Report the results
-m.report()
+m.clean_report()

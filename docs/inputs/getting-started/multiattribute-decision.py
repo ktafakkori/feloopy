@@ -20,4 +20,4 @@ m.add_cpcm(
 m.sol()
 
 # Report the results
-m.report(show_tensors=True)
+m.clean_report(show_tensors=True)

@@ -4,7 +4,7 @@ import feloopy as flp
 def instance(X):
 
     # Define model instance
-    m = flp.model("heuristic", "model_name", "feloopy", X)
+    m = flp.model(name="model_name", method="heuristic", interface="feloopy", X)
 
     # Define variables for the model instance
     x = m.bvar(name="x")
@@ -30,4 +30,4 @@ m = flp.make_model(instance)
 m.sol(penalty_coefficient=10)
 
 # Report the results
-m.report()
+m.clean_report()

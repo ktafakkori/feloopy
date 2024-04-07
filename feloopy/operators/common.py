@@ -58,7 +58,6 @@ def kvs(a):
     else:
         return None
 
-
 def kvs_advanced(a, sort_order='increasing', sort_by='key', b=None, output='both'):
     if isinstance(a, np.ndarray):
         return enumerate(a)
@@ -112,52 +111,20 @@ def kvs_advanced(a, sort_order='increasing', sort_by='key', b=None, output='both
 
 sets = it.product
 
-def random_number_generator(key):
-
-    return np.random.default_rng(key)
-
-
-def make_set(input):
-
-    if type(input) == int:
-
-        return range(input)
-
-    else:
-
-        return set(input)
-
-
-def make_uniform_param(rng, lb, ub, variable_dim=0):
-
-    if variable_dim == 0:
-
-        return rng.uniform(low=lb, high=ub)
-
-    else:
-
-        return rng.uniform(low=lb, high=ub, size=([len(i) for i in variable_dim]))
-
-
 def exponent(input):
     return np.exp(input)
-
 
 def floor(input):
     return np.floor(input)
 
-
 def ceil(input):
     return np.ceil(input)
-
 
 def round(input):
     return np.round(input)
 
-
 def log_of_base(input, base):
     return mt.log(input, base)
-
 
 def log(input):
     return np.log(input)
@@ -168,18 +135,14 @@ def log10(input):
 def sqrt(input):
     return np.sqrt(input)
 
-
 def sin(input):
     return np.sin(input)
-
 
 def cos(input):
     return np.cos(input)
 
-
 def power(input1, input2):
     return input1**input2
-
 
 def install(package):
     '''
@@ -242,141 +205,14 @@ def end_timer(show=False):
     return EndTime
 
 def version(INPUT):
-
     print(INPUT.__version__)
-
     return (INPUT)
-
-def sensitivity(model_function, params_list, range_of_change_list, step_of_change_list, show_table=True, show_plot=False, save_plot=False, file_name='sensfig.png', plot_style='ggplot', legends_list=None, axis_names=['% Change', 'Objective Value'], size_of_fig=[8, 6], dpi=80):
-    """
-    Generate a sensitivity analysis plot for parameters within their range of change.
-
-    Parameters:
-        model_function (callable): The model function to evaluate.
-        params_list (list): List of initial parameter values.
-        range_of_change_list (list): List of tuples representing the range of change for each parameter.
-        step_of_change_list (list): List of step values for sensitivity analysis.
-        show_table (bool, optional): Display a table of sensitivity analysis results. Default is True.
-        show_plot (bool, optional): Display the sensitivity analysis plot. Default is False.
-        save_plot (bool, optional): Save the plot as an image file. Default is False.
-        file_name (str, optional): File name for the saved plot. Default is 'sensfig.png'.
-        plot_style (str, optional): Style of the plot, e.g., 'ggplot'. Default is 'ggplot'.
-        legends_list (list, optional): List of legend labels for parameters. Default is None.
-        axis_names (list, optional): Names for the x and y axes. Default is ['% Change', 'Objective Value'].
-        size_of_fig (list, optional): Size of the figure in inches. Default is [8, 6].
-        dpi (int, optional): Dots per inch for the saved plot. Default is 80.
-
-    """
-    if show_plot:
-        fig, ax = plt.subplots(figsize=(size_of_fig[0], size_of_fig[1]), dpi=dpi)
-
-    for i in range(len(params_list)):
-        OriginalParameterValue = np.asarray(params_list[i])
-
-        SensitivityPoints = []
-        Percent = []
-
-        range_of_change = range_of_change_list[i].copy()
-        diff = np.copy(range_of_change[1] - range_of_change[0])
-        step_of_change = step_of_change_list[i]
-
-        for j in range(0, diff // step_of_change + 1):
-            Percent.append(range_of_change[0])
-
-            if isinstance(params_list[i], int) and step_of_change in [-1, 1]:
-                SensitivityPoints.append(OriginalParameterValue + step_of_change)
-            else:
-                SensitivityPoints.append(OriginalParameterValue * (1 + range_of_change[0] / 100))
-
-            range_of_change[0] += step_of_change
-
-        x = Percent
-        y = []
-
-        for SensitivityPointofaParam in SensitivityPoints:
-            NewParamValues = params_list.copy()
-            NewParamValues[i] = SensitivityPointofaParam
-            m = model_function(*tuple(NewParamValues))
-            y.append(m.get_obj())
-
-        if show_table:
-            if legends_list:
-                tline_text(f"Sensitivity to {legends_list[i]}")
-            else:
-                tline_text(f"Sensitivity to {i}")
-
-            two_column("% Change", "Objective value")
-            for xi, yi in zip(x, y):
-                two_column(format_string(xi), format_string(yi))
-            bline()
-
-        if show_plot:
-            style.use(plot_style)
-            ax.set_xlabel(axis_names[0], fontsize=12)
-            ax.set_ylabel(axis_names[1], fontsize=12)
-
-            if legends_list:
-                ax.plot(x, y, label=legends_list[i], linewidth=3.5)
-            else:
-                ax.plot(x, y, label=f"Parameter {i}", linewidth=3.5)
-
-            ax.scatter(x, y)
-
-    if show_plot:
-        ax.legend()
-
-    if show_plot and save_plot:
-        plt.savefig(file_name, dpi=500)
-
-    if show_plot:
-        plt.show()
-
-
-    if show_plot and save_plot:
-        plt.savefig(file_name, dpi=500)
-
-    if show_plot:
-        plt.show()
 
 import pandas as pd
 import os
 import sys
 
-def benchmark(environment, algorithms, repeat, show_report=False):
-    columns = pd.MultiIndex.from_product([['time', 'obj'], ['ave', 'std', 'min', 'max']],names=['metric', 'stat'])
-    df = pd.DataFrame(columns=columns,index=[i+1 for i in range(len(algorithms))])
-    counter = 0
-    for interface, solver in progress_bar(algorithms, unit="alg", description="Benchmarking"):
-        objs = []
-        times = []
-        try:
-            for _ in range(repeat):
-                m = environment(interface, solver)
-                objs.append(m.get_obj())
-                times.append(m.get_time())
-            df.loc[counter+1, ('time', 'ave')] = pd.Series(times).mean()
-            df.loc[counter+1, ('time', 'std')] = pd.Series(times).std()
-            df.loc[counter+1, ('time', 'min')] = pd.Series(times).min()
-            df.loc[counter+1, ('time', 'max')] = pd.Series(times).max()
-            df.loc[counter+1, ('obj', 'ave')] = pd.Series(objs).mean()
-            df.loc[counter+1, ('obj', 'std')] = pd.Series(objs).std()
-            df.loc[counter+1, ('obj', 'min')] = pd.Series(objs).min()
-            df.loc[counter+1, ('obj', 'max')] = pd.Series(objs).max()
-            df.loc[counter+1, ('interface', '')] = interface
-            df.loc[counter+1, ('solver', '')] = solver
-        except:
-            df.loc[counter+1, ('interface', '')] = interface
-            df.loc[counter+1, ('solver', '')] = solver        
-            pass
-        os.system('cls' if os.name == 'nt' else 'clear')
-        counter += 1
-    df_cleaned = df.dropna(subset=[('time', 'ave'), ('obj', 'ave')]).reset_index(drop=True)
-    df_sorted = df_cleaned.sort_values(by=('time', 'ave'))
-    df_sorted = df_sorted.reset_index(drop=True)
-    if show_report:
-        print(df_sorted.to_string())
-    return df_sorted
-ben = benchmark
+
 
 def compare(results, show_fig=True, save_fig=False, file_name=None, dpi=800, fig_size=(15, 3), alpha=0.8, line_width=5):
 

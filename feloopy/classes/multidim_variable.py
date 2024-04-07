@@ -51,11 +51,11 @@ class MultidimVariableClass:
 
         if self.features['solution_method'] == 'exact':
             from ..generators import variable_generator
-            self.mainvars[("fvar", name)] = variable_generator.generate_variable(
+            self.features['variables'][("fvar", name)] = variable_generator.generate_variable(
                 self.features['interface_name'], self.model, 'fvar', name, bound, dim
             )
-            self.maindims[name] = dim
-            return self.mainvars[("fvar", name)]
+            self.features['dimensions'][name] = dim
+            return self.features['variables'][("fvar", name)]
 
         elif self.features['solution_method'] == 'heuristic':
             from ..operators.heuristic_operators import generate_heuristic_variable
@@ -92,28 +92,28 @@ class MultidimVariableClass:
 
         if self.features['solution_method'] == 'exact':
             from ..generators import variable_generator
-            self.mainvars[("pvar", name)] = variable_generator.generate_variable(
+            self.features['variables'][("pvar", name)] = variable_generator.generate_variable(
                 self.features['interface_name'], self.model, 'pvar', name, bound, dim
             )
-            self.maindims[name] = dim
+            self.features['dimensions'][name] = dim
 
             if self.features['interface_name'] in ['rsome_ro', 'rsome_dro', 'cvxpy']:
                 if dim == 0:
-                    self.con(self.mainvars[("pvar", name)] >= 0)
+                    self.con(self.features['variables'][("pvar", name)] >= 0)
                     if bound[1] is not None:
-                        self.con(self.mainvars[("pvar", name)] <= bound[1])
+                        self.con(self.features['variables'][("pvar", name)] <= bound[1])
                 elif len(dim) == 1:
                     for i in dim[0]:
-                        self.con(self.mainvars[("pvar", name)][i] >= 0)
+                        self.con(self.features['variables'][("pvar", name)][i] >= 0)
                         if bound[1] is not None:
-                            self.con(self.mainvars[("pvar", name)][i] <= bound[1])
+                            self.con(self.features['variables'][("pvar", name)][i] <= bound[1])
                 else:
                     for i in it.product(*tuple(dim)):
-                        self.con(self.mainvars[("pvar", name)][i] >= 0)
+                        self.con(self.features['variables'][("pvar", name)][i] >= 0)
                         if bound[1] is not None:
-                            self.con(self.mainvars[("pvar", name)][i] <= bound[1])
+                            self.con(self.features['variables'][("pvar", name)][i] <= bound[1])
 
-            return self.mainvars[("pvar", name)]
+            return self.features['variables'][("pvar", name)]
 
         elif self.features['solution_method'] == 'heuristic':
             from ..operators.heuristic_operators import generate_heuristic_variable
@@ -150,28 +150,28 @@ class MultidimVariableClass:
 
         if self.features['solution_method'] == 'exact':
             from ..generators import variable_generator
-            self.mainvars[("ivar", name)] = variable_generator.generate_variable(
+            self.features['variables'][("ivar", name)] = variable_generator.generate_variable(
                 self.features['interface_name'], self.model, 'ivar', name, bound, dim
             )
-            self.maindims[name] = dim
+            self.features['dimensions'][name] = dim
 
             if self.features['interface_name'] in ['rsome_ro', 'rsome_dro', 'cvxpy']:
                 if dim == 0:
-                    self.con(self.mainvars[("ivar", name)] >= 0)
+                    self.con(self.features['variables'][("ivar", name)] >= 0)
                     if bound[1] is not None:
-                        self.con(self.mainvars[("ivar", name)] <= bound[1])
+                        self.con(self.features['variables'][("ivar", name)] <= bound[1])
                 elif len(dim) == 1:
                     for i in dim[0]:
-                        self.con(self.mainvars[("ivar", name)][i] >= 0)
+                        self.con(self.features['variables'][("ivar", name)][i] >= 0)
                         if bound[1] is not None:
-                            self.con(self.mainvars[("ivar", name)][i] <= bound[1])
+                            self.con(self.features['variables'][("ivar", name)][i] <= bound[1])
                 else:
                     for i in it.product(*tuple(dim)):
-                        self.con(self.mainvars[("ivar", name)][i] >= 0)
+                        self.con(self.features['variables'][("ivar", name)][i] >= 0)
                         if bound[1] is not None:
-                            self.con(self.mainvars[("ivar", name)][i] <= bound[1])
+                            self.con(self.features['variables'][("ivar", name)][i] <= bound[1])
 
-            return self.mainvars[("ivar", name)]
+            return self.features['variables'][("ivar", name)]
 
         elif self.features['solution_method'] == 'heuristic':
             from ..operators.heuristic_operators import generate_heuristic_variable
@@ -208,24 +208,24 @@ class MultidimVariableClass:
 
         if self.features['solution_method'] == 'exact':
             from ..generators import variable_generator
-            self.mainvars[("bvar", name)] = variable_generator.generate_variable(
+            self.features['variables'][("bvar", name)] = variable_generator.generate_variable(
                 self.features['interface_name'], self.model, 'bvar', name, bound, dim
             )
-            self.maindims[name] = dim
+            self.features['dimensions'][name] = dim
 
             if self.features['interface_name'] in ['cvxpy']:
                 if dim == 0:
-                    self.con(self.mainvars[("bvar", name)] >= 0)
-                    self.con(self.mainvars[("bvar", name)] <= 1)
+                    self.con(self.features['variables'][("bvar", name)] >= 0)
+                    self.con(self.features['variables'][("bvar", name)] <= 1)
                 elif len(dim) == 1:
                     for i in dim[0]:
-                        self.con(self.mainvars[("bvar", name)][i] >= 0)
-                        self.con(self.mainvars[("bvar", name)][i] <= 1)
+                        self.con(self.features['variables'][("bvar", name)][i] >= 0)
+                        self.con(self.features['variables'][("bvar", name)][i] <= 1)
                 else:
                     for i in it.product(*tuple(dim)):
-                        self.con(self.mainvars[("bvar", name)][i] >= 0)
-                        self.con(self.mainvars[("bvar", name)][i] <= 1)
-            return self.mainvars[("bvar", name)]
+                        self.con(self.features['variables'][("bvar", name)][i] >= 0)
+                        self.con(self.features['variables'][("bvar", name)][i] <= 1)
+            return self.features['variables'][("bvar", name)]
 
         elif self.features['solution_method'] == 'heuristic':
             from ..operators.heuristic_operators import generate_heuristic_variable
