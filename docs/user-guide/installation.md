@@ -25,13 +25,13 @@ For a quick installation of FelooPy with the generous support of interfaces and 
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[stock]==0.2.8"
+    pip install -U "feloopy[stock]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[stock]==0.2.8" --user
+    pip install -U "feloopy[stock]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -63,19 +63,19 @@ For a quick installation of FelooPy with the generous support of interfaces and 
    
 
     ``` console
-    pip install -U "feloopy[stock]==0.2.8"
+    pip install -U "feloopy[stock]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[stock]==0.2.8"
+        pip install -U "feloopy[stock]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[stock]==0.2.8" --user
+        pip install -U "feloopy[stock]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -83,7 +83,7 @@ For a quick installation of FelooPy with the generous support of interfaces and 
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[stock]==0.2.8"
+    !pip install -U "feloopy[stock]==0.2.9"
     ```
 
 
@@ -97,13 +97,13 @@ This variant installs the base package without any additional features. It insta
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy==0.2.8"
+    pip install -U "feloopy==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy==0.2.8" --user
+    pip install -U "feloopy==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -135,19 +135,19 @@ This variant installs the base package without any additional features. It insta
    
 
     ``` console
-    pip install -U "feloopy==0.2.8"
+    pip install -U "feloopy==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy==0.2.8"
+        pip install -U "feloopy==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy==0.2.8" --user
+        pip install -U "feloopy==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -155,7 +155,7 @@ This variant installs the base package without any additional features. It insta
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy==0.2.8"
+    !pip install -U "feloopy==0.2.9"
     ```
 
 ## Free variants
@@ -167,13 +167,13 @@ Same as the core variant.
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[pico]==0.2.8"
+    pip install -U "feloopy[pico]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[pico]==0.2.8" --user
+    pip install -U "feloopy[pico]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -205,19 +205,19 @@ Same as the core variant.
    
 
     ``` console
-    pip install -U "feloopy[pico]==0.2.8"
+    pip install -U "feloopy[pico]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[pico]==0.2.8"
+        pip install -U "feloopy[pico]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[pico]==0.2.8" --user
+        pip install -U "feloopy[pico]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -225,7 +225,7 @@ Same as the core variant.
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[pico]==0.2.8"
+    !pip install -U "feloopy[pico]==0.2.9"
     ```
 
 ### `nano`
@@ -235,13 +235,13 @@ This variant allows you to get started with linear programming, integer programm
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[nano]==0.2.8"
+    pip install -U "feloopy[nano]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[nano]==0.2.8" --user
+    pip install -U "feloopy[nano]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -273,19 +273,19 @@ This variant allows you to get started with linear programming, integer programm
    
 
     ``` console
-    pip install -U "feloopy[nano]==0.2.8"
+    pip install -U "feloopy[nano]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[nano]==0.2.8"
+        pip install -U "feloopy[nano]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[nano]==0.2.8" --user
+        pip install -U "feloopy[nano]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -293,7 +293,7 @@ This variant allows you to get started with linear programming, integer programm
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[nano]==0.2.8"
+    !pip install -U "feloopy[nano]==0.2.9"
     ```
 
 ### `micro`
@@ -303,13 +303,13 @@ This variant extends the capabilities of the `nano` variant to enable nonlinear 
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[micro]==0.2.8"
+    pip install -U "feloopy[micro]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[micro]==0.2.8" --user
+    pip install -U "feloopy[micro]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -341,19 +341,19 @@ This variant extends the capabilities of the `nano` variant to enable nonlinear 
    
 
     ``` console
-    pip install -U "feloopy[micro]==0.2.8"
+    pip install -U "feloopy[micro]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[micro]==0.2.8"
+        pip install -U "feloopy[micro]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[micro]==0.2.8" --user
+        pip install -U "feloopy[micro]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -361,7 +361,7 @@ This variant extends the capabilities of the `nano` variant to enable nonlinear 
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[micro]==0.2.8"
+    !pip install -U "feloopy[micro]==0.2.9"
     ```
 
 ### `mini`
@@ -371,13 +371,13 @@ This variant extends the capabilities of the `micro` variant to enable convex an
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[mini]==0.2.8"
+    pip install -U "feloopy[mini]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[mini]==0.2.8" --user
+    pip install -U "feloopy[mini]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -409,19 +409,19 @@ This variant extends the capabilities of the `micro` variant to enable convex an
    
 
     ``` console
-    pip install -U "feloopy[mini]==0.2.8"
+    pip install -U "feloopy[mini]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[mini]==0.2.8"
+        pip install -U "feloopy[mini]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[mini]==0.2.8" --user
+        pip install -U "feloopy[mini]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -429,7 +429,7 @@ This variant extends the capabilities of the `micro` variant to enable convex an
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[mini]==0.2.8"
+    !pip install -U "feloopy[mini]==0.2.9"
     ```
 
 ### `full`
@@ -439,13 +439,13 @@ This variant extends the capabilities of the `mini` variant to enable multi-obje
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[full]==0.2.8"
+    pip install -U "feloopy[full]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[full]==0.2.8" --user
+    pip install -U "feloopy[full]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -477,19 +477,19 @@ This variant extends the capabilities of the `mini` variant to enable multi-obje
    
 
     ``` console
-    pip install -U "feloopy[full]==0.2.8"
+    pip install -U "feloopy[full]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[full]==0.2.8"
+        pip install -U "feloopy[full]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[full]==0.2.8" --user
+        pip install -U "feloopy[full]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -497,7 +497,7 @@ This variant extends the capabilities of the `mini` variant to enable multi-obje
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[full]==0.2.8"
+    !pip install -U "feloopy[full]==0.2.9"
     ```
 
 ### `stock`
@@ -507,13 +507,13 @@ For enabling the switch among multiple different optimization algorithms, progra
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[stock]==0.2.8"
+    pip install -U "feloopy[stock]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[stock]==0.2.8" --user
+    pip install -U "feloopy[stock]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -545,19 +545,19 @@ For enabling the switch among multiple different optimization algorithms, progra
    
 
     ``` console
-    pip install -U "feloopy[stock]==0.2.8"
+    pip install -U "feloopy[stock]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[stock]==0.2.8"
+        pip install -U "feloopy[stock]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[stock]==0.2.8" --user
+        pip install -U "feloopy[stock]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -565,7 +565,7 @@ For enabling the switch among multiple different optimization algorithms, progra
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[stock]==0.2.8"
+    !pip install -U "feloopy[stock]==0.2.9"
     ```
 
 ## Commercial variants
@@ -577,13 +577,13 @@ This variant includes the Gurobi solver. It requires a valid Gurobi license. Ref
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[plus_gurobi]==0.2.8"
+    pip install -U "feloopy[plus_gurobi]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[plus_gurobi]==0.2.8" --user
+    pip install -U "feloopy[plus_gurobi]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -615,19 +615,19 @@ This variant includes the Gurobi solver. It requires a valid Gurobi license. Ref
    
 
     ``` console
-    pip install -U "feloopy[plus_gurobi]==0.2.8"
+    pip install -U "feloopy[plus_gurobi]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[plus_gurobi]==0.2.8"
+        pip install -U "feloopy[plus_gurobi]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[plus_gurobi]==0.2.8" --user
+        pip install -U "feloopy[plus_gurobi]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -635,7 +635,7 @@ This variant includes the Gurobi solver. It requires a valid Gurobi license. Ref
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[plus_gurobi]==0.2.8"
+    !pip install -U "feloopy[plus_gurobi]==0.2.9"
     ```
 
 ### `plus_cplex`
@@ -645,13 +645,13 @@ This variant includes the CPLEX solver. It requires a valid CPLEX license. Refer
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[plus_cplex]==0.2.8"
+    pip install -U "feloopy[plus_cplex]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[plus_cplex]==0.2.8" --user
+    pip install -U "feloopy[plus_cplex]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -683,19 +683,19 @@ This variant includes the CPLEX solver. It requires a valid CPLEX license. Refer
    
 
     ``` console
-    pip install -U "feloopy[plus_cplex]==0.2.8"
+    pip install -U "feloopy[plus_cplex]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[plus_cplex]==0.2.8"
+        pip install -U "feloopy[plus_cplex]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[plus_cplex]==0.2.8" --user
+        pip install -U "feloopy[plus_cplex]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -703,7 +703,7 @@ This variant includes the CPLEX solver. It requires a valid CPLEX license. Refer
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[plus_cplex]==0.2.8"
+    !pip install -U "feloopy[plus_cplex]==0.2.9"
     ```
 
 ### `plus_xpress`
@@ -714,13 +714,13 @@ This variant includes the Xpress solver. It requires a valid Xpress license. Ref
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[plus_xpress]==0.2.8"
+    pip install -U "feloopy[plus_xpress]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[plus_xpress]==0.2.8" --user
+    pip install -U "feloopy[plus_xpress]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -752,19 +752,19 @@ This variant includes the Xpress solver. It requires a valid Xpress license. Ref
    
 
     ``` console
-    pip install -U "feloopy[plus_xpress]==0.2.8"
+    pip install -U "feloopy[plus_xpress]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[plus_xpress]==0.2.8"
+        pip install -U "feloopy[plus_xpress]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[plus_xpress]==0.2.8" --user
+        pip install -U "feloopy[plus_xpress]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -772,7 +772,7 @@ This variant includes the Xpress solver. It requires a valid Xpress license. Ref
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[plus_xpress]==0.2.8"
+    !pip install -U "feloopy[plus_xpress]==0.2.9"
     ```
 
 ### `plus_copt`
@@ -782,13 +782,13 @@ This variant includes the COPT solver. It requires a valid COPT license. Refer t
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[plus_copt]==0.2.8"
+    pip install -U "feloopy[plus_copt]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[plus_copt]==0.2.8" --user
+    pip install -U "feloopy[plus_copt]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -820,19 +820,19 @@ This variant includes the COPT solver. It requires a valid COPT license. Refer t
    
 
     ``` console
-    pip install -U "feloopy[plus_copt]==0.2.8"
+    pip install -U "feloopy[plus_copt]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[plus_copt]==0.2.8"
+        pip install -U "feloopy[plus_copt]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[plus_copt]==0.2.8" --user
+        pip install -U "feloopy[plus_copt]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -840,7 +840,7 @@ This variant includes the COPT solver. It requires a valid COPT license. Refer t
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[plus_copt]==0.2.8"
+    !pip install -U "feloopy[plus_copt]==0.2.9"
     ```
 
 ### `plus_gams`
@@ -851,13 +851,13 @@ This variant includes the GAMS (General Algebraic Modeling System) interface. It
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[plus_gams]==0.2.8"
+    pip install -U "feloopy[plus_gams]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[plus_gams]==0.2.8" --user
+    pip install -U "feloopy[plus_gams]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -889,19 +889,19 @@ This variant includes the GAMS (General Algebraic Modeling System) interface. It
    
 
     ``` console
-    pip install -U "feloopy[plus_gams]==0.2.8"
+    pip install -U "feloopy[plus_gams]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[plus_gams]==0.2.8"
+        pip install -U "feloopy[plus_gams]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[plus_gams]==0.2.8" --user
+        pip install -U "feloopy[plus_gams]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -909,7 +909,7 @@ This variant includes the GAMS (General Algebraic Modeling System) interface. It
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[plus_gams]==0.2.8"
+    !pip install -U "feloopy[plus_gams]==0.2.9"
     ```
 
 ### `plus_insideopt`
@@ -922,13 +922,13 @@ This variant includes the Seeker(TM) solver. It requires a valid Seeker license.
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[plus_insideopt]==0.2.8"
+    pip install -U "feloopy[plus_insideopt]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[plus_insideopt]==0.2.8" --user
+    pip install -U "feloopy[plus_insideopt]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -960,19 +960,19 @@ This variant includes the Seeker(TM) solver. It requires a valid Seeker license.
    
 
     ``` console
-    pip install -U "feloopy[plus_insideopt]==0.2.8"
+    pip install -U "feloopy[plus_insideopt]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[plus_insideopt]==0.2.8"
+        pip install -U "feloopy[plus_insideopt]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[plus_insideopt]==0.2.8" --user
+        pip install -U "feloopy[plus_insideopt]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -980,7 +980,7 @@ This variant includes the Seeker(TM) solver. It requires a valid Seeker license.
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[plus_insideopt]==0.2.8"
+    !pip install -U "feloopy[plus_insideopt]==0.2.9"
     ```
 
 
@@ -994,13 +994,13 @@ This variant includes the CyLP solver. It requires a valid CyLP installation. Re
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[only_cylp]==0.2.8"
+    pip install -U "feloopy[only_cylp]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[only_cylp]==0.2.8" --user
+    pip install -U "feloopy[only_cylp]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -1032,19 +1032,19 @@ This variant includes the CyLP solver. It requires a valid CyLP installation. Re
    
 
     ``` console
-    pip install -U "feloopy[only_cylp]==0.2.8"
+    pip install -U "feloopy[only_cylp]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[only_cylp]==0.2.8"
+        pip install -U "feloopy[only_cylp]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[only_cylp]==0.2.8" --user
+        pip install -U "feloopy[only_cylp]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -1052,7 +1052,7 @@ This variant includes the CyLP solver. It requires a valid CyLP installation. Re
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[only_cylp]==0.2.8"
+    !pip install -U "feloopy[only_cylp]==0.2.9"
     ```
 
 ### `only_linux`
@@ -1064,13 +1064,13 @@ This variant includes additional features for Linux-based distros. It installs F
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[only_linux]==0.2.8"
+    pip install -U "feloopy[only_linux]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[only_linux]==0.2.8" --user
+    pip install -U "feloopy[only_linux]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -1102,19 +1102,19 @@ This variant includes additional features for Linux-based distros. It installs F
    
 
     ``` console
-    pip install -U "feloopy[only_linux]==0.2.8"
+    pip install -U "feloopy[only_linux]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[only_linux]==0.2.8"
+        pip install -U "feloopy[only_linux]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[only_linux]==0.2.8" --user
+        pip install -U "feloopy[only_linux]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -1122,7 +1122,7 @@ This variant includes additional features for Linux-based distros. It installs F
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[only_linux]==0.2.8"
+    !pip install -U "feloopy[only_linux]==0.2.9"
     ```
 
 
@@ -1135,13 +1135,13 @@ This variant includes all packages of free and commercial variants.
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[hyper]==0.2.8"
+    pip install -U "feloopy[hyper]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[hyper]==0.2.8" --user
+    pip install -U "feloopy[hyper]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -1173,19 +1173,19 @@ This variant includes all packages of free and commercial variants.
    
 
     ``` console
-    pip install -U "feloopy[hyper]==0.2.8"
+    pip install -U "feloopy[hyper]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[hyper]==0.2.8"
+        pip install -U "feloopy[hyper]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[hyper]==0.2.8" --user
+        pip install -U "feloopy[hyper]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -1193,7 +1193,7 @@ This variant includes all packages of free and commercial variants.
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[onlhypery_linux]==0.2.8"
+    !pip install -U "feloopy[onlhypery_linux]==0.2.9"
     ```
 
 
@@ -1204,13 +1204,13 @@ This variant includes all packages of free and commercial variants as well as in
 === ":material-console: System-wide"
 
     ``` console
-    pip install -U "feloopy[mega]==0.2.8"
+    pip install -U "feloopy[mega]==0.2.9"
     ```
 
 === ":material-console: User-specific"
 
     ``` console
-    pip install -U "feloopy[mega]==0.2.8" --user
+    pip install -U "feloopy[mega]==0.2.9" --user
     ```
 
 === ":material-console: Virtual environment"
@@ -1242,19 +1242,19 @@ This variant includes all packages of free and commercial variants as well as in
    
 
     ``` console
-    pip install -U "feloopy[mega]==0.2.8"
+    pip install -U "feloopy[mega]==0.2.9"
     ```
 
     === ":material-console: Admin"
 
         ``` console
-        pip install -U "feloopy[mega]==0.2.8"
+        pip install -U "feloopy[mega]==0.2.9"
         ```
 
     === ":material-console: User"
 
         ``` console
-        pip install -U "feloopy[mega]==0.2.8" --user
+        pip install -U "feloopy[mega]==0.2.9" --user
         ```
 
 === ":material-console: ipykernel"
@@ -1262,7 +1262,7 @@ This variant includes all packages of free and commercial variants as well as in
     ipykernel is a Python kernel for Jupyter notebooks and is used in Jupyter, Google Colab, and Spyder:
 
     ``` console
-    !pip install -U "feloopy[mega]==0.2.8"
+    !pip install -U "feloopy[mega]==0.2.9"
     ```
 
 

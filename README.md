@@ -11,7 +11,7 @@
 
 <div align="center" style="margin-bottom: 2px;">
 
-![Version](https://img.shields.io/static/v1?label=Version&message=v0.2.8&color=darkgreen)
+![Version](https://img.shields.io/static/v1?label=Version&message=v0.2.9&color=darkgreen)
 ![Release Date](https://img.shields.io/github/release-date/ktafakkori/feloopy?label=release&color=darkgreen)
 [![Documentation](https://readthedocs.org/projects/feloopy/badge/?label=docs&version=latest&color=darkgreen)](https://feloopy.readthedocs.io/en/latest/?badge=latest&color=darkgreen&label=docs)
 [![Discord](https://img.shields.io/discord/1196153377969676399)](https://discord.gg/VpZDeG8wbv)
