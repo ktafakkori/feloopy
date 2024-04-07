@@ -5,5 +5,3 @@ try:
     from .extras import *
 except ImportError:
     pass
-
-from .feloopy import search, model, implement
