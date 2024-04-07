@@ -14,15 +14,15 @@ common = [
     'numpy',
     'openpyxl==3.1.2',
     'pandas==2.1.3',
-    'plotly==5.18.0',
-    'polars==0.19.19',
-    'psutil==5.9.6',
+    'plotly',
+    'polars',
+    'psutil',
     'py-cpuinfo==9.0.0',
-    'scikit-learn==1.3.2',
+    'scikit-learn',
     'tabulate==0.9.0',
     'win-unicode-console==0.5',
     'xlsxwriter==3.1.9',
-    'tqdm==4.66.1',
+    'tqdm',
 ]
 
 # Interfaces for optimization solvers or algorithms
@@ -37,12 +37,12 @@ nano = pico + [
 ]
 
 micro = nano + [
-    'gekko==1.0.6',
+    'gekko==1.1.0',
     'mealpy==3.0.1',
 ]
 
 mini = micro + [
-    'cvxpy==1.4.1',
+    'cvxpy==1.4.2',
     'ortools==9.8.3296',
 ]
 
@@ -53,13 +53,13 @@ full = mini + [
 ]
 
 stock = full + [
-    'linopy==0.3.2',
+    'linopy==0.3.8',
     'mip==1.15.0',
     'niapy==2.1.0',
     'picos==2.4.17',
-    'pulp==2.7.0',
+    'pulp==2.8.0',
     'pygad==3.2.0',
-    'pyomo==6.7.0',
+    'pyomo==6.7.1',
 ]
 
 # Solvers for optimization problems or algorithms
