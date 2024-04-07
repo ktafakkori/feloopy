@@ -37,7 +37,7 @@ To cite or give credit to FelooPy in publications, projects, presentations, web 
 
 - APA:
 
-   Tafakkori, K. (2024). Efficient and feature-rich integrated decision environment [Python Library]. Retrieved from https://github.com/ktafakkori/feloopy (Original work published April 2024).\
+   Tafakkori, K. (2024). Efficient and feature-rich integrated decision environment [Python Library]. Retrieved from https://github.com/ktafakkori/feloopy (Original work published April 2024).
 
 - In-text:
 
