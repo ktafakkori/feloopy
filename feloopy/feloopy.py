@@ -4638,20 +4638,29 @@ class search(model,Implement):
         key_vars = [],
         scenarios = [],
         benchmark=None,
-        repeat=30,
+        repeat=1,
         verbose=False,
         should_run=True,
         memorize=True,
         report=False,
         control_scenario=0,
         options={},
+        email=None,
+        time_limit=None,
+        cpu_threads=None,
+        absolute_gap=None,
+        relative_gap=None,
         *args, **kwargs
     ):
 
         self.key_params = key_params
         self.key_vars = key_vars
         self.scenarios =  scenarios
-    
+        self.email = email
+        self.cpu_threads = cpu_threads
+        self.time_limit = time_limit
+        self.absolute_gap = absolute_gap
+        self.relative_gap = relative_gap
         self.args = args
         self.kwargs = kwargs 
         self.environment = environment
@@ -4668,6 +4677,7 @@ class search(model,Implement):
         self.options = options
         self.should_benchmark = True if (type(benchmark)==str and benchmark=='all') or (type(benchmark)==list and len(benchmark)>=1) else False
         self.data = {}
+        self.repeat = repeat
         
         self.number_of_objectives = len(self.directions)
         
@@ -4676,7 +4686,7 @@ class search(model,Implement):
         if self.should_run:
 
             if self.should_benchmark: 
-                self.benchmark_results = self.benchmark(algorithms=benchmark, repeat=repeat)
+                self.benchmark_results = self.benchmark(algorithms=benchmark, repeat=self.repeat)
                        
             self.run(verbose=self.verbose)
         
@@ -4707,7 +4717,7 @@ class search(model,Implement):
                 def instance(X):
                     lm = model(method=self.method, name=self.name, interface=self.interface, agent=X)
                     lm = environment(lm)
-                    lm.sol(directions=self.directions,solver_name=self.solver,show_log=self.verbose, solver_options=self.options)
+                    lm.sol(directions=self.directions,solver=self.solver,show_log=self.verbose, solver_options=self.options)
                     return lm[X]
                 
                 self.em = Implement(instance)
@@ -4752,9 +4762,10 @@ class search(model,Implement):
             
         if  self.number_of_objectives==1:
             if self.method in ["exact", "convex", "constraint", "uncertain"]:
-                self.em.sol(directions=self.directions, solver_name=self.solver, show_log=verbose)
+                self.em.sol(directions=self.directions, solver=self.solver, show_log=verbose, email=self.email, time_limit=self.time_limit, cpu_threads=self.cpu_threads,absolute_gap=self.absolute_gap, relative_gap=self.relative_gap)
+                    
             elif self.method == "heuristic":
-                self.em.sol(penalty_coefficient=self.penalty_coefficient)
+                self.em.sol(penalty_coefficient=self.penalty_coefficient, number_of_times=self.repeat)
         else:
             if self.method in ["exact", "convex", "constraint", "uncertain"]:
                 
@@ -4774,7 +4785,13 @@ class search(model,Implement):
                                          objective_id=self.approach,
                                          solver_name=self.solver,
                                          save_vars=True,
-                                         approach_options=self.options
+                                         approach_options=self.options,
+                                         show_log=verbose, 
+                                         email=self.email, 
+                                         time_limit=self.time_limit, 
+                                         cpu_threads=self.cpu_threads,
+                                         absolute_gap=self.absolute_gap, 
+                                         relative_gap=self.relative_gap
                                          )
                 self.time_solve_end = timeit.default_timer()
             elif self.method == "heuristic":
@@ -5262,7 +5279,7 @@ class search(model,Implement):
                     self.em.decision_information_print(self.em.status, 
                                                        show_tensors=False, 
                                                        show_detailed_tensors=False, 
-                                                       box_width=width)
+                                                       box_width=width-2)
                     box.empty()
                     box.bottom()
                 else:

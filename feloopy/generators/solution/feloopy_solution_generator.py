@@ -39,37 +39,38 @@ def generate_solution(model_object, fitness_function, total_features, objectives
                 best_reward_found = Result[1]
         bestreward.pop(0)
 
-        print()
-        hour = []
-        min = []
-        sec = []
-        ave = []
-        for i in range(number_of_times):
-            tothour = round(
-                (time_solve_end[i] - time_solve_begin[i]), 3) % (24 * 3600) // 3600
-            totmin = round(
-                (time_solve_end[i] - time_solve_begin[i]), 3) % (24 * 3600) % 3600 // 60
-            totsec = round(
-                (time_solve_end[i] - time_solve_begin[i]), 3) % (24 * 3600) % 3600 % 60
-            hour.append(tothour)
-            min.append(totmin)
-            sec.append(totsec)
-            ave.append(round((time_solve_end[i]-time_solve_begin[i])*10**6))
+        if show_log:
+            print()
+            hour = []
+            min = []
+            sec = []
+            ave = []
+            for i in range(number_of_times):
+                tothour = round(
+                    (time_solve_end[i] - time_solve_begin[i]), 3) % (24 * 3600) // 3600
+                totmin = round(
+                    (time_solve_end[i] - time_solve_begin[i]), 3) % (24 * 3600) % 3600 // 60
+                totsec = round(
+                    (time_solve_end[i] - time_solve_begin[i]), 3) % (24 * 3600) % 3600 % 60
+                hour.append(tothour)
+                min.append(totmin)
+                sec.append(totsec)
+                ave.append(round((time_solve_end[i]-time_solve_begin[i])*10**6))
 
-        print("~~~~~~~\nTIME INFO\n~~~~~~~")
-        print(tb({
-            "cpt (ave)": [np.average(ave), "%02d:%02d:%02d" % (np.average(hour), np.average(min), np.average(sec))],
-            "cpt (std)": [np.std(ave), "%02d:%02d:%02d" % (np.std(hour), np.std(min), np.std(sec))],
-            "unit": ["micro sec", "h:m:s"]
-        }, headers="keys", tablefmt="github"))
-        print()
+            print("~~~~~~~\nTIME INFO\n~~~~~~~")
+            print(tb({
+                "cpt (ave)": [np.average(ave), "%02d:%02d:%02d" % (np.average(hour), np.average(min), np.average(sec))],
+                "cpt (std)": [np.std(ave), "%02d:%02d:%02d" % (np.std(hour), np.std(min), np.std(sec))],
+                "unit": ["micro sec", "h:m:s"]
+            }, headers="keys", tablefmt="github"))
+            print()
 
-        print("~~~~~~~\nOBJ INFO\n~~~~~~~")
-        print(tb({
-            "obj": [np.max(bestreward), np.average(bestreward), np.std(bestreward), np.min(bestreward)],
-            "unit": ["max", "average", "standard deviation", "min"]
-        }, headers="keys", tablefmt="github"))
-        print("~~~~~~~")
+            print("~~~~~~~\nOBJ INFO\n~~~~~~~")
+            print(tb({
+                "obj": [np.max(bestreward), np.average(bestreward), np.std(bestreward), np.min(bestreward)],
+                "unit": ["max", "average", "standard deviation", "min"]
+            }, headers="keys", tablefmt="github"))
+            print("~~~~~~~")
 
         best_agent = best_agent_found
         best_reward = best_reward_found
