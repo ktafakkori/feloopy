@@ -1271,7 +1271,7 @@ This variant includes all packages of free and commercial variants as well as in
 To contribute to the project, support the developer with pull requests, and get the latest updates, you can install a development variant as follows:
 
 ```bash
-pip install -U git+https://github.com/ktafakkori/feloopy.git#egg=feloopy[variant_name]
+pip install -U' git+https://github.com/ktafakkori/feloopy.git#egg=feloopy[variant_name]'
 ```
 
 or
