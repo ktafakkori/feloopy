@@ -21,7 +21,6 @@ To cite or give credit to FelooPy in publications, projects, presentations, web 
 
 ### Version>=0.2.9
 
-
 - LaTeX:
 
    ```console
