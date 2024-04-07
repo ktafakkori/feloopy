@@ -25,6 +25,8 @@
 ![Source Users](https://img.shields.io/github/downloads/ktafakkori/feloopy/total?label=source%20users&color=blue)
 </div>
 
+FelooPy (pronounced /fɛlupaɪ/) is a comprehensive and versatile Decision Science and Operations Research library. It allows for coding, modeling, and solving decision problems and aligns with low or no-code requirements, letting you focus more on analytics. The library covers various categories of mathematical and statistical methods for decision-making and utilizes numerous interfaces and solvers without requiring prompting large language models or learning complex coding syntaxes. It is primarily developed in Python, which makes it accessible and callable from multiple programming languages.
+
 [This](https://github.com/ktafakkori/feloopy) is FelooPy project's repository hosted by GitHub.  For more information, please refer to FelooPy's [documentation](https://feloopy.readthedocs.io/en/latest/).
 
 ## Quick installation
