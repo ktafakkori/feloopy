@@ -1656,7 +1656,6 @@ class model(
                     if self.features['dimensions'][j] == 0:
 
                         if self.get(self.features['variables'][(i,j)]) not in [0, None]:
-
                             print(f"│ {j} =", self.get(self.features['variables'][(i,j)]), " "* (box_width-(len(f"│ {j} =") + len(str(self.get(self.features['variables'][(i,j)]))))-1) + "│")
 
                     elif len(self.features['dimensions'][j])==1:
@@ -1682,18 +1681,18 @@ class model(
 
                     if self.features['dimensions'][j] == 0:
                             if self.get_start(self.features['variables'][(i,j)])!=None:
-                                print(f"│ {j} =", [self.get_start(self.features['variables'][(i,j)]), self.get_end(self.features['variables'][(i,j)])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)]), self.get_end(self.features['variables'][(i,j)])])))-3) + "│")
+                                print(f"│ {j} =", [self.get_start(self.features['variables'][(i,j)]), self.get_end(self.features['variables'][(i,j)])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)]), self.get_end(self.features['variables'][(i,j)])])))-1) + "│")
 
 
                     elif len(self.features['dimensions'][j])==1:                    
                         for k in fix_dims(self.features['dimensions'][j])[0]:
                             if self.get_start(self.features['variables'][(i,j)][k])!=None:
-                                print(f"│ {j}[{k}] =", [self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])])))-3) + "│")
+                                print(f"│ {j}[{k}] =", [self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])])))-1) + "│")
 
                     else:                    
                         for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
                             if self.get_start(self.features['variables'][(i,j)][k])!=None:
-                                print(f"│ {j}[{k}] =", [self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])])))-3) + "│")
+                                print(f"│ {j}[{k}] =", [self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])])))-1) + "│")
                     
         else:
             
@@ -1722,17 +1721,17 @@ class model(
 
                     if self.features['dimensions'][j] == 0:
                             if self.get_start(self.features['variables'][(i,j)])!=None:
-                                print(f"│ {j} =", [self.get_start(self.features['variables'][(i,j)]), self.get_end(self.features['variables'][(i,j)])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)]), self.get_end(self.features['variables'][(i,j)])])))-3) + "│")
+                                print(f"│ {j} =", [self.get_start(self.features['variables'][(i,j)]), self.get_end(self.features['variables'][(i,j)])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)]), self.get_end(self.features['variables'][(i,j)])])))-1) + "│")
 
                     elif len(self.features['dimensions'][j])==1:                    
                         for k in fix_dims(self.features['dimensions'][j])[0]:
                             if self.get_start(self.features['variables'][(i,j)][k])!=None:
-                                print(f"│ {j}[{k}] =", [self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])])))-3) + "│")
+                                print(f"│ {j}[{k}] =", [self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])])))-1) + "│")
 
                     else:                    
                         for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
                             if self.get_start(self.features['variables'][(i,j)][k])!=None:
-                                print(f"│ {j}[{k}] =", [self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])])))-3) + "│")
+                                print(f"│ {j}[{k}] =", [self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)][k]), self.get_end(self.features['variables'][(i,j)][k])])))-1) + "│")
                             
     # Methods to work with input and output data.
 
@@ -3531,8 +3530,8 @@ class Implement:
                 return ('feasible' in status or 'optimal' in status) and 'infeasible' not in status
             except:
                 return False
-    def decision_information_print(self, status, show_tensors, show_detailed_tensors, box_width=90):
-        
+            
+    def decision_information_print(self, status, show_tensors, show_detailed_tensors, box_width=88):
         
         if show_detailed_tensors: show_tensors=True
         

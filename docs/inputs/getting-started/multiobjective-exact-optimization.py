@@ -24,7 +24,7 @@ payoff, conflict, pareto, variables = flp.sol_multi(
     ["max", "max"],
     "cplex",
     objective_id="ecm",
-    approach_options={"payoff_method": "seperated", "intervals": 100},
+    approach_options={"payoff_method": "separated", "intervals": 100},
 )
 
 print("Payoff table")

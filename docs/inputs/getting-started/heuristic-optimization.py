@@ -4,7 +4,7 @@ import feloopy as flp
 def instance(X):
 
     # Define model instance
-    m = flp.model(name="model_name", method="heuristic", interface="feloopy", X)
+    m = flp.model(name="model_name", method="heuristic", interface="feloopy", agent=X)
 
     # Define variables for the model instance
     x = m.bvar(name="x")
@@ -18,7 +18,7 @@ def instance(X):
     m.obj((x - 1) ** 2 + (y - 1) ** 2)
 
     # Solve the model instance
-    m.sol(["max"], "ga", {"epoch": 1000, "pop_size": 100})
+    m.sol(directions=["max"], solver="ga", solver_options={"epoch": 1000, "pop_size": 100})
 
     return m[X]
 

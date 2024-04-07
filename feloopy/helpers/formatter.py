@@ -516,6 +516,7 @@ def status_row_print(ObjectivesDirections, status, box_width=88):
 def solution_print(
     ObjectivesDirections, status, get_obj, get_payoff=None, box_width=88
 ):
+
     if len(ObjectivesDirections) != 1:
         if status[0] != "infeasible (constrained)":
             for i in range(len(status)):

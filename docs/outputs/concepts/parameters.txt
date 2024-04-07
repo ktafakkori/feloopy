@@ -1,4 +1,3 @@
-
 # --8<-- [start:generatingparameters]
 [ -1.51394967   1.88872941  -0.14801146 -10.24273945   0.23319163
    0.13434272   0.56933826  -1.11252977   5.82625894   2.77364089]
@@ -33,4 +32,49 @@
 # --8<-- [end:storingaparameter]
 
 # --8<-- [start:loadingaparameter1]
-Error in parameters.py: [Errno 2] No such file or directory: 'data.xlsx'
+1
+<class 'numpy.int64'>
+# --8<-- [end:loadingaparameter1]
+
+# --8<-- [start:loadingaparameter2]
+[1 2 3 4]
+<class 'numpy.ndarray'>
+# --8<-- [end:loadingaparameter2]
+
+# --8<-- [start:loadingaparameter3]
+[[ 1  5  9]
+ [ 2  6 10]
+ [ 3  7 11]
+ [ 4  8 12]]
+<class 'numpy.ndarray'>
+# --8<-- [end:loadingaparameter3]
+
+# --8<-- [start:loadingaparameter4]
+[[[ 1.  5.]
+  [ 9. 13.]]
+
+ [[ 2.  6.]
+  [10. 14.]]
+
+ [[ 3.  7.]
+  [11. 15.]]
+
+ [[ 4.  8.]
+  [12. 16.]]]
+<class 'numpy.ndarray'>
+# --8<-- [end:loadingaparameter4]
+
+# --8<-- [start:loadingaparameter5]
+[[[ 1.  9.]
+  [ 2. 10.]]
+
+ [[ 3. 11.]
+  [ 4. 12.]]
+
+ [[ 5. 13.]
+  [ 6. 14.]]
+
+ [[ 7. 15.]
+  [ 8. 16.]]]
+<class 'numpy.ndarray'>
+# --8<-- [end:loadingaparameter5]
