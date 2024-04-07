@@ -55,7 +55,7 @@ def sol_multi(
     M = np.copy(len(directions))
     dir_map = {'max': -1, 'min': 1}
 
-    if approach_options.get('payoff_method', 'lexicographic') == 'separated':
+    if approach_options.get('payoff_method', 'separated') == 'separated':
         
         payoff = np.zeros([M, M])
         for m in range(M):
