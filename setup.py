@@ -33,6 +33,7 @@ pico = [
 
 nano = pico + [
     'pymprog==1.1.2',
+    'highspy',
 ]
 
 micro = nano + [
@@ -149,7 +150,7 @@ if __name__ == '__main__':
         
         version = '0.2.9',
         
-        description = 'FelooPy: An integrated optimization environment (IOE) for automated operations research (AutoOR) in Python.',
+        description = 'FelooPy: Efficient and feature-rich integrated decision environment',
         
         packages = find_packages(include=['feloopy', 'feloopy.*']),
         

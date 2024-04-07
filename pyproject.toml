@@ -4,7 +4,7 @@
 [tool.poetry]
 name = "feloopy"
 version = "0.2.9"
-description = "FelooPy: An integrated optimization environment (IOE) for automated operations research (AutoOR) in Python."
+description = "FelooPy: Efficient and feature-rich integrated decision environment"
 authors = ["Keivan Tafakkori <k.tafakkori@gmail.com>"]
 license = "MIT"
 
@@ -32,11 +32,13 @@ tqdm= "4.66.1"
 
 [tool.poetry.group.nano.dependencies]
 pymprog = "1.1.2"
+highspy = ""
 
 [tool.poetry.group.micro.dependencies]
 gekko = "1.0.6"
 mealpy = "3.0.1"
 pymprog = "1.1.2"
+highspy = ""
 
 [tool.poetry.group.mini.dependencies]
 cvxpy = "1.4.1"
@@ -44,6 +46,7 @@ gekko = "1.0.6"
 mealpy = "3.0.1"
 ortools = "9.8.3296"
 pymprog = "1.1.2"
+highspy = ""
 
 [tool.poetry.group.full.dependencies]
 cvxpy = "1.4.1"
@@ -54,6 +57,7 @@ pydecision = "4.3.9"
 pymoo = "0.6.1.1"
 pymprog = "1.1.2"
 rsome = "1.2.5"
+highspy = ""
 
 [tool.poetry.group.stock.dependencies]
 cvxpy = "1.4.1"
@@ -71,6 +75,7 @@ pymoo = "0.6.1.1"
 pymprog = "1.1.2"
 pyomo = "6.7.0"
 rsome = "1.2.5"
+highspy = ""
 
 [tool.poetry.group.plus_gurobi.dependencies]
 gurobipy = "11.0.0"
@@ -116,6 +121,7 @@ pyomo = "6.7.0"
 rsome = "1.2.5"
 xpress = "9.2.5"
 gampspy = ""
+highspy = ""
 
 [tool.poetry.group.only_cylp.dependencies]
 cylp = "0.92.2"
@@ -147,6 +153,7 @@ pyomo = "6.7.0"
 rsome = "1.2.5"
 xpress = "9.2.5"
 gampspy = ""
+highspy = ""
 
 [tool.poetry.scripts]
 feloopy = "feloopy.cli:main"
