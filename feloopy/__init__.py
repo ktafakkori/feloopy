@@ -6,4 +6,4 @@ try:
 except ImportError:
     pass
 
-from .feloopy import *
+from .feloopy import search, model, implement
