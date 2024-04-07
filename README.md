@@ -27,15 +27,33 @@
 
 [This](https://github.com/ktafakkori/feloopy) is FelooPy project's repository hosted by GitHub.  For more information, please refer to FelooPy's [documentation](https://feloopy.readthedocs.io/en/latest/).
 
-
-## Installation
+## Quick installation
 
 You can install `feloopy` inside a Python>=3.10.x environment.
 
 ```py
-pip install feloopy
+pip install -U "feloopy[stock]==0.2.9"
 ```
 
+## Quick test
+
+Here is an example to test FelooPy's functionality:
+
+```py
+import feloopy as flp
+
+m = flp.model(name="model_name", method="exact", interface="pymprog")
+
+x = m.bvar(name="x")
+y = m.pvar(name="y", bound=[0, 1])
+m.con(x + y <= 1, name="c1")
+m.con(x - y >= 1, name="c2")
+m.obj(x + y)
+
+m.sol(directions=["max"], solver="glpk")
+
+m.clean_report()
+```
 
 
 ## Citation
