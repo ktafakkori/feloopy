@@ -55,7 +55,6 @@ m.sol(directions=["max"], solver="glpk")
 m.clean_report()
 ```
 
-
 ## Citation
 
 To cite or give credit to FelooPy in publications, projects, presentations, web pages, blog posts, etc. please use one of the following entries, based on the used version:
