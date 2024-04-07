@@ -4692,6 +4692,11 @@ class search(model,Implement):
         self.report()
         
     def create_env(self, environment):
+        
+        self.penalty_coefficient=self.options.get("penalty_coefficient",0)
+        if "penalty_coefficient" in self.options.keys():
+            del self.options["penalty_coefficient"]
+    
         if self.method in ["exact", "convex", "constraint", "uncertain"]:
             self.em = model(method=self.method,name=self.name,interface=self.interface)
             self.em = self.environment(self.em, *self.args, **self.kwargs)
@@ -4701,7 +4706,7 @@ class search(model,Implement):
                 def instance(X):
                     lm = model(method=self.method, name=self.name, interface=self.interface, agent=X)
                     lm = environment(lm)
-                    lm.sol(directions=self.directions,solver_name=self.solver,show_log=self.verbose, solver_options={'epoch':10, "pop_size":10})
+                    lm.sol(directions=self.directions,solver_name=self.solver,show_log=self.verbose, solver_options=self.options)
                     return lm[X]
                 
                 self.em = Implement(instance)
@@ -4710,7 +4715,7 @@ class search(model,Implement):
                 def instance(X):
                     m = model(self.name,self.method, self.interface,X)
                     m = self.environment(m, *self.args, **self.kwargs)
-                    m.sol(self.directions, self.solver, {'n_gen': 100}, obj_id='all')
+                    m.sol(self.directions, self.solver, self.options, obj_id='all')
                     return m[X]
 
                 self.em = implement(instance)
@@ -4748,7 +4753,7 @@ class search(model,Implement):
             if self.method in ["exact", "convex", "constraint", "uncertain"]:
                 self.em.sol(directions=self.directions, solver_name=self.solver, show_log=verbose)
             elif self.method == "heuristic":
-                self.em.sol(penalty_coefficient=0.1)
+                self.em.sol(penalty_coefficient=self.penalty_coefficient)
         else:
             if self.method in ["exact", "convex", "constraint", "uncertain"]:
                 
@@ -4762,22 +4767,17 @@ class search(model,Implement):
                     self.em = self.environment(self.em, *self.args, **self.kwargs)
                     return self.em
                 
-                
                 self.time_solve_begin = timeit.default_timer()
                 self.result = sol_multi(instance=instance,
                                          directions=self.directions.copy(),
                                          objective_id=self.approach,
                                          solver_name=self.solver,
                                          save_vars=True,
-                                         approach_options={
-                                             "payoff_method": "separated",
-                                             "intervals": 5,
-                                             "wm": "random",
-                                         }
+                                         approach_options=self.options
                                          )
                 self.time_solve_end = timeit.default_timer()
             elif self.method == "heuristic":
-                self.em.solve(show_log=False, penalty_coefficient=0.1)
+                self.em.solve(show_log=False, penalty_coefficient=self.penalty_coefficient)
 
         if self.method == "madm":
             self.time_solve_begin = timeit.default_timer()
@@ -5035,13 +5035,13 @@ class search(model,Implement):
 
         return self.ben_results
 
-    def clean_report(self):
+    def clean_report(self,full=False):
 
         command = "cls" if os.name == "nt" else "clear"
         os.system(command)
-        self.report()
+        self.report(full=full)
 
-    def report(self, skip_system_information=True,width=90,style=1,skip=False):
+    def report(self, skip_system_information=True,width=90,style=1,skip=False,full=False):
         
         # First box: FelooPy
         print()
@@ -5064,7 +5064,7 @@ class search(model,Implement):
         formatted_date = current_datetime.strftime("%Y-%m-%d")
         formatted_time = current_datetime.strftime("%H:%M:%S")
     
-        box.top(left="FelooPy v0.2.9", right="Released March 2024")
+        box.top(left="FelooPy v0.2.9", right="Released April 2024")
         box.empty()
         
         box.clear_columns(list_of_strings=["", f"Interface: {self.interface}"], label=f"Date: {formatted_date}", max_space_between_elements=4)
@@ -5094,9 +5094,7 @@ class search(model,Implement):
                     pconfigurated = "X Unconfigured"
             except:
                 pconfigurated = "N/A"
-
-
-               
+    
         import platform
         import psutil
         import cpuinfo
@@ -5162,50 +5160,51 @@ class search(model,Implement):
             self.em._generate_metric_info()
 
         # Mathematical Model
-        try:
-            import textwrap
-            tline_text('Math', box_width=90)
-            empty_line()
-            obdirs = 0
-            for objective in self.features['objectives']:
-                wrapped_objective = textwrap.fill(str(objective), width=90)
-                boxed(str(f"obj: {self.features['directions'][obdirs]} {wrapped_objective}"))
-                obdirs += 1
-            left_align('s.t.')
-            if self.features['constraint_labels'][0] != None:
-                for constraint in sorted(zip(self.features['constraint_labels'], self.features['constraints']), key=lambda x: x[0]):
-                    wrapped_constraint = textwrap.fill(str(constraint[1]), width=90)
-                    boxed(str(f"con {constraint[0]}: {wrapped_constraint}"))
-            else:
-                counter = 0
-                for constraint in self.features['constraints']:
-                    wrapped_constraint = textwrap.fill(str(constraint), width=90)
-                    boxed(str(f"con {counter}: {wrapped_constraint}"))
-                    counter += 1
-            empty_line()
-            bline()
-        except:
-            pass
+        if full:
+            try:
+                import textwrap
+                tline_text('Math', box_width=90)
+                empty_line()
+                obdirs = 0
+                for objective in self.features['objectives']:
+                    wrapped_objective = textwrap.fill(str(objective), width=90)
+                    boxed(str(f"obj: {self.features['directions'][obdirs]} {wrapped_objective}"))
+                    obdirs += 1
+                left_align('s.t.')
+                if self.features['constraint_labels'][0] != None:
+                    for constraint in sorted(zip(self.features['constraint_labels'], self.features['constraints']), key=lambda x: x[0]):
+                        wrapped_constraint = textwrap.fill(str(constraint[1]), width=90)
+                        boxed(str(f"con {constraint[0]}: {wrapped_constraint}"))
+                else:
+                    counter = 0
+                    for constraint in self.features['constraints']:
+                        wrapped_constraint = textwrap.fill(str(constraint), width=90)
+                        boxed(str(f"con {counter}: {wrapped_constraint}"))
+                        counter += 1
+                empty_line()
+                bline()
+            except:
+                pass
         
-        # Slack duual
+            # Slack duual
 
-        tline_text("Extra")
-        empty_line()
-        try:
-            left_align("Slack:")
-            for i in self.em.features['constraint_labels']:
-                left_align(str(i) + " = " + str(self.em.get_slack(i)))
+            tline_text("Extra")
             empty_line()
-        except:
-            pass
-        try:
-            left_align("Dual:")
-            for i in self.em.features['constraint_labels']:
-                left_align(str(i) + " = " + str(self.em.get_dual(i)))
-            empty_line()
-        except:
-            pass
-        bline()
+            try:
+                left_align("Slack:")
+                for i in self.em.features['constraint_labels']:
+                    left_align(str(i) + " = " + str(self.em.get_slack(i)))
+                empty_line()
+            except:
+                pass
+            try:
+                left_align("Dual:")
+                for i in self.em.features['constraint_labels']:
+                    left_align(str(i) + " = " + str(self.em.get_dual(i)))
+                empty_line()
+            except:
+                pass
+            bline()
     
 
         if self.healthy() == False:
