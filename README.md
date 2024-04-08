@@ -33,14 +33,14 @@ FelooPy (pronounced /fɛlupaɪ/) is a comprehensive and versatile Decision Scien
 
 You can install `feloopy` inside a Python>=3.10.x environment.
 
-```py
+```bash
 pip install -U "feloopy[stock]==0.2.9"
 ```
 
 For supporting the developer, testing the latest version, and reporting bugs or contributing to the code base, you can use the following command:
 
 ```bash
-pip install -U' git+https://github.com/ktafakkori/feloopy.git#egg=feloopy[stock]'
+pip install -U 'git+https://github.com/ktafakkori/feloopy.git#egg=feloopy[stock]'
 ```
 
 ## Quick test
