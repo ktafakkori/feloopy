@@ -10,8 +10,6 @@
 </div>
 
 <h2 align='center'>Efficient & Feature-Rich Integrated Decision Environment</h2>
-
-
 <div align="center" style="margin-bottom: 2px;">
 
 ![Version](https://img.shields.io/static/v1?label=Version&message=v0.3.0&color=darkgreen)
