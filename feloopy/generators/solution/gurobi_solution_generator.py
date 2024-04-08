@@ -55,7 +55,6 @@ def generate_solution(features):
         model_object.setParam('LogFile', f'{save}.log')
 
     if len(solver_options) != 0:
-
         for key in solver_options:
             model_object.setParam(key, solver_options[key])
 

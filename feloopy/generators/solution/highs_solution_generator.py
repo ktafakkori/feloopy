@@ -40,8 +40,8 @@ def generate_solution(features):
         model_object.setOptionValue('mip_abs_gap', absolute_gap)
     if relative_gap:
         model_object.setOptionValue('mip_rel_gap', relative_gap)
-    for key,value in solver_options:
-        model_object.setOptionValue(key, value)
+    for key in solver_options.keys():
+        model_object.setOptionValue(key, solver_options[key])
             
     match debug:
         case False:
