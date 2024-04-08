@@ -3,7 +3,7 @@
     <a align="center" href="" target="https://ktafakkori.github.io">
       <img
         width="100%"
-        src="https://github.com/ktafakkori/feloopy/blob/main/docs/assets/banner.png"
+        src="https://github.com/ktafakkori/feloopy/raw/main/docs/assets/banner.png"
         >
     </a>
   </p>
