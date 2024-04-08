@@ -18,6 +18,7 @@ import timeit
 import copy
 
 import numpy as np
+from . import *
 
 
 __author__ = ['Keivan Tafakkori']
