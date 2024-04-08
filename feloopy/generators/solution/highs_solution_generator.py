@@ -29,14 +29,22 @@ def generate_solution(features):
     solver_options = features['solver_options']
 
     if solver_name not in highs_solver_selector.keys():
-
-        raise RuntimeError(
-            "Using solver '%s' is not supported by 'highs'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
-
+        raise RuntimeError("Using solver '%s' is not supported by 'highs'! \nPossible fixes: \n1) Check the solver name. \n2) Use another interface. \n" % (solver_name))
+    
+    model_object.setOptionValue('output_flag', log)
+    if time_limit:
+        model_object.setOptionValue('time_limit', time_limit)
+    if thread_count:
+        model_object.setOptionValue('threads', thread_count)
+    if absolute_gap:
+        model_object.setOptionValue('mip_abs_gap', absolute_gap)
+    if relative_gap:
+        model_object.setOptionValue('mip_rel_gap', relative_gap)
+    for key,value in solver_options:
+        model_object.setOptionValue(key, value)
+            
     match debug:
-
         case False:
-
             counter = 0
             for constraint, label in zip(model_constraints, constraint_labels):
                 if label:
@@ -44,7 +52,6 @@ def generate_solution(features):
                 else:
                     model_object.addConstr(constraint)
                 counter += 1
-
             match directions[objective_id]:
                 case "min":
                     time_solve_begin = timeit.default_timer()
@@ -54,7 +61,6 @@ def generate_solution(features):
                     time_solve_begin = timeit.default_timer()
                     result = model_object.maximize(model_objectives[objective_id])
                     time_solve_end = timeit.default_timer()
-            
             generated_solution = result, [time_solve_begin, time_solve_end]
-
     return generated_solution
+
