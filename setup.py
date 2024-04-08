@@ -149,7 +149,7 @@ if __name__ == '__main__':
         
         name = 'feloopy',
         
-        version = '0.2.9',
+        version = '0.3.0',
         
         description = 'FelooPy: Efficient and feature-rich integrated decision environment',
         

@@ -1425,7 +1425,7 @@ class model(
             now = datetime.datetime.now()
             date_str = now.strftime("Date: %Y-%m-%d")
             time_str = now.strftime("Time: %H:%M:%S")
-            tline_text("FelooPy v0.2.9")
+            tline_text("FelooPy v0.3.0")
             empty_line()
             two_column(date_str, time_str)
             two_column(f"Interface: {self.interface_name}", f"Solver: {self.solver_name}")
@@ -3411,7 +3411,7 @@ class Implement:
             now = datetime.datetime.now()
             date_str = now.strftime("Date: %Y-%m-%d")
             time_str = now.strftime("Time: %H:%M:%S")
-            tline_text("FelooPy v0.2.9")
+            tline_text("FelooPy v0.3.0")
             empty_line()
             two_column(date_str, time_str)
             two_column(f"Interface: {self.interface_name}", f"Solver: {self.solver_name}")
@@ -4454,7 +4454,7 @@ class MADM:
         date_str = now.strftime("Date: %Y-%m-%d")
         time_str = now.strftime("Time: %H:%M:%S")
 
-        tline_text("FelooPy v0.2.9")
+        tline_text("FelooPy v0.3.0")
         empty_line()
         two_column(date_str, time_str)
 
@@ -5083,7 +5083,7 @@ class search(model,Implement):
         formatted_date = current_datetime.strftime("%Y-%m-%d")
         formatted_time = current_datetime.strftime("%H:%M:%S")
     
-        box.top(left="FelooPy v0.2.9", right="Released April 2024")
+        box.top(left="FelooPy v0.3.0", right="Released April 2024")
         box.empty()
         
         box.clear_columns(list_of_strings=["", f"Interface: {self.interface}"], label=f"Date: {formatted_date}", max_space_between_elements=4)
