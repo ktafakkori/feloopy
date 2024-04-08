@@ -4,7 +4,7 @@
       <img
         width="100%"
         src="https://github.com/ktafakkori/feloopy/blob/main/docs/assets/banner.png"
-      >
+        >
     </a>
   </p>
 </div>
