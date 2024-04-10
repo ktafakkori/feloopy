@@ -2,7 +2,7 @@
 from feloopy import *
 
 # Environment
-m = learner_model('convex', 'linear_regression_problem', 'cvxpy')
+m = model(method='convex', name='linear_regression_problem', interface='cvxpy')
 
 # Dataset
 a = np.array([[1, 2, 2], [2, 3, 3], [3, 4, 5], [4, 5, 6], [5, 7, 8]])  # Features
@@ -32,7 +32,7 @@ m.obj((2*len(T))**(-1)*sum((nor_a[t, :]@x + z -nor_b[t])**2 for t in T))
 m.sol(['min'], 'gurobi')
 
 # Report
-m.report()
+m.report(show_tensors=True)
 
 # Store
 w = [] 
