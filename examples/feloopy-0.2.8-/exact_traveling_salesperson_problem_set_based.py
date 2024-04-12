@@ -40,5 +40,3 @@ for i, j in sets(U, N):
 m.sol(['min'], 'glop', show_log=False)
 
 m.report(show_tensors=True)
-
-print(m.features)
