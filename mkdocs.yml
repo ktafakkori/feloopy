@@ -28,6 +28,7 @@ nav:
 theme:
 
   name: material
+  font: false
   palette:
 
   # Palette toggle for light mode
@@ -97,6 +98,9 @@ plugins:
 
 extra_css:
   - stylesheets/better.css
+  - https://fonts.cdnfonts.com/css/noto-serif
+  - https://fonts.cdnfonts.com/css/noto-mono
+
 
 extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML

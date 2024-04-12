@@ -16,7 +16,8 @@ span .md-typeset .emojione, .md-typeset .gemoji, .md-typeset .twemoji {
 }
 
 :root {
-  --md-code-font: "Source Code Pro" !important;
+  --md-text-font: "Noto Serif";
+  --md-code-font: "Noto Mono";
 }
 
 .contributor_icon {
