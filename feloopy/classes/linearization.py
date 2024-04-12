@@ -16,7 +16,7 @@ import math as mt
 class LinearizationClass:
     
 
-    def lin_piecewise(self, slopes: List[float], intercepts: List[float], breakpoints: List[float]) -> Expression:
+    def lin_piecewise(self, name: str, var, slopes: List[float], intercepts: List[float], breakpoints: List[float]) -> Expression: 
         """
         Implements a piecewise linear function in the context of mathematical programming.
 
@@ -36,35 +36,38 @@ class LinearizationClass:
         except:
             self.features['indicators'] = [0]
 
-        x = self.pvar(f"indicatorr{self.features['indicators'][-1]}", range(len(breakpoints)))
-        y = self.bvar(f"indicatorr{self.features['indicators'][-1]}", range(len(breakpoints)))
+        x = self.pvar(name=f"val_{name}_{self.features['indicators'][-1]}",  dim=[range(len(breakpoints)-1)])
+        y = self.bvar(name=f"part_{name}_{self.features['indicators'][-1]}", dim=[range(len(breakpoints)-1)])
 
         for i in range(len(breakpoints) - 1):
-            self.con((breakpoints[i+1] - breakpoints[i]) * y[i] <= x[i])
-            self.con(x[i] <= (breakpoints[i+1] - breakpoints[i]) * y[i+1])
+            self.con(breakpoints[i]*y[i] <= x[i])
+            self.con(x[i] <= breakpoints[i+1] * y[i])
 
-        self.con(sum(y[i] for i in range(len(breakpoints))) == 1)
+        self.con(sum(y[i] for i in range(len(breakpoints)-1)) == 1)    
+        self.con(var==sum(x[i] for i in range(len(breakpoints) - 1)))
+        
+        return sum(slopes[i] * x[i] + intercepts[i]* y[i] for i in range(len(breakpoints)-1))
 
-        return sum((slopes[i] * x[i] + intercepts[i]) * y[i] for i in range(len(breakpoints)))
-
-    def lin_approx(self, f: Callable, x: MultidimVariable, x_range: Tuple[float, float], num_breakpoints: int) -> Expression:
+    def lin_approx(self, name: str, f: Callable, var: MultidimVariable, bound: Tuple[float, float], num_breakpoints: int) -> Expression:
+        
         """
         Implements a piecewise linear approximation of a non-linear function in the context of mathematical programming.
 
         Parameters:
             f (Callable): The non-linear function to be approximated.
             x (MultidimVariable): The variable of the non-linear function.
-            x_range (Tuple[float, float]): A tuple of two numbers representing the minimum and maximum values of x.
+            bound (Tuple[float, float]): A tuple of two numbers representing the minimum and maximum values of x.
             num_breakpoints (int): The number of breakpoints to use in the approximation.
 
         Returns:
             Expression: The piecewise linear approximation of the non-linear function.
         """
-        breakpoints = np.linspace(x_range[0], x_range[1], num_breakpoints)
-        slopes = [(f(breakpoints[i+1]) - f(breakpoints[i])) / (breakpoints[i+1] - breakpoints[i]) for i in range(len(breakpoints)-1)]
-        intercepts = [f(breakpoints[i]) - slopes[i] * breakpoints[i] for i in range(len(breakpoints)-1)]
         
-        return self.lin_piecewise(slopes, intercepts, breakpoints)
+        breakpoints = np.linspace(bound[0], bound[1], num_breakpoints)        
+        slopes = [(f(breakpoints[i+1]) - f(breakpoints[i]))/(breakpoints[i+1]  -  breakpoints[i]) for i in range(len(breakpoints)-1)]          
+        intercepts = [f(breakpoints[i]) - slopes[i] * breakpoints[i] for i in range(len(breakpoints)-1)]        
+
+        return self.lin_piecewise(name,var,slopes, intercepts, breakpoints)
 
     def lin_abs_in_obj(self, expr: Expression, method: int = 0, dir_obj: Optional[str] = None) -> Expression:
         """
