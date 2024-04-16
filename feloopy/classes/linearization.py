@@ -14,7 +14,6 @@ import numpy as np
 import math as mt
 
 class LinearizationClass:
-    
 
     def lin_piecewise(self, name: str, var, slopes: List[float], intercepts: List[float], breakpoints: List[float]) -> Expression: 
         """
@@ -89,39 +88,39 @@ class LinearizationClass:
         """
         if method == 0:
             try:
-                self.features['abs_obj_linearizers'].append(self.features['abs_obj_linearizers'][-1] + 1)
-                self.features['abs_obj_linearizers'].append(self.features['abs_obj_linearizers'][-1] + 1)
+                self.features['abs_obj_lins'].append(self.features['abs_obj_lins'][-1] + 1)
+                self.features['abs_obj_lins'].append(self.features['abs_obj_lins'][-1] + 1)
             except:
-                self.features['abs_obj_linearizers'] = [0, 1]
-            z1 = self.pvar(f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-1]}")
-            z2 = self.pvar(f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-2]}")
+                self.features['abs_obj_lins'] = [0, 1]
+            z1 = self.pvar(f"abs_obj_lin{self.features['abs_obj_lins'][-1]}")
+            z2 = self.pvar(f"abs_obj_lin{self.features['abs_obj_lins'][-2]}")
             self.con(expr == z1 - z2)
             return z1 + z2
 
         if method == 1:
             if dir_obj == 'min':
                 try:
-                    self.features['abs_obj_linearizers'].append(self.features['abs_obj_linearizers'][-1] + 1)
+                    self.features['abs_obj_lins'].append(self.features['abs_obj_lins'][-1] + 1)
                 except:
-                    self.features['abs_obj_linearizers'] = [0]
-                z = self.pvar(f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-1]}")
+                    self.features['abs_obj_lins'] = [0]
+                z = self.pvar(f"abs_obj_lin{self.features['abs_obj_lins'][-1]}")
                 self.scon_abs_leq(expr, z)
                 return z
             elif dir_obj == 'max':
                 try:
-                    self.features['abs_obj_linearizers'].append(self.features['abs_obj_linearizers'][-1] + 1)
+                    self.features['abs_obj_lins'].append(self.features['abs_obj_lins'][-1] + 1)
                 except:
-                    self.features['abs_obj_linearizers'] = [0]
-                z = self.pvar(f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-1]}")
+                    self.features['abs_obj_lins'] = [0]
+                z = self.pvar(f"abs_obj_lin{self.features['abs_obj_lins'][-1]}")
                 self.scon_abs_geq(expr, z)
                 return z
 
         if method == 2:
             try:
-                self.features['abs_obj_linearizers'].append(self.features['abs_obj_linearizers'][-1] + 1)
+                self.features['abs_obj_lins'].append(self.features['abs_obj_lins'][-1] + 1)
             except:
-                self.features['abs_obj_linearizers'] = [0]
-            z = self.pvar(f"abs_obj_linearizer{self.features['abs_obj_linearizers'][-1]}")
+                self.features['abs_obj_lins'] = [0]
+            z = self.pvar(f"abs_obj_lin{self.features['abs_obj_lins'][-1]}")
             self.con(expr + z >= 0)
             return expr + 2 * z
 
@@ -142,18 +141,18 @@ class LinearizationClass:
         """
         if self.features['solution_method'] == 'exact':
             try:
-                self.features['max_linearizers'].append(self.features['max_linearizers'][-1] + 1)
+                self.features['max_lins'].append(self.features['max_lins'][-1] + 1)
             except:
-                self.features['max_linearizers'] = [0]
+                self.features['max_lins'] = [0]
 
             if type_max == 'bvar':
-                z = self.bvar(f"max_linearizer{self.features['max_linearizers'][-1]}")
+                z = self.bvar(f"max_lin{self.features['max_lins'][-1]}")
             elif type_max == 'ivar':
-                z = self.ivar(f"max_linearizer{self.features['max_linearizers'][-1]}")
+                z = self.ivar(f"max_lin{self.features['max_lins'][-1]}")
             elif type_max == 'pvar':
-                z = self.pvar(f"max_linearizer{self.features['max_linearizers'][-1]}")
+                z = self.pvar(f"max_lin{self.features['max_lins'][-1]}")
             elif type_max == 'fvar':
-                z = self.fvar(f"max_linearizer{self.features['max_linearizers'][-1]}")
+                z = self.fvar(f"max_lin{self.features['max_lins'][-1]}")
 
             for item in input_list:
                 self.con(z >= item)
@@ -177,18 +176,18 @@ class LinearizationClass:
             The linearization is performed based on the type of variable chosen for linearization and the lower bound, if provided.
         """
         try:
-            self.features['min_linearizers'].append(self.features['min_linearizers'][-1] + 1)
+            self.features['min_lins'].append(self.features['min_lins'][-1] + 1)
         except:
-            self.features['min_linearizers'] = [0]
+            self.features['min_lins'] = [0]
 
         if type_min == 'bvar':
-            z = self.bvar(f"min_linearizer{self.features['min_linearizers'][-1]}")
+            z = self.bvar(f"min_lin{self.features['min_lins'][-1]}")
         elif type_min == 'ivar':
-            z = self.ivar(f"min_linearizer{self.features['min_linearizers'][-1]}")
+            z = self.ivar(f"min_lin{self.features['min_lins'][-1]}")
         elif type_min == 'pvar':
-            z = self.pvar(f"min_linearizer{self.features['min_linearizers'][-1]}")
+            z = self.pvar(f"min_lin{self.features['min_lins'][-1]}")
         elif type_min == 'fvar':
-            z = self.fvar(f"min_linearizer{self.features['min_linearizers'][-1]}")
+            z = self.fvar(f"min_lin{self.features['min_lins'][-1]}")
 
         for item in input_list:
             self.con(z <= item)
@@ -207,11 +206,11 @@ class LinearizationClass:
             The linearization requires +3 constraints and +1 positive variable.
         """
         try:
-            self.features['bb_linearizers'].append(self.features['bb_linearizers'][-1] + 1)
+            self.features['bb_lins'].append(self.features['bb_lins'][-1] + 1)
         except:
-            self.features['bb_linearizers'] = [0]
+            self.features['bb_lins'] = [0]
 
-        z = self.pvar(f"bb_linearizer{self.features['bb_linearizers'][-1]}")
+        z = self.pvar(f"bb_lin{self.features['bb_lins'][-1]}")
         self.con(z <= binary1)
         self.con(z <= binary2)
         self.con(z >= binary1 + binary2 - 1)
@@ -228,11 +227,11 @@ class LinearizationClass:
             The linearization requires +3 constraints and +1 positive variable.
         """
         try:
-            self.features['bp_linearizers'].append(self.features['bp_linearizers'][-1] + 1)
+            self.features['bp_lins'].append(self.features['bp_lins'][-1] + 1)
         except:
-            self.features['bp_linearizers'] = [0]
+            self.features['bp_lins'] = [0]
 
-        z = self.pvar(f"bp_linearizer{self.features['bp_linearizers'][-1]}")
+        z = self.pvar(f"bp_lin{self.features['bp_lins'][-1]}")
         self.con(z <= positive)
         self.con(z <= binary * ub_positive)
         self.con(z >= positive - ub_positive * (1 - binary))
@@ -249,11 +248,11 @@ class LinearizationClass:
             The linearization requires +3 constraints and +1 positive variable.
         """
         try:
-            self.features['bi_linearizers'].append(self.features['bi_linearizers'][-1] + 1)
+            self.features['bi_lins'].append(self.features['bi_lins'][-1] + 1)
         except:
-            self.features['bi_linearizers'] = [0]
+            self.features['bi_lins'] = [0]
 
-        z = self.pvar(f"bi_linearizer{self.features['bi_linearizers'][-1]}")
+        z = self.pvar(f"bi_lin{self.features['bi_lins'][-1]}")
         self.con(z <= integer)
         self.con(z <= binary * ub_integer)
         self.con(z >= integer - ub_integer * (1 - binary))
@@ -272,12 +271,12 @@ class LinearizationClass:
             (mt.ceil(mt.log2(ub_integer + 1))) binary variables.
         """
         try:
-            self.features['ip_linearizers'].append(self.features['ip_linearizers'][-1] + 1)
+            self.features['ip_lins'].append(self.features['ip_lins'][-1] + 1)
         except:
-            self.features['ip_linearizers'] = [0]
+            self.features['ip_lins'] = [0]
 
-        z = self.pvar(f"ip_linearizer{self.features['ip_linearizers'][-1]}", [range(mt.ceil(mt.log2(ub_integer + 1)))])
-        x = self.bvar(f"ip_binary_convert{self.features['ip_linearizers'][-1]}", [range(mt.ceil(mt.log2(ub_integer + 1)))])
+        z = self.pvar(f"ip_lin{self.features['ip_lins'][-1]}", [range(mt.ceil(mt.log2(ub_integer + 1)))])
+        x = self.bvar(f"ip_binary_convert{self.features['ip_lins'][-1]}", [range(mt.ceil(mt.log2(ub_integer + 1)))])
         
         self.con(integer == sum(2**i * x[i] for i in range(mt.ceil(mt.log2(ub_integer + 1)))))
 
@@ -302,12 +301,12 @@ class LinearizationClass:
         """
 
         try:
-            self.features['ii_linearizers'].append(self.features['ii_linearizers'][-1] + 1)
+            self.features['ii_lins'].append(self.features['ii_lins'][-1] + 1)
         except:
-            self.features['ii_linearizers'] = [0]
+            self.features['ii_lins'] = [0]
 
-        z = self.pvar(f"ii_linearizer{self.features['ii_linearizers'][-1]}", [range(mt.ceil(mt.log2(ub_integer1 + 1)))])
-        x = self.bvar(f"ii_binary_convert{self.features['ii_linearizers'][-1]}", [range(mt.ceil(mt.log2(ub_integer1 + 1)))])
+        z = self.pvar(f"ii_lin{self.features['ii_lins'][-1]}", [range(mt.ceil(mt.log2(ub_integer1 + 1)))])
+        x = self.bvar(f"ii_binary_convert{self.features['ii_lins'][-1]}", [range(mt.ceil(mt.log2(ub_integer1 + 1)))])
 
         self.con(integer1 == sum(2**i * x[i] for i in range(mt.ceil(mt.log2(ub_integer1 + 1)))))
 
@@ -317,3 +316,28 @@ class LinearizationClass:
             self.con(z[i] >= integer2 - ub_integer2 * (1 - x[i]))
 
         return sum(2**i * z[i] for i in range(mt.ceil(mt.log2(ub_integer1 + 1))))
+    
+    def lin_prod_ff(self, var1: MultidimVariable, var2: MultidimVariable, bound1, bound2, num_breakpoints):
+        try:
+            self.features['ff_lins'].append(self.features['ff_lins'][-1] + 1)
+        except:
+            self.features['ff_lins'] = [0]
+        y1 = self.fvar(name=f"ff_lin1_{self.features['ff_lins'][-1]}", bound=bound1)
+        y2 = self.fvar(name=f"ff_lin2_{self.features['ff_lins'][-1]}", bound=bound2)
+        self.con(y1==0.5*(var1+var2))
+        self.con(y2==0.5*(var1-var2))
+        return self.lin_approx(name=f"ff_lin1_{self.features['ff_lins'][-1]}", f=lambda y1:y1**2, var=y1, bound=bound1, num_breakpoints=num_breakpoints)-self.lin_approx(name=f"ff_lin2_{self.features['ff_lins'][-1]}", f=lambda y2:y2**2, var=y2, bound=bound2, num_breakpoints=num_breakpoints)
+    
+    def lin_prod_pp(self, var1: MultidimVariable, var2: MultidimVariable, bound1, bound2, num_breakpoints):
+        try:
+            self.features['pp_lins'].append(self.features['pp_lins'][-1] + 1)
+        except:
+            self.features['pp_lins'] = [0]
+        y1 = self.pvar(name=f"pp_lin1_{self.features['pp_lins'][-1]}", bound=bound1)
+        y2 = self.pvar(name=f"pp_lin2_{self.features['pp_lins'][-1]}", bound=bound2)
+        self.con(y1==0.5*(var1+var2))
+        self.con(y2==0.5*(var1-var2))
+        return self.lin_approx(name=f"pp_lin1_{self.features['pp_lins'][-1]}", f=lambda y1:y1**2, var=y1, bound=bound1, num_breakpoints=num_breakpoints)-self.lin_approx(name=f"pp_lin2_{self.features['pp_lins'][-1]}", f=lambda y2:y2**2, var=y2, bound=bound2, num_breakpoints=num_breakpoints)
+        
+            
+        

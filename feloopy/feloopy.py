@@ -5286,8 +5286,9 @@ class search(model,Implement):
                 else:
                     if self.number_of_objectives ==1:
                         for key in self.solutions:
-                            box.empty()
-                            box.print_tesnor(key,self.solutions[key])
+                            if key in self.key_vars:
+                                box.empty()
+                                box.print_tesnor(key,self.solutions[key])
                     else:
                         box.empty()
                         for i in range(self.objective_values.shape[0]):
@@ -5301,7 +5302,8 @@ class search(model,Implement):
                                 box.row(left=f"Pareto solution {k}")
                                 box.empty()
                                 for key in self.solutions[k]:
-                                    box.print_tesnor(key,self.solutions[k][key])
+                                    if key in self.key_vars:
+                                        box.print_tesnor(key,self.solutions[k][key])
                             if i!=self.objective_values.shape[0]-1:
                                 box.empty()
                     box.empty()
