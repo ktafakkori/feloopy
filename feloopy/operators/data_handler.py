@@ -373,7 +373,30 @@ class DataToolkit(FileManager):
             result = self.random.dirichlet(alpha, size=[len(i) for i in dim])
         return self.__keep(name, result, neglect)
 
-
+    def colors(self, name, dim=0, neglect=False, with_names=True):
+        import matplotlib.colors as mcolors
+        self.colors = dict(mcolors.BASE_COLORS, **mcolors.CSS4_COLORS)
+        dim = self.__fix_dims(dim)
+        if dim == 0:    
+            if with_names:
+                result = np.random.choice(list(self.colors.keys()))
+            else:
+                result = '#{:06x}'.format(np.random.randint(0, 0xFFFFFF))
+        else:
+            if len(dim) == 1:
+                if with_names:
+                    result = {key: np.random.choice(list(self.colors.keys())) for key in dim[0]}
+                else:
+                    result = {key: '#{:06x}'.format(np.random.randint(0, 0xFFFFFF)) for key in dim[0]}
+            else:
+                if with_names:
+                    result = {key: np.random.choice(list(self.colors.keys())) for key in it.product(*dim)}
+                else:
+                    result = {key: '#{:06x}'.format(np.random.randint(0, 0xFFFFFF)) for key in it.product(*dim)}
+        return self.__keep(name, result, neglect)
+    
+        return self.__keep(name, result, neglect)
+    
     def start(self, name, value, direction=None):
         self.criteria_directions[name] = direction
         self.data[name] = [value]

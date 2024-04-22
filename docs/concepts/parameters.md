@@ -41,6 +41,7 @@ In the real world, instances of a dataset are almost always collected and not ge
 | `weight`               | $[0,1]$ where $\sum_{i=1}^{k} x_i =1$ (coefficients of a convex combination)                                       |
 | `weibull`              | $(0,\infty)$                                                                 |
 | `cauchy`               | $(-\infty, \infty)$                                                          |
+| `colors`               | all supported colors                                                        |
 
 An all-in-one example of using these functions is provided as follows:
 

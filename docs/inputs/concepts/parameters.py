@@ -33,6 +33,7 @@ a = dt.dirichlet(name="a", dim=[I])
 a = dt.weight(name="a", dim=[I])
 a = dt.weibull(name="a", dim=[I], beta=1, alpha=1)
 a = dt.cauchy(name="a", dim=[I])
+a = dt.colors(name="a", dim=[I], with_names=False)
 
 print(a)
 print(type(a))
