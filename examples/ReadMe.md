@@ -1,10 +1,7 @@
 
-
-<h1 align="center">FelooPy Model Libary</h1>
-
+<h1 align="center" markdown="1"><img src="https://github.com/ktafakkori/feloopy/raw/main/assets/logo/logo3.png" alt="Logo" /> FelooPy Model Library</h1>
 
 
-<div align="center">
 
 | Decision problem                        | Acronym  | Example
 | :------------------------------ | :-------- | :------|
