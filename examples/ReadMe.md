@@ -16,7 +16,7 @@
 | 📈 Linear regression              | LRP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/linear-regression-problem.ipynb)   |
 | 📈 Piecewise linear approximation | PLAP     |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/piecewise-linear-approximation-problem.ipynb)   |
 | 🤝 Team formation                 | TFP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/team-formation-problem.ipynb)   |
-| 🗾 Traveling salesperson          | TSP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/traveling-salesperson-problem-problem.ipynb)   |
+| 🗾 Traveling salesperson          | TSP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/traveling-salesperson-problem.ipynb)   |
 | 🔴 Vertex coloring                | VCP      | [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/vertex-coloring-problem.ipynb)   |
 
 
