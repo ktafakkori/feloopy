@@ -8,7 +8,7 @@
 
 | Decision problem                        | Acronym  | Example
 | :------------------------------ | :-------- | :------|
-| 🗑️ Bin Packing                    | BPP      |   [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/bin-packing-problem.ipynb)   |
+| 🗑️ Bin packing                    | BPP      |   [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/bin-packing-problem.ipynb)   |
 | 🧲 Clustering                     | CP       |      [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/clustering-problem.ipynb)   |
 | 🏭 Facility location              | FLP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/facility-location-problem.ipynb)  |
 | 📌 Hub location                   | HLP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/hub-location-problem.ipynb)  |
