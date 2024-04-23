@@ -20,3 +20,9 @@
 | 🔴 Vertex coloring                | VCP      | [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/vertex-coloring-problem.ipynb)   |
 
 </div>
+
+
+
+*  Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
+*  See the file LICENSE file for licensing details.
+
