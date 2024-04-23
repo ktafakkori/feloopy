@@ -1,5 +1,9 @@
-
-<h1 align="center" markdown="1"><img src="https://github.com/ktafakkori/feloopy/raw/main/assets/logo/logo3.png" alt="Logo" /> FelooPy Model Library</h1>
+<table align="center">
+ <tr>
+    <td><img src="https://github.com/ktafakkori/feloopy/raw/main/assets/logo/logo3.png" alt="Logo" width="10%"></td>
+    <td><h1>FelooPy Model Library</h1></td>
+ </tr>
+</table>
 
 
 
