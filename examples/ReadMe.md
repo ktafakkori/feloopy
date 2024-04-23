@@ -1,6 +1,23 @@
 
 
-# FelooPy Model Library
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .centered-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="centered-title">FelooPy Model Libary</h1>
+</body>
+</html>
+
 
 <div align="center">
 
