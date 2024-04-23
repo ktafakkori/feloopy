@@ -19,10 +19,13 @@
 | 🗾 Traveling salesperson          | TSP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/traveling-salesperson-problem-problem.ipynb)   |
 | 🔴 Vertex coloring                | VCP      | [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/vertex-coloring-problem.ipynb)   |
 
+
+Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
+
+See the file LICENSE file for licensing details.
+
+
 </div>
 
 
-
-*  Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
-*  See the file LICENSE file for licensing details.
 
