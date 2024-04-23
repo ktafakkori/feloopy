@@ -22,7 +22,7 @@
 
 Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
 
-See the file LICENSE file for licensing details.
+See the file [LICENSE file](https://github.com/ktafakkori/feloopy/blob/main/LICENSE) for licensing details.
 
 
 </div>
