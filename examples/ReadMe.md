@@ -1,7 +1,7 @@
 <table align="center">
  <tr>
     <td><img src="https://github.com/ktafakkori/feloopy/raw/main/assets/logo/logo3.png" alt="Logo" width="10%"></td>
-    <td><h1>FelooPy Model Library</h1></td>
+    <td><strong>FelooPy Model Library</strong></td>
  </tr>
 </table>
 
