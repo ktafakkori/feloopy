@@ -21,12 +21,15 @@
 | 🔴 Vertex coloring                | VCP      | [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/vertex-coloring-problem.ipynb)   |
 
 
-Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
 
-See the file [LICENSE file](https://github.com/ktafakkori/feloopy/blob/main/LICENSE) for licensing details.
 
 
 </div>
 
 
 
+<div align="center">
+Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
+
+See the file <a href="https://github.com/ktafakkori/feloopy/blob/main/LICENSE">LICENSE file</a> for licensing details.
+</div>
