@@ -1,15 +1,15 @@
-<table align="center">
- <tr>
-    <td><img src="https://github.com/ktafakkori/feloopy/raw/main/assets/logo/logo3.png" alt="Logo" width="10%"></td>
-    <td><strong>FelooPy Model Library</strong></td>
- </tr>
-</table>
+<div align="center">
+
+<img src="https://github.com/ktafakkori/feloopy/raw/main/assets/logo/logo3.png" width="5%"> **FelooPy Model Library** 
+
+</div>
 
 
+<div align="center">
 
 | Decision problem                        | Acronym  | Example
 | :------------------------------ | :-------- | :------|
-| 🗑️ Bin packing                    | BPP      |   [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/bin-packing-problem.ipynb)   |
+| 🗑️ Bin Packing                    | BPP      |   [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/bin-packing-problem.ipynb)   |
 | 🧲 Clustering                     | CP       |      [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/clustering-problem.ipynb)   |
 | 🏭 Facility location              | FLP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/facility-location-problem.ipynb)  |
 | 📌 Hub location                   | HLP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/hub-location-problem.ipynb)  |
