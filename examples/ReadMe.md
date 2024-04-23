@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://github.com/ktafakkori/feloopy/raw/main/assets/logo/logo3.png" width="2.5%"> **FelooPy Model Library** 
+<img src="https://github.com/ktafakkori/feloopy/raw/main/assets/logo/logo3.png" width="2%">  FelooPy Model Library** 
 
 </div>
 
