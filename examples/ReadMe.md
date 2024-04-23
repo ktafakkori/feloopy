@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://github.com/ktafakkori/feloopy/raw/main/assets/logo/logo3.png" width="2%"> **FelooPy Model Library** 
+<img src="https://github.com/ktafakkori/feloopy/raw/main/assets/logo/logo3.png" width="2%"> FelooPy Model Library 
 
 </div>
 
@@ -19,9 +19,6 @@
 | 🤝 Team formation                 | TFP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/team-formation-problem.ipynb)   |
 | 🗾 Traveling salesperson          | TSP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/traveling-salesperson-problem.ipynb)   |
 | 🔴 Vertex coloring                | VCP      | [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/vertex-coloring-problem.ipynb)   |
-
-
-
 
 
 </div>
