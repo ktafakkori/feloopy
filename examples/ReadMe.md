@@ -6,7 +6,7 @@
 
 <div align="center">
 
-| Problem                        | Acronym  | Example
+| Decision problem                        | Acronym  | Example
 | :------------------------------ | :-------- | :------|
 | 🗑️ Bin Packing                    | BPP      |   [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/bin-packing-problem.ipynb)   |
 | 🧲 Clustering                     | CP       |      [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/clustering-problem.ipynb)   |
