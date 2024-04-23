@@ -10,7 +10,7 @@
 | :------------------------------ | :-------- | :------|
 | 🗑️ Bin Packing                    | BPP      |   [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/bin-packing-problem.ipynb)   |
 | 🧲 Clustering                     | CP       |      [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/clustering-problem.ipynb)   |
-| 🪧 Facility location              | FLP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/facility-location-problem.ipynb)  |
+| 🏭 Facility location              | FLP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/facility-location-problem.ipynb)  |
 | 📌 Hub location                   | HLP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/hub-location-problem.ipynb)  |
 | 🎒 Knapsack                       | KP       |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/knapsack-problem.ipynb)  |
 | 📈 Linear regression              | LRP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/linear-regression-problem.ipynb)   |
