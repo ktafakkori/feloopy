@@ -36,6 +36,8 @@ Provide any additional information that might help in diagnosing the problem.
 
 ## Checklist
 
+Put x inside each box below:
+
 - [ ] I have checked the documentation and FAQs for similar issues.
 - [ ] I have searched the issue tracker for similar issues without finding a resolution.
 - [ ] I have included a minimal working example that reproduces the bug.

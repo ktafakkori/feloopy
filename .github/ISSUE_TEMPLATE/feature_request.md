@@ -21,6 +21,8 @@ Include any additional information, such as mockups, diagrams, or references to 
 
 ## Checklist
 
+Put x inside each box below:
+
 - [ ] I have checked the documentation and FAQs for similar features.
 - [ ] I have searched the issue tracker for similar feature requests without finding a resolution.
 - [ ] I have provided a clear problem statement and a detailed proposed solution.
