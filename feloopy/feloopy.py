@@ -4714,9 +4714,10 @@ class search(model,Implement):
             self.em = self.environment(self.em, *self.args, **self.kwargs)
           
         if self.method in ["heuristic"]:
+
             if len(self.directions)==1:
                 def instance(X):
-                    lm = model(method=self.method, name=self.name, interface=self.interface, agent=X)
+                    lm = model(method=self.method, name=self.name, interface=self.interface, agent=X, no_agents=self.options.get("pop_size", 50))
                     lm = environment(lm)
                     lm.sol(directions=self.directions,solver=self.solver,show_log=self.verbose, solver_options=self.options)
                     return lm[X]
@@ -4725,7 +4726,7 @@ class search(model,Implement):
 
             else:
                 def instance(X):
-                    m = model(self.name,self.method, self.interface,X)
+                    m = model(self.name,self.method, self.interface,X, no_agents=self.options.get("pop_size", 50))
                     m = self.environment(m, *self.args, **self.kwargs)
                     m.sol(self.directions, self.solver, self.options, obj_id='all')
                     return m[X]

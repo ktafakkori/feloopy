@@ -64,7 +64,7 @@ def run_setup_file():
      "bonmin": ("1.4.0", "https://www.coin-or.org/download/binary/Bonmin/Bonmin-{version}-win32-msvc9.zip"),
      "couenne": ("0.3.2", "https://www.coin-or.org/download/binary/Couenne/Couenne-{version}-win32-msvc9.zip"),
      "scip": ("9.0.0", "https://github.com/scipopt/scip/releases/download/v{version_no_dots}/SCIPOptSuite-{version}-win64-VS15.exe"),
-     "git": ("2.44.0", "https://github.com/git-for-windows/git/releases/download/v{version}.windows.1/Git-{version}-64-bit.exe"),
+     "git": ("2.45.0", "https://github.com/git-for-windows/git/releases/download/v{version}.windows.1/Git-{version}-64-bit.exe"),
  }
 
  for solver, (version, url) in versions.items():

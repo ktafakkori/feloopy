@@ -1,45 +1,45 @@
 # Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
 # See the file LICENSE file for licensing details.
 
-
+from .configurator import *
+import timeit
+from pymoo.core.problem import Problem
+from pymoo.optimize import minimize
+from pymoo.termination import get_termination
+from pymoo.util.ref_dirs import get_reference_directions
+import numpy as np
+    
 def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, ObjectivesDirections, ObjectiveBeingOptimized, number_of_times, show_plots, save_plots, show_log):
 
-    import timeit
-    from pymoo.core.problem import Problem
-    from pymoo.optimize import minimize
-    from pymoo.termination import get_termination
-    from pymoo.util.ref_dirs import get_reference_directions
-
-    import numpy as np
-
-    if show_log:
-        verbose=True
-    
-    else:
-        verbose=False
-
-    ObjectivesDirections = [-1 if direction =='max' else 1 for direction in ObjectivesDirections]
+    coeffs = get_coeffs("pymoo", objectives_directions)
 
     class MyProblem(Problem):
-
         def __init__(self):
-            super().__init__(n_var=ToTalVariableCounter[1], n_obj=len(ObjectivesDirections), xl=np.array([0,]*ToTalVariableCounter[1]), xu=np.array([1,]*ToTalVariableCounter[1]))
-        
+            super().__init__(n_var=ToTalVariableCounter[1], n_obj=len(coeffs), xl=np.array([0,]*ToTalVariableCounter[1]), xu=np.array([1,]*ToTalVariableCounter[1]))
         def _evaluate(self, x, out, *args, **kwargs):
-
-    
             f = Fitness(np.array(x))
-
-            out["F"] = np.column_stack([ObjectivesDirections[i]*f[i] for i in range(len(ObjectivesDirections))])
-    
+            out["F"] = np.column_stack([coeffs[i]*f[i] for i in range(len(coeffs))])
     problem = MyProblem()
-
+    
     match solver_name:
-
+        
         case "ns-ga-ii":
 
             from pymoo.algorithms.moo.nsga2 import NSGA2
-            algorithm = NSGA2()
+            config = fix_config("pymoo", "ns-ga-ii")
+            sub_config={}
+            if "pop_size" not in config.keys(): config["pop_size"] = 250
+            if "n_gen" in config.keys(): 
+                sub_config["n_gen"]=config["n_gen"] 
+                del config["n_gen"]
+            if "seed" in config.keys():
+                sub_config["seed"]=config["seed"] 
+                del config["seed"]
+            if "verbose" in config.keys() or show_log:
+                sub_config["verbose"]=config["verbose"] 
+                del config["verbose"]                                
+                
+            algorithm = NSGA2(**config)
 
         case "d-ns-ga-ii":
 
@@ -112,16 +112,14 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
         n_max_evals=100000
     )
 
-    if AlgOptions.get('n_gen', None)!=None:
-        termination = get_termination("n_gen", AlgOptions['n_gen'])
-
-    if AlgOptions.get('n_eval', None)!=None:
+    if config.get('n_gen', None)!=None:
+        termination = get_termination('n_gen', AlgOptions['n_gen'])
+    if config.get('n_eval', None)!=None:
         termination = get_termination("n_gen", AlgOptions['n_eval'])
-
-    if AlgOptions.get('time', None)!=None:
+    if config.get('time', None)!=None:
         termination = get_termination("time", AlgOptions['time'])
-
-    if AlgOptions.get('design_space_tolerance_period', None)!=None:
+        
+    if config.get('design_space_tolerance_period', None)!=None:
 
         from pymoo.termination.xtol import DesignSpaceTermination
         from pymoo.termination.robust import RobustTermination
