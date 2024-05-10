@@ -828,6 +828,9 @@ class model(
         else:
             return 'infeasible (constrained)' if self.penalty > 0 else 'feasible (constrained)'
 
+    def sets(self,*args):
+        return it.product(*args)
+         
     def fix_ifneeded(self, dims):
         return fix_dims(dims)
     
@@ -2361,6 +2364,9 @@ class Implement:
                 self.ModelObject = feloopy_model_generator.generate_model(
                     self.tot_counter[1], self.objectives_directions, self.solver_name, self.AlgOptions)
 
+    def sets(self,*args):
+        return it.product(*args)
+         
     def remove_infeasible_solutions(self):
 
         self.BestAgent = np.delete(self.BestAgent, self.remove, axis=0)
