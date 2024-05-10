@@ -278,23 +278,46 @@ class report:
         row = rowstart +remaining*" " + " "+ row
         print(f"{row} │")
 
-    def print_tesnor(self, label, numpy_var, additional_text=''):
+    def print_tensor(self, label, numpy_var, additional_text=''):
         numpy_var = np.array(numpy_var)
         numpy_str = np.array2string(numpy_var, separator=', ', prefix='│ ')
         rows = numpy_str.split('\n')
         first_row_len = len(rows[0])
         for i, row in enumerate(rows):
             if i == 0:
-                # Append additional_text to the rightmost of the first line
                 print(self._border + " " + f"{label} = {row}".ljust(self.width - 4 - len(additional_text)) + additional_text + " " + self._border)
             else:
                 print(self._border + " " + (" "*(len(f"{label} =")-1)+row).ljust(self.width - 4) + " " + self._border)
+
+    def print_element(self, label, numpy_var, additional_text=''):
+        numpy_var = np.array(numpy_var)
+        
+        num_dims = numpy_var.ndim
+        
+        current_index = 0
+        
+        def print_recursive(index, depth=0):
+            nonlocal current_index
+            if num_dims > depth:
+                for i in range(numpy_var.shape[depth]):
+                    print_recursive(current_index, depth + 1)
+            else:
+                if numpy_var[current_index]>0 or numpy_var[current_index]<0:
+                    print(self._border + " " + (f"{label}[{current_index}] = "+str(numpy_var[current_index])).ljust(self.width - 4) + " " + self._border)
+
+        
+                current_index += 1
+
+        print_recursive(0)
+
+        if additional_text:
+            print(additional_text)
 
     def print_pandas_df(self, label, df, columns=None, additional_text=''):
         for index, row in df.iterrows():
             thisrow = [format_text(i,length=10, ensure_length=True) if type(i)==str else format_string(i) for i in row.values]
             self.clear_columns(thisrow, "", max_space_between_elements=15)
-    
+
 import numpy as np
 
 def left_align(input, box_width=88, rt=False):

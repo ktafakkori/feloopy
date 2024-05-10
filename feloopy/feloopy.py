@@ -1372,11 +1372,11 @@ class model(
                     show_tensors=show_tensors, 
                     show_detailed_tensors=detailed)
             
-    def clean_report(self):
+    def clean_report(self, **kwargs):
 
         command = "cls" if os.name == "nt" else "clear"
         os.system(command)
-        self.report()
+        self.report(**kwargs)
          
     def report(self, all_metrics: bool = False, feloopy_info: bool = True, extra_info: bool = False, math_info: bool = False, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], show_tensors = False, show_detailed_tensors=False, save=None):
 
@@ -3377,11 +3377,11 @@ class Implement:
             payoff.append(val)
         return np.array(payoff)
 
-    def clean_report(self):
+    def clean_report(self,**kwargs):
 
         command = "cls" if os.name == "nt" else "clear"
         os.system(command)
-        self.report()
+        self.report(**kwargs)
         
     def report(self, all_metrics: bool = False, feloopy_info: bool = True, sys_info: bool = False, model_info: bool = True, sol_info: bool = True, obj_values: bool = True, dec_info: bool = True, metric_info: bool = True, ideal_pareto: Optional[np.ndarray] = [], ideal_point: Optional[np.array] = [], show_tensors = False, show_detailed_tensors=False, save=None):
 
@@ -4392,11 +4392,11 @@ class MADM:
         
         return self.normalized_weights
 
-    def clean_report(self):
+    def clean_report(self,**kwargs):
 
         command = "cls" if os.name == "nt" else "clear"
         os.system(command)
-        self.report()
+        self.report(**kwargs)
         
     def report(self, all_metrics=False, feloopy_info=True, sys_info=False,
                         model_info=True, sol_info=True, metric_info=True,
@@ -4425,11 +4425,11 @@ class MADM:
 
         self._generate_decision_info()
 
-    def clean_report(self):
+    def clean_report(self,**kwargs):
 
         command = "cls" if os.name == "nt" else "clear"
         os.system(command)
-        self.report()
+        self.report(**kwargs)
         
     def display_as_tensor(self, name, numpy_var, detailed):
         if detailed:
@@ -4697,11 +4697,11 @@ class search(model,Implement):
         if report:
             self.report()
     
-    def clean_report(self):
+    def clean_report(self,**kwargs):
 
         command = "cls" if os.name == "nt" else "clear"
         os.system(command)
-        self.report()
+        self.report(**kwargs)
         
     def create_env(self, environment):
         
@@ -5055,13 +5055,13 @@ class search(model,Implement):
 
         return self.ben_results
 
-    def clean_report(self,full=False):
+    def clean_report(self,**kwargs):
 
         command = "cls" if os.name == "nt" else "clear"
         os.system(command)
-        self.report(full=full)
+        self.report(**kwargs)
 
-    def report(self, skip_system_information=True,width=90,style=1,skip=False,full=False):
+    def report(self, skip_system_information=True, show_elements=False, width=90,style=1,skip=False,full=False):
         
         # First box: FelooPy
         print()
@@ -5289,7 +5289,10 @@ class search(model,Implement):
                         for key in self.solutions:
                             if key in self.key_vars:
                                 box.empty()
-                                box.print_tesnor(key,self.solutions[key])
+                                if show_elements:
+                                    box.print_element(key,self.solutions[key])
+                                else:
+                                    box.print_tensor(key,self.solutions[key])
                     else:
                         box.empty()
                         for i in range(self.objective_values.shape[0]):
@@ -5304,7 +5307,7 @@ class search(model,Implement):
                                 box.empty()
                                 for key in self.solutions[k]:
                                     if key in self.key_vars:
-                                        box.print_tesnor(key,self.solutions[k][key])
+                                        box.print_tensor(key,self.solutions[k][key])
                             if i!=self.objective_values.shape[0]-1:
                                 box.empty()
                     box.empty()
@@ -5374,13 +5377,13 @@ class search(model,Implement):
                         for key in self.sensitivity_data[f"sensitivtiy_of_solutions_to_{parameter_name}"][j]:
                             if key in self.key_vars:
                                 if self.number_of_objectives ==1:
-                                    box.print_tesnor(key,self.sensitivity_data[f"sensitivtiy_of_solutions_to_{parameter_name}"][j][key], "∆ " + format_string(self.sensitivity_data[f"sensitivtiy_of_similarity_to_{parameter_name}"][j][key])+"")
+                                    box.print_tensor(key,self.sensitivity_data[f"sensitivtiy_of_solutions_to_{parameter_name}"][j][key], "∆ " + format_string(self.sensitivity_data[f"sensitivtiy_of_similarity_to_{parameter_name}"][j][key])+"")
                         
                         if self.number_of_objectives !=1:
                             for obj_id in range(self.number_of_objectives):
-                                box.print_tesnor(f"Objective {obj_id}",np.mean(self.sensitivity_data[f"sensitivtiy_of_objectives_to_{parameter_name}"][j][:,obj_id]))
+                                box.print_tensor(f"Objective {obj_id}",np.mean(self.sensitivity_data[f"sensitivtiy_of_objectives_to_{parameter_name}"][j][:,obj_id]))
                     
-                        
+
                     box.empty()
                 
             seconds_value = self.sensitivity_end_timer - self.sensitivity_begin_timer
