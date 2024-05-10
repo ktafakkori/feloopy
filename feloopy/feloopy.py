@@ -5004,7 +5004,7 @@ class search(model,Implement):
         if environment is None:
             environment = self.environment        
         
-        if algorithms is None:
+        if algorithms is None or algorithms is "all":
             if self.method=="exact":
                 algorithms=EXACT_ALGORITHMS
             if self.method=="heuristic":
