@@ -38,7 +38,7 @@ nano = pico + [
 ]
 
 micro = nano + [
-    'gekko==1.1.0',
+    'gekko==1.1.1',
     'mealpy==3.0.1',
 ]
 
@@ -50,7 +50,7 @@ mini = micro + [
 full = mini + [
     'pydecision==4.5.4',
     'pymoo==0.6.1.1',
-    'rsome==1.2.5',
+    'rsome==1.2.6',
 ]
 
 stock = full + [
