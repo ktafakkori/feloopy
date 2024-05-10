@@ -43,8 +43,8 @@ micro = nano + [
 ]
 
 mini = micro + [
-    'cvxpy==1.4.2',
-    'ortools==9.8.3296',
+    'cvxpy==1.5.0',
+    'ortools==9.10.4067',
 ]
 
 full = mini + [
@@ -60,7 +60,7 @@ stock = full + [
     'picos==2.4.17',
     'pulp==2.8.0',
     'pygad==3.2.0',
-    'pyomo==6.7.1',
+    'pyomo==6.7.2',
 ]
 
 # Solvers for optimization problems or algorithms
