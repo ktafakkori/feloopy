@@ -20,7 +20,7 @@
 | 🤝 Team formation                 | TFP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/team-formation-problem.ipynb)   |
 | 🗾 Traveling salesperson          | TSP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/traveling-salesperson-problem.ipynb)   |
 | 🔴 Vertex coloring                | VCP      | [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/vertex-coloring-problem.ipynb)   |
-| Zitzler, Deb, and Thiele Problem  | ZDT  | [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/zitzler-deb-thiele-problem.ipynb)
+| 🎯 Zitzler, Deb, and Thiele Problem  | ZDT  | [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/zitzler-deb-thiele-problem.ipynb)
 
 
 </div>
