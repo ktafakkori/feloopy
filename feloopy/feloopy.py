@@ -4820,8 +4820,6 @@ class search(model,Implement):
 
                         self.solutions = {i: {} for i in range(num_pareto)}
 
-                        print("HEEEEEEEEEEEEEEEEEEY", self.number_of_objectives)
-
                         for i in range(num_pareto):
                             for j in self.em.VariablesDim.keys():
                                 self.solutions[i][j] = self.em.VariablesBound[j][0] + self.em.BestAgent[i,self.em.VariablesSpread[j][0]:self.em.VariablesSpread[j][1]] * (self.em.VariablesBound[j][1] - self.em.VariablesBound[j][0])

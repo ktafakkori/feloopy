@@ -138,9 +138,6 @@ def generate_solution(solver_name, AlgOptions, Fitness, ToTalVariableCounter, Ob
     time_solve_end = timeit.default_timer()
     pareto_front = ObjectivesDirections*res.F
     pareto_solutions = res.X
-    
-    print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK")
-    print(pareto_front)
 
     return pareto_solutions, pareto_front, time_solve_begin, time_solve_end
 
