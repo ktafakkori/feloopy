@@ -797,6 +797,7 @@ class model(
         self.get_stat = self.get_status
         self.get_tensor = self.get_numpy_var
         self.get_var = self.value = self.get = self.get_variable
+        self.PI = self.pi = np.pi
 
     def __getitem__(self, agent):
         agent_status = self.features['agent_status']
@@ -1846,6 +1847,7 @@ class model(
 
             return abs(input)
 
+
     def acos(self, input):
         """
 
@@ -1856,6 +1858,12 @@ class model(
         if self.features['interface_name'] == 'gekko':
 
             return self.model.acos(input)
+
+
+        else:
+
+            return np.arccos(input)
+        
 
     def acosh(self, input):
         """
@@ -1868,6 +1876,11 @@ class model(
 
             return self.model.acosh(input)
 
+        else:
+
+            return np.arccosh(input)
+        
+
     def asin(self, input):
         """
 
@@ -1877,8 +1890,13 @@ class model(
 
         if self.features['interface_name'] == 'gekko':
 
-            return self.model.acos(input)
+            return self.model.asin(input)
 
+
+        else:
+
+            return np.asin(input)
+        
     def asinh(self, input):
         """
 
@@ -1888,8 +1906,12 @@ class model(
 
         if self.features['interface_name'] == 'gekko':
 
-            return self.model.acos(input)
+            return self.model.asinh(input)
 
+        else:
+
+            return np.arcsinh(input)
+        
     def atan(self, input):
         """
 
@@ -1899,8 +1921,12 @@ class model(
 
         if self.features['interface_name'] == 'gekko':
 
-            return self.model.acos(input)
+            return self.model.atan(input)
 
+        else:
+
+            return np.arctan(input)
+        
     def atanh(self, input):
         """
 
@@ -1912,6 +1938,10 @@ class model(
 
             return self.model.atanh(input)
 
+        else:
+
+            return np.arctanh(input)
+        
     def cos(self, input):
         """
 
@@ -1923,6 +1953,10 @@ class model(
 
             return self.model.cos(input)
 
+        else:
+
+            return np.cos(input)
+
     def erf(self, input):
         """
 
@@ -1933,7 +1967,7 @@ class model(
         if self.features['interface_name'] == 'gekko':
 
             return self.model.erf(input)
-
+        
     def erfc(self, input):
         """
 
@@ -2149,6 +2183,9 @@ class model(
 
             return self.model.log10(input)
 
+        else:
+            return np.log10(input)
+        
     def sin(self, input):
         """
 
@@ -2159,6 +2196,8 @@ class model(
         if self.features['interface_name'] in ['gekko']:
 
             return self.model.sin(input)
+        else:
+            return np.sin(input)
 
     def sinh(self, input):
         """
@@ -2170,7 +2209,9 @@ class model(
         if self.features['interface_name'] in ['gekko']:
 
             return self.model.sinh(input)
-
+        else:
+            return np.sinh(input)
+      
     def sqrt(self, input):
         """
 
@@ -2181,7 +2222,9 @@ class model(
         if self.features['interface_name'] in ['gekko']:
 
             return self.model.sqrt(input)
-
+        else:
+            return np.sqrt(input)
+        
     def tan(self, input):
         """
 
@@ -2192,7 +2235,9 @@ class model(
         if self.features['interface_name'] in ['gekko']:
 
             return self.model.tan(input)
-
+        else:
+            return np.tan(input)
+        
     def tanh(self, input):
         """
 
@@ -2203,7 +2248,9 @@ class model(
         if self.features['interface_name'] in ['gekko']:
 
             return self.model.tanh(input)
-
+        else:
+            return np.tanh(input)
+        
     def sigmoid(self, input):
         """
 
@@ -2214,7 +2261,9 @@ class model(
         if self.features['interface_name'] in ['gekko']:
 
             return self.model.sigmoid(input)
-
+        else:
+            return 1 / (1 + np.exp(-x))
+        
     def exponent(self, input):
 
         if self.features['interface_name'] in ['cplex_cp', 'gekko']:
@@ -2331,6 +2380,8 @@ class Implement:
         self.get_var = self.get_variable = self.get
         self.search = self.solve = self.optimize = self.run = self.sol
         self.get_tensor = self.get_numpy_var
+        self.PI = self.pi = np.pi
+        self.sets = it.product
         
         match self.interface_name:
 
@@ -5315,7 +5366,10 @@ class search(model,Implement):
                                 box.empty()
                                 for key in self.solutions[k]:
                                     if key in self.key_vars:
-                                        box.print_tensor(key,self.solutions[k][key])
+                                        if show_elements:
+                                            box.print_element(key,self.solutions[k][key])
+                                        else:
+                                            box.print_tensor(key,self.solutions[k][key])
                             if i!=self.objective_values.shape[0]-1:
                                 box.empty()
                     box.empty()
