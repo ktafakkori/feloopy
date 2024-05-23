@@ -356,4 +356,5 @@ class SpecialConstraintClass:
         z = self.bvar(
             f"abs_geq_linearizer{self.features['abs_geq_linearizers'][-1]}")
         
-        self.con_this_or_that(expr >= rhs - z * big_m, expr <= -1 * rhs + (1 - z) * big_m)
+        self.con(expr >= rhs - z * big_m)
+        self.con(expr <= -1*rhs + (1 - z) * big_m)

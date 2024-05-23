@@ -92,9 +92,12 @@ class LinearizationClass:
                 self.features['abs_obj_lins'].append(self.features['abs_obj_lins'][-1] + 1)
             except:
                 self.features['abs_obj_lins'] = [0, 1]
+
             z1 = self.pvar(f"abs_obj_lin{self.features['abs_obj_lins'][-1]}")
             z2 = self.pvar(f"abs_obj_lin{self.features['abs_obj_lins'][-2]}")
+
             self.con(expr == z1 - z2)
+
             return z1 + z2
 
         if method == 1:
@@ -104,15 +107,15 @@ class LinearizationClass:
                 except:
                     self.features['abs_obj_lins'] = [0]
                 z = self.pvar(f"abs_obj_lin{self.features['abs_obj_lins'][-1]}")
-                self.scon_abs_leq(expr, z)
+                self.con_abs_geq(expr, z)
                 return z
-            elif dir_obj == 'max':
+            if dir_obj == 'max':
                 try:
                     self.features['abs_obj_lins'].append(self.features['abs_obj_lins'][-1] + 1)
                 except:
                     self.features['abs_obj_lins'] = [0]
                 z = self.pvar(f"abs_obj_lin{self.features['abs_obj_lins'][-1]}")
-                self.scon_abs_geq(expr, z)
+                self.con_abs_leq(expr, z)
                 return z
 
         if method == 2:
@@ -328,16 +331,16 @@ class LinearizationClass:
         self.con(y2==0.5*(var1-var2))
         return self.lin_approx(name=f"ff_lin1_{self.features['ff_lins'][-1]}", f=lambda y1:y1**2, var=y1, bound=bound1, num_breakpoints=num_breakpoints)-self.lin_approx(name=f"ff_lin2_{self.features['ff_lins'][-1]}", f=lambda y2:y2**2, var=y2, bound=bound2, num_breakpoints=num_breakpoints)
     
-    def lin_prod_pp(self, var1: MultidimVariable, var2: MultidimVariable, bound1, bound2, num_breakpoints):
+    def lin_prod_pp(self, var1: MultidimVariable, var2: MultidimVariable, ub_positive1, ub_positive2, num_breakpoints):
         try:
             self.features['pp_lins'].append(self.features['pp_lins'][-1] + 1)
         except:
             self.features['pp_lins'] = [0]
-        y1 = self.pvar(name=f"pp_lin1_{self.features['pp_lins'][-1]}", bound=bound1)
-        y2 = self.pvar(name=f"pp_lin2_{self.features['pp_lins'][-1]}", bound=bound2)
+        y1 = self.pvar(name=f"pp_lin1_{self.features['pp_lins'][-1]}", bound=[0,ub_positive1])
+        y2 = self.pvar(name=f"pp_lin2_{self.features['pp_lins'][-1]}", bound=[0,ub_positive2])
         self.con(y1==0.5*(var1+var2))
         self.con(y2==0.5*(var1-var2))
-        return self.lin_approx(name=f"pp_lin1_{self.features['pp_lins'][-1]}", f=lambda y1:y1**2, var=y1, bound=bound1, num_breakpoints=num_breakpoints)-self.lin_approx(name=f"pp_lin2_{self.features['pp_lins'][-1]}", f=lambda y2:y2**2, var=y2, bound=bound2, num_breakpoints=num_breakpoints)
+        return self.lin_approx(name=f"pp_lin1_{self.features['pp_lins'][-1]}", f=lambda y1:y1**2, var=y1, bound=[0,ub_positive1], num_breakpoints=num_breakpoints)-self.lin_approx(name=f"pp_lin2_{self.features['pp_lins'][-1]}", f=lambda y2:y2**2, var=y2, bound=[0,ub_positive2], num_breakpoints=num_breakpoints)
         
             
         
