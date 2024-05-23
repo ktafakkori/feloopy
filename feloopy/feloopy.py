@@ -3105,8 +3105,7 @@ class Implement:
 
                             else:
                                 def var(*args):
-                                    self.NewAgentProperties = (self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
-                                        self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                    self.NewAgentProperties = (self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                                     return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
 
                                 return var(*i[1])
@@ -3117,8 +3116,7 @@ class Implement:
 
                             else:
                                 def var(*args):
-                                    self.NewAgentProperties = (self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
-                                        self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                    self.NewAgentProperties = (self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                                     return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
 
                                 return var(*i[1])
@@ -3129,8 +3127,7 @@ class Implement:
 
                             else:
                                 def var(*args):
-                                    self.NewAgentProperties = np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (
-                                        self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
+                                    self.NewAgentProperties = np.round(self.VariablesBound[i[0]][0] + self.BestAgent[:, self.VariablesSpread[i[0]][0]:self.VariablesSpread[i[0]][1]] * (self.VariablesBound[i[0]][1] - self.VariablesBound[i[0]][0]))
                                     return self.NewAgentProperties[sum(args[k]*mt.prod(len(self.VariablesDim[i[0]][j]) for j in range(k+1, len(self.VariablesDim[i[0]]))) for k in range(len(self.VariablesDim[i[0]])))]
 
                                 return var(*i[1])
@@ -4815,14 +4812,21 @@ class search(model,Implement):
         if self.em.healthy():
             if self.method not in ["madm"]:
                 if self.number_of_objectives != 1:
+                    
                     if self.method not in ["heuristic"]:
                         self.solutions = self.result[3]
                     else:
                         num_pareto = self.em.get_obj().shape[0]
+
                         self.solutions = {i: {} for i in range(num_pareto)}
+
+                        print("HEEEEEEEEEEEEEEEEEEY", self.number_of_objectives)
+
                         for i in range(num_pareto):
                             for j in self.em.VariablesDim.keys():
-                                self.solutions[i][j] = self.em.get_numpy_var(j)
+                                self.solutions[i][j] = self.em.VariablesBound[j][0] + self.em.BestAgent[i,self.em.VariablesSpread[j][0]:self.em.VariablesSpread[j][1]] * (self.em.VariablesBound[j][1] - self.em.VariablesBound[j][0])
+
+
                 else:
                     self.solutions = {}
                     if self.method not in ["heuristic"]:
@@ -5010,7 +5014,7 @@ class search(model,Implement):
         if environment is None:
             environment = self.environment        
         
-        if algorithms is None or algorithms is "all":
+        if algorithms is None or algorithms == "all":
             if self.method=="exact":
                 algorithms=EXACT_ALGORITHMS
             if self.method=="heuristic":

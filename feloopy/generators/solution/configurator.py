@@ -11,8 +11,7 @@ def get_coeffs(interface, directions):
     else:
         max_indicator = -1
         min_indicator = 1
-        
-        
+    
     return np.array([max_indicator if directions[objective_number]!='min' else min_indicator for objective_number in range(len(directions))])
 
 def get_additional_info(interface,inputi, dicti):
@@ -25,7 +24,6 @@ def get_additional_info(interface,inputi, dicti):
 def get_config(interface, solver, verbose=False):
     
     config = {}
-    
     
     additional_info = \
         {
@@ -163,17 +161,17 @@ def get_config(interface, solver, verbose=False):
         print("}")
     return config
 
-def fix_config(interface,solver):
+def fix_config(interface,solver,options):
     initial_configs = get_config(interface, solver)
     supported_configs_specific = initial_configs.keys()
     supported_configs_standard = initial_configs.values()
     config = {}
-    for key in solver_options.keys():
+    for key in options.keys():
         if key in initial_configs.keys():
-            config[key] = solver_options[key]
+            config[key] = options[key]
         elif key in initial_configs.values():
             correct_key = next((k for k, v in initial_configs.items() if v == key), None)
-            config[correct_key] = solver_options[key]
+            config[correct_key] = options[key]
     return config
             
 print(get_config('pymoo', 'ga', verbose=False))
