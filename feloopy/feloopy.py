@@ -5051,7 +5051,7 @@ class search(model,Implement):
             
             os.system('cls' if os.name == 'nt' else 'clear')
             counter += 1
-            
+        
         df_cleaned = df.dropna(subset=[('time', 'ave'), ('obj', 'ave')]).reset_index(drop=True)
         df_sorted = df_cleaned.sort_values(by=('time', 'ave'))
         df_sorted = df_sorted.reset_index(drop=True)
