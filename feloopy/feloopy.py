@@ -2199,6 +2199,9 @@ class model(
         else:
             return np.sin(input)
 
+    def whether(self,condition, do_if_true, do_if_false):
+        return np.where(condition, do_if_true, do_if_false)
+
     def sinh(self, input):
         """
 
@@ -2415,9 +2418,6 @@ class Implement:
                 self.ModelObject = feloopy_model_generator.generate_model(
                     self.tot_counter[1], self.objectives_directions, self.solver_name, self.AlgOptions)
 
-    def sets(self,*args):
-        return it.product(*args)
-         
     def remove_infeasible_solutions(self):
 
         self.BestAgent = np.delete(self.BestAgent, self.remove, axis=0)
