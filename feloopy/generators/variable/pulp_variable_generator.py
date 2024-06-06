@@ -23,10 +23,7 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
         case 'pvar':
 
             '''
-
             Positive Variable Generator
-
-
             '''
 
             if variable_dim == 0:
@@ -35,8 +32,10 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
                     variable_name, variable_bound[0], variable_bound[1], POSITIVE)
 
             else:
+                if isinstance(variable_dim,set):
+                    GeneratedVariable = pulp_interface.LpVariable.dicts(variable_name, variable_dim, lowBound=variable_bound[0], upBound=variable_bound[1])
 
-                if len(variable_dim) == 1:
+                elif len(variable_dim) == 1:
 
                     GeneratedVariable = {key: VariableGenerator(
                         f"{variable_name}{key}", variable_bound[0], variable_bound[1], POSITIVE) for key in variable_dim[0]}
@@ -62,7 +61,10 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
             else:
 
-                if len(variable_dim) == 1:
+                if isinstance(variable_dim,set):
+                    GeneratedVariable = pulp_interface.LpVariable.dicts(variable_name, variable_dim, lowBound=variable_bound[0], upBound=variable_bound[1])
+
+                elif len(variable_dim) == 1:
 
                     GeneratedVariable = {key: VariableGenerator(
                         f"{variable_name}{key}", variable_bound[0], variable_bound[1], BINARY) for key in variable_dim[0]}

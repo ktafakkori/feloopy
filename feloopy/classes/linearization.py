@@ -214,9 +214,7 @@ class LinearizationClass:
             self.features['bb_lins'] = [0]
 
         z = self.pvar(f"bb_lin{self.features['bb_lins'][-1]}")
-        self.con(z <= binary1)
-        self.con(z <= binary2)
-        self.con(z >= binary1 + binary2 - 1)
+        self.con([z <= binary1, z <= binary2, z >= binary1 + binary2 - 1])
         return z
     
     def lin_prod_bp(self, binary: MultidimVariable, positive: MultidimVariable, ub_positive: float = 1e9) -> MultidimVariable:

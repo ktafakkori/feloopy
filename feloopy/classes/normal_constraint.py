@@ -14,7 +14,7 @@ def check_constraint_type(constraint):
 
         if isinstance(constraint[0], list) and isinstance(constraint[0][1], str):
             return 'list with sense'
-        elif isinstance(constraint[1], str):
+        elif len(constraint)>=2 and isinstance(constraint[1], str):
             return 'single list with sense'
         else:
             return 'list without sense'
@@ -96,7 +96,6 @@ class NormalConstraintClass:
         def add_special_constraint(element):
             relation, lower_bound, upper_bound = element[1], element[0], element[2]
 
-            
             epsilon = element[3] if len(element) == 4 else 0.000001
 
             const = generate_constraint(lower_bound,relation,upper_bound,epsilon)

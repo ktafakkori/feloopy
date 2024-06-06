@@ -1596,21 +1596,30 @@ class model(
                 if j==var_name:
                     if self.features['dimensions'][j]==0:
                         output = self.get(self.features['variables'][(i,j)])
-                    elif len(self.features['dimensions'][j])==1:
-                        output = np.zeros(shape=len(fix_dims(self.features['dimensions'][j])[0]))
-                        for k in fix_dims(self.features['dimensions'][j])[0]:
-                            try:
-                                output[k] = self.get(self.features['variables'][(i,j)][k])
-                            except:
-                                output[k] = self.get(self.features['variables'][(i,j)])[k]
+                    elif len(self.features['dimensions'][j])==1 or isinstance(self.features['dimensions'][j],set):
+                        if isinstance(self.features['dimensions'][j],list):
+                            output = np.zeros(shape=len(fix_dims(self.features['dimensions'][j])[0]))
+                            for k in fix_dims(self.features['dimensions'][j])[0]:
+                                try:
+                                    output[k] = self.get(self.features['variables'][(i,j)][k])
+                                except:
+                                    output[k] = self.get(self.features['variables'][(i,j)])[k]
+                        else:
+                            output = {}
+                            for k in self.features['dimensions'][j]:
+                                try:
+                                    output[k] = self.get(self.features['variables'][(i,j)][k])
+                                except:
+                                    output[k] = self.get(self.features['variables'][(i,j)])[k]
+
                     else:
                         output = np.zeros(shape=tuple([len(dim) for dim in fix_dims(self.features['dimensions'][j])]))
                         for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
                             try:
                                 output[k] = self.get(self.features['variables'][(i,j)][k])
                             except:
-                                output[k] =  self.get(self.features['variables'][(i,j)])[k]
-        
+                                output[k] = self.get(self.features['variables'][(i,j)])[k]
+
         if reduced_cost:
             
     
@@ -1746,6 +1755,8 @@ class model(
 
         if self.features['interface_name'] == 'cplex_cp':
             return self.model.max(*args)
+        else:
+            return np.max(*args)
 
     def set(self, index='', bound=None, step=1, to_list=False):
         """

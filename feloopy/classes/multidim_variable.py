@@ -13,7 +13,6 @@ import numpy as np
 from ..operators.fix_operators import fix_dims
 from ..operators.update_operators import update_variable_features
 
-
     
 class MultidimVariable:
     """Specifies the variable type."""

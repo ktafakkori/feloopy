@@ -10,7 +10,16 @@ def product(iterable):
 def count_variable(variable_dim, total_count, special_count):
     total_count[0] += 1
     special_count[0] += 1
-    count = 1 if variable_dim == 0 else product(len(dims) for dims in variable_dim)
+    if variable_dim == 0:
+
+        count = 1 
+        
+    else:
+        if isinstance(variable_dim,set):
+            count = len(variable_dim)
+        else:
+            count = product(len(dims) for dims in variable_dim)
+    
     special_count[1] += count
     total_count[1] += count
     return total_count, special_count

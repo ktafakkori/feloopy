@@ -289,29 +289,43 @@ class report:
             else:
                 print(self._border + " " + (" "*(len(f"{label} =")-1)+row).ljust(self.width - 4) + " " + self._border)
 
-    def print_element(self, label, numpy_var, additional_text=''):
-        numpy_var = np.array(numpy_var)
-        
-        num_dims = numpy_var.ndim
-        
-        current_index = 0
-        
-        def print_recursive(index, depth=0):
-            nonlocal current_index
-            if num_dims > depth:
-                for i in range(numpy_var.shape[depth]):
-                    print_recursive(current_index, depth + 1)
-            else:
-                if numpy_var[current_index]>0 or numpy_var[current_index]<0:
-                    print(self._border + " " + (f"{label}[{current_index}] = "+str(numpy_var[current_index])).ljust(self.width - 4) + " " + self._border)
+    def print_element(self, label, var, additional_text=''):
 
-        
-                current_index += 1
-
-        print_recursive(0)
+        if isinstance(var, np.ndarray):
+            self._print_numpy_element(label, var)
+        elif isinstance(var, dict):
+            self._print_dict_element(label, var)
+        else:
+            raise ValueError("Input must be a NumPy array or a dictionary.")
 
         if additional_text:
             print(additional_text)
+
+    def _print_numpy_element(self, label, numpy_var):
+
+        num_dims = numpy_var.ndim
+        current_index = [0] * num_dims
+
+        def print_recursive(depth=0):
+            if depth < num_dims:
+                for i in range(numpy_var.shape[depth]):
+                    current_index[depth] = i
+                    print_recursive(depth + 1)
+            else:
+                index_str = "[" + ", ".join(str(current_index[dim]) for dim in range(num_dims)) + "]"
+                value_str = str(numpy_var[tuple(current_index)])
+                if float(value_str) != 0.0:
+                    print(self._border + " " + (f"{label}{index_str} = {value_str}").ljust(self.width - 4) + " " + self._border)
+
+        print_recursive()
+
+    def _print_dict_element(self, label, dict_var):
+
+        for key in dict_var.keys():
+            index_str = str(key).replace("(","[").replace(")","]")
+            value_str = str(dict_var[key])
+            if float(value_str) != 0.0:
+                print(self._border + " " + (f"{label}{index_str} = {value_str}").ljust(self.width - 4) + " " + self._border)
 
     def print_pandas_df(self, label, df, columns=None, additional_text=''):
         for index, row in df.iterrows():
@@ -328,6 +342,7 @@ def left_align(input, box_width=88, rt=False):
         print("│" + " " + input.ljust(box_width - 2) + " " + "│")
         
 def format_string(input, length=8, ensure_length=False):
+
     if input is None:
         formatted_str = "None"
     elif isinstance(input, int):

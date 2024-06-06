@@ -1,9 +1,6 @@
 # Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
 # See the file LICENSE file for licensing details.
 
-
-import cplex
-from docplex.mp.model import Model as CPLEXMODEL
 from ...helpers.formatter import *
 
 def Get(model_object, result, input1, input2=None):
@@ -14,8 +11,12 @@ def Get(model_object, result, input1, input2=None):
 
         case 'variable':
 
-            return input2.solution_value
-
+            try:
+                return input2.solution_value
+            
+            except Exception as e:
+                print(f"Solution retrieval faced error: {e}")
+        
         case 'status':
 
             return model_object.solve_details.status
