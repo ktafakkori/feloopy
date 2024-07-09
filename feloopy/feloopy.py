@@ -20,7 +20,6 @@ import copy
 import numpy as np
 from . import *
 
-
 __author__ = ['Keivan Tafakkori']
 
 HEURISTIC_ALGORITHMS = [
@@ -1149,7 +1148,6 @@ class model(
 
                                 for i in range(self.features['objective_counter'][0]):
 
-                                    
                                     if directions[i] == 'max':
                                         self.sing_result.append(self.features['objectives'][i] - self.features['penalty_coefficient'] * (self.penalty)**2)
 
@@ -2352,6 +2350,25 @@ class model(
         else:
 
             return np.round(x)
+
+
+    def set_local_parameters(self, dataset):
+
+        if type(dataset)==dict:
+            for key, value in dataset.items():
+                locals()[key] = value
+        else:
+            for key, value in dataset.data.items():
+                locals()[key] = value      
+
+    def set_global_parameters(self, dataset):
+
+        if type(dataset)==dict:
+            for key, value in dataset.items():
+                globals()[key] = value
+        else:
+            for key, value in dataset.data.items():
+                globals()[key] = value
 
 # Aliases
 
@@ -4783,7 +4800,7 @@ class search(model,Implement):
             if len(self.directions)==1:
                 def instance(X):
                     lm = model(method=self.method, name=self.name, interface=self.interface, agent=X, no_agents=self.options.get("pop_size", 50))
-                    lm = environment(lm)
+                    lm = environment(lm, *self.args, **self.kwargs)
                     lm.sol(directions=self.directions,solver=self.solver,show_log=self.verbose, solver_options=self.options)
                     return lm[X]
                 
@@ -4871,22 +4888,25 @@ class search(model,Implement):
         
         if self.method in ["heuristic"]: self.cpt = self.em.get_time()
             
-        if self.em.healthy():
+        if self.em.healthy() or self.number_of_objectives != 1:
             if self.method not in ["madm"]:
                 if self.number_of_objectives != 1:
                     
                     if self.method not in ["heuristic"]:
                         self.solutions = self.result[3]
+
+
                     else:
                         num_pareto = self.em.get_obj().shape[0]
-
                         self.solutions = {i: {} for i in range(num_pareto)}
-
                         for i in range(num_pareto):
                             for j in self.em.VariablesDim.keys():
-                                self.solutions[i][j] = self.em.VariablesBound[j][0] + self.em.BestAgent[i,self.em.VariablesSpread[j][0]:self.em.VariablesSpread[j][1]] * (self.em.VariablesBound[j][1] - self.em.VariablesBound[j][0])
-
-
+                                if self.em.VariablesType[j] in ["pvar", "fvar"]:
+                                    self.solutions[i][j] = self.em.VariablesBound[j][0] + self.em.BestAgent[i,self.em.VariablesSpread[j][0]:self.em.VariablesSpread[j][1]] * (self.em.VariablesBound[j][1] - self.em.VariablesBound[j][0])
+                                elif self.em.VariablesType[j] in ["bvar", "ivar"]:
+                                    self.solutions[i][j] = np.array(self.em.VariablesBound[j][0] + self.em.BestAgent[i,self.em.VariablesSpread[j][0]:self.em.VariablesSpread[j][1]] * (self.em.VariablesBound[j][1] - self.em.VariablesBound[j][0]),dtype=np.int64)
+                                elif self.em.VariablesType[j] in ["svar"]:
+                                    self.solutions[i][j] = np.argsort(self.em.VariablesBound[j][0] + self.em.BestAgent[i,self.em.VariablesSpread[j][0]:self.em.VariablesSpread[j][1]] * (self.em.VariablesBound[j][1] - self.em.VariablesBound[j][0]))
                 else:
                     self.solutions = {}
                     if self.method not in ["heuristic"]:
@@ -5139,7 +5159,7 @@ class search(model,Implement):
         init(autoreset=True)
 
         phealthy = "Unknown"
-        if self.em.healthy() or self.method=="madm" or self.sensitivity_analyzed:
+        if self.em.healthy() or self.method=="madm" or self.sensitivity_analyzed or (self.number_of_objectives!=1 and len(self.solutions)!=0):
             phealthy = f"{Fore.GREEN}{'√ Healthy'}"
         else:
             phealthy = f"{Fore.RED}{'X Unhealthy'}"
@@ -5297,7 +5317,7 @@ class search(model,Implement):
             bline()
     
 
-        if self.healthy() == False:
+        if self.healthy() == False or (self.number_of_objectives!=1 and len(self.solutions)==0):
             tline_text("Debug")
             empty_line()
             try:

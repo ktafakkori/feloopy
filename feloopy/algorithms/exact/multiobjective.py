@@ -79,9 +79,22 @@ def sol_multi(
                 model_object.con(z[k] == model_object.features['objectives'][k])
             model_object.features['model_object_before_solve'] = model_object.model
             model_object.solution = solution_generator.generate_solution(model_object.features)
-            for k in range(M):
-                payoff[m, k] = model_object.get_variable(z[k])
-                
+            if model_object.healthy():
+                for k in range(M):
+                    payoff[m, k] = model_object.get_variable(z[k])
+            else:
+                sys.exit(f"There is a problem when {directions[k]}imizing obj {k}")
+
+    if show_log:
+        print()
+        print()
+        print()
+        print("Finished Generating the Payoff Table!")
+        print(payoff)
+        print()
+        print()
+        print()
+        
     if objective_id == 'ecm':
 
         def eps_constraint_model(g, intervals, important):
@@ -107,13 +120,13 @@ def sol_multi(
             z = model_object.fvar('_z', [range(M)])
             model_object.obj(z[approach_options.get('important_objective', important)])
             for k in range(M):
-                model_object.con(z[k] == model_object.features['objectives'][k])
+                model_object.con(z[k] == model_object.features['objectives'][k], name=f"epsilon_objective_value_{k}")
             for k in range(M):
                 if k != approach_options.get('important_objective', important):
                     if directions[k] == 'max':
-                        model_object.con(z[k] >= maxobj[k] - ((1/intervals)*(g))*(maxobj[k] - minobj[k]))
+                        model_object.con(z[k] >= maxobj[k] - ((1/intervals)*(g))*(maxobj[k] - minobj[k]), name=f"epsilon_max_{k}")
                     if directions[k] == 'min':
-                        model_object.con(z[k] <= minobj[k] + ((1/intervals)*(g))*(maxobj[k] - minobj[k]))
+                        model_object.con(z[k] <= minobj[k] + ((1/intervals)*(g))*(maxobj[k] - minobj[k]), name=f"epsilon_min_{k}")
             model_object.features['model_object_before_solve'] = model_object.model
             model_object.features['debug_mode'] = False
             model_object.features['time_limit'] = time_limit
@@ -211,6 +224,7 @@ def sol_multi(
 
         maxobj = np.amax(payoff, axis=0)
         minobj = np.amin(payoff, axis=0)
+
         if np.any(maxobj-minobj) == 0:
             raise ValueError('Please check if the objectives have conflicts!!')
 
@@ -232,8 +246,8 @@ def sol_multi(
                         variables.append({})
                         if save_vars:
                             for typ,var in models.features['variables'].keys():
-                                variables[g][var] = models.get_numpy_var(var)
-                                variables[g]['_weights'] = weights
+                                variables[-1][var] = models.get_numpy_var(var)
+                                variables[-1]['_weights'] = weights
                 else:
                     print('early exit (jump)')
                     break
@@ -246,8 +260,8 @@ def sol_multi(
                     variables.append({})
                     if save_vars:
                         for typ,var in models.features['variables'].keys():
-                            variables[g][var] = models.get_numpy_var(var)
+                            variables[-1][var] = models.get_numpy_var(var)
 
-    conflict = np.corrcoef(*tuple(pareto[:,i] for i in range(M)))
+    conflict = np.corrcoef(pareto.T)
 
     return pareto, payoff, conflict, variables

@@ -10,7 +10,7 @@ from numpy import reshape, shape
 
 def check_constraint_type(constraint):
 
-    if isinstance(constraint, list):
+    if isinstance(constraint, list) and len(constraint)!=0:
 
         if isinstance(constraint[0], list) and isinstance(constraint[0][1], str):
             return 'list with sense'
@@ -25,6 +25,8 @@ def check_constraint_type(constraint):
         else:
             
             return 'dict without sense'
+    elif isinstance(constraint, list) and len(constraint)==0:
+        return 'pass'
     else:
         return 'classic'
 
@@ -170,6 +172,9 @@ class NormalConstraintClass:
                         self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
                         self.features['constraints'].append(expression)
                         self.features['constraint_counter'][1] = len(self.features['constraints'])
+
+                    case 'pass':
+                        pass
 
             case 'heuristic':
 

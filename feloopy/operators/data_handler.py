@@ -500,6 +500,16 @@ class DataToolkit(FileManager):
         else:
             return sample
 
+    def set_local_parameters(self):
+
+        for key, value in self.data.items():
+            locals()[key] = value      
+
+    def set_global_parameters(self):
+
+        for key, value in self.data.items():
+            globals()[key] = value
+
     def load_from_excel(
         self, name: str, dim: list, labels: list, appearance: list, file_name: str, neglect=False
     ):
