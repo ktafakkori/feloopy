@@ -9,16 +9,12 @@ sets = it.product
 
 def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
+    if isinstance(variable_dim,set):
+        variable_dim=[variable_dim]
+
     match variable_type:
 
         case 'pvar':
-
-            '''
-
-            Positive Variable Generator
-
-
-            '''
 
             if variable_dim == 0:
                 generated_variable = model_object.addVariable(
@@ -33,13 +29,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
         case 'bvar':
 
-            '''
-
-            Binary Variable Generator
-
-
-            '''
-
             if variable_dim == 0:
                 generated_variable = model_object.addVariable(
                     variable_name, 0, isInt=False)
@@ -53,13 +42,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
         case 'ivar':
 
-            '''
-
-            Integer Variable Generator
-
-
-            '''
-
             if variable_dim == 0:
                 generated_variable = model_object.addVariable(
                     variable_name, 1, isInt=False)
@@ -72,13 +54,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
                         f"{variable_name}{key}", 1, isInt=True) for key in it.product(*variable_dim)}
 
         case 'fvar':
-
-            '''
-
-            Free Variable Generator
-
-
-            '''
 
             if variable_dim == 0:
                 generated_variable = model_object.addVariable(

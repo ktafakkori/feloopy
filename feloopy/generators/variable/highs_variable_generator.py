@@ -21,6 +21,9 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
     if variable_bound[1] == None:
         variable_bound[1] = +INFINITY
 
+    if isinstance(variable_dim,set):
+        variable_dim=[variable_dim]
+
     match variable_type:
 
         case 'pvar':

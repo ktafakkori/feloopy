@@ -13,13 +13,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
         case 'pvar':
 
-            '''
-
-            Positive Variable Generator
-
-
-            '''
-
             if variable_dim == 0:
 
                 GeneratedVariable = model_object.continuous_var(
@@ -39,12 +32,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
         case 'bvar':
 
-            '''
-
-            Binary Variable Generator
-
-
-            '''
 
             if variable_dim == 0:
 
@@ -64,13 +51,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
 
         case 'ivar':
 
-            '''
-
-            Integer Variable Generator
-
-
-            '''
-
             if variable_dim == 0:
 
                 GeneratedVariable = model_object.integer_var(
@@ -88,13 +68,6 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
                         min=variable_bound[0], max=variable_bound[1]) for key in sets(*variable_dim)}
 
         case 'fvar':
-
-            '''
-
-            Free Variable Generator
-
-
-            '''
 
             if variable_dim == 0:
 

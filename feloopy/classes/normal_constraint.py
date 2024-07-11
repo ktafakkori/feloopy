@@ -27,6 +27,8 @@ def check_constraint_type(constraint):
             return 'dict without sense'
     elif isinstance(constraint, list) and len(constraint)==0:
         return 'pass'
+    elif isinstance(constraint, str):
+        return 'evaluation string'
     else:
         return 'classic'
 
@@ -168,6 +170,13 @@ class NormalConstraintClass:
                        
                     case 'classic':
                     
+                        self.features['constraint_labels'].append(name)
+                        self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                        self.features['constraints'].append(expression)
+                        self.features['constraint_counter'][1] = len(self.features['constraints'])
+
+                    case 'evaluation string':
+
                         self.features['constraint_labels'].append(name)
                         self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
                         self.features['constraints'].append(expression)

@@ -151,6 +151,24 @@ def run_project(file_path):
             subprocess.run([sys.executable, file_path], check=True)
         except:
             print(f"Error running the project: {e}")
+
+def julia_install(packages):
+    from juliacall import Main as jl
+    for package in packages:
+        try:
+            jl.seval(f'import Pkg; Pkg.add("{package}")')
+            print(f"Successfully installed {package} with Julia Pkg")
+        except Exception as e:
+            print(f"Error installing {package} with Julia Pkg: {e}")
+
+def julia_uninstall(packages):
+    from juliacall import Main as jl
+    for package in packages:
+        try:
+            jl.seval(f'import Pkg; Pkg.rm("{package}")')
+            print(f"Successfully uninstalled {package} with Julia Pkg")
+        except Exception as e:
+            print(f"Error uninstalling {package} with Julia Pkg: {e}")
             
 def pip_install(packages, update=False):
    for package in packages:

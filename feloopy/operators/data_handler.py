@@ -7,6 +7,8 @@ import itertools as it
 import numpy as np
 import pandas as pd
 import polars as pl
+import os
+import json
 
 try:
     from ..extras.operators.data_handler import *
@@ -63,6 +65,62 @@ class DataToolkit(FileManager):
             return set(input_set)
         else:
             raise TypeError("Unsupported set type")
+
+    def _json_serializer(self, obj):
+        if isinstance(obj, np.ndarray):
+            return {
+                "__type__": "ndarray",
+                "shape": obj.shape,
+                "data": obj.tolist()
+            }
+        elif isinstance(obj, pd.DataFrame):
+            return {
+                "__type__": "dataframe",
+                "index": obj.index.tolist(),
+                "columns": obj.columns.tolist(),
+                "data": obj.to_dict(orient='records')
+            }
+        elif isinstance(obj, pd.Series):
+            return {
+                "__type__": "series",
+                "index": obj.index.tolist(),
+                "data": obj.to_dict()
+            }
+        elif isinstance(obj, set):
+            return {
+                "__type__": "set",
+                "data": list(obj)
+            }
+        elif isinstance(obj, range):
+            return {
+                "__type__": "range",
+                "start": obj.start,
+                "stop": obj.stop,
+                "step": obj.step
+            }
+        raise TypeError(f"Object of type {type(obj).__name__} is not JSON serializable")
+
+    def _json_decoder(self, dct):
+        # numpy arrays
+        if "shape" in dct and "data" in dct:
+            return np.array(dct["data"]).reshape(dct["shape"])
+        # pandas DataFrames
+        elif "columns" in dct and "index" in dct and "data" in dct:
+            return pd.DataFrame(data=dct["data"], index=dct["index"], columns=dct["columns"])
+        # pandas Series
+        elif "index" in dct and "data" in dct:
+            try:
+                return pd.Series(data=dct["data"], index=dct["index"])
+            except Exception:
+                pass  
+        # sets
+        elif isinstance(dct, dict) and "data" in dct:
+            if "__type__" in dct and dct["__type__"] == "set":
+                return set(dct["data"])
+        # range
+        elif "start" in dct and "stop" in dct and "step" in dct:
+            return range(dct["start"], dct["stop"], dct["step"])
+        return dct
 
     def set(
         self,
@@ -255,7 +313,6 @@ class DataToolkit(FileManager):
                 cols_with_ones = self.random.choice(cols, num_ones, replace=False)
                 result[row, cols_with_ones] = 1
         return self.__keep(name, result, neglect)
-
 
     def permutation(self, name, dim=0, neglect=False):
         dim = self.__fix_dims(dim,is_range=False)
@@ -471,11 +528,9 @@ class DataToolkit(FileManager):
                 counter += 1
             xcounter += 1
 
-
     def sample(self, name, init, size, replace=False, sort_result=False, reset_index=False, return_indices=False, axis=None, neglect=False):
 
         type_is= type(init)
-        
         if type_is ==set:
             init = list(init)
             
@@ -567,5 +622,50 @@ class DataToolkit(FileManager):
 
         return self.__keep(name, result, neglect)
 
+    def save(self, name, format="json"):
+        directory = 'results/data'
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        file_path = os.path.join(directory, name+"."+format)
+        
+        if format == "json":
+            try:
+                with open(file_path, 'w') as file:
+                    json.dump(self.data, file, default=self._json_serializer, indent=4)
+                print(f"Data successfully exported to {file_path}")
+            except TypeError as e:
+                print(f"Serialization error: {e}")
+            except Exception as e:
+                print(f"An error occurred: {e}")
+
+    def load(self,name, format="json", neglect=False):
+        name = name+"."+format
+        final_dir = './data/final'
+        results_dir = 'results/datasets'
+        file_path_final = os.path.join(final_dir, name)
+        file_path_results = os.path.join(results_dir, name)
+        
+        if os.path.exists(file_path_final):
+            file_path = file_path_final
+        elif os.path.exists(file_path_results):
+            file_path = file_path_results
+            print(f"Data file found in {results_dir}. For consistency, please move it to {final_dir}.")
+        else:
+            raise FileNotFoundError(f"File not found. Please place the data file in {final_dir} or {results_dir}.")
+        
+        if "json" in name:
+            try:
+                with open(file_path, 'r') as file:
+                    data = json.load(file, object_hook=self._json_decoder)
+                print(f"Data successfully imported from {file_path}")
+                data = data
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                data= None
+
+        if name.endswith(".json"):
+            name = name[:-5]
+    
+        return self.__keep(name, data, neglect)
 
 data_toolkit = data_utils = data_manager = DataToolkit

@@ -36,7 +36,12 @@ def generate_solution(features):
 
             from .solution import highs_solution_generator
             ModelSolution = highs_solution_generator.generate_solution(features)
-                                                   
+
+        case 'jump':
+
+            from .solution import jump_solution_generator
+            ModelSolution = jump_solution_generator.generate_solution(features)
+                                           
         case 'ortools':
 
             from .solution import ortools_solution_generator

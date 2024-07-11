@@ -43,6 +43,12 @@ def main():
    install_parser.add_argument("-u", "--update", action="store_true", help="Update installed packages to the latest versions")
    install_parser.add_argument("packages", nargs='*', help="Packages to install")
 
+   jlinstall_parser = subparsers.add_parser("jlinstall")
+   jlinstall_parser.add_argument("packages", nargs='*', help="Packages to install")
+
+   jluninstall_parser = subparsers.add_parser("jluninstall")
+   jluninstall_parser.add_argument("packages", nargs='*', help="Packages to uninstall")
+
    uninstall_parser = subparsers.add_parser("uninstall")
    uninstall_parser.add_argument("packages", nargs='*', help="Packages to uninstall")
 
@@ -61,7 +67,9 @@ def main():
        "deps": get_installed_dependencies,
        "run": lambda: run_project(args.file) if args.file else print("Error: Please specify a Python file to run."),
        "install": lambda: pip_install(args.packages, update=args.update) if args.packages else print("Error: Please specify packages to install."),
+       "jlinstall": lambda: julia_install(args.packages) if args.packages else print("Error: Please specify packages to install."),
        "uninstall": lambda: pip_uninstall(args.packages) if args.packages else print("Error: Please specify packages to uninstall."),
+       "jluninstall": lambda: julia_uninstall(args.packages) if args.packages else print("Error: Please specify packages to install."),
    }
 
    if args.version:

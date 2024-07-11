@@ -43,6 +43,11 @@ def generate_variable(interface_name, model_object, variable_type, variable_name
             from .variable import highs_variable_generator
             return highs_variable_generator.generate_variable(**inputs)
 
+        case 'jump':
+
+            from .variable import jump_variable_generator
+            return jump_variable_generator.generate_variable(**inputs)
+
         case 'ortools':
 
             from .variable import ortools_variable_generator

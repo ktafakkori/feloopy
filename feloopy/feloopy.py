@@ -476,6 +476,66 @@ EXACT_ALGORITHMS = [
     ['pyomo', 'xpress-direct'],
     ['pyomo', 'xpress-persistent'],
     ['pyomo', 'xpress'],
+
+    ['jump', 'cbc'],
+    ['jump', 'glpk'],
+    ['jump', 'clp'],
+    ['jump', 'cplex'],
+    ['jump', 'gurobi'],
+    ['jump', 'highs'],
+    ['jump', 'ipopt'],
+    ['jump', 'knitro'],
+    ['jump', 'mosek'],
+    ['jump', 'scip'],
+    ['jump', 'xpress'],
+    ['jump', 'osicbc'],
+    ['jump', 'osiglpk'],
+    ['jump', 'cosmo'],
+    ['jump', 'path'],
+    ['jump', 'profound'],
+    ['jump', 'alpine'],
+    ['jump', 'artelys_knitro'],
+    ['jump', 'baron'],
+    ['jump', 'bonmin'],
+    ['jump', 'cdc'],
+    ['jump', 'cdd'],
+    ['jump', 'clarabel'],
+    ['jump', 'copt'],
+    ['jump', 'couenne'],
+    ['jump', 'csdp'],
+    ['jump', 'daqp'],
+    ['jump', 'dsdp'],
+    ['jump', 'eago'],
+    ['jump', 'ecos'],
+    ['jump', 'fico_xpress'],
+    ['jump', 'hypatia'],
+    ['jump', 'juniper'],
+    ['jump', 'loraine'],
+    ['jump', 'madnlp'],
+    ['jump', 'maingo'],
+    ['jump', 'manopt'],
+    ['jump', 'minotaur'],
+    ['jump', 'minizinc'],
+    ['jump', 'nlopt'],
+    ['jump', 'octeract'],
+    ['jump', 'optim'],
+    ['jump', 'osqp'],
+    ['jump', 'pajarito'],
+    ['jump', 'pavito'],
+    ['jump', 'penbmi'],
+    ['jump', 'percival'],
+    ['jump', 'polyjump_kkt'],
+    ['jump', 'polyjump_qcqp'],
+    ['jump', 'raposa'],
+    ['jump', 'scs'],
+    ['jump', 'sdpa'],
+    ['jump', 'sdplr'],
+    ['jump', 'sdpnal'],
+    ['jump', 'sdpt3'],
+    ['jump', 'sedumi'],
+    ['jump', 'status_switching_qp'],
+    ['jump', 'tulip'],
+
     ['xpress', 'xpress'],
 ]
 
@@ -636,7 +696,7 @@ class model(
         self,
         name: str = 'model_name',
         method: Literal['constraint', 'convex', 'exact', 'heuristic', 'uncertain'] = 'exact',
-        interface: Literal['copt','cplex','cplex_cp','cvxpy','cylp','feloopy','gekko','gurobi','linopy','mealpy','mip','niapy','ortools','ortools_cp','picos','pulp','pygad','pymoo','pymprog','pymultiobjective','pyomo','rsome_dro','rsome_ro','xpress','insideopt','insideopt-demo', 'gams','highs'] = 'pulp',
+        interface: Literal['copt','cplex','cplex_cp','cvxpy','cylp','feloopy','gekko','gurobi','linopy','mealpy','mip','niapy','ortools','ortools_cp','picos','pulp','pygad','pymoo','pymprog','pymultiobjective','pyomo','rsome_dro','rsome_ro','xpress','insideopt','insideopt-demo', 'gams','highs', 'jump'] = 'pulp',
         agent: Optional[Any] = None,
         no_scenarios: Optional[int] = None,
         no_agents: Optional[int] = None,
@@ -678,7 +738,7 @@ class model(
 
             validate_string(
                 label="interface", 
-                list_of_allowed_values=['copt','cplex','cplex_cp','cvxpy','cylp','feloopy','gekko','gurobi','linopy','mealpy','mip','niapy','ortools','ortools_cp','picos','pulp','pygad','pymoo','pymprog','pymultiobjective','pyomo','rsome_dro','rsome_ro','xpress','insideopt','insideopt-demo', 'gams','highs'], 
+                list_of_allowed_values=['copt','cplex','cplex_cp','cvxpy','cylp','feloopy','gekko','gurobi','linopy','mealpy','mip','niapy','ortools','ortools_cp','picos','pulp','pygad','pymoo','pymprog','pymultiobjective','pyomo','rsome_dro','rsome_ro','xpress','insideopt','insideopt-demo', 'gams','highs', 'jump'], 
                 input_string=interface,
                 required=True)
             
@@ -748,7 +808,6 @@ class model(
 
             from .generators import model_generator
             self.model = model_generator.generate_model(self.features)
-                   
                    
             self.features.update(
                 {
@@ -1427,7 +1486,7 @@ class model(
             now = datetime.datetime.now()
             date_str = now.strftime("Date: %Y-%m-%d")
             time_str = now.strftime("Time: %H:%M:%S")
-            tline_text("FelooPy v0.3.0")
+            tline_text("FelooPy v0.3.5")
             empty_line()
             two_column(date_str, time_str)
             two_column(f"Interface: {self.interface_name}", f"Solver: {self.solver_name}")
@@ -1589,6 +1648,9 @@ class model(
 
     def get_numpy_var(self, var_name, dual=False, slack=False, reduced_cost=False):
 
+        if self.features["interface_name"]=="jump":
+            return self.get(var_name)
+
         if not dual and not slack:
             for i,j in self.features['variables'].keys():
                 if j==var_name:
@@ -1664,39 +1726,46 @@ class model(
         if not show_tensors:
 
             for i,j in self.features['variables'].keys():
-
                 if i!='evar':
-
                     if self.features['dimensions'][j] == 0:
-
                         if self.get(self.features['variables'][(i,j)]) not in [0, None]:
                             print(f"│ {j} =", self.get(self.features['variables'][(i,j)]), " "* (box_width-(len(f"│ {j} =") + len(str(self.get(self.features['variables'][(i,j)]))))-1) + "│")
-
                     elif len(self.features['dimensions'][j])==1:
-                        try:
-                            for k in fix_dims(self.features['dimensions'][j])[0]:
+                        if type(self.features['dimensions'][j])==set:
+                            for k in self.features['dimensions'][j]:
                                 if self.get(self.features['variables'][(i,j)][k]) not in [0, None]:
-                                    print(f"│ {j}[{k}] =", self.get(self.features['variables'][(i,j)][k]), " "* (box_width-(len(f"│ {j}[{k}] =") + len(str(self.get(self.features['variables'][(i,j)][k])))) - 1) + "│")
-                        except:
-                            for k in fix_dims(self.features['dimensions'][j])[0]:
-                                if self.get(self.features['variables'][(i,j)])[k] not in [0, None]:
-                                    print(f"│ {j}[{k}] =", self.get(self.features['variables'][(i,j)])[k], " "* (box_width-(len(f"│ {j}[{k}] =") + len(str(self.get(self.features['variables'][(i,j)])[k]))) - 1) + "│")
+                                    print(f"│ {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.features['variables'][(i,j)][k]), " "* (box_width-(len(f"│ {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.features['variables'][(i,j)][k])))) - 1) + "│")   
+                        else:  
+                            try:
+                                for k in fix_dims(self.features['dimensions'][j])[0]:
+                                    if self.get(self.features['variables'][(i,j)][k]) not in [0, None]:
+                                        print(f"│ {j}[{k}] =", self.get(self.features['variables'][(i,j)][k]), " "* (box_width-(len(f"│ {j}[{k}] =") + len(str(self.get(self.features['variables'][(i,j)][k])))) - 1) + "│")
+                            except:
+                                for k in fix_dims(self.features['dimensions'][j])[0]:
+                                    if self.get(self.features['variables'][(i,j)])[k] not in [0, None]:
+                                        print(f"│ {j}[{k}] =", self.get(self.features['variables'][(i,j)])[k], " "* (box_width-(len(f"│ {j}[{k}] =") + len(str(self.get(self.features['variables'][(i,j)])[k]))) - 1) + "│")
                     else:
-                        try:
-                            for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
+                        if type(self.features['dimensions'][j])==set:
+                            for k in self.features['dimensions'][j]:
                                 if self.get(self.features['variables'][(i,j)][k]) not in [0, None]:
-                                    print(f"│ {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.features['variables'][(i,j)][k]), " "* (box_width-(len(f"│ {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.features['variables'][(i,j)][k])))) - 1) + "│")
-                        except:
-                            for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
-                                if self.get(self.features['variables'][(i,j)])[k] not in [0, None]:
-                                    print(f"│ {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.features['variables'][(i,j)])[k], " "* (box_width-(len(f"│ {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.features['variables'][(i,j)])[k]))) - 1) + "│")
+                                    print(f"│ {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.features['variables'][(i,j)][k]), " "* (box_width-(len(f"│ {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.features['variables'][(i,j)][k])))) - 1) + "│")                      
+                        else:
+                            try:
+                                for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
+                                    print(k)
+                                    if self.get(self.features['variables'][(i,j)][k]) not in [0, None]:
+                                        print(f"│ {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.features['variables'][(i,j)][k]), " "* (box_width-(len(f"│ {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.features['variables'][(i,j)][k])))) - 1) + "│")
+                            except:
+                                for k in it.product(*tuple(fix_dims(self.features['dimensions'][j]))):
+                                    print(k)
+                                    if self.get(self.features['variables'][(i,j)])[k] not in [0, None]:
+                                        print(f"│ {j}[{k}] =".replace("(", "").replace(")", ""), self.get(self.features['variables'][(i,j)])[k], " "* (box_width-(len(f"│ {j}[{k}] =".replace("(", "").replace(")", "")) + len(str(self.get(self.features['variables'][(i,j)])[k]))) - 1) + "│")
 
                 else:
 
                     if self.features['dimensions'][j] == 0:
                             if self.get_start(self.features['variables'][(i,j)])!=None:
                                 print(f"│ {j} =", [self.get_start(self.features['variables'][(i,j)]), self.get_end(self.features['variables'][(i,j)])], " "* (box_width-(len(f"│ {j} =") + len(str([self.get_start(self.features['variables'][(i,j)]), self.get_end(self.features['variables'][(i,j)])])))-1) + "│")
-
 
                     elif len(self.features['dimensions'][j])==1:                    
                         for k in fix_dims(self.features['dimensions'][j])[0]:
@@ -2369,6 +2438,53 @@ class model(
         else:
             for key, value in dataset.data.items():
                 globals()[key] = value
+    
+    def jlcode_preamble(self,code):
+
+        if "jlcode_preamble" not in self.features.keys():
+            self.features["jlcode_preamble"]=f"\n{code}"
+        else:
+            self.features["jlcode_preamble"]+=f"\n{code}"
+
+    def jlcode_before_variables(self, code):
+
+        if "jlcode_before_variables" not in self.features.keys():
+
+            self.features["jlcode_before_variables"]=f"\n{code}"
+        else:
+            self.features["jlcode_before_variables"]+=f"\n{code}"
+
+    def jlcode_before_constraints(self, code):
+
+        if "jlcode_before_constraints" not in self.features.keys():
+
+            self.features["jlcode_before_constraints"]=f"\n{code}"
+        else:
+            self.features["jlcode_before_constraints"]+=f"\n{code}"
+
+    def jlcode_before_objectives(self, code):
+
+        if "jlcode_before_objectives" not in self.features.keys():
+
+            self.features["jlcode_before_objectives"]=f"\n{code}"
+        else:
+            self.features["jlcode_before_objectives"]+=f"\n{code}"
+
+    def jlcode_before_solve(self, code):
+
+        if "jlcode_before_solve" not in self.features.keys():
+
+            self.features["jlcode_before_solve"]=f"\n{code}"
+        else:
+            self.features["jlcode_before_solve"]+=f"\n{code}"
+
+    def jlcode_after_solve(self, code):
+
+        if "jlcode_after_solve" not in self.features.keys():
+
+            self.features["jlcode_after_solve"]=f"\n{code}"
+        else:
+            self.features["jlcode_after_solve"]+=f"\n{code}"
 
 # Aliases
 
@@ -3493,7 +3609,7 @@ class Implement:
             now = datetime.datetime.now()
             date_str = now.strftime("Date: %Y-%m-%d")
             time_str = now.strftime("Time: %H:%M:%S")
-            tline_text("FelooPy v0.3.0")
+            tline_text("FelooPy v0.3.5")
             empty_line()
             two_column(date_str, time_str)
             two_column(f"Interface: {self.interface_name}", f"Solver: {self.solver_name}")
@@ -4536,7 +4652,7 @@ class MADM:
         date_str = now.strftime("Date: %Y-%m-%d")
         time_str = now.strftime("Time: %H:%M:%S")
 
-        tline_text("FelooPy v0.3.0")
+        tline_text("FelooPy v0.3.5")
         empty_line()
         two_column(date_str, time_str)
 
@@ -4704,7 +4820,7 @@ class seeker_model(model):
 class xpress_model(model):
     def __init__(self,name='x'):
         super().__init__('exact', name, 'xpress')
-        
+
 class search(model,Implement):
 
     def __init__(
@@ -5174,7 +5290,7 @@ class search(model,Implement):
         formatted_date = current_datetime.strftime("%Y-%m-%d")
         formatted_time = current_datetime.strftime("%H:%M:%S")
     
-        box.top(left="FelooPy v0.3.0", right="Released April 2024")
+        box.top(left="FelooPy v0.3.5", right="Released July 2024")
         box.empty()
         
         box.clear_columns(list_of_strings=["", f"Interface: {self.interface}"], label=f"Date: {formatted_date}", max_space_between_elements=4)

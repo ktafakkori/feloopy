@@ -39,6 +39,11 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
                 from .result import highs_result_generator
                 return highs_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
 
+            case 'jump':
+
+                from .result import jump_result_generator
+                return jump_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
+
             case 'insideopt-demo':
 
                 from .result import seeker_result_generator
@@ -147,7 +152,12 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
 
                 from .result import highs_result_generator
                 return highs_result_generator.Get(model_object, model_solution, indicator)
-                      
+
+            case 'jump':
+
+                from .result import jump_result_generator
+                return jump_result_generator.Get(model_object, model_solution, indicator)
+                     
             case 'insideopt':
 
                 from .result import seeker_result_generator

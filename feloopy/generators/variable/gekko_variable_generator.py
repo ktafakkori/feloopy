@@ -8,6 +8,9 @@ sets = it.product
 
 def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
+    if isinstance(variable_dim,set):
+        variable_dim=[variable_dim]
+        
     match variable_type:
         case 'pvar':
             if variable_dim == 0:

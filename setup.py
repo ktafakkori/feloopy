@@ -94,6 +94,10 @@ plus_gams = [
     'gamspy',
 ]
 
+plus_jump = [
+    'juliacall',
+]
+
 hyper = stock + plus_gurobi + plus_cplex + plus_xpress + plus_copt + plus_gams
 
 # Might have some os-dependent issues
@@ -123,6 +127,7 @@ extra_dict = {
     'plus_insideopt': plus_insideopt,
     'plus_insideoptdemo': plus_insideoptdemo,
     'plus_gams': plus_gams,
+    'plus_jump': plus_jump,
     'only_cylp': only_cylp,
     'only_linux': only_linux,
     'mega': mega}
@@ -149,7 +154,7 @@ if __name__ == '__main__':
         
         name = 'feloopy',
         
-        version = '0.3.0',
+        version = '0.3.5',
         
         description = 'FelooPy: Efficient and feature-rich integrated decision environment',
         

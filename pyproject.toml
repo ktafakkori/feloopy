@@ -3,7 +3,7 @@
 
 [tool.poetry]
 name = "feloopy"
-version = "0.3.0"
+version = "0.3.5"
 description = "FelooPy: Efficient and feature-rich integrated decision environment"
 authors = ["Keivan Tafakkori <k.tafakkori@gmail.com>"]
 license = "MIT"
@@ -99,6 +99,9 @@ insideopt = ""
 
 [tool.poetry.group.plus_gams.dependencies]
 gampspy = ""
+
+[tool.poetry.group.plus_jump.dependencies]
+juliacall = ""
 
 [tool.poetry.group.hyper.dependencies]
 coptpy = ""
