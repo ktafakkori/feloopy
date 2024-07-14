@@ -7,6 +7,51 @@ import sys
 
 warnings.filterwarnings("ignore")
 
+def found_preto_at(z,show_log):
+    if show_log:
+        print()
+        print()
+        print("==========================")
+        print(f"Found Pareto Solution at \n{z}!")
+        print("==========================")
+        print()
+        print()
+
+def revise_pareto(dir_map, directions, pareto, variables):
+    d = np.array([-1*dir_map[direction] for direction in directions])
+    size = np.shape(pareto)[0]
+    pareto_cols = np.shape(pareto)[1]
+    isdominated = np.zeros(size, dtype=np.int64)
+    for t in range(size):
+        for tt in range(size):
+            if np.all(d * pareto[t, :] <= d * pareto[tt, :]) and np.any(d * pareto[t, :] < d * pareto[tt, :]):
+                isdominated[t] += 1
+            if np.all(d * pareto[t, :] >= d * pareto[tt, :]) and np.any(d * pareto[t, :] > d * pareto[tt, :]):
+                isdominated[tt] += 1
+    indices_to_add = []
+    for t in range(size):
+        if isdominated[t] == 0:
+            indices_to_add.append(t)
+    removed_indices = []
+    for t in range(size):
+        if isdominated[t] > 0:
+            removed_indices.append(t)
+    new_members = np.zeros((len(indices_to_add), pareto_cols))
+    for idx, t in enumerate(indices_to_add):
+        new_members[idx] = pareto[t]
+    pareto = new_members
+    indices_set = set(removed_indices)
+    variables= [item for idx, item in enumerate(variables) if idx not in indices_set]
+    pareto_array = np.array(pareto)
+    _, unique_indices = np.unique(pareto_array, axis=0, return_index=True)
+    sorted_unique_indices = sorted(unique_indices)
+    all_indices = set(range(len(pareto)))
+    removed_indices = sorted(all_indices - set(sorted_unique_indices))
+    unique_pareto = pareto_array[sorted_unique_indices]
+    filtered_variables = [variables[idx] for idx in sorted_unique_indices]
+
+    return unique_pareto, filtered_variables
+
 def sol_multi(
     instance, 
     directions=None, 
@@ -54,6 +99,8 @@ def sol_multi(
 
     M = np.copy(len(directions))
     dir_map = {'max': -1, 'min': 1}
+    temp_pareto = []
+    temp_vars = []
 
     if approach_options.get('payoff_method', 'separated') == 'separated':
         
@@ -82,6 +129,11 @@ def sol_multi(
             if model_object.healthy():
                 for k in range(M):
                     payoff[m, k] = model_object.get_variable(z[k])
+                temp_pareto.append([model_object.get_variable(z[k]) for k in range(M)])
+                if save_vars:
+                    temp_vars.append({})
+                    for typ,var in model_object.features['variables'].keys():
+                        temp_vars[-1][var] = model_object.get_numpy_var(var)
             else:
                 sys.exit(f"There is a problem when {directions[k]}imizing obj {k}")
 
@@ -94,7 +146,7 @@ def sol_multi(
         print()
         print()
         print()
-        
+
     if objective_id == 'ecm':
 
         def eps_constraint_model(g, intervals, important):
@@ -149,7 +201,7 @@ def sol_multi(
         minobj = np.amin(payoff, axis=0)
         
         if np.any(maxobj-minobj) == 0:
-            raise ValueError('Please check the conflict among objectives!')
+            raise ValueError(f'Please check the conflict among objectives!\nCurrent payoff:\n{payoff}\n\nCurrent conflict:\n"{np.corrcoef(payoff.T)}')
 
         intervals = approach_options.get('intervals', 10)
         pareto = []
@@ -159,26 +211,22 @@ def sol_multi(
                 for g in range(0, intervals+1):
                     models, result = eps_constraint_model(g, intervals, k)
                     if models.healthy():
+                        found_preto_at(result,show_log)
                         pareto.append(result)
                         if save_vars:
                             variables.append({})
                             for typ,var in models.features['variables'].keys():
                                 variables[-1][var] = models.get_numpy_var(var)
-                    else:
-                        print('early exit (jump)')
-                        break
         else:
             for g in range(0, intervals+1):
                 models, result = eps_constraint_model(g, intervals, k)
                 if models.healthy():
+                    found_preto_at(result,show_log)
                     pareto.append(result)
                     if save_vars:
                         variables.append({})
                         for typ,var in models.features['variables'].keys():
                             variables[-1][var] = models.get_numpy_var(var)
-                else:
-                    print('early exit (jump)')
-                    break
 
         pareto = np.array(pareto)
 
@@ -248,9 +296,6 @@ def sol_multi(
                             for typ,var in models.features['variables'].keys():
                                 variables[-1][var] = models.get_numpy_var(var)
                                 variables[-1]['_weights'] = weights
-                else:
-                    print('early exit (jump)')
-                    break
 
         else:
             models, result = nwsm_model(weights)
@@ -262,6 +307,7 @@ def sol_multi(
                         for typ,var in models.features['variables'].keys():
                             variables[-1][var] = models.get_numpy_var(var)
 
+    pareto, variables = revise_pareto(dir_map, directions, pareto, variables)
     conflict = np.corrcoef(pareto.T)
 
     return pareto, payoff, conflict, variables
