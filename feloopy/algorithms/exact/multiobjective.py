@@ -12,7 +12,7 @@ def found_pareto_at(z,show_log):
         print()
         print()
         print("==========================")
-        print(f"Found Pareto Solution at \n{z}!")
+        print(f"Found Pareto solution at \n{z}")
         print("==========================")
         print()
         print()
