@@ -291,8 +291,8 @@ def sol_multi(
                 if models.healthy():
                     for k in range(M):
                         pareto[g, k] = result[k]
-                        variables.append({})
                         if save_vars:
+                            variables.append({})
                             for typ,var in models.features['variables'].keys():
                                 variables[-1][var] = models.get_numpy_var(var)
                                 variables[-1]['_weights'] = weights
@@ -302,8 +302,8 @@ def sol_multi(
             if models.healthy():
                 for k in range(M):
                     pareto[g, k] = result[k]
-                    variables.append({})
                     if save_vars:
+                        variables.append({})
                         for typ,var in models.features['variables'].keys():
                             variables[-1][var] = models.get_numpy_var(var)
 
