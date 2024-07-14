@@ -350,8 +350,12 @@ def format_string(input, length=8, ensure_length=False):
             formatted_str = f"{input:.0f}"
         else:
             formatted_str = f"{input:.2e}"
-    else:
+    elif isinstance(input, float):
         formatted_str = f"{input:.2f}"
+    elif isinstance(input, dict):
+        formatted_str = ', '.join(f"{k}: {format_string(v, length, ensure_length)}" for k, v in input.items())
+    else:
+        formatted_str = str(input)
     
     if ensure_length and len(formatted_str) < length:
         formatted_str += ' ' * (length - len(formatted_str))
@@ -689,6 +693,30 @@ def metrics_print(
 
     two_column("CPT (hour:min:sec)", "%02d:%02d:%02d" % (hour, min, sec))
 
+import time
+import threading
+from tqdm import tqdm
+
+def run_with_progress(func, show_log, *args, **kwargs):
+    def show_progress():
+        with tqdm(total=0, unit='s', bar_format='{desc}') as pbar:
+            while not stop_event.is_set():
+                pbar.set_description("Processing...") 
+                pbar.update()
+                time.sleep(0.5)
+
+    stop_event = threading.Event()
+
+    if show_log:
+        progress_thread = threading.Thread(target=show_progress)
+        progress_thread.start()
+
+    try:
+        func(*args, **kwargs)
+    finally:
+        if show_log:
+            stop_event.set()
+            progress_thread.join()
 
 def progress_bar(iterable, unit="iter", description="Progress", remain=False):
     from tqdm import tqdm

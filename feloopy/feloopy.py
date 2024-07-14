@@ -1,7 +1,7 @@
 # Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
 # See the file LICENSE file for licensing details.
 
-import contextlib
+
 import importlib
 import itertools as it
 import math as mt
@@ -10,15 +10,16 @@ import platform
 import sys
 import time
 import warnings
-from collections import defaultdict
-from typing import Literal, Optional, Union
-from contextlib import suppress
-from .operators.metrics import compute_similarity
-import timeit 
-import copy
 
+from typing import Literal, Optional, Union
+from contextlib import suppress,redirect_stdout
+import timeit
 import numpy as np
-from . import *
+
+from .algorithms import *
+from .classes import *
+from .helpers import *
+from .operators import *
 
 __author__ = ['Keivan Tafakkori']
 
@@ -687,10 +688,7 @@ SPECIAL_ALGORITHMS = [
     ['opa_method', 'pydecision'],
 ]
 
-from .algorithms import *
-from .classes import *
-from .helpers import *
-from .operators import *
+
 
 class model(
     TensorVariableClass,
@@ -821,7 +819,9 @@ class model(
 
             from .generators import model_generator
             self.model = model_generator.generate_model(self.features)
-                   
+            
+            from collections import defaultdict
+
             self.features.update(
                 {
                 'model_object': self.model,
@@ -1398,7 +1398,7 @@ class model(
         if not os.path.isfile(path):
             open(path, 'w').close()
         with open(path, 'a', encoding='utf-8') as f:
-            with contextlib.redirect_stdout(f):
+            with redirect_stdout(f):
                 self.full_report(**kwargs)
                 
     def append_report(self, filename="result.txt", dir='./results/texts/', **kwargs):
@@ -1408,7 +1408,7 @@ class model(
         if not os.path.isfile(path):
             open(path, 'w').close()
         with open(path, 'a', encoding='utf-8') as f:
-            with contextlib.redirect_stdout(f):
+            with redirect_stdout(f):
                 self.report(**kwargs)
                                
     def write_full_report(self, filename="result.txt", dir='./results/texts/', **kwargs):
@@ -1418,7 +1418,7 @@ class model(
         if not os.path.isfile(path):
             open(path, 'w').close()
         with open(path, 'w', encoding='utf-8') as f:
-            with contextlib.redirect_stdout(f):
+            with redirect_stdout(f):
                 self.full_report(**kwargs)
 
     def write_report(self, filename="result.txt", dir='./results/texts/', **kwargs):
@@ -1428,7 +1428,7 @@ class model(
         if not os.path.isfile(path):
             open(path, 'w').close()
         with open(path, 'w', encoding='utf-8') as f:
-            with contextlib.redirect_stdout(f):
+            with redirect_stdout(f):
                 self.report(**kwargs)
             
     def full_report(self,show_tensors=False, detailed=False):
@@ -4991,6 +4991,7 @@ class search(model,Implement):
         benchmark=None,
         repeat=1,
         verbose=False,
+        progress=False,
         should_run=True,
         memorize=True,
         report=False,
@@ -5030,6 +5031,7 @@ class search(model,Implement):
         self.inputdata = dataset
         self.data = {}
         self.repeat = repeat
+        self.progress = progress
         
         self.number_of_objectives = len(self.directions)
         
@@ -5039,8 +5041,10 @@ class search(model,Implement):
 
             if self.should_benchmark: 
                 self.benchmark_results = self.benchmark(algorithms=benchmark, repeat=self.repeat)
-                       
+            
+            #run_with_progress(self.run, show_log= self.progress, verbose=self.verbose)
             self.run(verbose=self.verbose)
+            
         
         if len(self.key_params)!=0:
             self.sensitivity(dataset, key_params, scenarios, environment,control_scenario)
@@ -5270,7 +5274,6 @@ class search(model,Implement):
             else:
                 return self.result[0]
                 
-        
     def get_dual(self,input):
         return self.em.get_dual(input)
 
@@ -5279,6 +5282,9 @@ class search(model,Implement):
       
     def sensitivity(self, dataset, parameter_names, parameter_values, environment=None,control_scenario=0):
         
+        from .operators.metrics import compute_similarity
+        import copy
+
         self.sensitivity_parameter_names = parameter_names
         self.sensitivity_parameter_values = parameter_values
         
@@ -5588,7 +5594,8 @@ class search(model,Implement):
                 pass
             bline()
     
-        if self.healthy() == False or (self.number_of_objectives!=1 and len(self.solutions)==0):
+        if self.healthy() == False and (self.number_of_objectives!=1 and len(self.solutions)==0) and not self.sensitivity_analyzed:
+            bline()
             tline_text("Debug")
             empty_line()
             try:
@@ -5664,7 +5671,7 @@ class search(model,Implement):
                                 if i%skip==0:
                                     k=i
                             if k!=None:
-                                box.row(left=f"Pareto solution {k}")
+                                box.row(left=f"Pareto solution {k}", right=' '.join(format_string(j,ensure_length=True) for j in self.objective_values[k]))
                                 box.empty()
                                 for key in self.solutions[k]:
                                     if key in self.key_vars or len(self.key_vars)==0:
@@ -5743,6 +5750,7 @@ class search(model,Implement):
                         from colorama import init, Fore
                         init(autoreset=True)
                         
+
                         if self.number_of_objectives==1:
                             box.row(left=f"→ Scenario {j}", center=(f"{'√ Healthy'}" if self.sensitivity_data[f"sensitivtiy_of_health_to_{parameter_name}"][j] else f"{'X Unhealthy'}")+ f" (Objective: {format_string(self.sensitivity_data[f'sensitivtiy_of_objectives_to_{parameter_name}'][j])})", right=f"{time_formatted} h:m:s" + f" {microseconds_scientific_notation} μs")
                         else:
@@ -5752,11 +5760,22 @@ class search(model,Implement):
                         for key in self.sensitivity_data[f"sensitivtiy_of_solutions_to_{parameter_name}"][j]:
                             if key in self.key_vars or len(self.key_vars)==0:
                                 if self.number_of_objectives ==1:
-                                    box.print_tensor(key,self.sensitivity_data[f"sensitivtiy_of_solutions_to_{parameter_name}"][j][key], "∆ " + format_string(self.sensitivity_data[f"sensitivtiy_of_similarity_to_{parameter_name}"][j][key])+"")
-                        
+                                    #
+                                    if show_elements:
+                                        try:
+                                            box.print_element(key,self.sensitivity_data[f"sensitivtiy_of_solutions_to_{parameter_name}"][j][key])
+                                            box.row(right="∆ " + format_string(self.sensitivity_data[f"sensitivtiy_of_similarity_to_{parameter_name}"][j][key])+"")
+                                        except:
+                                            pass
+                                    else:
+                                        try:
+                                            box.print_tensor(key,self.sensitivity_data[f"sensitivtiy_of_solutions_to_{parameter_name}"][j][key], "∆ " + format_string(self.sensitivity_data[f"sensitivtiy_of_similarity_to_{parameter_name}"][j][key])+"")
+                                        except:
+                                            pass
+
                         if self.number_of_objectives !=1:
                             for obj_id in range(self.number_of_objectives):
-                                box.print_tensor(f"Objective {obj_id}",np.mean(self.sensitivity_data[f"sensitivtiy_of_objectives_to_{parameter_name}"][j][:,obj_id]))
+                                box.print_tensor(f"Ave. Obj. {obj_id}",np.mean(self.sensitivity_data[f"sensitivtiy_of_objectives_to_{parameter_name}"][j][:,obj_id]))
                     
 
                     box.empty()
