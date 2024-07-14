@@ -309,7 +309,6 @@ def sol_multi(
                     for typ,var in models.features['variables'].keys():
                         variables[-1][var] = models.get_numpy_var(var)
 
-    print(variables,pareto)
     pareto, variables = revise_pareto(dir_map, directions, pareto, variables)
     conflict = np.corrcoef(pareto.T)
 
