@@ -325,7 +325,7 @@ class report:
             index_str = str(key).replace("(","[").replace(")","]")
             value_str = str(dict_var[key])
             if float(value_str) != 0.0:
-                print(self._border + " " + (f"{label}{index_str} = {value_str}").ljust(self.width - 4) + " " + self._border)
+                print(self._border + " " + (f"{label}[{index_str}] = {value_str}").ljust(self.width - 4) + " " + self._border)
 
     def print_pandas_df(self, label, df, columns=None, additional_text=''):
         for index, row in df.iterrows():

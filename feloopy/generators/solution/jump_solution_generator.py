@@ -79,6 +79,7 @@ def generate_solution(features):
     model_object=""
     model_object+="\nusing "+jump_solver_selector[solver_name]
     model_object+=features.get("jlcode_preamble","")
+    model_object+=features.get("jlcode_data","")
     model_object+= features['model_object_before_solve']
     model_objectives = features['objectives']
     model_constraints = features['constraints']
@@ -170,5 +171,20 @@ def generate_solution(features):
                     pass
 
             generated_solution = [result, [0, jl.elapsed_time]]
+
+    file_path = './__pycache__/data.json'
+    # Check if the file exists
+    if os.path.exists(file_path):
+        # Remove the file
+        os.remove(file_path)
+        
+        # Get the directory from the file path
+        dir_path = os.path.dirname(file_path)
+        
+        # Check if the directory is empty
+        if not os.listdir(dir_path):
+            # Remove the directory
+            os.rmdir(dir_path)
+
 
     return generated_solution

@@ -33,6 +33,9 @@ class DataToolkit(FileManager):
         
         self.store = self.__keep
 
+    def sets(self,*args):
+        return it.product(*args)
+    
     def __fix_dims(self, dim, is_range=True):
         if dim == 0:
             pass
@@ -168,7 +171,6 @@ class DataToolkit(FileManager):
             if callback:
                 result =  set(item for item in result if callback(item))
 
-
         else:   
             if callback:
                 named_indices = False
@@ -268,7 +270,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = np.zeros(1)
         else:
-            result = np.zeros(dim)
+            if type(dim)==set:
+                result = {key: 0 for key in dim}
+            else:
+                result = np.zeros(dim)
         return self.__keep(name, result, neglect)
 
     def ones(self, name, dim=0, neglect=False):
@@ -276,7 +281,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = np.ones(1)
         else:
-            result = np.ones(tuple(dim))
+            if type(dim)==set:
+                result = {key: 0 for key in dim}
+            else:
+                result = np.ones(tuple(dim))
         return self.__keep(name, result, neglect)
 
     def ones_per_column(self, name, dim=0, min_ones=1, max_ones=1, neglect=False):
@@ -294,7 +302,9 @@ class DataToolkit(FileManager):
                 num_ones = self.random.integers(min_ones, max_ones + 1)
                 rows_with_ones = self.random.choice(rows, num_ones, replace=False)
                 result[rows_with_ones, col] = 1
-        
+        if type(dim)==set:
+            result = {key: result[key] for key in dim}
+
         return self.__keep(name, result, neglect)
     
     def ones_per_row(self, name, dim=0, min_ones=1, max_ones=1, neglect=False):
@@ -312,6 +322,9 @@ class DataToolkit(FileManager):
                 num_ones = self.random.integers(min_ones, max_ones + 1)
                 cols_with_ones = self.random.choice(cols, num_ones, replace=False)
                 result[row, cols_with_ones] = 1
+        if type(dim)==set:
+            result = {key: result[key] for key in dim}
+
         return self.__keep(name, result, neglect)
 
     def permutation(self, name, dim=0, neglect=False):
@@ -324,7 +337,9 @@ class DataToolkit(FileManager):
         identity_matrix = np.eye(dim[0])
         self.random.shuffle(identity_matrix)
         result = identity_matrix
-        
+        if type(dim)==set:
+            result = {key: result[key] for key in dim}     
+            
         return self.__keep(name, result, neglect)
     
     def uniformint(self, name, dim=0, bound=[1, 10], result=None, neglect=False):
@@ -332,7 +347,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.integers(low=bound[0], high=bound[1] + 1)
         else:
-            result = self.random.integers(low=bound[0], high=bound[1] + 1, size=dim)
+            if type(dim)==set:
+                result = {key: self.random.integers(low=bound[0], high=bound[1] + 1) for key in dim}
+            else:
+                result = self.random.integers(low=bound[0], high=bound[1] + 1, size=dim)
         return self.__keep(name, result, neglect)
     
     def bernoulli(self, name, dim=0, p=0.5, result=None, neglect=False):
@@ -340,7 +358,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.choice([0, 1], p=[1-p, p])
         else:
-            result = self.random.choice([0, 1], p=[1-p, p], size=dim)
+            if type(dim)==set:
+                result = {key: self.random.choice([0, 1], p=[1-p, p]) for key in dim}
+            else:
+                result = self.random.choice([0, 1], p=[1-p, p], size=dim)
         return self.__keep(name, result, neglect)
     
     def binomial(self, name, dim=0, n=None, p=None, result=None, neglect=False):
@@ -348,7 +369,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.binomial(n, p)
         else:
-            result = self.random.binomial(n, p, size=tuple(dim))
+            if type(dim)==set:
+                result = {key: self.random.binomial(n, p) for key in dim}
+            else:
+                result = self.random.binomial(n, p, size=tuple(dim))
         return self.__keep(name, result, neglect)
 
     def poisson(self, name, dim=0, lam=1, result=None, neglect=False):
@@ -356,7 +380,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.poisson(lam)
         else:
-            result = self.random.poisson(lam, size=tuple(dim))
+            if type(dim)==set:
+                result = {key: self.random.poisson(lam) for key in dim}
+            else:
+                result = self.random.poisson(lam, size=tuple(dim))
         return self.__keep(name, result, neglect)
 
     def geometric(self, name, dim=0, p=None, result=None, neglect=False):
@@ -364,7 +391,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.geometric(p)
         else:
-            result = self.random.geometric(p, size=tuple(dim))
+            if type(dim)==set:
+                result = {key: self.random.geometric(p) for key in dim}
+            else: 
+                result = self.random.geometric(p, size=tuple(dim))
         return self.__keep(name, result, neglect)
 
     def negative_binomial(self, name, dim=0, r=None, p=None, result=None, neglect=False):
@@ -372,7 +402,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.negative_binomial(r, p)
         else:
-            result = self.random.negative_binomial(r, p, size=tuple(dim))
+            if type(dim)==set:
+                result = {key: self.random.negative_binomial(r, p) for key in dim}
+            else:
+                result = self.random.negative_binomial(r, p, size=tuple(dim))
         return self.__keep(name, result, neglect)
 
     def hypergeometric(self, name, dim=0, N=None, m=None, n=None, result=None, neglect=False):
@@ -384,7 +417,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.hypergeometric(ngood, nbad, nsamples)
         else:
-            result = self.random.hypergeometric(ngood, nbad, nsamples, size=tuple(dim))
+            if type(dim)==set:
+                result = {key: self.random.hypergeometric(ngood, nbad, nsamples) for key in dim}
+            else:
+                result = self.random.hypergeometric(ngood, nbad, nsamples, size=tuple(dim))
         return self.__keep(name, result, neglect)
 
     def uniform(self, name, dim=0, bound=[0, 1], result=None, neglect=False):
@@ -392,7 +428,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.uniform(low=bound[0], high=bound[1])
         else:
-            result = self.random.uniform(low=bound[0], high=bound[1], size=dim)
+            if type(dim)==set:
+                result = {key: self.random.uniform(low=bound[0], high=bound[1]) for key in dim}
+            else:
+                result = self.random.uniform(low=bound[0], high=bound[1], size=dim)
         return self.__keep(name, result, neglect)
 
     def weight(self, name, dim=0, bound=[0, 1], result=None, neglect=False):
@@ -401,6 +440,8 @@ class DataToolkit(FileManager):
             data = self.random.uniform(low=bound[0], high=bound[1])
             result = data / data.sum() if data.sum() != 0 else data
         else:
+            if type(dim)==set:
+                dim = len(dim)
             data = self.random.uniform(low=bound[0], high=bound[1], size=dim)
             result = data / data.sum(axis=-1, keepdims=True) if data.sum() != 0 else data
         return self.__keep(name, result, neglect)
@@ -410,7 +451,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.normal(mu, sigma)
         else:
-            result = self.random.normal(mu, sigma, size=dim)
+            if type(dim)==set:
+                result = {key: self.random.normal(mu, sigma) for key in dim}
+            else:
+                result = self.random.normal(mu, sigma, size=dim)
         return self.__keep(name, result, neglect)
 
     def standard_normal(self, name, dim=0, result=None, neglect=False):
@@ -418,7 +462,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.normal(0, 1)
         else:
-            result = self.random.normal(0, 1, size=dim)
+            if type(dim)==set:
+                result = {key: self.random.normal(0, 1) for key in dim}
+            else:
+                result = self.random.normal(0, 1, size=dim)
         return self.__keep(name, result, neglect)
 
     def exponential(self, name, dim=0, lam=1.0, result=None, neglect=False):
@@ -426,7 +473,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.exponential(scale=1/lam)
         else:
-            result = self.random.exponential(scale=1/lam, size=dim)
+            if type(dim)==set:
+                result = {key: self.random.exponential(scale=1/lam) for key in dim}
+            else:
+                result = self.random.exponential(scale=1/lam, size=dim)
         return self.__keep(name, result, neglect)
 
     def gamma(self, name, dim=0, alpha=1, lam=1, result=None, neglect=False):
@@ -434,7 +484,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.gamma(shape=alpha, scale=1/lam)
         else:
-            result = self.random.gamma(shape=alpha, scale=1/lam, size=dim)
+            if type(dim)==set:
+                result = {key: self.random.gamma(shape=alpha, scale=1/lam) for key in dim}
+            else:
+                result = self.random.gamma(shape=alpha, scale=1/lam, size=dim)
         return self.__keep(name, result, neglect)
 
     def erlang(self, name, dim=0, alpha=1, lam=1, result=None, neglect=False):
@@ -443,7 +496,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.gamma(shape=alpha, scale=1/lam)
         else:
-            result = self.random.gamma(shape=alpha, scale=1/lam, size=dim)
+            if type(dim)==set:
+                result = {key: self.random.gamma(shape=alpha, scale=1/lam) for key in dim}
+            else:
+                result = self.random.gamma(shape=alpha, scale=1/lam, size=dim)
         return self.__keep(name, result, neglect)
 
     def beta(self, name, dim=0, a=1, b=1, result=None, neglect=False):
@@ -451,7 +507,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.beta(a, b, size=None)
         else:
-            result = self.random.beta(a, b, size=dim)
+            if type(dim)==set:
+                result = {key: self.random.beta(a, b)  for key in dim}
+            else:
+                result = self.random.beta(a, b, size=dim)
         return self.__keep(name, result, neglect)
 
     def weibull(self, name, dim=0, alpha=None, beta=None, result=None, neglect=False):
@@ -459,7 +518,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = alpha * self.random.weibull(a=beta)
         else:
-            result = alpha * self.random.weibull(a=beta, size=dim)
+            if type(dim)==set:
+                result = {key: alpha * self.random.weibull(a=beta) for key in dim}
+            else: 
+                result = alpha * self.random.weibull(a=beta, size=dim)
         return self.__keep(name, result, neglect)
 
     def cauchy(self, name, dim=0, alpha=None, beta=None, result=None, neglect=False):
@@ -467,7 +529,10 @@ class DataToolkit(FileManager):
         if dim == 0:
             result = self.random.standard_cauchy()
         else:
-            result = self.random.standard_cauchy(size=dim)
+            if type(dim)==set:
+                result = {key: self.random.standard_cauchy() for key in dim}
+            else:
+                result = self.random.standard_cauchy(size=dim)
         return self.__keep(name, result, neglect)
 
     def dirichlet(self, name, dim=0, k=None, alpha=None, result=None, neglect=False):
@@ -480,7 +545,10 @@ class DataToolkit(FileManager):
         if dim == 0 or len(dim) == 1:
             result = self.random.dirichlet(alpha)
         else:
-            result = self.random.dirichlet(alpha, size=dim)
+            if type(dim)==set:
+                result = {key: self.random.dirichlet(alpha) for key in dim}
+            else:
+                result = self.random.dirichlet(alpha, size=dim)
         return self.__keep(name, result, neglect)
 
     def colors(self, name, dim=0, neglect=False, with_names=True):
@@ -667,5 +735,6 @@ class DataToolkit(FileManager):
             name = name[:-5]
     
         return self.__keep(name, data, neglect)
+
 
 data_toolkit = data_utils = data_manager = DataToolkit

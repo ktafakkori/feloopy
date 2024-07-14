@@ -603,16 +603,28 @@ WEIGHTING_ALGORITHMS = [
     ['bw_method','pydecision'],
     ['cilos_method', 'pydecision'],
     ['critic_method', 'pydecision'],
+    ['fuzzy_critic_method', 'pydecision'],
     ['entropy_method', 'pydecision'],
     ['fuzzy_ahp_method','pydecision'],
+    ['ppf_ahp_method','pydecision'],
     ['fuzzy_bw_method','pydecision'],
+    ['simplified_bw_method','pydecision'],
     ['idocriw_method', 'pydecision'],
     ['lp_method', 'feloopy'],
     ['merec_method', 'pydecision'],
+    ['fuzzy_merec_method', 'pydecision'],
+    ['fucom_method', 'pydecision'],
+    ['roc_method', 'pydecision'],
+    ['rrw_method', 'pydecision'],
+    ['rsw_method', 'pydecision'],
+    ['seca_method', 'pydecision'],
+    ['fuzzy_fucom_method', 'pydecision'],
     ]
 
 RANKING_ALGORITHMS = [
     ['aras_method', 'pydecision'],
+    ['mara_method', 'pydecision'],
+    ['wisp_method', 'pydecision'],
     ['borda_method', 'pydecision'],
     ['cocoso_method', 'pydecision'],
     ['codas_method', 'pydecision'],
@@ -672,6 +684,7 @@ SPECIAL_ALGORITHMS = [
     ['promethee_iii', 'pydecision'],
     ['promethee_v', 'pydecision'],
     ['wings_method', 'pydecision'],
+    ['opa_method', 'pydecision'],
 ]
 
 from .algorithms import *
@@ -2486,6 +2499,81 @@ class model(
         else:
             self.features["jlcode_after_solve"]+=f"\n{code}"
 
+    def jlcode_data(self,data):
+
+        if type(data)==dict:
+            data_dict = data.copy()
+        else:
+            data_dict = data.data.copy()
+
+        import json
+
+        def convert_value(value):
+            if isinstance(value, pd.DataFrame):
+                return value.to_dict('list')
+            elif isinstance(value, np.ndarray):
+                return value.tolist()
+            elif isinstance(value, set):
+                return list(value)
+              
+            elif isinstance(value, dict):
+                return {k: convert_value(v) for k, v in value.items()} 
+            elif isinstance(value, (list, tuple)):
+                return [convert_value(v) for v in value] 
+            else:
+                return value
+
+        converted_dict = {k: convert_value(v) for k, v in data_dict.items()}
+
+        file_path = './__pycache__/data.json'
+        dir_path = os.path.dirname(file_path)
+        os.makedirs(dir_path, exist_ok=True)
+        with open(file_path, 'w') as f:
+            json.dump(converted_dict, f)
+        
+        code = """
+using Pkg
+using JSON
+using DataFrames
+
+data = JSON.parsefile("./__pycache__/data.json")
+
+# Function to convert values to Julia-compatible formats
+function convert_value(value)
+    if typeof(value) == Dict
+        if all(x -> typeof(x) == Vector{Any}, values(value))
+            try
+                return DataFrame(value)
+            catch
+                return Dict(k => convert_value(v) for (k, v) in value) 
+            end
+        else
+            return Dict(k => convert_value(v) for (k, v) in value)
+        end
+    elseif typeof(value) == Vector{Any}
+        return [convert_value(v) for v in value]
+    else
+        return value  # Base case
+    end
+end
+
+converted_data = Dict(k => convert_value(v) for (k, v) in data)
+
+print(converted_data)
+
+for item in converted_data
+    key = Symbol(item[1])  
+    value = item[2]       
+    @eval global $key = $value
+end
+"""
+    
+        if "jlcode_data" not in self.features.keys():
+
+            self.features["jlcode_data"]=code
+        else:
+            self.features["jlcode_data"]=code
+
 # Aliases
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -3796,6 +3884,7 @@ construct = make_model = implementor = implement = Implement
 class MADM:
 
     def __init__(self, solution_method, problem_name, interface_name):
+        
         """
         Initializes an instance of MADM.
 
@@ -4042,11 +4131,53 @@ class MADM:
         else:
             self.solver_options['F'] = self.utility_functions
 
+    def add_cr(self,data):
+
+        self.features['cr_defined'] = True
+        self.criteria_pairwise_comparison_matrix = np.array(data)
+        self.solver_options['criteria_rank'] = self.criteria_pairwise_comparison_matrix
+
+    def add_cp(self,data):
+
+        self.features['cpm_defined'] = True
+        self.criteria_pairwise_comparison_matrix = np.array(data)
+        self.solver_options['criteria_priority'] = self.criteria_pairwise_comparison_matrix
+
+    def add_er(self,data):
+
+        self.features['er_defined'] = True
+        self.criteria_pairwise_comparison_matrix = np.array(data)
+        self.solver_options['experts_rank'] = self.criteria_pairwise_comparison_matrix
+
+    def add_erc(self,data):
+
+        self.features['erc_defined'] = True
+        self.criteria_pairwise_comparison_matrix = np.array(data)
+        self.solver_options['experts_rank_criteria'] = self.criteria_pairwise_comparison_matrix
+
+    def add_era(self,data):
+
+        self.features['era_defined'] = True
+        self.criteria_pairwise_comparison_matrix = np.array(data)
+        self.solver_options['experts_rank_alternatives'] = self.criteria_pairwise_comparison_matrix
+
     def add_cpcm(self,data):
 
         self.features['cpm_defined'] = True
         self.criteria_pairwise_comparison_matrix = np.array(data)
         self.solver_options['dataset'] = self.criteria_pairwise_comparison_matrix
+
+    def add_ppfcpcm(self,data):
+
+        self.features['ppfcpm_defined'] = True
+        self.criteria_pairwise_comparison_matrix = np.array(data)
+        self.solver_options['comparison_matrix'] = self.criteria_pairwise_comparison_matrix
+        
+    def add_ppfcpcm(self,data):
+
+        self.features['ppfcpm_defined'] = True
+        self.criteria_pairwise_comparison_matrix = np.array(data)
+        self.solver_options['comparison_matrix'] = self.criteria_pairwise_comparison_matrix
 
     def add_fcpcm(self,data):
 
@@ -4114,7 +4245,8 @@ class MADM:
             self.auxiliary_solver_options['graph'] = False
         if show_log!=None: 
             self.auxiliary_solver_options['verbose'] = show_log
-
+        else:
+            self.auxiliary_solver_options['verbose'] = show_log
         try:
             self.start = time.time()
             self.result =  self.madam_algorithm(**{**self.solver_options, **self.auxiliary_solver_options})
@@ -4141,13 +4273,18 @@ class MADM:
                 self.features['number_of_criteria'] = len(self.result)
                 self.weights = self.result
 
+            if self.madam_method in ['simplified_bw_method']:
+                self.features['inconsistency_found'] = True
+                self.weights = self.result[1]
+                self.inconsistency = self.result[0]
+
             if self.madam_method in ['lp_method']:
 
                 self.features['inconsistency_found'] = True
                 self.weights = self.result[0]
                 self.inconsistency = self.result[1]
                 
-            if self.madam_method in ['ahp_method']:
+            if self.madam_method in ['ahp_method', 'ppf_ahp_method']:
 
                 self.features['inconsistency_found'] = True
                 self.weights = self.result[0]
@@ -4168,6 +4305,9 @@ class MADM:
                 self.epsilon = self.result[0]
                 self.features['inconsistency_found'] = True
 
+            if self.madam_method in ['fuzzy_fucom_method']:
+                self.weights = self.result[1]
+                self.fuzzy_weights = self.result[0]
 
         if  self.madam_method in np.array(RANKING_ALGORITHMS)[:,0]:
 
@@ -4199,6 +4339,16 @@ class MADM:
 
         if self.madam_method in np.array(SPECIAL_ALGORITHMS)[:,0]:
 
+            if self.madam_method == 'opa_method':
+
+                self.expert_weights = self.result[0]
+                self.criteria_weights = self.result[1]
+                self.alternative_weights = self.result[2]
+
+                self.weights = {'experts': self.expert_weights, 
+                                'criteria': self.criteria_weights,
+                                'alternatives': self.alternative_weights}
+
             if self.madam_method == 'cwdea_method':
 
                 self.features['number_of_criteria'] = self.solver_options['dataset'].shape[1]
@@ -4209,12 +4359,14 @@ class MADM:
                 self.ranks = self.get_ranks()
 
             if 'dematel' in self.madam_method:
+                
                 self.features['number_of_criteria'] = self.solver_options['dataset'].shape[1]
 
                 self.features['weights_found'] = True
                 self.features['dpr_found'] = True
                 self.features['dmr_found'] = True
                 self.D_plus_R, self.D_minus_R, self.weights = self.result
+                self.weights = self.result[2]
 
             if  self.madam_method in ['electre_i', 'electre_i_v']:
                 self.features['number_of_criteria'] = self.solver_options['dataset'].shape[1]
@@ -4417,7 +4569,6 @@ class MADM:
             if self.features['p_rank_found']:
                 self.display_as_tensor(f'p_rv', self.rank_P, self.show_detailed_tensors)
 
-
         if self.features['global_concordance_found']:
             self.display_as_tensor('gcm', np.round(self.global_concordance,self.output_decimals), self.show_detailed_tensors)
 
@@ -4454,20 +4605,21 @@ class MADM:
         empty_line()
         bline()
 
-    def _generate_metric_info(self):
-        tline_text("Metric")
-        empty_line()
+    def _generate_metric_info(self,show_top=True):
+        if show_top: 
+            tline_text("Metric")
+            empty_line()
 
         if self.features['inconsistency_found']:
-            two_column('Inconsistency:', str(np.round(self.inconsistency,self.output_decimals)))
+            two_column('Inconsistency:', str(np.round(self.inconsistency,4)))
         
         import time
         elapsed_time_seconds = self.finish - self.start
         elapsed_time_microseconds = int(elapsed_time_seconds * 1_000_000)
         elapsed_time_formatted = time.strftime('%H:%M:%S', time.gmtime(elapsed_time_seconds))
-
-        two_column('CPT (microseconds):', str(elapsed_time_microseconds))
-        two_column('CPT (hour:min:sec):', elapsed_time_formatted)
+        if show_top: 
+            two_column('CPT (microseconds):', str(elapsed_time_microseconds))
+            two_column('CPT (hour:min:sec):', elapsed_time_formatted)
 
         empty_line()
         bline()
@@ -4481,6 +4633,7 @@ class MADM:
             return self.ranks
 
         if input == 'wv':
+        
             return self.weights
 
         if input == 'fwv':
@@ -4531,6 +4684,9 @@ class MADM:
         if input in ['rank_a', 'a_rv']:
             return self.rank_A
 
+        if input in ['rank_p', 'p_rv']:
+            return self.rank_P
+        
         if input in ['classification', 'class', 'c']:
             return self.classification     
           
@@ -4731,7 +4887,7 @@ class MADM:
 
         empty_line()
         bline()
-    
+
 madm = MADM
 
 class feloop_model(model):
@@ -4830,7 +4986,7 @@ class search(model,Implement):
         method="exact",
         approach = "nwsm",
         interface="pymprog",
-        directions=["max"],
+        directions=[],
         solver="glpk",
         dataset = None,
         key_params = [],
@@ -4875,6 +5031,7 @@ class search(model,Implement):
         self.sensitivity_analyzed = False
         self.options = options
         self.should_benchmark = True if (type(benchmark)==str and benchmark=='all') or (type(benchmark)==list and len(benchmark)>=1) else False
+        self.inputdata = dataset
         self.data = {}
         self.repeat = repeat
         
@@ -4910,6 +5067,8 @@ class search(model,Implement):
         if self.method in ["exact", "convex", "constraint", "uncertain"]:
             self.em = model(method=self.method,name=self.name,interface=self.interface)
             self.em = self.environment(self.em, *self.args, **self.kwargs)
+            if self.interface =="jump" and self.inputdata:
+                self.em.jlcode_data(self.inputdata)
           
         if self.method in ["heuristic"]:
 
@@ -4999,7 +5158,7 @@ class search(model,Implement):
 
         if self.method == "madm":
             self.time_solve_begin = timeit.default_timer()
-            self.em.sol()
+            self.em.sol(criteria_directions=self.directions, solver_options=self.options)
             self.time_solve_end = timeit.default_timer()
         
         if self.method in ["heuristic"]: self.cpt = self.em.get_time()
@@ -5080,7 +5239,9 @@ class search(model,Implement):
                         self.objective_values = self.result[0]
                         self.num_objective_values = self.objective_values.shape[0]
                         self.cpt = self.time_solve_end - self.time_solve_begin
-            
+            else:
+                self.cpt = self.time_solve_end - self.time_solve_begin
+
             if self.memorize:
                 if self.method != 'madm':
                     self.data["obj"] = self.objective_values
@@ -5382,8 +5543,7 @@ class search(model,Implement):
         
             box.clear_columns(list_of_strings=values, label=f"Size ", max_space_between_elements=4)
             box.bottom()
-        else:
-            self.em._generate_metric_info()
+
 
         # Mathematical Model
         if full:
@@ -5432,7 +5592,6 @@ class search(model,Implement):
                 pass
             bline()
     
-
         if self.healthy() == False or (self.number_of_objectives!=1 and len(self.solutions)==0):
             tline_text("Debug")
             empty_line()
@@ -5493,7 +5652,7 @@ class search(model,Implement):
                 else:
                     if self.number_of_objectives ==1:
                         for key in self.solutions:
-                            if key in self.key_vars:
+                            if key in self.key_vars or len(self.key_vars)==0:
                                 box.empty()
                                 if show_elements:
                                     box.print_element(key,self.solutions[key])
@@ -5512,7 +5671,7 @@ class search(model,Implement):
                                 box.row(left=f"Pareto solution {k}")
                                 box.empty()
                                 for key in self.solutions[k]:
-                                    if key in self.key_vars:
+                                    if key in self.key_vars or len(self.key_vars)==0:
                                         if show_elements:
                                             box.print_element(key,self.solutions[k][key])
                                         else:
@@ -5527,9 +5686,20 @@ class search(model,Implement):
                 box.bottom()
                 pass
         else:
-            self.em.show_tensor=True
+            self.em.show_tensor=False if show_elements else True
             self.em.show_detailed_tensors=False
-            self.em.output_decimals=True
+            self.em.output_decimals=4
+            
+            seconds_value = self.cpt
+            microseconds_value = seconds_value * 1e6
+            microseconds_scientific_notation = "{:.2e}".format(microseconds_value)
+            hours = int(microseconds_value // 3600e6)
+            minutes = int((microseconds_value % 3600e6) // 60e6)
+            seconds = int((microseconds_value % 60e6) / 1e6)
+            time_formatted = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+            box.top(left="Metric",right=f"{time_formatted} h:m:s" + f" {microseconds_scientific_notation} μs")
+            box.empty()
+            self.em._generate_metric_info(show_top=False)
             print()
             self.em._generate_decision_info()
         
@@ -5584,7 +5754,7 @@ class search(model,Implement):
                             
                         box.empty()
                         for key in self.sensitivity_data[f"sensitivtiy_of_solutions_to_{parameter_name}"][j]:
-                            if key in self.key_vars:
+                            if key in self.key_vars or len(self.key_vars)==0:
                                 if self.number_of_objectives ==1:
                                     box.print_tensor(key,self.sensitivity_data[f"sensitivtiy_of_solutions_to_{parameter_name}"][j][key], "∆ " + format_string(self.sensitivity_data[f"sensitivtiy_of_similarity_to_{parameter_name}"][j][key])+"")
                         
@@ -5605,7 +5775,19 @@ class search(model,Implement):
                         
         
             box.bottom(right=f"{time_formatted} h:m:s" + f" {microseconds_scientific_notation} μs")
-        
-            
-            
+    
             print()
+
+    def save_io(self,name,extra=None):
+
+        dt = data_toolkit(key=0)
+        if type(self.inputdata)==dict:
+            dt.data["inputs"] = self.inputdata
+        else:
+            dt.data["inputs"] = self.inputdata.data
+        dt.data["outputs"] = self.solutions
+
+        if extra:
+            dt.data["extra"] = extra
+
+        dt.save(name=name)

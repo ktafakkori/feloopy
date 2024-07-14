@@ -176,11 +176,12 @@ class NormalConstraintClass:
                         self.features['constraint_counter'][1] = len(self.features['constraints'])
 
                     case 'evaluation string':
-
-                        self.features['constraint_labels'].append(name)
-                        self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
-                        self.features['constraints'].append(expression)
-                        self.features['constraint_counter'][1] = len(self.features['constraints'])
+                        
+                        if self.features['interface_name']=="jump":
+                            self.features['constraint_labels'].append(name)
+                            self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                            self.features['constraints'].append(expression)
+                            self.features['constraint_counter'][1] = len(self.features['constraints'])
 
                     case 'pass':
                         pass

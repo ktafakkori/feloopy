@@ -9,6 +9,9 @@ sets = it.product
 
 def generate_variable(model_object, variable_type, variable_name, variable_bound, variable_dim=0):
 
+    if isinstance(variable_dim,set):
+        variable_dim=[variable_dim]
+
     match variable_type:
 
         case 'pvar':
@@ -20,7 +23,7 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
             if variable_dim == 0:
                 GeneratedVariable=f"\n@variable(jlmodel, {variable_name} >= 0)"
             else:
-                index_ranges = ', '.join([f'0:{dim.stop - 1}' for dim in variable_dim])
+                index_ranges = ', '.join([f'element in {str(list(dim))}' for dim in variable_dim])
                 GeneratedVariable = f"\n@variable(jlmodel, {variable_name}[{index_ranges}] >= 0)"
 
         case 'bvar':
@@ -32,7 +35,7 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
             if variable_dim == 0:
                 GeneratedVariable=f"\n@variable(jlmodel, {variable_name}, Bin)"
             else:
-                index_ranges = ', '.join([f'0:{dim.stop - 1}' for dim in variable_dim])
+                index_ranges = ', '.join([f'element in {str(list(dim))}' for dim in variable_dim])
                 GeneratedVariable = f"\n@variable(jlmodel, {variable_name}[{index_ranges}], Bin)"
 
         case 'ivar':
@@ -44,7 +47,7 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
             if variable_dim == 0:
                 GeneratedVariable=f"\n@variable(jlmodel, {variable_name}, Int)"
             else:
-                index_ranges = ', '.join([f'0:{dim.stop - 1}' for dim in variable_dim])
+                index_ranges = ', '.join([f'element in {str(list(dim))}' for dim in variable_dim])
                 GeneratedVariable = f"\n@variable(jlmodel, {variable_name}[{index_ranges}], Int)"
 
         case 'fvar':
@@ -55,7 +58,7 @@ def generate_variable(model_object, variable_type, variable_name, variable_bound
             if variable_dim == 0:
                 GeneratedVariable=f"\n@variable(jlmodel, {variable_name})"
             else:
-                index_ranges = ', '.join([f'0:{dim.stop - 1}' for dim in variable_dim])
+                index_ranges = ', '.join([f'element in {str(list(dim))}' for dim in variable_dim])
                 GeneratedVariable = f"\n@variable(jlmodel, {variable_name}[{index_ranges}])"
 
     return GeneratedVariable
