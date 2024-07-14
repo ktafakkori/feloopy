@@ -151,7 +151,7 @@ def sol_multi(
 
         def eps_constraint_model(g, intervals, important):
             model_object = instance()
-            model_object.features['directions'] = directions
+            model_object.features['directions'] = directions.copy()
             model_object.features['objective_being_optimized'] = M
             model_object.features['directions'].append(directions[approach_options.get('important_objective', important)])
             model_object.features['solver_name'] = solver_name
@@ -234,7 +234,7 @@ def sol_multi(
 
         def nwsm_model(weights):
             model_object = instance()
-            model_object.features['directions'] = directions
+            model_object.features['directions'] = directions.copy()
             model_object.features['objective_being_optimized'] = M
             model_object.features['directions'].append('min')
             model_object.features['solver_name'] = solver_name
@@ -274,7 +274,7 @@ def sol_multi(
         minobj = np.amin(payoff, axis=0)
 
         if np.any(maxobj-minobj) == 0:
-            raise ValueError(f'Please check the conflict among objectives!\nCurrent payoff:\n{payoff}\n\nCurrent conflict:\n"{np.corrcoef(payoff.T)}')
+            raise ValueError(f'Please check the conflict among objectives!\nCurrent payoff:\n {payoff}\n\nCurrent conflict:\n {np.corrcoef(payoff.T)}')
 
         intervals = approach_options.get('intervals', 10)
         pareto = np.empty([intervals+1, M])
