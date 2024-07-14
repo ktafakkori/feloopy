@@ -7,7 +7,7 @@ import sys
 
 warnings.filterwarnings("ignore")
 
-def found_preto_at(z,show_log):
+def found_pareto_at(z,show_log):
     if show_log:
         print()
         print()
@@ -211,7 +211,7 @@ def sol_multi(
                 for g in range(0, intervals+1):
                     models, result = eps_constraint_model(g, intervals, k)
                     if models.healthy():
-                        found_preto_at(result,show_log)
+                        found_pareto_at(result,show_log)
                         pareto.append(result)
                         if save_vars:
                             variables.append({})
@@ -221,7 +221,7 @@ def sol_multi(
             for g in range(0, intervals+1):
                 models, result = eps_constraint_model(g, intervals, k)
                 if models.healthy():
-                    found_preto_at(result,show_log)
+                    found_pareto_at(result,show_log)
                     pareto.append(result)
                     if save_vars:
                         variables.append({})
@@ -291,7 +291,7 @@ def sol_multi(
                 if models.healthy():
                     for k in range(M):
                         pareto[g, k] = result[k]
-                    found_preto_at(pareto[g,:],show_log)
+                    found_pareto_at(pareto[g,:],show_log)
                     if save_vars:
                         variables.append({})
                         for typ,var in models.features['variables'].keys():
@@ -303,7 +303,7 @@ def sol_multi(
             if models.healthy():
                 for k in range(M):
                     pareto[g, k] = result[k]
-                found_preto_at(pareto[g,:],show_log)
+                found_pareto_at(pareto[g,:],show_log)
                 if save_vars:
                     variables.append({})
                     for typ,var in models.features['variables'].keys():

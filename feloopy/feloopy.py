@@ -2538,7 +2538,6 @@ using DataFrames
 
 data = JSON.parsefile("./__pycache__/data.json")
 
-# Function to convert values to Julia-compatible formats
 function convert_value(value)
     if typeof(value) == Dict
         if all(x -> typeof(x) == Vector{Any}, values(value))
@@ -2559,15 +2558,12 @@ end
 
 converted_data = Dict(k => convert_value(v) for (k, v) in data)
 
-print(converted_data)
-
 for item in converted_data
     key = Symbol(item[1])  
     value = item[2]       
     @eval global $key = $value
 end
 """
-    
         if "jlcode_data" not in self.features.keys():
 
             self.features["jlcode_data"]=code
