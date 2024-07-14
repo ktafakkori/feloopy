@@ -291,22 +291,25 @@ def sol_multi(
                 if models.healthy():
                     for k in range(M):
                         pareto[g, k] = result[k]
-                        if save_vars:
-                            variables.append({})
-                            for typ,var in models.features['variables'].keys():
-                                variables[-1][var] = models.get_numpy_var(var)
-                                variables[-1]['_weights'] = weights
+                    found_preto_at(pareto[g,:],show_log)
+                    if save_vars:
+                        variables.append({})
+                        for typ,var in models.features['variables'].keys():
+                            variables[-1][var] = models.get_numpy_var(var)
+                            variables[-1]['_weights'] = weights
 
         else:
             models, result = nwsm_model(weights)
             if models.healthy():
                 for k in range(M):
                     pareto[g, k] = result[k]
-                    if save_vars:
-                        variables.append({})
-                        for typ,var in models.features['variables'].keys():
-                            variables[-1][var] = models.get_numpy_var(var)
+                found_preto_at(pareto[g,:],show_log)
+                if save_vars:
+                    variables.append({})
+                    for typ,var in models.features['variables'].keys():
+                        variables[-1][var] = models.get_numpy_var(var)
 
+    print(variables,pareto)
     pareto, variables = revise_pareto(dir_map, directions, pareto, variables)
     conflict = np.corrcoef(pareto.T)
 
