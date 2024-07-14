@@ -274,7 +274,7 @@ def sol_multi(
         minobj = np.amin(payoff, axis=0)
 
         if np.any(maxobj-minobj) == 0:
-            raise ValueError('Please check if the objectives have conflicts!!')
+            raise ValueError(f'Please check the conflict among objectives!\nCurrent payoff:\n{payoff}\n\nCurrent conflict:\n"{np.corrcoef(payoff.T)}')
 
         intervals = approach_options.get('intervals', 10)
         pareto = np.empty([intervals+1, M])
