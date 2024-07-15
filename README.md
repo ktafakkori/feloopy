@@ -4,6 +4,7 @@
    <picture>
    <source media="(prefers-color-scheme: light)" srcset="https://github.com/ktafakkori/feloopy/raw/main/docs/assets/feloopy-light.png">
    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/ktafakkori/feloopy/raw/main/docs/assets/feloopy-dark.png">
+   <img alt="FelooPy's logo." src="https://github.com/ktafakkori/feloopy/raw/main/docs/assets/feloopy-light.png">
    </picture>
  </a>
   </p>
