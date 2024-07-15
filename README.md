@@ -4,7 +4,6 @@
    <picture>
    <source media="(prefers-color-scheme: light)" srcset="https://github.com/ktafakkori/feloopy/raw/main/docs/assets/feloopy-light.png">
    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/ktafakkori/feloopy/raw/main/docs/assets/feloopy-dark.png">
-   <img alt="JuMP.jl logo." src="https://jump.dev/JuMP.jl/dev/assets/logo-with-text-background.svg">
    </picture>
  </a>
   </p>
