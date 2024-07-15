@@ -1,13 +1,15 @@
 <div align="center">
   <p>
-    <a align="center" href="" target="https://ktafakkori.github.io">
-      <img
-        width="100%"
-        src="https://github.com/ktafakkori/feloopy/raw/main/docs/assets/banner.png"
-        >
-    </a>
+<a align="center" href="" target="https://ktafakkori.github.io">
+   <picture>
+   <source media="(prefers-color-scheme: light)" srcset="https://github.com/ktafakkori/feloopy/raw/main/docs/assets/feloopy-light.png">
+   <source media="(prefers-color-scheme: dark)" srcset="https://github.com/ktafakkori/feloopy/raw/main/docs/assets/feloopy-dark.png">
+   <img alt="JuMP.jl logo." src="https://jump.dev/JuMP.jl/dev/assets/logo-with-text-background.svg">
+   </picture>
+ </a>
   </p>
-</div>
+ </div>
+---
 
 <h2 align='center'>Efficient & Feature-Rich Integrated Decision Environment</h2>
 <div align="center" style="margin-bottom: 2px;">
