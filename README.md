@@ -13,6 +13,7 @@
 <h2 align='center'>Efficient & Feature-Rich Integrated Decision Environment</h2>
 <div align="center" style="margin-bottom: 2px;">
 
+
 ![Version](https://img.shields.io/static/v1?label=Version&message=v0.3.0&color=darkgreen)
 ![Release Date](https://img.shields.io/github/release-date/ktafakkori/feloopy?label=release&color=darkgreen)
 [![Documentation](https://readthedocs.org/projects/feloopy/badge/?label=docs&version=latest&color=darkgreen)](https://feloopy.readthedocs.io/en/latest/?badge=latest&color=darkgreen&label=docs)
