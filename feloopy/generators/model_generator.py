@@ -56,6 +56,16 @@ def generate_model(features):
             from .model import gekko_model_generator
             model_object = gekko_model_generator.generate_model(features)
 
+        case 'mathopt':
+
+            from .model import mathopt_model_generator
+            model_object = mathopt_model_generator.generate_model(features)
+
+        case name if 'pyoptinterface' in name:
+
+            from .model import pyoptinterface_model_generator
+            model_object = pyoptinterface_model_generator.generate_model(features)
+
         case 'picos':
 
             from .model import picos_model_generator

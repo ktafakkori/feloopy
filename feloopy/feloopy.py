@@ -417,6 +417,32 @@ EXACT_ALGORITHMS = [
     ['ortools', 'scip'],
     ['ortools', 'xpress-'],
     ['ortools', 'xpress'],
+    ['ortools', 'bop'],
+    ['ortools', 'cbc'],
+    ['ortools', 'clp'],
+    ['ortools', 'cplex-'],
+    ['ortools', 'cplex'],
+    ['ortools', 'glop'],
+    ['ortools', 'glpk-'],
+    ['ortools', 'glpk'],
+    ['ortools', 'gurobi-'],
+    ['ortools', 'gurobi'],
+    ['ortools', 'sat'],
+    ['ortools', 'scip'],
+    ['ortools', 'xpress-'],
+    ['ortools', 'xpress'],
+    ['mathopt', 'cp-sat'],
+    ['mathopt', 'ecos'],
+    ['mathopt', 'gscip'],
+    ['mathopt', 'pdlp'],
+    ['mathopt', 'osqp'],
+    ['mathopt', 'scs'],
+    ['mathopt', 'highs'],
+    ['mathopt', 'santorini'],
+    ['pyoptinterface.highs', 'highs'],
+    ['pyoptinterface.copt', 'copt'],
+    ['pyoptinterface.gurobi', 'gurobi'],
+    ['pyoptinterface.mosek', 'mosek'],
     ['picos', 'cplex'],
     ['picos', 'cvxopt'],
     ['picos', 'ecos'],
@@ -707,7 +733,7 @@ class model(
         self,
         name: str = 'model_name',
         method: Literal['constraint', 'convex', 'exact', 'heuristic', 'uncertain'] = 'exact',
-        interface: Literal['copt','cplex','cplex_cp','cvxpy','cylp','feloopy','gekko','gurobi','linopy','mealpy','mip','niapy','ortools','ortools_cp','picos','pulp','pygad','pymoo','pymprog','pymultiobjective','pyomo','rsome_dro','rsome_ro','xpress','insideopt','insideopt-demo', 'gams','highs', 'jump'] = 'pulp',
+        interface: Literal['copt','cplex','cplex_cp','cvxpy','cylp','feloopy','gekko','gurobi','linopy','mealpy','mip','niapy','ortools','ortools_cp','picos','pulp','pygad','pymoo','pymprog','pymultiobjective','pyomo','rsome_dro','rsome_ro','xpress','insideopt','insideopt-demo', 'gams','highs', 'jump', 'mathopt', 'pyoptinterface.highs', 'pyoptinterface.copt', 'pyoptinterface.mosek', 'pyoptinterface.gurobi'] = 'pulp',
         agent: Optional[Any] = None,
         no_scenarios: Optional[int] = None,
         no_agents: Optional[int] = None,
@@ -749,7 +775,7 @@ class model(
 
             validate_string(
                 label="interface", 
-                list_of_allowed_values=['copt','cplex','cplex_cp','cvxpy','cylp','feloopy','gekko','gurobi','linopy','mealpy','mip','niapy','ortools','ortools_cp','picos','pulp','pygad','pymoo','pymprog','pymultiobjective','pyomo','rsome_dro','rsome_ro','xpress','insideopt','insideopt-demo', 'gams','highs', 'jump'], 
+                list_of_allowed_values=['copt','cplex','cplex_cp','cvxpy','cylp','feloopy','gekko','gurobi','linopy','mealpy','mip','niapy','ortools','ortools_cp','picos','pulp','pygad','pymoo','pymprog','pymultiobjective','pyomo','rsome_dro','rsome_ro','xpress','insideopt','insideopt-demo', 'gams','highs', 'jump', 'mathopt', 'pyoptinterface.highs', 'pyoptinterface.copt', 'pyoptinterface.mosek', 'pyoptinterface.gurobi'], 
                 input_string=interface,
                 required=True)
             
@@ -5032,19 +5058,25 @@ class search(model,Implement):
         self.data = {}
         self.repeat = repeat
         self.progress = progress
-        
+        self.mgt = 0
+
         self.number_of_objectives = len(self.directions)
         
+        start = timeit.default_timer()
         self.create_env(environment)
-            
+        end = timeit.default_timer()
+        self.mgt+=end-start
+
         if self.should_run:
 
             if self.should_benchmark: 
                 self.benchmark_results = self.benchmark(algorithms=benchmark, repeat=self.repeat)
             
             #run_with_progress(self.run, show_log= self.progress, verbose=self.verbose)
+            start = timeit.default_timer()
             self.run(verbose=self.verbose)
-            
+            end = timeit.default_timer()
+            self.mgt+=end-start
         
         if len(self.key_params)!=0:
             self.sensitivity(dataset, key_params, scenarios, environment,control_scenario)
@@ -5242,15 +5274,19 @@ class search(model,Implement):
             else:
                 self.cpt = self.time_solve_end - self.time_solve_begin
 
+            self.mgt = self.mgt - self.cpt
+
             if self.memorize:
                 if self.method != 'madm':
                     self.data["obj"] = self.objective_values
                     self.data["cpt"] = self.cpt
+                    self.data["mgt"] = self.mgt
                     self.data["healthy"] = self.em.healthy()
                 else:
                     self.data["cpt"] = self.time_solve_end - self.time_solve_begin
+                    self.data["mgt"] = self.mgt
                     self.data["healthy"] = self.em.healthy()               
-            
+
         solving_complete = True
 
         if not verbose:
@@ -5259,7 +5295,7 @@ class search(model,Implement):
             sys.stdout.write('\rSolving... Done!    \n')
             sys.stdout.flush()
             """
-            
+
     def get(self,input=None):
         
         if type(input)==str:
@@ -5608,14 +5644,9 @@ class search(model,Implement):
         # Third box: Metrics
         if self.method!='madm':                
             print()
-            seconds_value = self.cpt
-            microseconds_value = seconds_value * 1e6
-            microseconds_scientific_notation = "{:.2e}".format(microseconds_value)
-            hours = int(microseconds_value // 3600e6)
-            minutes = int((microseconds_value % 3600e6) // 60e6)
-            seconds = int((microseconds_value % 60e6) / 1e6)
-            time_formatted = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
-            box.top(left="Metric",right=f"{time_formatted} h:m:s" + f" {microseconds_scientific_notation} μs")
+
+
+            box.top(left="Metric",center=format_time_and_microseconds(self.mgt, name='MGT: '),right=format_time_and_microseconds(self.cpt, name='CPT: '))
             box.empty()
             if self.number_of_objectives==1:
                 def show(i):

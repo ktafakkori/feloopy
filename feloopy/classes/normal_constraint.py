@@ -14,9 +14,13 @@ def check_constraint_type(constraint):
 
         if isinstance(constraint[0], list) and isinstance(constraint[0][1], str):
             return 'list with sense'
+        
         elif len(constraint)>=2 and isinstance(constraint[1], str):
+            
             return 'single list with sense'
+        
         else:
+
             return 'list without sense'
 
     elif type(constraint)== dict:
@@ -110,81 +114,88 @@ class NormalConstraintClass:
         match self.features['solution_method']:
 
             case 'exact':
-                
-                match check_constraint_type(expression):
-                
-                    case 'list with sense':
-                        const_list = []
-                        for element in expression:
-                            const = add_special_constraint(element)
-                            const_list+=const
-                        if isinstance(name, list): self.features['constraint_labels'] += name
-                        else: self.features['constraint_labels'] += [str(name)+str(i) if name else None for i in range(len(expression))]
-                        self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
-                        self.features['constraints'] += const_list
-                        self.features['constraint_counter'][1] = len(self.features['constraints'])
-                
-                    case 'single list with sense': 
-               
-                        if len(expression)==3: name = [name]
-                        const = add_special_constraint(expression)
-                        if isinstance(name, list): self.features['constraint_labels'] += name
-                        else: self.features['constraint_labels'] += [str(name)+str(i) if name else None for i in range(len(const))]
-                        self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
-                        self.features['constraints'] += const
-                        self.features['constraint_counter'][1] = len(self.features['constraints'])
 
-                    case 'list without sense':
+                if 'insideopt' in self.features['interface_name'] or 'pyoptinterface' in self.features['interface_name']:
+                    self.features['constraint_labels'].append(name)
+                    self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                    self.features['constraints'].append(expression)
+                    self.features['constraint_counter'][1] = len(self.features['constraints'])
 
-                        if isinstance(name, list): self.features['constraint_labels'] += name
-                        else: self.features['constraint_labels'] += [str(name)+str(i) if name else None for i in range(len(expression))]
-                        self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
-                        self.features['constraints'] += list(expression)
-                        self.features['constraint_counter'][1] = len(self.features['constraints'])
+                else:           
+                    match check_constraint_type(expression):
 
-                    case 'dict with sense':
-
-                        for key, value in expression.items():
-    
-                            const = add_special_constraint(value)
-                            self.features['constraint_labels'].append(key)
+                        case 'list with sense':
+                            const_list = []
+                            for element in expression:
+                                const = add_special_constraint(element)
+                                const_list+=const
+                            if isinstance(name, list): self.features['constraint_labels'] += name
+                            else: self.features['constraint_labels'] += [str(name)+str(i) if name else None for i in range(len(expression))]
                             self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
-                            self.features['constraints']+=const
+                            self.features['constraints'] += const_list
                             self.features['constraint_counter'][1] = len(self.features['constraints'])
-
-                    case 'single dict with sense':
-                
-                        for key, value in expression.items():
-                            const = add_special_constraint(value)
-                            self.features['constraint_labels'].append(key)
-                            self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
-                            self.features['constraints']+=const
-                            self.features['constraint_counter'][1] = len(self.features['constraints'])
-
-                    case 'dict without sense':
-
-                        self.features['constraint_labels']+=list(expression.keys())
-                        self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
-                        self.features['constraints']+=list(expression.values())
-                        self.features['constraint_counter'][1] = len(self.features['constraints'])
-                       
-                    case 'classic':
                     
-                        self.features['constraint_labels'].append(name)
-                        self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
-                        self.features['constraints'].append(expression)
-                        self.features['constraint_counter'][1] = len(self.features['constraints'])
+                        case 'single list with sense': 
+                
+                            if len(expression)==3: name = [name]
+                            const = add_special_constraint(expression)
+                            if isinstance(name, list): self.features['constraint_labels'] += name
+                            else: self.features['constraint_labels'] += [str(name)+str(i) if name else None for i in range(len(const))]
+                            self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                            self.features['constraints'] += const
+                            self.features['constraint_counter'][1] = len(self.features['constraints'])
 
-                    case 'evaluation string':
+                        case 'list without sense':
+
+                            if isinstance(name, list): self.features['constraint_labels'] += name
+                            else: self.features['constraint_labels'] += [str(name)+str(i) if name else None for i in range(len(expression))]
+                            self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                            self.features['constraints'] += list(expression)
+                            self.features['constraint_counter'][1] = len(self.features['constraints'])
+
+                        case 'dict with sense':
+
+                            for key, value in expression.items():
+        
+                                const = add_special_constraint(value)
+                                self.features['constraint_labels'].append(key)
+                                self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                                self.features['constraints']+=const
+                                self.features['constraint_counter'][1] = len(self.features['constraints'])
+
+                        case 'single dict with sense':
+                    
+                            for key, value in expression.items():
+                                const = add_special_constraint(value)
+                                self.features['constraint_labels'].append(key)
+                                self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                                self.features['constraints']+=const
+                                self.features['constraint_counter'][1] = len(self.features['constraints'])
+
+                        case 'dict without sense':
+
+                            self.features['constraint_labels']+=list(expression.keys())
+                            self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                            self.features['constraints']+=list(expression.values())
+                            self.features['constraint_counter'][1] = len(self.features['constraints'])
                         
-                        if self.features['interface_name']=="jump":
+                        case 'classic':
+                        
                             self.features['constraint_labels'].append(name)
                             self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
                             self.features['constraints'].append(expression)
                             self.features['constraint_counter'][1] = len(self.features['constraints'])
 
-                    case 'pass':
-                        pass
+                        case 'evaluation string':
+                            
+                            if self.features['interface_name']=="jump":
+                                self.features['constraint_labels'].append(name)
+                                self.features['constraint_counter'][0] = len(set(self.features['constraint_labels']))
+                                self.features['constraints'].append(expression)
+                                self.features['constraint_counter'][1] = len(self.features['constraints'])
+
+                        case 'pass':
+                            pass
 
             case 'heuristic':
 

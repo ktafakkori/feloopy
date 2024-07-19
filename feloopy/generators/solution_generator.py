@@ -66,6 +66,19 @@ def generate_solution(features):
             ModelSolution = picos_solution_generator.generate_solution(
                 features)
 
+        case 'mathopt':
+
+            from .solution import mathopt_solution_generator
+            ModelSolution = mathopt_solution_generator.generate_solution(
+                features)
+            
+        case name if 'pyoptinterface' in name:
+
+
+            from .solution import pyoptinterface_solution_generator
+            ModelSolution = pyoptinterface_solution_generator.generate_solution(
+                features)
+
         case 'cvxpy':
 
             from .solution import cvxpy_solution_generator

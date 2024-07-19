@@ -737,3 +737,17 @@ def calculate_time_difference(start=0, end=0, length=None):
         second = round((length), 3) % (24 * 3600) % 3600 % 60
 
     return hour, minute, second
+
+def format_time_and_microseconds(seconds_value, name=''):
+
+    microseconds_value = seconds_value * 1e6
+
+    microseconds_scientific_notation = "{:.2e}".format(microseconds_value)
+
+    hours = int(microseconds_value // 3600e6)
+    minutes = int((microseconds_value % 3600e6) // 60e6)
+    seconds = int((microseconds_value % 60e6) / 1e6)
+    
+    time_formatted = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+    
+    return name+f"{time_formatted} h:m:s {microseconds_scientific_notation} μs"

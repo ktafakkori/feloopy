@@ -83,6 +83,16 @@ def generate_variable(interface_name, model_object, variable_type, variable_name
             from .variable import pymprog_variable_generator
             return pymprog_variable_generator.generate_variable(**inputs)
 
+        case 'mathopt':
+
+            from .variable import mathopt_variable_generator
+            return mathopt_variable_generator.generate_variable(**inputs)
+
+        case name if 'pyoptinterface' in name:
+
+            from .variable import pyoptinterface_variable_generator
+            return pyoptinterface_variable_generator.generate_variable(**inputs)
+
         case 'cplex':
 
             from .variable import cplex_variable_generator

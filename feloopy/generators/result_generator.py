@@ -84,6 +84,16 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
                 from .result import pymprog_result_generator
                 return pymprog_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
 
+            case 'mathopt':
+
+                from .result import mathopt_result_generator
+                return mathopt_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
+
+            case name if 'pyoptinterface' in name:
+
+                from .result import pyoptinterface_result_generator
+                return pyoptinterface_result_generator.Get(model_object, model_solution, indicator, variable_name_with_index)
+
             case 'cplex':
 
                 from .result import cplex_result_generator
@@ -187,6 +197,16 @@ def get(input, model_object, model_solution, Thing, variable_name_with_index):
 
                 from .result import picos_result_generator
                 return picos_result_generator.Get(model_object, model_solution, indicator)
+
+            case 'mathopt':
+
+                from .result import mathopt_result_generator
+                return mathopt_result_generator.Get(model_object, model_solution, indicator)
+
+            case name if 'pyoptinterface' in name:
+
+                from .result import pyoptinterface_result_generator
+                return pyoptinterface_result_generator.Get(model_object, model_solution, indicator)
 
             case 'cvxpy':
 
