@@ -86,7 +86,7 @@ To cite or give credit to FelooPy in publications, projects, presentations, web 
 
    Tafakkori, K. (2022). FelooPy: An integrated optimization environment for AutoOR in Python [Python Library]. Retrieved from https://github.com/ktafakkori/feloopy (Original work published September 2022).
 
-### Version>=0.3.5
+### Version>=0.3.0
 
 
 - LaTeX:
