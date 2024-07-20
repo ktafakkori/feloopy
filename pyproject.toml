@@ -77,6 +77,8 @@ pymprog = "1.1.2"
 pyomo = "6.7.2"
 rsome = "1.2.6"
 highspy = ""
+highsbox = ""
+pyoptinterface= ""
 
 [tool.poetry.group.plus_gurobi.dependencies]
 gurobipy = ""
@@ -126,6 +128,8 @@ rsome = "1.2.6"
 xpress = ""
 gampspy = ""
 highspy = ""
+highsbox = ""
+pyoptinterface= ""
 
 [tool.poetry.group.only_cylp.dependencies]
 cylp = "0.92.2"
@@ -158,6 +162,8 @@ rsome = "1.2.6"
 xpress = ""
 gampspy = ""
 highspy = ""
+highsbox = ""
+pyoptinterface= ""
 
 [tool.poetry.scripts]
 feloopy = "feloopy.cli:main"

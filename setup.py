@@ -61,6 +61,8 @@ stock = full + [
     'pulp==2.8.0',
     'pygad==3.2.0',
     'pyomo==6.7.2',
+    'highsbox',
+    'pyoptinterface',
 ]
 
 # Solvers for optimization problems or algorithms
