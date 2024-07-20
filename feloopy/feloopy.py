@@ -5287,6 +5287,9 @@ class search(model,Implement):
                     self.data["mgt"] = self.mgt
                     self.data["healthy"] = self.em.healthy()               
 
+        else:
+            self.cpt=0
+            
         solving_complete = True
 
         if not verbose:
