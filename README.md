@@ -40,7 +40,7 @@ pip install -U "feloopy[stock]==0.3.5"
 For supporting the developer, testing the latest version, and reporting bugs or contributing to the code base, you can use the following command:
 
 ```bash
-pip install -U "git+https://github.com/ktafakkori/feloopy.git#egg=feloopy[stock]"
+pip install "feloopy[stock] @ git+https://github.com/ktafakkori/feloopy.git"
 ```
 
 ## Quick test
