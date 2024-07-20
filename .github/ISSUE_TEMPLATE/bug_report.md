@@ -7,7 +7,7 @@ about: Report a bug encountered while using FelooPy.
 
 Please provide details about your setup to use FelooPy:
 
-- FelooPy version: (e.g., v0.3.0)
+- FelooPy version: (e.g., v0.3.0, v0.3.5, etc.)
 - Python version: (e.g., Python 3.8)
 - Interpreter: (e.g., CPython, PyPy)
 - Operating System: (e.g., Windows 10, macOS 11.0, Ubuntu 20.04)
