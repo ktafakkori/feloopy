@@ -555,6 +555,7 @@ class DataToolkit(FileManager):
         import matplotlib.colors as mcolors
         self.colors = dict(mcolors.BASE_COLORS, **mcolors.CSS4_COLORS)
         dim = self.__fix_dims(dim,is_range=False)
+        dim = [range(i) for i in dim]
         if dim == 0:    
             if with_names:
                 result = self.random.choice(list(self.colors.keys()))
