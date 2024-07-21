@@ -7,6 +7,29 @@
 
 <div align="center">
 
+| Programming problem             | Acronym  | Example
+| :------------------------------ | :-------- | :------|
+| ➖ Linear                    | LP      |   [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/linear-programming.ipynb)   |
+| 📈 Non-Linear                     | NLP       |      [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/non-linear-programming.ipynb)   |
+| 🔢 Integer          | IP       |      [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/integer-programming.ipynb)   |
+| 🌀 Mixed-Integer Linear              | MILP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/mixed-integer-linear-programming.ipynb)  |
+| 🔄 Mixed-Integer Non-Linear                   | MINLP      |  [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/mixed-integer-non-linear-programming.ipynb)  |
+
+</div>
+
+
+
+<div align="center">
+Copyright (c) 2022-2024, Keivan Tafakkori. All rights reserved.
+
+See the file <a href="https://github.com/ktafakkori/feloopy/blob/main/LICENSE">LICENSE file</a> for licensing details.
+</div>
+
+
+
+
+<div align="center">
+
 | Decision problem                        | Acronym  | Example
 | :------------------------------ | :-------- | :------|
 | 🗑️ Bin packing                    | BPP      |   [Python](https://github.com/ktafakkori/feloopy/blob/main/examples/feloopy-0.3.0%2B/bin-packing-problem.ipynb)   |
