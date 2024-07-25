@@ -2558,7 +2558,6 @@ class model(
             json.dump(converted_dict, f)
         
         code = """
-using Pkg
 using JSON
 using DataFrames
 
